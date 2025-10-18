@@ -1,0 +1,87 @@
+====================
+SQL BASICS
+====================
+Q1: What is SQL?
+A: Structured Query Language used to store, retrieve, and manipulate data in relational databases.
+
+Q2: Difference between SQL and NoSQL?
+A: SQL → structured tables with schema.
+   NoSQL → flexible schema (JSON, documents, key-value).
+
+Q3: Types of SQL Commands:
+A:
+DDL (Data Definition): CREATE, ALTER, DROP
+DML (Data Manipulation): INSERT, UPDATE, DELETE
+DCL (Data Control): GRANT, REVOKE
+TCL (Transaction Control): COMMIT, ROLLBACK
+DQL (Data Query): SELECT
+
+====================
+QUERY BASICS
+====================
+Q4: Get all records from Employee table
+A: SELECT * FROM Employee;
+
+Q5: Get employees whose salary > 50000
+A: SELECT name, salary FROM Employee WHERE salary > 50000;
+
+Q6: Sort employees by name
+A: SELECT * FROM Employee ORDER BY name ASC;
+
+====================
+JOINS
+====================
+Q7: Inner Join example
+A:
+SELECT e.name, d.dept_name
+FROM Employee e
+INNER JOIN Department d
+ON e.dept_id = d.id;
+
+Q8: Difference between LEFT JOIN and INNER JOIN
+A:
+INNER JOIN → common records only
+LEFT JOIN → all from left + matched from right
+
+====================
+AGGREGATE & GROUPING
+====================
+Q9: Find total employees per department
+A:
+SELECT dept_id, COUNT(*) as total
+FROM Employee
+GROUP BY dept_id;
+
+Q10: Filter grouped results with HAVING
+A:
+SELECT dept_id, COUNT(*) as total
+FROM Employee
+GROUP BY dept_id
+HAVING COUNT(*) > 5;
+
+====================
+ADVANCED
+====================
+Q11: Find 2nd highest salary
+A:
+SELECT MAX(salary) FROM Employee
+WHERE salary < (SELECT MAX(salary) FROM Employee);
+
+Q12: What is a CTE (WITH clause)?
+A:
+Temporary result used in next SELECT.
+Example:
+WITH HighSalary AS (
+  SELECT * FROM Employee WHERE salary > 50000
+)
+SELECT * FROM HighSalary WHERE dept_id=3;
+
+Q13: What is indexing?
+A: Data structure to speed up SELECT queries by avoiding full table scans.
+
+Q14: Explain ACID properties
+A:
+Atomicity - All or nothing
+Consistency - Maintains valid state
+Isolation - Transactions don’t interfere
+Durability - Changes are permanent

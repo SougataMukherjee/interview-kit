@@ -1,0 +1,197 @@
+====================
+JAVASCRIPT THEORY NOTES
+====================
+
+1️⃣ What is Hoisting?
+Variables and functions are moved to top of scope during compilation.
+Example:
+console.log(a); // undefined
+var a = 5;
+
+2️⃣ What is Closure?
+Function remembers variables from its parent scope.
+Example:
+function outer() {
+  let count = 0;
+  return function inner() {
+    count++;
+    console.log(count);
+  }
+}
+
+3️⃣ Difference: var, let, const
+var -> function scoped
+let, const -> block scoped
+const cannot be reassigned.
+
+4️⃣ What is Event Loop?
+Handles async operations. Executes sync code first, then callbacks from queue.
+Example:
+console.log('a');
+setTimeout(()=>console.log('b'),0);
+console.log('c');
+// Output: a c b
+
+5️⃣ What is 'this' keyword?
+Refers to current context.
+In function -> global/window
+In object -> that object.
+
+6️⃣ Arrow function vs normal function
+Arrow: no own 'this', uses parent's context.
+Normal: has own 'this'.
+
+7️⃣ Shallow vs Deep Copy
+Shallow: copies reference
+Deep: copies values recursively.
+Example:
+let a = {x:1};
+let b = {...a}; // shallow copy
+
+8️⃣ What are Promises?
+Used for async tasks.
+Example:
+new Promise((res, rej)=>res(5)).then(console.log);
+
+9️⃣ Async/Await
+Syntax sugar over Promises.
+Example:
+async function getData(){
+  const data = await fetch(url);
+}
+
+10️⃣ What is Debounce & Throttle?
+Debounce: delay execution till user stops typing.
+Throttle: limit execution in interval.
+Example:
+function debounce(fn, delay){ let timer; return (...a)=>{clearTimeout(timer); timer=setTimeout(()=>fn(...a),delay);} }
+
+11️⃣ Polyfill Example (map)
+Array.prototype.myMap = function(cb){
+  let res=[];
+  for(let i=0;i<this.length;i++){
+    res.push(cb(this[i],i));
+  }
+  return res;
+}
+
+12️⃣ Call, Apply, Bind
+All used to set 'this' manually.
+fn.call(obj, a,b);
+fn.apply(obj, [a,b]);
+fn.bind(obj)(a,b);
+
+13️⃣ What is Currying?
+Breaking function into multiple single-arg calls.
+Example:
+function add(a){return b=>a+b;}
+
+14️⃣ What is Prototype?
+JS uses prototypal inheritance. Every object has a hidden [[Prototype]].
+
+15️⃣ Difference: undefined vs null
+undefined -> declared but not assigned
+null -> intentional empty value.
+
+16️⃣ Event Delegation
+Attach single listener to parent.
+Example:
+ul.addEventListener('click',(e)=>{ if(e.target.tagName==='LI') console.log(e.target.textContent) })
+
+17️⃣ LocalStorage vs SessionStorage
+localStorage -> persists after reload
+sessionStorage -> clears when tab closes
+
+18️⃣ Spread vs Rest
+Spread -> expands [...arr]
+Rest -> collects (...args)
+
+19️⃣ Deep Clone Object
+JSON.parse(JSON.stringify(obj));
+
+20️⃣ Optional Chaining
+Access nested property safely: user?.address?.city
+
+21️⃣ Difference Between == and ===
+== does type coercion
+=== checks type + value
+
+22️⃣ Difference Between slice, splice, split
+slice -> copy array portion
+splice -> modify array
+split -> convert string → array
+
+23️⃣ Event Bubbling vs Capturing
+Bubbling: inner → outer
+Capturing: outer → inner
+addEventListener(type, fn, true) → capturing
+
+24️⃣ What is Temporal Dead Zone (TDZ)?
+Zone where variable exists but can’t be accessed before initialization.
+
+25️⃣ Garbage Collection
+JS automatically removes unused memory (unreferenced objects).
+
+====================
+TYPESCRIPT THEORY NOTES
+====================
+
+1️⃣ What is TypeScript?
+Superset of JS adding static typing + compiler checks.
+
+2️⃣ Benefits:
+- Early error detection
+- Better IntelliSense
+- Type safety in large apps
+
+3️⃣ Basic Types:
+string, number, boolean, any, void, unknown, null, undefined
+
+4️⃣ Interface Example:
+interface User {
+  name: string;
+  age: number;
+}
+
+5️⃣ Type Alias:
+type Status = "loading" | "success" | "error";
+
+6️⃣ Optional and Readonly Properties:
+interface User { name: string; age?: number; readonly id: number; }
+
+7️⃣ Generics:
+function identity<T>(arg: T): T { return arg; }
+
+8️⃣ Union and Intersection Types:
+let val: string | number;
+type A = {x:number}; type B = {y:string};
+type C = A & B;
+
+9️⃣ Enum:
+enum Color { Red, Green, Blue }
+
+10️⃣ Difference between Interface and Type
+Interface -> extendable
+Type -> can use union/intersection
+
+11️⃣ Utility Types:
+Partial<T>, Pick<T,K>, Omit<T,K>, Readonly<T>
+
+12️⃣ Type Assertion:
+let val: any = "hello";
+let len = (val as string).length;
+
+13️⃣ Difference between any and unknown
+any -> unsafe
+unknown -> needs type check before use
+
+14️⃣ What are Decorators?
+Experimental feature for class modification.
+Example:
+@Logger
+class User {}
+
+15️⃣ Difference between TypeScript and JavaScript
+TS -> compiled language
+JS -> interpreted
+TS adds types; JS doesn’t.

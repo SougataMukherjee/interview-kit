@@ -1,0 +1,228 @@
+====================
+CSS NOTES
+====================
+
+
+
+Q1: Difference between inline, block, and inline-block?
+A:
+- inline: width/height not applicable (span, a)
+- block: takes full width (div, p)
+- inline-block: behaves inline but allows width/height.
+
+Q2: What is the Box Model?
+A:
+Content → Padding → Border → Margin  
+Example:
+div {
+  padding: 10px;
+  border: 2px solid;
+  margin: 5px;
+}
+
+Q3: Explain CSS Specificity Order.
+A:
+Inline style > ID > Class > Element  
+Example:
+#id > .class > div
+
+Q4: Position properties?
+A:
+- static (default)
+- relative (moves within itself)
+- absolute (relative to nearest non-static)
+- fixed (relative to viewport)
+- sticky (hybrid)
+
+Q5: Flexbox Basics.
+A:
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+Q6: Grid Basics.
+A:
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+Q7: z-index and stacking context?
+A:
+z-index works only for positioned elements (relative, absolute, fixed).
+
+Q8: Responsive Design.
+A:
+Use media queries:
+@media (max-width: 768px) {
+  .container { flex-direction: column; }
+}
+
+Q9: Difference between transition and animation?
+A:
+Transition: triggers on state change.
+Animation: runs automatically with @keyframes.
+
+Q10: Pseudo classes and elements.
+A:
+:hover, :focus, :nth-child(2)
+::before, ::after
+
+==============================
+SCSS / SASS THEORY
+==============================
+
+Q1: What is SCSS?
+A: CSS preprocessor with variables, nesting, mixins, and partials.
+
+Q2: Variables
+A:
+$primary: #3490dc;
+body { color: $primary; }
+
+Q3: Nesting
+A:
+nav {
+  ul {
+    li { color: red; }
+  }
+}
+
+Q4: Mixins and Include
+A:
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container { @include flex-center; }
+
+Q5: Extends
+A:
+%btn {
+  padding: 10px;
+  border-radius: 5px;
+}
+.btn-primary {
+  @extend %btn;
+  background: blue;
+}
+
+Q6: Partials and Import
+A:
+Create _variables.scss, then import:
+@import 'variables';
+
+Q7: Operators
+A:
+width: (100% / 3);
+
+Q8: Functions
+A:
+lighten($color, 20%);
+darken($color, 10%);
+
+Q9: Loops & Conditionals
+A:
+@for $i from 1 through 3 {
+  .m-#{$i} { margin: #{$i * 5}px; }
+}
+
+Q10: SCSS Compilation
+A:
+Use `sass input.scss output.css` to compile.
+
+==============================
+TAILWIND CSS THEORY
+==============================
+
+Q1: What is Tailwind CSS?
+A: Utility-first CSS framework — style directly in HTML using class names.
+
+Q2: Example:
+<div class="flex items-center justify-between p-4 bg-blue-500 text-white">Navbar</div>
+
+Q3: Advantages:
+- No writing custom CSS
+- Small bundle (JIT)
+- Mobile-first by default
+
+Q4: Responsive Classes
+A:
+<p class="text-lg md:text-2xl lg:text-4xl">Responsive text</p>
+
+Q5: Hover & State Variants
+A:
+<button class="bg-blue-500 hover:bg-blue-700">Click</button>
+
+Q6: Custom Theme
+A:
+Add in tailwind.config.js
+theme: {
+  extend: {
+    colors: { primary: '#1e40af' },
+  },
+}
+
+Q7: Conditional Styling
+A:
+<div class={`${isActive ? "bg-green-500" : "bg-gray-500"}`}></div>
+
+Q8: Plugins
+A:
+Forms, Typography, Line Clamp.
+
+Q9: Dark Mode
+A:
+Add `dark:` variant.
+<div class="bg-white dark:bg-black"></div>
+
+Q10: Tailwind with Next.js
+A:
+Installed via `npm install tailwindcss postcss autoprefixer`
+Run `npx tailwindcss init -p`
+Import in `globals.css`.
+ WHAT IS TAILWIND?
+- Utility-first CSS framework for rapid UI building.
+
+2️⃣ INSTALLATION
+npm install tailwindcss postcss autoprefixer
+
+3️⃣ CONFIGURATION
+npx tailwindcss init -p
+
+4️⃣ COMMON CLASSES
+- Flex: `flex justify-center items-center`
+- Grid: `grid grid-cols-3 gap-4`
+- Text: `text-lg font-bold text-blue-500`
+- Spacing: `p-4 m-2`
+- Colors: `bg-gray-800 text-white`
+
+5️⃣ RESPONSIVE DESIGN
+- Prefixes: `sm:`, `md:`, `lg:`, `xl:`
+Example: `sm:text-sm md:text-lg lg:text-xl`
+
+6️⃣ DARK MODE
+- Enable in config: `darkMode: 'class'`
+- Use: `<div class="dark:bg-gray-900 dark:text-white">`
+
+7️⃣ CUSTOM THEME
+- Modify `tailwind.config.js` → extend colors, fonts, etc.
+
+8️⃣ REUSABLE COMPONENTS
+- Use `@apply` in your CSS file.
+Example:
+.btn { @apply px-4 py-2 bg-blue-500 text-white rounded-lg; }
+
+9️⃣ ANIMATIONS
+- Use `animate-bounce`, `animate-spin` etc.
+- Custom in config under `keyframes`.
+
+10️⃣ INTEGRATION WITH REACT/NEXT.JS
+- Import Tailwind CSS in `index.css` or `_app.tsx`
+
+

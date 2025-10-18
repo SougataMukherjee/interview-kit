@@ -1,0 +1,186 @@
+====================
+HTML NOTES
+====================
+
+
+Q1: What is HTML and why is it important?
+A: HTML (HyperText Markup Language) structures web content. It defines the layout and semantic meaning of elements (headings, paragraphs, links, forms, etc.).
+
+------------------------------------------
+Q2: What are semantic tags? Give examples.
+A: Semantic tags describe the meaning of content.
+Examples: <header>, <nav>, <article>, <section>, <footer>, <aside>.
+They help with SEO, readability, and accessibility.
+
+------------------------------------------
+Q3: What is the difference between <div> and <section>?
+A: <div> is a generic container, no semantic meaning.
+<section> groups related content with semantic meaning.
+
+------------------------------------------
+Q4: What is the difference between inline, block, and inline-block elements?
+A:
+- Inline: does not start on new line (e.g., <span>, <a>)
+- Block: starts on new line, takes full width (e.g., <div>, <p>)
+- Inline-block: stays inline but allows setting width/height.
+
+------------------------------------------
+Q5: What is DOCTYPE and why is it used?
+A: <!DOCTYPE html> tells the browser to render the page in standards mode using HTML5 syntax.
+
+------------------------------------------
+Q6: What are HTML meta tags?
+A: <meta> provides metadata about a web page.
+Examples:
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+------------------------------------------
+Q7: What are global attributes in HTML?
+A: Attributes applicable to any element.
+Examples: id, class, style, title, data-*.
+
+------------------------------------------
+Q8: Explain the difference between <script>, <script async>, and <script defer>.
+A:
+- Normal <script>: blocks rendering until script loads.
+- async: loads in parallel and executes immediately.
+- defer: loads in parallel but executes after HTML parsing.
+
+------------------------------------------
+Q9: What are forms in HTML?
+A: Forms collect user input using <form>, <input>, <textarea>, <select>, <button>.
+Example:
+<form>
+  <input type="text" placeholder="Name" />
+  <button>Submit</button>
+</form>
+
+------------------------------------------
+Q10: Difference between GET and POST method?
+A:
+- GET: sends data in URL, used for data retrieval.
+- POST: sends data in body, used for data creation or sensitive info.
+
+------------------------------------------
+Q11: What are data-* attributes?
+A: Used to store custom data in HTML elements.
+Example: <div data-user="sam"></div>
+
+------------------------------------------
+Q12: What is the difference between <b> and <strong>, <i> and <em>?
+A:
+- <b> and <i>: purely stylistic.
+- <strong> and <em>: semantic emphasis for screen readers and SEO.
+
+------------------------------------------
+Q13: What is the purpose of <link> tag?
+A: Used to link external resources like CSS files or icons.
+Example: <link rel="stylesheet" href="style.css">
+
+------------------------------------------
+Q14: What is accessibility (a11y)?
+A: Making web pages usable for all users including people with disabilities.
+Use semantic HTML, ARIA roles, alt attributes, keyboard navigation.
+
+------------------------------------------
+Q15: What is the difference between <img> alt and title attributes?
+A:
+- alt: alternative text shown if image fails to load (important for accessibility)
+- title: tooltip text shown on hover.
+
+------------------------------------------
+Q16: What are HTML entities?
+A: Used to display reserved characters.
+Example: &lt; for < , &gt; for > , &nbsp; for space.
+
+------------------------------------------
+Q17: What is lazy loading for images?
+A: Defers image loading until it enters the viewport.
+Example: <img src="img.jpg" loading="lazy" />
+
+------------------------------------------
+Q18: What are the new features in HTML5?
+A:
+- New semantic elements (<header>, <footer>, <article>, <nav>)
+- Audio and video tags
+- Canvas and SVG
+- LocalStorage, SessionStorage
+- Geolocation API
+- Form enhancements (email, date, number)
+
+------------------------------------------
+Q19: What is the difference between localStorage, sessionStorage, and cookies?
+A:
+- localStorage: persistent key-value storage
+- sessionStorage: clears when tab closes
+- cookies: small data sent with every HTTP request (used for auth/tracking)
+
+------------------------------------------
+Q20: What are <canvas> and <svg>?
+A:
+- <canvas>: used for drawing via JavaScript (pixel-based)
+- <svg>: scalable vector graphics (markup-based)
+
+------------------------------------------
+Q21: Explain <template> tag.
+A: Defines reusable HTML content not rendered until cloned by JS.
+Example:
+<template id="card">
+  <div class="card">Sample Card</div>
+</template>
+
+------------------------------------------
+Q22: What is the difference between HTMLCollection and NodeList?
+A:
+- HTMLCollection: live, updates automatically.
+- NodeList: static, doesn’t auto-update.
+
+------------------------------------------
+Q23: What are ARIA roles?
+A: Accessibility roles that describe elements to assistive technologies.
+Example: <button role="switch"></button>
+
+------------------------------------------
+Q24: What is Shadow DOM?
+A: A scoped subtree inside a web component that encapsulates styles and markup.
+
+------------------------------------------
+Q25: Explain difference between relative and absolute paths in HTML.
+A:
+- Relative: based on current file location (e.g., ./images/pic.jpg)
+- Absolute: full URL (e.g., https://site.com/images/pic.jpg)
+
+------------------------------------------
+Q26: What is the difference between <noscript> and <script>?
+A:
+<noscript> displays fallback content when JS is disabled.
+
+------------------------------------------
+Q27: Explain contenteditable attribute.
+A:
+Makes an element editable directly in the browser.
+Example: <div contenteditable="true"></div>
+
+------------------------------------------
+Q28: What is the purpose of <iframe>?
+A:
+Used to embed another HTML page inside current page.
+Example: <iframe src="https://example.com"></iframe>
+
+------------------------------------------
+Q29: What is cross-origin resource sharing (CORS)?
+A:
+A security feature that restricts how resources can be fetched from another domain.
+
+------------------------------------------
+Q30: How do you optimize HTML for SEO?
+A:
+- Use semantic tags
+- Proper headings (H1–H6)
+- Meta description
+- Alt attributes for images
+- Structured data
+
+=============================
+

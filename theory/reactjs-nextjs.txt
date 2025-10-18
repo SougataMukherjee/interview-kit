@@ -1,0 +1,153 @@
+==============================
+REACT THEORY NOTES 
+==============================
+
+Q1: What is Virtual DOM?
+A: A lightweight JS representation of the real DOM. React updates only changed nodes, improving performance.
+
+Q2: What is Reconciliation?
+A: The diffing process where React compares old and new virtual DOM trees and updates only changed parts.
+
+Q3: Functional vs Class Components
+A: Functional - simpler, uses hooks.
+   Class - uses lifecycle methods, more boilerplate.
+
+Q4: What are Hooks in React?
+A: Functions that let you use React features without classes (e.g. useState, useEffect, useMemo, useCallback).
+
+Q5: Explain useState
+A: Manages local state in functional components.
+Example:
+const [count, setCount] = useState(0);
+
+Q6: Explain useEffect
+A: Performs side effects after render.
+Example:
+useEffect(() => { console.log('runs after render'); }, []);
+
+Q7: useMemo vs useCallback
+A:
+useMemo → memoizes computed value
+useCallback → memoizes function reference
+
+Q8: What is Prop Drilling?
+A: Passing props deeply through multiple components. Solved using Context API.
+
+Q9: What is Context API?
+A: Provides global state without prop drilling.
+Example:
+const UserContext = createContext();
+
+Q10: What is React.memo?
+A: Prevents unnecessary re-renders of functional components when props don’t change.
+
+Q11: Controlled vs Uncontrolled Components
+A:
+Controlled - state managed by React.
+Uncontrolled - managed by DOM via refs.
+
+Q12: What is useRef?
+A: Used to access DOM elements or persist mutable values without re-render.
+Example:
+const inputRef = useRef();
+
+Q13: Explain React Fiber
+A: Internal engine for scheduling rendering tasks efficiently.
+
+Q14: Difference between keys in React list
+A: Unique key helps React identify elements and track updates efficiently.
+
+Q15: Lifecycle methods in class component
+A:
+Mounting → componentDidMount
+Updating → componentDidUpdate
+Unmounting → componentWillUnmount
+
+Q16: What is HOC (Higher Order Component)?
+A: A function that takes a component and returns a new component with added functionality.
+
+Q17: What is React Fragment?
+A: <></> wrapper to avoid adding extra DOM nodes.
+
+Q18: Error boundaries
+A: Components that catch JS errors in child tree and display fallback UI.
+
+Q19: Difference between state and props
+A:
+State - internal, mutable.
+Props - external, immutable.
+
+Q20: How does React handle events?
+A: Through synthetic events, which wrap native events for cross-browser compatibility.
+
+
+==============================
+NEXT.JS THEORY NOTES 
+==============================
+
+Q1: What is Next.js?
+A: A React framework for server-side rendering, static site generation, and optimized performance.
+
+Q2: CSR vs SSR vs SSG
+A:
+CSR - Rendered on client (useEffect)
+SSR - Rendered on server per request (getServerSideProps)
+SSG - Pre-built HTML at build time (getStaticProps)
+
+Q3: Explain getStaticProps
+A: Used for static generation; runs at build time and provides props to page.
+
+Q4: Explain getServerSideProps
+A: Runs on each request; fetches data on server before rendering.
+
+Q5: Explain getStaticPaths
+A: Used with dynamic routes to pre-render specific paths at build time.
+
+Q6: Difference between pages and app router
+A:
+- Pages router: uses /pages directory, older version.
+- App router: introduced in Next.js 13, uses /app directory, server components, and layout.js.
+
+Q7: What are Server Components?
+A: Components rendered on the server — faster, smaller bundles, no client JS needed.
+
+Q8: What are Client Components?
+A: Components rendered in the browser using "use client" directive.
+
+Q9: How to create API routes in Next.js?
+A: Inside /pages/api or /app/api folder.
+Example:
+export default function handler(req, res) { res.json({ msg: 'Hello' }) }
+
+Q10: Difference between next/link and a tag
+A: next/link does client-side routing (faster, no reload), <a> tag reloads the page.
+
+Q11: What is Image Optimization in Next.js?
+A: <Image /> automatically optimizes image size and format for performance.
+
+Q12: What is Middleware in Next.js?
+A: Runs before request is completed, used for auth, redirects, or rewrites.
+
+Q13: How to handle environment variables in Next.js?
+A: Stored in .env.local and accessed via process.env.NAME
+
+Q14: What is ISR (Incremental Static Regeneration)?
+A: Allows static pages to update at runtime after a set interval (revalidate).
+
+Q15: What is next/head used for?
+A: To modify <head> tags dynamically (title, meta tags).
+
+Q16: What is next/script?
+A: Used to control script loading strategy (lazyOnload, beforeInteractive, etc.).
+
+Q17: How to handle API fetching in Next.js 13 app router?
+A: Use async server components with fetch directly inside component.
+
+Q18: What is Dynamic Routing in Next.js?
+A: File-based routing with parameters using [id].js files.
+
+Q19: What are Layouts and Templates in Next.js 13?
+A: Layouts persist between routes; templates re-render on navigation.
+
+Q20: How to deploy Next.js app?
+A: Vercel (recommended), or Node server with next build + next start.
