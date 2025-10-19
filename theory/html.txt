@@ -215,5 +215,57 @@ Q35: How to lazy load images in HTML?
 Use loading="lazy" attribute:
 <img src="image.jpg" loading="lazy" alt="example">
 
+Q36:HTML Elements
+Building blocks of a webpage (e.g., <div>, <p>, <a>).
+ Each element has opening <tag> and closing </tag>.
+Can be nested inside each other.
+
+Q37:HTML Attributes
+→ Provide extra info to elements.
+→ Written inside the opening tag.
+Example: <img src="img.png" alt="photo">
+→ Common ones: id, class, href, src, title, style
+
+Q38:Blockquote for Quotations
+→ Used for long quoted text.
+<blockquote cite="https://example.com">
+  This text is quoted from another source.
+</blockquote>
+
+Q39: <img> vs <picture> Elements
+→ <img> → single image file.
+→ <picture> → multiple image sources for responsive design.
+<picture>
+  <source srcset="large.jpg" media="(min-width:800px)">
+  <img src="small.jpg" alt="photo">
+</picture>
+
+Q40:HTML Tables
+→ Used to display data in rows and columns.
+Example:
+
+<table>
+  <tr><th>Name</th><th>Age</th></tr>
+  <tr><td>Sam</td><td>25</td></tr>
+</table>
+
+Q41: HTML Forms
+→ action defines where data goes.
+→ <input> collects info, <submit> sends it.
+<form action="/submit">
+  <input type="text" name="user">
+  <input type="submit" value="Send">
+</form>
+
+Q42:HTML Video and Controls
+→ Used to embed videos with play/pause buttons.
+<video width="300" controls>
+  <source src="movie.mp4" type="video/mp4">
+</video>
+
+
+
+
+
 =============================
 

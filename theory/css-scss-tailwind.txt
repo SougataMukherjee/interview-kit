@@ -63,8 +63,15 @@ Use media queries:
 
 Q9: Difference between transition and animation?
 A:
-Transition: triggers on state change.
+Transition: smooth change between two states.Needs trigger (hover, active).
+div { transition: all 0.3s; }
+div:hover { color: red; }
+
 Animation: runs automatically with @keyframes.
+@keyframes move { from{left:0;} to{left:100px;} }
+div { animation: move 2s infinite; }
+
+
 
 Q10: Pseudo classes and elements.
 A:
@@ -95,6 +102,62 @@ Q15: What are CSS variables and how to use them?
 Reusable custom properties:
 :root { --main-color: blue; }
 h1 { color: var(--main-color); }
+
+Q16: @property
+Defines custom CSS properties with type and defaults.
+Used with animations for better control.
+@property --x {
+  syntax: "<length>";
+  initial-value: 0px;
+  inherits: false;
+}
+div { transition: --x 1s; }
+
+Q17:CSS Math Functions
+calc() → perform calculations (width: calc(100% - 50px);)
+min() → picks smallest (width: min(80%, 600px);)
+max() → picks largest (width: max(50%, 200px);)
+clamp() → range limit (font-size: clamp(14px, 2vw, 20px);)
+
+Q18::global 
+Used to apply styles globally in scoped CSS files.
+:global(.btn) { color: red; }
+Without :global, styles are limited to component scope.
+
+Q19:CSS Attribute Selectors
+[attr] → elements with that attribute
+[attr=value] → exact match
+[attr^=val] → starts with
+[attr$=val] → ends with
+[attr*=val] → contains substring
+Example: input[type="text"]
+
+Q20:CSS Font Fallback
+Multiple fonts listed in order of priority.
+If first fails, next is used.
+Example:
+font-family: "Roboto", "Arial", sans-serif;
+
+Q21:Border vs Outline
+Border → part of element box, affects layout.
+Outline → drawn outside border, doesn’t affect size.
+Example:
+border: 2px solid red;
+outline: 2px solid blue;
+
+Q22: CSS Selectors
+Select elements based on name, class, id, attribute, etc.
+Examples:
+#id → by id
+.class → by class
+div → by tag
+div p → descendant
+div > p → direct child
+div + p → next sibling
+div ~ p → all following siblings
+* → universal
+:hover → on hover state
+:first-child, :last-child → positional selectors
 
 ==============================
 SCSS THEORY
