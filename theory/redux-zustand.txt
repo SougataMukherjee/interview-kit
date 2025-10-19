@@ -1,0 +1,52 @@
+==============================
+REDUX THEORY NOTES 
+==============================
+
+What is Redux and why is it used?
+
+What are the core principles of Redux?
+
+What are actions, reducers, and the store?
+
+How does the Redux data flow work?
+
+What is immutability in Redux?
+
+Difference between Redux and Context API.
+
+What are middleware functions in Redux?
+
+What is Redux Thunk?
+
+What is Redux Toolkit and its advantages?
+
+Explain createSlice and createAsyncThunk.
+
+What is the purpose of useSelector and useDispatch?
+
+What is the difference between local and global state?
+
+How to debug Redux apps?
+
+What are extraReducers in Redux Toolkit?
+
+What is reselect and how does it improve performance?
+
+
+What is Zustand and how is it different from Redux?
+
+What is a store in Zustand?
+
+How do you create and use a Zustand store?
+
+How does Zustand handle re-renders efficiently?
+
+Difference between global and local state in Zustand?
+
+How to persist Zustand state?
+
+What is the use of subscribe and getState?
+
+How to integrate middleware in Zustand?
+
+Difference between shallow and deep comparison in Zustand?

@@ -8,9 +8,9 @@ A: HTML (HyperText Markup Language) structures web content. It defines the layou
 
 ------------------------------------------
 Q2: What are semantic tags? Give examples.
-A: Semantic tags describe the meaning of content.
-Examples: <header>, <nav>, <article>, <section>, <footer>, <aside>.
-They help with SEO, readability, and accessibility.
+A: A semantic element clearly describes its meaning to both the browser and the developer.
+Examples of non-semantic elements: <div> and <span> - Tells nothing about its content.
+Examples of semantic elements: <img>, <table>, <header>,<nav>,<footer>, <article> - Clearly defines its content.
 
 ------------------------------------------
 Q3: What is the difference between <div> and <section>?
@@ -22,7 +22,7 @@ Q4: What is the difference between inline, block, and inline-block elements?
 A:
 - Inline: does not start on new line (e.g., <span>, <a>)
 - Block: starts on new line, takes full width (e.g., <div>, <p>)
-- Inline-block: stays inline but allows setting width/height.
+- Inline-block: stays inline but allows setting width/height.(e.g., make 3 div inline using inline-block)
 
 ------------------------------------------
 Q5: What is DOCTYPE and why is it used?

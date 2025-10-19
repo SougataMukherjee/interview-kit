@@ -139,7 +139,7 @@ TYPESCRIPT THEORY NOTES
 1️⃣ What is TypeScript?
 Superset of JS adding static typing + compiler checks.
 
-2️⃣ Benefits:
+2️⃣ why use it over JavaScript:
 - Early error detection
 - Better IntelliSense
 - Type safety in large apps
@@ -181,7 +181,7 @@ Partial<T>, Pick<T,K>, Omit<T,K>, Readonly<T>
 let val: any = "hello";
 let len = (val as string).length;
 
-13️⃣ Difference between any and unknown
+13️⃣ Difference between any and unknown and never
 any -> unsafe
 unknown -> needs type check before use
 
