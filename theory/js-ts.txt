@@ -308,7 +308,60 @@ sessionStorage: cleared on tab close.
 Q55:Cookies
 Small data stored in browser; sent with every HTTP request.
 
+Q56 Array Methods
+push() → adds element to end.
+pop() → removes element from end.
+unshift() → adds element to start.
+shift() → removes element from start.
+concat() → joins two arrays.
+slice() → returns part of array.
+splice() → adds/removes elements at position.
+indexOf() → finds first index of value.
+includes() → checks if value exists.
+join() → joins array elements into string.
+reverse() → reverses array order.
+sort() → sorts array elements.
+map() → returns new array by applying function.
+filter() → returns new array with matching elements.
+reduce() → combines all elements into single value.
+forEach() → runs function for each element.
+find() → returns first matching element.
+findIndex() → returns index of first match.
+every() → checks if all elements pass test.
+some() → checks if any element passes test.
+flat() → flattens nested arrays.
+fill() → fills array with given value.
+from() → creates array from iterable.
 
+Q57:String Methods
+charAt() → returns character at index.
+charCodeAt() → returns ASCII of character.
+concat() → joins two strings.
+includes() → checks if substring exists.
+indexOf() → finds first index of substring.
+lastIndexOf() → finds last index of substring.
+slice() → extracts part of string.
+substring() → extracts part by index.
+replace() → replaces part of string.
+split() → splits string into array.
+trim() → removes spaces from both ends.
+toUpperCase() → converts to uppercase.
+toLowerCase() → converts to lowercase.
+startsWith() → checks if string starts with given text.
+endsWith() → checks if string ends with given text.
+repeat() → repeats string given times.
+
+Q58:Object Methods
+keys() → returns array of property names.
+values() → returns array of property values.
+entries() → returns array of [key, value] pairs.
+assign() → copies values from one object to another.
+hasOwnProperty() → checks if key exists in object.
+delete → removes property from object.
+freeze() → makes object immutable.
+seal() → prevents adding or removing keys.
+create() → creates object with given prototype.
+toString() → returns string form of object.
 
 
 ====================
