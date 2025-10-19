@@ -1,4 +1,4 @@
-//reverse the array
+//reverse the array without reverse()
 function reverseArray(arr){
     const n = arr.length;
 	//reverse first half assign j with j = Math.floor(n / 2) - 1

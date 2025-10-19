@@ -82,6 +82,7 @@ Example: <link rel="stylesheet" href="style.css">
 Q14: What is accessibility (a11y)?
 A: Making web pages usable for all users including people with disabilities.
 Use semantic HTML, ARIA roles, alt attributes, keyboard navigation.
+Use semantic HTML, ARIA roles, alt text, keyboard navigation, and proper color contrast
 
 ------------------------------------------
 Q15: What is the difference between <img> alt and title attributes?
@@ -181,6 +182,38 @@ A:
 - Meta description
 - Alt attributes for images
 - Structured data
+
+Q31: Difference between <article>, <section>, and <aside>
+<article> → Represents independent, self-contained content (e.g., blog post, news item).
+
+<section> → Groups related content within a document (e.g., chapters, tabs).
+
+<aside> → Holds secondary content (e.g., sidebar, ads, related links).
+
+Q32: What are HTML5 APIs (like localStorage, canvas, geolocation)?
+localStorage / sessionStorage: Store key-value data in browser.
+
+Canvas API: Draw 2D graphics dynamically using JS.
+
+Geolocation API: Access user’s location (with permission).
+
+Drag & Drop, Web Storage, Web Workers, Audio/Video are also HTML5 APIs
+
+Q33: Difference between HTML entities and characters?
+Entities are used to display reserved or special characters in HTML.
+
+Example: &lt; displays <, &nbsp; displays a non-breaking space.
+
+Characters are the actual visual symbols, entities are encoded forms.
+
+Q34:Difference between <strong> and <b> tags
+<b> → purely visual (bold text).
+
+<strong> → semantic; conveys importance (screen readers emphasize it).
+
+Q35: How to lazy load images in HTML?
+Use loading="lazy" attribute:
+<img src="image.jpg" loading="lazy" alt="example">
 
 =============================
 

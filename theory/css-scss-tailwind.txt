@@ -12,6 +12,7 @@ A:
 
 Q2: What is the Box Model?
 A:
+Width = content + padding + border (margin lies outside).
 Content → Padding → Border → Margin  
 Example:
 
@@ -25,12 +26,13 @@ Example:
 Q4: Position properties?
 A:
 - static (default)
-- relative (moves within itself)
-- absolute (relative to nearest non-static)
-- fixed (relative to viewport)
-- sticky (hybrid)
+- relative (moves within itself) Moves relative to its normal position.
+- absolute (relative to nearest non-static) Positioned relative to the nearest positioned ancestor.
+- fixed (relative to viewport) Stays fixed relative to viewport (even when scrolling).
+- sticky (hybrid) Acts relative until scroll crosses threshold, then sticks
 
 Q5: Flexbox Basics.
+flexbox useful for 1D layout (row or column).
 A:
 .container {
   display: flex;
@@ -41,6 +43,7 @@ A:
 
 Q6: Grid Basics.
 A:
+Grid useful for 2D layout (rows and columns)
 .container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -65,18 +68,45 @@ Animation: runs automatically with @keyframes.
 
 Q10: Pseudo classes and elements.
 A:
-:hover, :focus, :nth-child(2)
-::before, ::after
+Pseudo-class: Targets state (e.g., :hover, :focus,:nth-child(2)).
+Pseudo-element: Targets part of element (e.g., ::before, ::after)
+
+Q11: Difference between margin and padding
+Margin: Space outside the element’s border.
+Padding: Space inside the element’s border, around content.
+
+Q12: What are CSS combinators?
+Define relationships between selectors:
+Descendant (space), Child (>), Adjacent sibling (+), General sibling (~).
+
+Q13: How do you handle browser compatibility in CSS?
+
+Use vendor prefixes (-webkit-, -moz-).
+Use Autoprefixer/PostCSS.
+Test in multiple browsers; use @supports or CSS resets.
+
+Q14:Difference between em, rem, %, and px
+px: Absolute pixel value.
+em: Relative to parent font-size.
+rem: Relative to root (html) font-size.
+%: Relative to parent element size.
+
+Q15: What are CSS variables and how to use them?
+Reusable custom properties:
+:root { --main-color: blue; }
+h1 { color: var(--main-color); }
 
 ==============================
 SCSS THEORY
 ==============================
 
-Q1: What is SCSS?
+Q1: What is SCSS and how does it differ from CSS?
 A: CSS preprocessor with variables, nesting, mixins, and partials.
+Compiles to standard CSS for browsers.
 
-Q2: Variables
+Q2: Variables and scoped
 A:
+Variables store reusable values and Scoped globally or within blocks.
 $primary: #3490dc;
 body { color: $primary; }
 
@@ -90,6 +120,7 @@ nav {
 
 Q4: Mixins and Include
 A:
+@mixin: Reusable block with parameters (like a function).
 @mixin flex-center {
   display: flex;
   justify-content: center;
@@ -99,6 +130,7 @@ A:
 
 Q5: Extends
 A:
+@extend: Inherits all styles of another selector.
 %btn {
   padding: 10px;
   border-radius: 5px;
@@ -132,15 +164,30 @@ Q10: SCSS Compilation
 A:
 Use `sass input.scss output.css` to compile.
 
+Q11: What are placeholders (%) in SCSS?
+Define styles that can only be extended (not compiled by themselves).
+%btn { padding: 10px; }
+.submit { @extend %btn; }
+
+
+Q12:How do control directives like @if, @for, @each work?
+Allow logic in SCSS:
+@if $theme == dark { ... }
+@for $i from 1 through 5 { ... }
+@each $color in red, blue { ... }
+
+
 ==============================
 TAILWIND CSS THEORY
 ==============================
 
 Q1: What is Tailwind CSS?
 A: Utility-first CSS framework — style directly in HTML using class names.
+ Example:
+<div class="flex items-center justifsy-between p-4 bg-blue-500 text-white">Navbar</div>
 
-Q2: Example:
-<div class="flex items-center justify-between p-4 bg-blue-500 text-white">Navbar</div>
+Q2: What are utility-first CSS frameworks?
+Frameworks where styling is applied via small, reusable utility classes (e.g., p-4, text-center).
 
 Q3: Advantages:
 - No writing custom CSS
@@ -158,6 +205,7 @@ A:
 Q6: Custom Theme
 A:
 Add in tailwind.config.js
+tailwind.config.js is responsible for theme,variants,and custom utility
 theme: {
   extend: {
     colors: { primary: '#1e40af' },
@@ -172,53 +220,20 @@ Q8: Plugins
 A:
 Forms, Typography, Line Clamp.
 
-Q9: Dark Mode
+Q9: How to enable dark mode in Tailwind?
 A:
+Set in config
+darkMode: 'class' or 'media'
+then
 Add `dark:` variant.
 <div class="bg-white dark:bg-black"></div>
 
-Q10: Tailwind with Next.js
-A:
-Installed via `npm install tailwindcss postcss autoprefixer`
-Run `npx tailwindcss init -p`
-Import in `globals.css`.
- WHAT IS TAILWIND?
-- Utility-first CSS framework for rapid UI building.
+Q10: Difference between @apply and utility classes
 
-2️⃣ INSTALLATION
-npm install tailwindcss postcss autoprefixer
+@apply: Used in CSS files to compose utilities into one class.
 
-3️⃣ CONFIGURATION
-npx tailwindcss init -p
+Utility classes: Used directly in HTML.
 
-4️⃣ COMMON CLASSES
-- Flex: `flex justify-center items-center`
-- Grid: `grid grid-cols-3 gap-4`
-- Text: `text-lg font-bold text-blue-500`
-- Spacing: `p-4 m-2`
-- Colors: `bg-gray-800 text-white`
-
-5️⃣ RESPONSIVE DESIGN
-- Prefixes: `sm:`, `md:`, `lg:`, `xl:`
-Example: `sm:text-sm md:text-lg lg:text-xl`
-
-6️⃣ DARK MODE
-- Enable in config: `darkMode: 'class'`
-- Use: `<div class="dark:bg-gray-900 dark:text-white">`
-
-7️⃣ CUSTOM THEME
-- Modify `tailwind.config.js` → extend colors, fonts, etc.
-
-8️⃣ REUSABLE COMPONENTS
-- Use `@apply` in your CSS file.
-Example:
-.btn { @apply px-4 py-2 bg-blue-500 text-white rounded-lg; }
-
-9️⃣ ANIMATIONS
-- Use `animate-bounce`, `animate-spin` etc.
-- Custom in config under `keyframes`.
-
-10️⃣ INTEGRATION WITH REACT/NEXT.JS
-- Import Tailwind CSS in `index.css` or `_app.tsx`
-
+Q11: How to optimize Tailwind build size?
+Enable purge/content mode in config to remove unused styles during production build.
 

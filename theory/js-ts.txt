@@ -132,6 +132,72 @@ Zone where variable exists but can’t be accessed before initialization.
 25️⃣ Garbage Collection
 JS automatically removes unused memory (unreferenced objects).
 
+Explain the concept of prototype and prototypal inheritance.
+
+Every JS object inherits from a prototype object.
+
+Shared methods are defined on the prototype to save memory.
+
+Example: Object.create(proto) creates a new object inheriting from proto.
+
+2. Difference between call, apply, and bind.
+
+call: fn.call(this, arg1, arg2) → calls immediately.
+
+apply: fn.apply(this, [args]) → same but takes array.
+
+bind: fn.bind(this) → returns new function for later call.
+
+3. What are higher-order functions?
+Functions that take another function as argument or return one (e.g., map, filter, reduce).
+
+4. Explain the event loop and microtask queue.
+
+JS is single-threaded; event loop manages async execution.
+
+Microtasks: Promises.
+
+Macrotasks: setTimeout, DOM events.
+
+Microtasks run before next render cycle.
+
+5. What are modules in JavaScript?
+
+Break code into reusable files using export and import.
+
+Example:
+
+export const x = 1; 
+import { x } from './file.js';
+
+
+6. Difference between shallow and deep copy.
+
+Shallow copy: copies only top-level properties (e.g., spread operator).
+
+Deep copy: copies all nested objects (e.g., structuredClone, recursion).
+
+7. What is destructuring?
+Extract values from arrays or objects easily:
+
+const [a, b] = [1, 2];
+const {name, age} = person;
+
+
+8. What is a generator function?
+
+Function that can pause/resume with yield.
+
+Defined with function*.
+
+Used for lazy evaluation or async flows.
+
+9. Explain the concept of immutability.
+
+Data shouldn’t be modified directly; instead, create new copies.
+
+Important for React state and predictable behavior.
+
 ====================
 TYPESCRIPT THEORY NOTES
 ====================
@@ -168,7 +234,10 @@ type A = {x:number}; type B = {y:string};
 type C = A & B;
 
 9️⃣ Enum:
+Used to define named constants:
 enum Color { Red, Green, Blue }
+enum Direction { Up, Down, Left, Right }
+
 
 10️⃣ Difference between Interface and Type
 Interface -> extendable
@@ -187,6 +256,7 @@ unknown -> needs type check before use
 
 14️⃣ What are Decorators?
 Experimental feature for class modification.
+Special syntax to add metadata or modify classes/functions
 Example:
 @Logger
 class User {}
@@ -195,3 +265,18 @@ class User {}
 TS -> compiled language
 JS -> interpreted
 TS adds types; JS doesn’t.
+
+. What is type narrowing?
+Process of refining a variable’s type based on conditions.
+Example:
+
+if (typeof x === 'string') { x.toUpperCase(); }
+
+
+2. What are type guards?
+Functions or checks that help narrow down types at runtime.
+Example:
+
+function isString(x: unknown): x is string {
+  return typeof x === 'string';
+}
