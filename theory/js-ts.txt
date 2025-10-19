@@ -2,14 +2,28 @@
 JAVASCRIPT THEORY NOTES
 ====================
 
-1️⃣ What is Hoisting?
+Q1: what is JavaScript? why name called JavaScript?
+JavaScript is a lightweight, case sensitive scripting language.
+JS was created to add logic to web pages;  initial name was "LiveScript" then marketing—syntax inspired by Java, but not related.
+
+Q2: what are JavaScript engine?
+a javascript engine is a computer programme that execute javascript code developed by web browser vender.
+Example: chrome we have V8 firefox we have SpiderMonkey
+
+Q1: What is Hoisting?
 Variables and functions are moved to top of scope during compilation.
 Example:
 console.log(a); // undefined
 var a = 5;
 
-2️⃣ What is Closure?
-Function remembers variables from its parent scope.
+function foo(){
+  console.log(a);//undefined
+  var a =5;
+}
+foo()
+
+Q2: What is Closure?
+inner function remembers parent scope even after function ends.
 Example:
 function outer() {
   let count = 0;
@@ -19,12 +33,12 @@ function outer() {
   }
 }
 
-3️⃣ Difference: var, let, const
+Q3: Difference: var, let, const
 var -> function scoped
 let, const -> block scoped
 const cannot be reassigned.
 
-4️⃣ What is Event Loop?
+Q4: What is Event Loop?
 Handles async operations. Executes sync code first, then callbacks from queue.
 Example:
 console.log('a');
@@ -32,41 +46,43 @@ setTimeout(()=>console.log('b'),0);
 console.log('c');
 // Output: a c b
 
-5️⃣ What is 'this' keyword?
+Q5: What is 'this' keyword?
 Refers to current context.
 In function -> global/window
 In object -> that object.
 
-6️⃣ Arrow function vs normal function
-Arrow: no own 'this', uses parent's context.
-Normal: has own 'this'.
+Q6: Arrow function vs normal function vs IIFE vs Anonymous function
+Normal Function function add(a, b) { return a + b; }
+Arrow Function  const add = (a, b) => a + b;
+IIFE (Immediately Invoked Function Expression) (function(){ console.log("Run once"); })();
+Anonymous Function let f=function(args){}
 
-7️⃣ Shallow vs Deep Copy
+Q7: Shallow vs Deep Copy
 Shallow: copies reference
 Deep: copies values recursively.
 Example:
 let a = {x:1};
 let b = {...a}; // shallow copy
 
-8️⃣ What are Promises?
+Q8. What are Promises?
 Used for async tasks.
 Example:
 new Promise((res, rej)=>res(5)).then(console.log);
 
-9️⃣ Async/Await
+Q9. Async/Await
 Syntax sugar over Promises.
 Example:
 async function getData(){
   const data = await fetch(url);
 }
 
-10️⃣ What is Debounce & Throttle?
+Q10: What is Debounce & Throttle?
 Debounce: delay execution till user stops typing.
 Throttle: limit execution in interval.
 Example:
 function debounce(fn, delay){ let timer; return (...a)=>{clearTimeout(timer); timer=setTimeout(()=>fn(...a),delay);} }
 
-11️⃣ Polyfill Example (map)
+Q11: Polyfill Example (map)
 Array.prototype.myMap = function(cb){
   let res=[];
   for(let i=0;i<this.length;i++){
@@ -75,128 +91,225 @@ Array.prototype.myMap = function(cb){
   return res;
 }
 
-12️⃣ Call, Apply, Bind
+Q12: Call, Apply, Bind
 All used to set 'this' manually.
 fn.call(obj, a,b);
 fn.apply(obj, [a,b]);
 fn.bind(obj)(a,b);
 
-13️⃣ What is Currying?
+Q13: What is Currying?
 Breaking function into multiple single-arg calls.
 Example:
 function add(a){return b=>a+b;}
 
-14️⃣ What is Prototype?
+Q14: What is Prototype?
 JS uses prototypal inheritance. Every object has a hidden [[Prototype]].
+Objects inherit from __proto__ → links to [[Prototype]]
 
-15️⃣ Difference: undefined vs null
+Q15: Difference: undefined vs null
 undefined -> declared but not assigned
 null -> intentional empty value.
 
-16️⃣ Event Delegation
+Q16: Event Delegation
 Attach single listener to parent.
 Example:
 ul.addEventListener('click',(e)=>{ if(e.target.tagName==='LI') console.log(e.target.textContent) })
 
-17️⃣ LocalStorage vs SessionStorage
+Q17: LocalStorage vs SessionStorage
 localStorage -> persists after reload
 sessionStorage -> clears when tab closes
 
-18️⃣ Spread vs Rest
+Q18: Spread vs Rest
 Spread -> expands [...arr]
 Rest -> collects (...args)
 
-19️⃣ Deep Clone Object
+Q19: Deep Clone Object
 JSON.parse(JSON.stringify(obj));
 
-20️⃣ Optional Chaining
+Q20: Optional Chaining
 Access nested property safely: user?.address?.city
 
-21️⃣ Difference Between == and ===
+Q21: Difference Between == and ===
 == does type coercion
 === checks type + value
 
-22️⃣ Difference Between slice, splice, split
+Q22: Difference Between slice, splice, split
 slice -> copy array portion
 splice -> modify array
 split -> convert string → array
 
-23️⃣ Event Bubbling vs Capturing
+Q23: Event Bubbling vs Capturing
 Bubbling: inner → outer
 Capturing: outer → inner
 addEventListener(type, fn, true) → capturing
 
-24️⃣ What is Temporal Dead Zone (TDZ)?
+Q24: What is Temporal Dead Zone (TDZ)?
 Zone where variable exists but can’t be accessed before initialization.
 
-25️⃣ Garbage Collection
+Q25: Garbage Collection
 JS automatically removes unused memory (unreferenced objects).
-
 Explain the concept of prototype and prototypal inheritance.
-
 Every JS object inherits from a prototype object.
-
 Shared methods are defined on the prototype to save memory.
-
 Example: Object.create(proto) creates a new object inheriting from proto.
 
-2. Difference between call, apply, and bind.
-
+Q26: Difference between call, apply, and bind.
 call: fn.call(this, arg1, arg2) → calls immediately.
-
 apply: fn.apply(this, [args]) → same but takes array.
-
 bind: fn.bind(this) → returns new function for later call.
 
-3. What are higher-order functions?
+Q27: What are higher-order functions?
 Functions that take another function as argument or return one (e.g., map, filter, reduce).
 
-4. Explain the event loop and microtask queue.
-
+Q28: Explain the event loop and microtask queue.
 JS is single-threaded; event loop manages async execution.
-
 Microtasks: Promises.
-
 Macrotasks: setTimeout, DOM events.
-
 Microtasks run before next render cycle.
 
-5. What are modules in JavaScript?
-
+Q29: What are modules in JavaScript?
 Break code into reusable files using export and import.
-
 Example:
-
 export const x = 1; 
 import { x } from './file.js';
 
 
-6. Difference between shallow and deep copy.
+Q30: Difference between shallow and deep copy.
 
 Shallow copy: copies only top-level properties (e.g., spread operator).
-
 Deep copy: copies all nested objects (e.g., structuredClone, recursion).
 
-7. What is destructuring?
+Q31: What is destructuring?
 Extract values from arrays or objects easily:
-
 const [a, b] = [1, 2];
 const {name, age} = person;
 
 
-8. What is a generator function?
-
+Q32: What is a generator function?
 Function that can pause/resume with yield.
-
 Defined with function*.
-
 Used for lazy evaluation or async flows.
 
-9. Explain the concept of immutability.
-
+Q33: Explain the concept of immutability.
 Data shouldn’t be modified directly; instead, create new copies.
-
 Important for React state and predictable behavior.
+
+Q34: All attributes of <script> tag
+use script tag to include js in html
+<script scr="index.js"></script>
+src, type, async, defer, crossorigin
+
+Q35: When to use defer / async
+defer → loads JS in background, runs after HTML parsing, best for most scripts.
+async → runs as soon as loaded, may block DOM. Good for analytics.
+
+Q36:Use of "use strict"
+Makes JS more secure: prevents undeclared variables, silent errors.
+"use strict"; x = 5;//error
+but x = 5;//no error
+
+Q37:Primitive vs Non-Primitive
+Primitive: single value (immutable)(String, Number, boolean, null, undefined, symbol, bigint).
+Non-Primitive:(mutable) Object, Array, function,Date,Math.
+
+Q38:Null vs Undefined
+null → empty value set by user.
+undefined → declared but not assigned.
+
+Q39: types of operator
+Arithmetic:+,-,*,/,%,++,--
+Assignment: =,+=,-=,*=,/=
+Comparison:==,===,!=,!==,>,<,>=,<=
+Logical: &&,||,!
+Bitwise: 
+Ternary:variable=(condition)?value1:value2
+
+Q40:Parameter vs Argument
+Parameter = variable in function definition.
+Argument = actual value passed.
+function add(a,b){ } add(2,3);
+
+Q41:Callback Function
+Function passed into another function to run after a task completes.
+setTimeout(()=>console.log("done"),1000);
+
+Q42:Pyramid of Doom (Callback Hell)
+When many callbacks are nested inside each other — code becomes deep, messy, and hard to read.
+getData(() => {
+  processData(() => {
+    saveData(() => {
+      sendEmail(() => {
+        console.log("Done");
+      });
+    });
+  });
+});
+Q48:call back hell solved by Promise Chain
+its readable and handle error easily
+getData()
+  .then(processData)
+  .then(saveData)
+  .then(sendEmail)
+  .then(() => console.log("Done"))
+  .catch(err => console.log("Error:", err));
+
+
+Q42: Constructor
+Used to create multiple similar objects.
+function User(n){this.name=n;}
+let u=new User("Sam");
+
+Q43: Strings are Immutable
+Once created, can’t be changed—new copy made on edit.
+
+Q44:new Array() vs []
+new Array(3) creates empty slots, [] creates actual array.
+Prefer [].
+Example: const fruits=['Apple','Banana','Orange']
+        const fruits=new Array('Apple','Banana','Orange')
+
+Q45: for of vs for in
+
+1. for of does not work with object but for in works with Object and array
+2. for of ignore extra properties which does not have index but for in does not ignore
+
+Q46:map vs forEach
+map returns new array; forEach just loops.
+
+Q47: instanceof
+Checks if object created from class.
+obj instanceof MyClass;
+
+
+
+Q49: Tree Shaking
+Removes unused JS code during bundling.
+
+Q50:Useful DOM Properties
+.innerHTML, .textContent, .style, .classList, .value, .children, .parentElement
+
+Q51:clientX vs scrollX
+
+clientX → mouse position in viewport.
+scrollX → amount page scrolled horizontally
+
+Q52:Mouse Events
+click, dblclick, mousedown, mouseup, mousemove, mouseenter, mouseleave
+
+Q53:DOMContentLoaded
+Fires when HTML fully parsed (before images).
+Helps run JS early.
+
+Q54:localStorage vs sessionStorage
+
+localStorage: permanent until cleared.
+sessionStorage: cleared on tab close.
+
+Q55:Cookies
+Small data stored in browser; sent with every HTTP request.
+
+
+
 
 ====================
 TYPESCRIPT THEORY NOTES
