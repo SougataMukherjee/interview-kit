@@ -86,6 +86,107 @@ Consistency - Maintains valid state
 Isolation - Transactions don’t interfere
 Durability - Changes are permanent
 
+========================
+SQL NOTES
+large object
+a)clob(character large object) this is used to store the character upto 4 gb of size where in varchar max store 4000
+b)blob(binary large object)this is used to store binary number of images,videosfile upto 4gb size
+
+constraints constraints are the conditions that are assigned to a particular column to validate the data
+types:1)UNIQUE is a constraint which is assigned to a particular column which can not accept duplicate value
+2) NOt Null notnull is a constraint which is assigned to a particular column which can not be null or which are mandatory
+ 3)CHECK is a constraints which is assigned to a particular column for extra validation
+ 4)Primary key is a constraints which is used to assign a column to identify a record uniquely from the table E:g aadhar card 
+we can have only one primary key in a table and it can not accept null or duplicate values and its not mandatory but recomended to use
+5)Foreign key is a constraints which is used to establish the connection between two tables
+we can have n number of foreign key in a table and it can accept repeated duplicate value even null and it also reffer as referential intigrity constraints
+
+
+Expression a statements which gives us result is known as expression
+Expression concept of two types operand and operators(+,-,*,/)
+
+Alias alias is an alternative name given to a column or expression in a result table
+alias name can be used with or without using AS keyword and its not a mandatory
+
+select * [DISTINCT] column_name/Expression[Alies]
+
+Distinct to remove repeated value or duplicate value in result table we use distinct clause
+for distinct clause we can pass column name or expression
+we can pass multiple column for distinct clause
+
+Where clause this is used to filter the record
+SELECT * FROM Customers WHERE Country = 'India';
+
+
+AND and OR operator: 
+AND operator return true if both condition true
+OR operator return true if any one condition true
+
+BETWEEN and NOT BETWEEN operator:
+between operator is used whenever we have range
+not between is simillar to between operator but it reject the value instead of selecting it
+syntax
+
+IS and IS NOT operator
+IS operator is used only to compare with null
+Is Not is similar of is but it reject the value instead of selecting
+
+LiKE operator
+LIke operator is used whenever we need to match the pattern
+percentile(%) it can accept any character any number of times
+underscore(_) it can accept any character but only once
+first character must A - A%
+Last character must A - %A
+Second Character must A- _A%
+Second last character must A - %A_
+
+
+Subqueries
+A query inside another query.
+Single Row Subquery → Returns exactly one value.
+Example operators: =, >, <, >=, <=
+Multi Row Subquery → Returns multiple values.
+Example operators: IN, NOT IN, ANY, ALL
+
+Any operator
+any operator is a special operator which can accept multiple value at rhs,it will return true if anyone of the condition at the rhs is satisfied
+
+
+Joins: this statements is used to retrieve the data from multiple table simultaneously
+types of join
+1)cartesian join or cross join
+here a record from a table 1 will be marged with all the record of table 2
+number of columns in result table will be summation of column present in table 1 table 2
+
+2)inner join or equi join
+we use inner join to obtain only the matched records or the records which as pair
+
+3)outer join
+in outer join we get the unmatch record along with the match record
+	Left outer join
+	Right outer join
+	FULL OUTER JOIN
+4)self join
+self join is used to join the same two tables ot the table itself
+
+5)natural join
+Automatically joins tables based on columns with the same name
+
+SQL Functions
+MOD(x, y) → Returns remainder of division (x % y).
+Example: MOD(10, 4) → 2
+NVL(expr1, expr2) → Returns expr2 if expr1 is NULL.
+Example: NVL(salary, 0)
+INSTR(string, substring) → Returns position of substring inside string.
+INSTR() this function is used to obtain inside value of the substring which is present in the original string 
+
+pseudo columns:
+pseudo columns are the false columns that are present in each and every table and must be called explicitly
+types of pseudo columns
+RowId: rowid is 8 digit address in which the record is present in the record is store in the memory
+RowNum: Rownum acts as serial number to the result table 
+both are unique, it cannot be duplicate
+
 =========================
 CREATE TABLE Customers (
   CustomerID INT PRIMARY KEY,
