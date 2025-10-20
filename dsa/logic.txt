@@ -1,0 +1,37 @@
+// 🧠 Visualize how string methods work inside a loop
+
+const str="HELLO"
+for (let i = 0; i < str.length; i++) {
+  let part = str.slice(0, i + 1); // take from 0 to i+1
+  console.log(part);
+}
+// output: gradually builds substrings "H", "HE", "HEL", "HELL", "HELLO"
+
+// ------------------------------
+
+for (let i = 0; i < str.length; i++) {
+  let ch = str.charAt(i);
+  console.log(ch);
+}
+// output: prints each letter one by one H E L L O
+
+// ------------------------------
+
+for (let i = 0; i < str.length; i++) {
+  let ch = str[i];
+  let index = str.indexOf(ch);
+  console.log(index);
+}
+// output: always shows the first position where character found 0 1 2 2 4
+
+// ------------------------------
+
+
+for (let i = 0; i < str.length; i++) {
+  let ch = str[i];
+  let isPresent = str.includes(ch);
+  console.log(isPresent);
+}
+// output: always true because all chars exist in "HELLO" true true true true true
+
+
