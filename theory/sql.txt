@@ -85,3 +85,168 @@ Atomicity - All or nothing
 Consistency - Maintains valid state
 Isolation - Transactions don’t interfere
 Durability - Changes are permanent
+
+=========================
+CREATE TABLE Customers (
+  CustomerID INT PRIMARY KEY,
+  CustomerName VARCHAR(100),
+  ContactName VARCHAR(100),
+  Address VARCHAR(150),
+  City VARCHAR(50),
+  PostalCode VARCHAR(10),
+  Country VARCHAR(50)
+);
+
+CREATE TABLE Products (
+  ProductID INT PRIMARY KEY,
+  ProductName VARCHAR(100),
+  Price DECIMAL(10,2)
+);
+
+CREATE TABLE OrderDetails (
+  OrderID INT,
+  ProductID INT,
+  Quantity INT
+);
+
+INSERT INTO Customers VALUES
+(1, 'Sam', 'Boss1', 'BK street', '12209', 'Germany'),
+(2, 'Mike', 'Boss2', 'Green Garden', 'México D.F.', '05021', 'Mexico'),
+(3, 'Jake', 'Boss3', 'MK houl', 'Madrid', '28023', 'Spain'),
+(4, 'Rupai', 'Boss4', '5 sq road', 'London', 'WA1 1DP', 'UK'),
+(5, 'Rik', 'Boss5', 'BK colony', 'Mannheim', '68163', 'Germany'),
+(6, 'Sou', NULL, 'Lord Bunglo', 'Milan', '20100', 'Italy');
+
+INSERT INTO Products VALUES
+(1, 'Chais', 18.00),
+(2, 'Chang', 19.00),
+(3, 'Aniseed Syrup', 10.00),
+(4, 'Chef Anton''s Cajun Seasoning', 22.00),
+(5, 'Chef Anton''s Gumbo Mix', 21.35);
+
+INSERT INTO OrderDetails VALUES
+(101, 1, 10),
+(102, 2, 20),
+(103, 3, 15),
+(104, 4, 25);
+
+
+SELECT * FROM Customers;
+-- Shows all rows and columns from Customers table
+-- +-------------+---------------+-------------+-------------+----------+-------------+----------+
+-- | CustomerID  | CustomerName  | ContactName | Address     | City     | PostalCode  | Country  |
+-- +-------------+---------------+-------------+-------------+----------+-------------+----------+
+-- | 1 | Sam   | Boss1 | BK street    | 12209     | Germany   |
+-- | 2 | Mike  | Boss2 | Green Garden | México D.F.| Mexico   |
+-- | 3 | Jake  | Boss3 | MK houl      | Madrid    | Spain     |
+-- | 4 | Rupai | Boss4 | 5 sq road    | London    | UK        |
+-- | 5 | Rik   | Boss5 | BK colony    | Mannheim  | Germany   |
+-- | 6 | Sou   | NULL  | Lord Bunglo  | Milan     | Italy     |
+
+SELECT CustomerName, City FROM Customers;
+-- Displays only specific columns
+-- +--------------+------------+
+-- | CustomerName | City       |
+-- +--------------+------------+
+-- | Sam          | 12209      |
+-- | Mike         | México D.F.|
+-- | Jake         | Madrid     |
+-- | Rupai        | London     |
+-- | Rik          | Mannheim   |
+-- | Sou          | Milan      |
+
+
+SELECT DISTINCT Country FROM Customers;
+-- Removes duplicate country names
+-- +----------+
+-- | Country  |
+-- +----------+
+-- | Germany  |
+-- | Mexico   |
+-- | Spain    |
+-- | UK       |
+-- | Italy    |
+
+
+SELECT * FROM Customers WHERE Country='Mexico';
+-- Filters customers only from Mexico
+-- +-------------+----------+----------+--------------+-------------+----------+
+-- | CustomerID  | Name     | Contact  | Address      | City        | Country  |
+-- +-------------+----------+----------+--------------+-------------+----------+
+-- | 2 | Mike | Boss2 | Green Garden | México D.F. | Mexico |
+
+
+SELECT * FROM Products ORDER BY Price;
+-- Sorts products in ascending order of price
+-- +-----------+----------------------------+--------+
+-- | ProductID | ProductName                | Price  |
+-- +-----------+----------------------------+--------+
+-- | 3 | Aniseed Syrup              | 10.00 |
+-- | 1 | Chais                      | 18.00 |
+-- | 2 | Chang                      | 19.00 |
+-- | 5 | Chef Anton's Gumbo Mix     | 21.35 |
+-- | 4 | Chef Anton's Cajun Seasoning| 22.00 |
+
+
+SELECT * FROM Customers WHERE Country='Germany' OR Country='Spain';
+-- Shows customers either from Germany or Spain
+
+
+SELECT * FROM Customers WHERE NOT Country='Spain';
+-- Shows customers not from Spain
+
+SELECT TOP 3 * FROM Customers;  -- For MySQL use: SELECT * FROM Customers LIMIT 3;
+-- Shows only first 3 rows
+
+SELECT MIN(Price) FROM Products;
+-- Shows smallest price value
+-- +------------+
+-- | MIN(Price) |
+-- +------------+
+-- | 10.00      |
+
+SELECT COUNT(*) FROM Products;
+-- Counts total number of rows
+-- +----------+
+-- | COUNT(*) |
+-- +----------+
+-- | 5        |
+
+SELECT SUM(Quantity) FROM OrderDetails;
+-- Adds up all quantities
+-- +---------------+
+-- | SUM(Quantity) |
+-- +---------------+
+-- | 70            |
+
+
+SELECT AVG(Price) FROM Products;
+-- Finds average price
+-- +------------+
+-- | AVG(Price) |
+-- +------------+
+-- | 18.47      |
+
+SELECT * FROM Customers WHERE CustomerName LIKE 'a%';
+-- Finds customer names starting with 'a'
+-- (No result since none starts with 'a')
+
+
+SELECT * FROM Customers WHERE Country IN ('Germany', 'France', 'UK');
+-- Shows only rows where Country matches any in the list
+
+SELECT * FROM Products WHERE Price BETWEEN 10 AND 20;
+-- Filters rows where price lies between 10 and 20
+
+SELECT CustomerID AS ID FROM Customers;
+-- Renames column CustomerID to ID in output
+-- +----+
+-- | ID |
+-- +----+
+-- | 1  |
+-- | 2  |
+-- | 3  |
+-- | 4  |
+-- | 5  |
+-- | 6  |
+
