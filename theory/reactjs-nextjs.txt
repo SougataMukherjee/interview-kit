@@ -79,6 +79,17 @@ Props - external, immutable.
 
 Q20: How does React handle events?
 A: Through synthetic events, which wrap native events for cross-browser compatibility.
+Virtual DOM → In-memory copy of real DOM for faster UI diff & updates.
+
+SPA (Single Page App) → One HTML loaded once; updates view via JS routing.
+
+Babel → JS compiler that converts modern JS/JSX → browser-compatible code.
+HOC (Higher-Order Component) → Function that takes a component and returns a new one with extra features.
+
+Code-split / Lazy-load → Load parts of app only when needed for better performance
+import("./math").then(math => {
+  console.log(math.add(16, 20)); 
+});
 
 
 ==============================
@@ -151,3 +162,9 @@ A: Layouts persist between routes; templates re-render on navigation.
 
 Q20: How to deploy Next.js app?
 A: Vercel (recommended), or Node server with next build + next start.
+dynamic route [segment] → For routes like /user/[id], dynamic by parameter.
+optional catch-all [...segment] → Matches /a, /a/b, /a/b/c.
+optional [ [ ...segment ] ] → Same but optional (works with or without param).
+
+private folder (folder) → Grouping folder not part of route path.
+underscore _folder → Conventionally means internal folder (ignored by Next).
