@@ -194,3 +194,78 @@ optional [ [ ...segment ] ] → Same but optional (works with or without param).
 
 private folder (folder) → Grouping folder not part of route path.
 underscore _folder → Conventionally means internal folder (ignored by Next).
+
+Styled JSX in Next.js
+Built-in CSS-in-JS for component-level styling using <style jsx> tag.
+
+Client-side vs Server-side Rendering
+CSR: Render in browser (fast navigation).
+SSR: Render on server before sending HTML (better SEO).
+
+How to improve SEO
+Use SSR/SSG, meta tags, sitemap, semantic HTML, image alt, clean URLs.
+
+Layouts and Templates
+ Layouts = Common UI (like Navbar/Footer).
+ Templates = Predefined page structures reused across routes.
+
+Optimized data fetching (getStaticProps)
+Yes getStaticProps pre-renders pages at build time for faster load.
+
+export async function getStaticProps() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/users');
+  const users = await res.json();
+
+  return {
+    props: { users }, // passed to the component
+  };
+}
+
+export default function Users({ users }) {
+  return (
+    <div>
+      <h2>User List</h2>
+      {users.map(u => (
+        <p key={u.id}>{u.name}</p>
+      ))}
+    </div>
+  );
+}
+
+
+Types of styling in Next.js
+CSS Modules, Styled JSX, Tailwind CSS, Global CSS, Styled-components
+
+Dynamic imports in Next.js
+Using next/dynamic for lazy loading components
+const Component = dynamic(() => import('../Components'));
+
+Environment variables in Next.js
+Use .env.local, access with process.env.NEXT_PUBLIC_... for client-side.
+
+Optimize performance
+Use Image component, code-splitting, caching, getStaticProps, lazy loading, CDN.
+
+Dynamic Props in Next.js
+// pages/users/[id].js
+export async function getStaticPaths() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/users');
+  const users = await res.json();
+
+  const paths = users.map(user => ({
+    params: { id: user.id.toString() }
+  }));
+
+  return { paths, fallback: false };
+}
+
+export async function getStaticProps({ params }) {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/users/${params.id}`);
+  const user = await res.json();
+
+  return { props: { user } };
+}
+
+export default function User({ user }) {
+  return <h2>{user.name}</h2>;
+}
