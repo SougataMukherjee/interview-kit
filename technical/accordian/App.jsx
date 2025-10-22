@@ -36,6 +36,7 @@ export default function App() {
             <button
               className="accordion-header"
               onClick={() => toggleSection(index)}
+              disabled={index % 2 !== 0}
             >
               Image {index + 1}
             </button>
