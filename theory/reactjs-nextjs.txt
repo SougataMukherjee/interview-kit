@@ -2,8 +2,9 @@
 REACT THEORY NOTES 
 ==============================
 
-Q1: What is Virtual DOM?
+Q1: What is Virtual DOM?How React Manages Virtual DOM?
 A: A lightweight JS representation of the real DOM. React updates only changed nodes, improving performance.
+React keeps a virtual copy of the DOM → compares (diff) → updates only changed parts.
 
 Q2: What is Reconciliation?
 A: The diffing process where React compares old and new virtual DOM trees and updates only changed parts.
@@ -21,7 +22,7 @@ Example:
 const [count, setCount] = useState(0);
 
 Q6: Explain useEffect
-A: Performs side effects after render.
+A: Performs side effects after render.(API calls, event, etc)
 Example:
 useEffect(() => { console.log('runs after render'); }, []);
 
@@ -90,6 +91,31 @@ Code-split / Lazy-load → Load parts of app only when needed for better perform
 import("./math").then(math => {
   console.log(math.add(16, 20)); 
 });
+
+Q21. Route & Protected Route
+Route: Defines which component to show for a path.
+Protected Route: Restricts access (e.g. only logged-in users).
+
+Q22. Render Props
+Share logic by passing a function as a prop that returns JSX.
+<Data render={(data) => <List data={data}/>}/>
+
+Q23.React.createElement vs React.cloneElement
+createElement: Creates a new element.
+cloneElement: Copies an element and adds new props/children.
+
+Q24. Event-driven Architecture
+Code reacts to events (e.g., click, message).
+Microfrontend Architecture
+Break big app into small independent frontends.
+
+Q25.Types of API Calls
+GET (read), POST (create), PUT/PATCH (update), DELETE (remove).
+
+Q26.Type Checking with PropTypes
+import PropTypes from 'prop-types';
+Comp.propTypes = { name: PropTypes.string.isRequired };
+
 
 
 ==============================
