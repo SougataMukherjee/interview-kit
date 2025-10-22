@@ -111,6 +111,9 @@ retryFetch("https://dummyjson.com/posts/1", 3, 1000)
   .then(data => console.log(data))
   .catch(err => console.error(err));
 
+How to handle error in Promise
+Use .catch() or try...catch inside async/await.
+fetch(url).catch(err => console.error(err));
 
 
 Q9. Async/Await
@@ -183,7 +186,11 @@ splice -> modify array
 split -> convert string → array
 
 Q23: Event Bubbling vs Capturing
-Bubbling: inner → outer
+Bubbling: inner → outer (Event moves from child → parent)
+<div onClick={()=>alert("Parent")}>
+  <button onClick={()=>alert("Child")}>Click</button>
+</div>
+
 Capturing: outer → inner
 addEventListener(type, fn, true) → capturing
 

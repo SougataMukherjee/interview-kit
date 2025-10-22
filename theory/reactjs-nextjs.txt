@@ -9,6 +9,9 @@ React keeps a virtual copy of the DOM → compares (diff) → updates only chang
 Q2: What is Reconciliation?
 A: The diffing process where React compares old and new virtual DOM trees and updates only changed parts.
 
+How diffing algorithm works in Virtual DOM
+→ React compares old and new virtual DOM trees, updates only changed nodes (O(n) optimization).
+
 Q3: Functional vs Class Components
 A: Functional - simpler, uses hooks.
    Class - uses lifecycle methods, more boilerplate.
@@ -63,6 +66,10 @@ A:
 Mounting → componentDidMount
 Updating → componentDidUpdate
 Unmounting → componentWillUnmount
+
+componentDidMount vs useEffect
+componentDidMount (class) = runs once after mount.
+useEffect(()=>{},[]) (hook) = same behavior in functional components.
 
 Q16: What is HOC (Higher Order Component)?
 A: A function that takes a component and returns a new component with added functionality.
@@ -152,7 +159,7 @@ Q8: What are Client Components?
 A: Components rendered in the browser using "use client" directive.
 
 Q9: How to create API routes in Next.js?
-A: Inside /pages/api or /app/api folder.
+A: Create serverless functions inside /pages/api or /app/api folder each file becomes an API endpoint.
 Example:
 export default function handler(req, res) { res.json({ msg: 'Hello' }) }
 
