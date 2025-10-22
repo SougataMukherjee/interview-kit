@@ -1,20 +1,31 @@
 ====================
 SQL BASICS
 ====================
-Q1: What is SQL?
+Q1: What is SQL?what is Schema?
 A: Structured Query Language used to store, retrieve, and manipulate data in relational databases.
-
+    Structure of database (tables, views, relations).
 Q2: Difference between SQL and NoSQL?
 A: SQL → structured tables with schema.
    NoSQL → flexible schema (JSON, documents, key-value).
 
 Q3: Types of SQL Commands:
 A:
-DDL (Data Definition): CREATE, ALTER, DROP
-DML (Data Manipulation): INSERT, UPDATE, DELETE
-DCL (Data Control): GRANT, REVOKE
-TCL (Transaction Control): COMMIT, ROLLBACK
-DQL (Data Query): SELECT
+DDL (Data Definition Language): CREATE, ALTER, DROP, TRUNCATE
+DML (Data Manipulation Language): SELECT, INSERT, UPDATE, DELETE
+DCL (Data Control Language): GRANT, REVOKE
+TCL (Transaction Control Language): COMMIT, ROLLBACK, SAVEPOINT
+DQL (Data Query Language): SELECT
+
+Note: DDL vs DML
+
+Note:DELETE vs DROP vs TRUNCATE
+DELETE → removes rows (can rollback)
+TRUNCATE → removes all rows (no rollback)
+DROP → removes table
+
+Note:WHERE vs HAVING
+WHERE → before grouping
+HAVING → after grouping
 
 ====================
 QUERY BASICS
@@ -78,6 +89,7 @@ SELECT * FROM HighSalary WHERE dept_id=3;
 
 Q13: What is indexing?
 A: Data structure to speed up SELECT queries by avoiding full table scans.
+Speeds up search using pointers
 
 Q14: Explain ACID properties
 A:
@@ -100,7 +112,7 @@ types:1)UNIQUE is a constraint which is assigned to a particular column which ca
 we can have only one primary key in a table and it can not accept null or duplicate values and its not mandatory but recomended to use
 5)Foreign key is a constraints which is used to establish the connection between two tables
 we can have n number of foreign key in a table and it can accept repeated duplicate value even null and it also reffer as referential intigrity constraints
-
+Composite key – Combination of 2+ columns as primary key.
 
 Expression a statements which gives us result is known as expression
 Expression concept of two types operand and operators(+,-,*,/)
@@ -179,6 +191,9 @@ NVL(expr1, expr2) → Returns expr2 if expr1 is NULL.
 Example: NVL(salary, 0)
 INSTR(string, substring) → Returns position of substring inside string.
 INSTR() this function is used to obtain inside value of the substring which is present in the original string 
+Note:NVL vs NVL2
+NVL(expr1, expr2) → if null, replace with expr2
+NVL2(expr1, expr2, expr3) → if not null expr2 else expr3
 
 pseudo columns:
 pseudo columns are the false columns that are present in each and every table and must be called explicitly
@@ -187,6 +202,35 @@ RowId: rowid is 8 digit address in which the record is present in the record is 
 RowNum: Rownum acts as serial number to the result table 
 both are unique, it cannot be duplicate
 
+Product never ordered
+SELECT * FROM Product 
+WHERE product_id NOT IN (SELECT product_id FROM Orders);
+
+DBMS vs RDBMS 
+RDBMS uses tables + relations (foreign keys).
+
+Normalization – Reduces redundancy; organizes data.
+  Normalization forms –
+1NF – atomic columns
+2NF – no partial dep
+3NF – no transitive dep
+Views – Virtual table based on query.
+
+Trigger – Auto executes on INSERT/UPDATE/DELETE.
+Cursor – Row-by-row pointer to query result.
+
+Stored procedure – Precompiled SQL block for reuse.
+Temporary table – Exists for session only
+EXISTS vs IN –
+EXISTS → checks row existence (faster)
+IN → compares values list
+CHAR vs VARCHAR
+CHAR → fixed length
+VARCHAR → variable length
+
+SQL vs NoSQL
+SQL → structured tables
+NoSQL → unstructured (JSON, key-value, doc)
 =========================
 CREATE TABLE Customers (
   CustomerID INT PRIMARY KEY,

@@ -260,6 +260,9 @@ Q3: Advantages:
 Q4: Responsive Classes
 A:
 <p class="text-lg md:text-2xl lg:text-4xl">Responsive text</p>
+<div class="text-sm md:text-lg lg:text-xl"></div>
+
+
 
 Q5: Hover & State Variants
 A:
