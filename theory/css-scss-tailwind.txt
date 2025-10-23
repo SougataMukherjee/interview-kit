@@ -145,6 +145,10 @@ Example:
 border: 2px solid red;
 outline: 2px solid blue;
 
+Q21:display:none vs visibility:hidden
+display:none → removes element from layout
+visibility:hidden → hides but keeps layout space
+
 Q22: CSS Selectors
 Select elements based on name, class, id, attribute, etc.
 Examples:

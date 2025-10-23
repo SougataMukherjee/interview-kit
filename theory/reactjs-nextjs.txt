@@ -29,16 +29,34 @@ A: Performs side effects after render.(API calls, event, etc)
 Example:
 useEffect(() => { console.log('runs after render'); }, []);
 
+Q6: Lifecycle using useEffect
+useEffect(()=>{console.log("Mount")},[]); // Mount
+useEffect(()=>{console.log("Update")},[val]); // Update
+useEffect(()=>()=>console.log("Unmount"),[]); // Unmount
+
+
 Q7: useMemo vs useCallback
 A:
 useMemo → memoizes computed value
-useCallback → memoizes function reference
+const [count, setCount] = useState(0);
+
+  const double = useMemo(() => {
+    console.log("Calculating...");
+    return count * 2;
+  }, [count]);
+useCallback → memoizes/caches function reference
+const [count, setCount] = useState(0);
+
+  const handleClick = useCallback(() => {
+    setCount(c => c + 1);
+  }, []);
+
 
 Q8: What is Prop Drilling?
 A: Passing props deeply through multiple components. Solved using Context API.
 
 Q9: What is Context API?
-A: Provides global state without prop drilling.
+A: Provides global state without prop drilling and solution for props drilling.
 Example:
 const UserContext = createContext();
 
@@ -77,8 +95,23 @@ A: A function that takes a component and returns a new component with added func
 Q17: What is React Fragment?
 A: <></> wrapper to avoid adding extra DOM nodes.
 
-Q18: Error boundaries
+Q18: Error boundaries and limitation
 A: Components that catch JS errors in child tree and display fallback UI.
+but Error Boundaries cannot catch:
+     Errors inside event handlers.
+     Errors in asynchronous code(like setTimeout,fetch)
+
+Q19. how to handle error in react?
+class ErrorBoundary extends React.Component {
+  state = { hasError: false };
+  componentDidCatch() { this.setState({ hasError: true }); }
+  render() {
+    return this.state.hasError ? <h3>Something went wrong</h3> : this.props.children;
+  }
+}
+
+and use like <ErrorBoundary><MyComponent/></ErrorBoundary>
+
 
 Q19: Difference between state and props
 A:
@@ -109,6 +142,13 @@ Share logic by passing a function as a prop that returns JSX.
 
 Q23.React.createElement vs React.cloneElement
 createElement: Creates a new element.
+function Greeting({ name }) {
+  return React.createElement(
+    'h1',
+    { className: 'greeting' },
+    'Hello'
+  );
+}
 cloneElement: Copies an element and adds new props/children.
 
 Q24. Event-driven Architecture
@@ -123,6 +163,51 @@ Q26.Type Checking with PropTypes
 import PropTypes from 'prop-types';
 Comp.propTypes = { name: PropTypes.string.isRequired };
 
+Q27. React 18 Features
+  1.Automatic Batching:Combines multiple state updates into one render.
+  fetch('/api').then(()=>{
+ setA(1); setB(2); setC(3); // only 1 re-render
+});
+  2.Transitions:Used for non-urgent updates
+  import { startTransition } from 'react';
+startTransition(() => setPage('home'));
+
+Q28: Render Props
+Share logic between components using function prop
+<Data render={data => <List data={data}/>}/>
+
+Q29: Axios
+axios.get('/users');
+axios.post('/users',{name:'Sam'});
+axios.put('/user/1',{name:'A'});
+axios.delete('/user/1');
+
+Library vs Framework
+Library: you control flow (React)
+Framework: it controls flow (Angular)
+
+React vs React DOM
+React → core logic
+ReactDOM → renders UI in browser
+
+JSX
+JS + HTML
+const el = <h1>Hello {name}</h1>;
+
+Props vs State
+
+Props: read-only
+State: mutable (internal data)
+
+types of conditional rendering
+isLogged ? <Home/> : <Login/>
+status && <Loader/>
+msg || "No message"
+
+Folder Structure
+
+React: src/components, hooks, pages, utils
+Next.js: app/, pages/, components/, public/
 
 
 ==============================

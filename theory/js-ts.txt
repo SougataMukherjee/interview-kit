@@ -10,6 +10,10 @@ Q2: what are JavaScript engine?
 a javascript engine is a computer programme that execute javascript code developed by web browser vender.
 Example: chrome we have V8 firefox we have SpiderMonkey
 
+Q3: JavaScript vs ECMAScript
+JavaScript → language used in browsers.
+ECMAScript → standard/spec that JS follows.
+
 Q1: What is Hoisting?
 Variables and functions are moved to top of scope during compilation.
 Example:
@@ -46,6 +50,10 @@ setTimeout(()=>console.log('b'),0);
 console.log('c');
 // Output: a c b
 
+Q5:Sync vs Async
+Sync → one by one
+Async → doesn’t block next
+
 Q5: What is 'this' keyword?
 Refers to current context.
 In function -> global/window
@@ -56,6 +64,9 @@ Normal Function function add(a, b) { return a + b; }
 Arrow Function  const add = (a, b) => a + b;
 IIFE (Immediately Invoked Function Expression) (function(){ console.log("Run once"); })();
 Anonymous Function let f=function(args){}
+
+
+
 
 Q7: Shallow vs Deep Copy
 Shallow: copies reference
@@ -68,6 +79,11 @@ Q8. What are Promises?
 Used to handle async operations, It has 3 states: pending → resolved → rejected
 Example:
 new Promise((res, rej)=>res(5)).then(console.log);
+
+Promise.all vs Promise.race
+
+Promise.all() → waits all
+Promise.race() → first settled
 
 Q9. How to fetch API using Promise?
 fetch("https://api.example.com/data")
@@ -162,9 +178,10 @@ Attach single listener to parent.
 Example:
 ul.addEventListener('click',(e)=>{ if(e.target.tagName==='LI') console.log(e.target.textContent) })
 
-Q17: LocalStorage vs SessionStorage
-localStorage -> persists after reload
+Q17: LocalStorage vs SessionStorage with exp
+localStorage -> persists after reload and permanent until cleared.
 sessionStorage -> clears when tab closes
+
 
 Q18: Spread vs Rest
 Spread -> expands [...arr]
@@ -172,6 +189,8 @@ Rest -> collects (...args)
 
 Q19: Deep Clone Object
 JSON.parse(JSON.stringify(obj));
+NOTE:JSON.stringify() → Object → String
+     JSON.parse() → String → Object
 
 Q20: Optional Chaining
 Access nested property safely: user?.address?.city
@@ -220,6 +239,9 @@ Microtasks run before next render cycle.
 
 Q29: What are modules in JavaScript?
 Break code into reusable files using export and import.
+Types:
+Named export
+Default export
 Example:
 export const x = 1; 
 import { x } from './file.js';
@@ -257,9 +279,9 @@ async → runs as soon as loaded, may block DOM. Good for analytics.
 Q36:Use of "use strict"
 Makes JS more secure: prevents undeclared variables, silent errors.
 "use strict"; x = 5;//error
-but x = 5;//no error
+but x = 5;//no error 
 
-Q37:Primitive vs Non-Primitive
+Q37:Data Types in JS (Primitive vs Non-Primitive)
 Primitive: single value (immutable)(String, Number, boolean, null, undefined, symbol, bigint).
 Non-Primitive:(mutable) Object, Array, function,Date,Math.
 
@@ -310,6 +332,10 @@ Used to create multiple similar objects.
 function User(n){this.name=n;}
 let u=new User("Sam");
 
+Q42: Constructor Function
+function User(name){this.name=name;}
+let u=new User('Sam');
+
 Q43: Strings are Immutable
 Once created, can’t be changed—new copy made on edit.
 
@@ -318,6 +344,20 @@ new Array(3) creates empty slots, [] creates actual array.
 Prefer [].
 Example: const fruits=['Apple','Banana','Orange']
         const fruits=new Array('Apple','Banana','Orange')
+
+Q45: create object without using new
+  const obj1 = {}; 
+const obj2 = Object.create(null);
+const obj3 = {name:"Sam"};
+const obj4 = Object.assign({}, {a:1});
+function makeObj(){return {id:1}}
+const obj5 = makeObj();
+
+Q45: Web APIs (browser features)
+fetch(), setTimeout(), setInterval(), localStorage, sessionStorage,
+document, navigator, geolocation, history, console, alert()
+
+
 
 Q45: for of vs for in
 
@@ -336,6 +376,10 @@ obj instanceof MyClass;
 Q49: Tree Shaking
 Removes unused JS code during bundling.
 
+Q50: what is DOM and its advantage
+DOM: tree structure of HTML.
+Advantage: JS can dynamically change HTML/CSS
+
 Q50:Useful DOM Properties
 .innerHTML, .textContent, .style, .classList, .value, .children, .parentElement
 
@@ -351,10 +395,12 @@ Q53:DOMContentLoaded
 Fires when HTML fully parsed (before images).
 Helps run JS early.
 
-Q54:localStorage vs sessionStorage
+Q54: isNaN() and Number()
 
-localStorage: permanent until cleared.
-sessionStorage: cleared on tab close.
+Checks if value is not number
+isNaN('abc') → true
+
+
 
 Q55:Cookies
 Small data stored in browser; sent with every HTTP request.
@@ -383,6 +429,13 @@ some() → checks if any element passes test.
 flat() → flattens nested arrays.
 fill() → fills array with given value.
 from() → creates array from iterable.
+
+Array CRUD
+let a=[1,2,3];
+a.push(4);  // add
+a.splice(1,1); // remove
+a[0]=9;     // update
+
 
 Q57:String Methods
 charAt() → returns character at index.
@@ -442,6 +495,9 @@ event.emit('hi');
 Q65: Optimize DOM Traversal 
 Cache DOM nodes, use documentFragment, batch updates
 
+Webpack
+
+Module bundler (combines JS, CSS, imgs into build).
 
 
 ====================
