@@ -2,10 +2,20 @@
 HTML NOTES
 ====================
 
+web browser
+web browser is a s/w application for retriving presenting info on www e.g google chrome
+why <br> called empty element?
+because it has no content
+
+does hyperlink only apply to text?
+text and image both
 
 Q1: What is HTML and why is it important?
 A: HTML (HyperText Markup Language) structures web content. It defines the layout and semantic meaning of elements (headings, paragraphs, links, forms, etc.).
-
+HTML5 features
+new element new attribute multimedia 2d 3d drawing support
+version of html are
+html 1.0 html2.0 html 3 html 4 html 5
 ------------------------------------------
 Q2: What are semantic tags? Give examples.
 A: A semantic element clearly describes its meaning to both the browser and the developer.
@@ -16,6 +26,11 @@ Examples of semantic elements: <img>, <table>, <header>,<nav>,<footer>, <article
 Q3: What is the difference between <div> and <section>?
 A: <div> is a generic container, no semantic meaning.
 <section> groups related content with semantic meaning.
+
+fieldset element is used to group  related control in a single box
+<fieldset>
+	<lagend>contact</lagent>
+</fieldset>
 
 ------------------------------------------
 Q4: What is the difference between inline, block, and inline-block elements?
@@ -214,6 +229,9 @@ Q34:Difference between <strong> and <b> tags
 Q35: How to lazy load images in HTML?
 Use loading="lazy" attribute:
 <img src="image.jpg" loading="lazy" alt="example">
+
+transition:
+css transition  allow you to change property value smoothly over a given duration 
 
 Q36:HTML Elements
 Building blocks of a webpage (e.g., <div>, <p>, <a>).
