@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Sidebar Layout</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Sidebar */
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      position: fixed;
+      width: 25%;
+      height: 100%;
+      background-color: tomato;
+    }
+
+    ul li a {
+      display: block;
+      text-align: center;
+      color: black;
+      text-decoration: none;
+      padding: 10px;
+      background-color: burlywood;
+    }
+
+    ul li a:hover:not(.active) {
+      background-color: beige;
+      color: white;
+    }
+
+    .active {
+      background-color: #00F0F0;
+      color: white;
+    }
+
+    /* Main content */
+    div.main {
+      margin-left: 30%;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <ul>
+    <li><a class="active" href="#">HOME</a></li>
+    <li><a href="#">ABOUT</a></li>
+    <li><a href="#">DETAILS</a></li>
+    <li><a href="#">CONTACT</a></li>
+  </ul>
+
+  <div class="main">
+    <h1>This is my mini project</h1>
+    <span>This is the heading</span>
+    <p>This is some dummy text...</p>
+  </div>
+</body>
+</html>
