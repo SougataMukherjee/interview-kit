@@ -72,6 +72,9 @@ Q12: What is useRef?
 A: Used to access DOM elements or persist mutable values without re-render.
 Example:
 const inputRef = useRef();
+When do you need to use refs?
+To directly access DOM elements or React elements.
+Use case: focus input, play video, integrate 3rd-party lib.
 
 Q13: Explain React Fiber
 A: Internal engine for scheduling rendering tasks efficiently.
@@ -194,6 +197,18 @@ JSX
 JS + HTML
 const el = <h1>Hello {name}</h1>;
 
+How do you print falsy values in JSX?
+ Wrap in {String(value)} or conditional render.{String(false)}  // prints "false"
+
+ Is it possible to use React without JSX?
+ Yes.
+ React.createElement('h1', null, 'Hello');
+
+How JSX prevents Injection Attacks?
+ JSX escapes values before rendering → prevents XSS.
+ <div>{userInput}</div> // safe
+
+
 Props vs State
 
 Props: read-only
@@ -208,6 +223,34 @@ Folder Structure
 
 React: src/components, hooks, pages, utils
 Next.js: app/, pages/, components/, public/
+
+Purpose of forwardRef?
+Pass ref from parent → child component.
+const Input = React.forwardRef((props, ref) => <input ref={ref} />);
+
+What is Suspense component?
+ Used to show fallback UI while loading async content (like lazy components).
+<Suspense fallback={<p>Loading...</p>}> <MyComp /> </Suspense>
+
+How to prevent component from rendering?
+Return null inside render.
+if(!isVisible) return null;
+
+What are portals in React?
+Render children outside parent DOM hierarchy.
+ReactDOM.createPortal(child, domNode);
+
+Why not call setState in componentWillUnmount()?
+Component already unmounted → causes memory leak warning.
+
+Is constructor mandatory in React class component?
+No. Only needed when using this.state or binding methods.
+
+How do you pass arguments to event handler?
+ Use arrow function.
+ onClick={() => handleClick(id)}
+
+
 
 
 ==============================
