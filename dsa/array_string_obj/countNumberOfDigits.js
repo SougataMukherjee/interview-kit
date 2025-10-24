@@ -1,16 +1,11 @@
 //count number of digits
-function countDigit(n) {
-  let count = 0,
-    temp = n;
-
-  while (temp > 0) {
-    let digit = temp % 10;
-    if (digit !== 0 ) {
-      count++;
+function countDigit(n){
+    let temp,count=0
+    temp=n;
+    while(temp>0){
+        temp=Math.floor(temp/10)
+        count++
     }
-    temp = Math.floor(temp / 10);
-  }
-
-  return count;
+    return count
 }
-console.log(countDigit(2343))
+console.log(countDigit(2335))
