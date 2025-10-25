@@ -5,11 +5,15 @@ export default function TicTacToe() {
   const [isXTurn, setIsXTurn] = useState(true);
 
   function handleClick(i) {
+    // Check if the clicked cell is empty (only allow move if not already filled)
     if (!cells[i]) {
+      // Create a shallow copy of the 'cells' array
       const copy = [...cells];
       console.log(copy);
       // copy[i] = isXTurn ? "X" : "O";
+      // If it's X's turn, mark as 'red'; otherwise, mark as 'blue'
       copy[i] = isXTurn ? "red" : "blue";
+      //update the board and switch turn
       setCells(copy);
       setIsXTurn(!isXTurn);
     }
