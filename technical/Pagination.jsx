@@ -19,7 +19,6 @@ export default function App() {
     { id: 15, name: "Item 15" },
   ];
 
-  const perPage = 5;
   const pages = [data.slice(0, 5), data.slice(5, 10), data.slice(10, 15)];
   const [page, setPage] = useState(0);
 
