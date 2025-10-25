@@ -1,3 +1,13 @@
+//         1
+//        / \
+//       2   3
+//      / \   \
+//     4   5   6
+//            /
+//           7
+//
+// Height (levels) = 4  (1->3->6->7)
+
 function heightOfBinaryTree(root) {
   function height(node) {
     if (!node) return 0; //return -1

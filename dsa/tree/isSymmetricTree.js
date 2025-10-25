@@ -1,3 +1,9 @@
+//       1
+//     /   \
+//    2     2
+//   / \   / \
+//  3   4 4   3
+
 function helper(left, right) {
   if (!left && !right) return true;
   if (!left || !right) return false;

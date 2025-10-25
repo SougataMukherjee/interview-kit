@@ -1,4 +1,17 @@
 //LCA means the deepest (or lowest) node that is an ancestor of both node
+//                1
+//              /   \
+//             2     3
+//           /  \   / \
+//          4    5 6   7
+//             /
+//            8
+//
+// Examples:
+// LCA(4,5) -> 2
+// LCA(4,6) -> 1
+// LCA(5,8) -> 5
+// LCA(6,7) -> 3
 
 function lowestCommonAncestor(root, p, q) {
   //if any one find in root the root ans
