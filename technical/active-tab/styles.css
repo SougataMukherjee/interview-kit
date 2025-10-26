@@ -1,0 +1,21 @@
+ul {
+  list-style-type: none;
+  margin: 0;
+  width: 25%;
+  height: 100%;
+  position: fixed;
+  background-color: tomato;
+}
+ul li a {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  text-decoration: none;
+}
+.active {
+  background-color: white;
+}
+div.main {
+  margin-left: 40%;
+  padding: 20px;
+}

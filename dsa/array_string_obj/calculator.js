@@ -1,5 +1,6 @@
 function calculator(a, b, operator) {
-  switch (operator) {
+  if(typeof a === "number"&& typeof b==="number"){
+    switch (operator) {
     case '+':
       return a + b;
     case '-':
@@ -11,5 +12,9 @@ function calculator(a, b, operator) {
     default:
       return "Invalid operator";
   }
+  }else{
+    return "unknown value"
+  }
+  
 }
 console.log(calculator(10, 5, '+'));
