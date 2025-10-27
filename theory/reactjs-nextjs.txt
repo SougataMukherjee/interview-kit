@@ -262,15 +262,42 @@ A: A React framework for server-side rendering, static site generation, and opti
 
 Q2: CSR vs SSR vs SSG
 A:
-CSR - Rendered on client (useEffect)
-SSR - Rendered on server per request (getServerSideProps)
+CSR - Rendered on client (useEffect),its render in browser for fast navigation
+SSR - Rendered on server per request (getServerSideProps),Render on server before sending HTML (better SEO)
 SSG - Pre-built HTML at build time (getStaticProps)
 
+
 Q3: Explain getStaticProps
-A: Used for static generation; runs at build time and provides props to page.
+A: Used for static generation; runs at build time only and provides props to page and Generates static HTML.
+we use when Data changes rarely
+export async function getStaticProps() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/users');
+  const users = await res.json();
+
+  return {
+    props: { users }, // passed to the component
+  };
+}
+
+export default function Users({ users }) {
+  return (
+    <div>
+      <h2>User List</h2>
+      {users.map(u => (
+        <p key={u.id}>{u.name}</p>
+      ))}
+    </div>
+  );
+}
 
 Q4: Explain getServerSideProps
-A: Runs on each request; fetches data on server before rendering.
+A: Runs on each request; fetches data on server before rendering.Data fetched fresh each time.
+export default async function Page() {
+  const res = await fetch("https://api.example.com/data", { cache: "no-store" });
+  const data = await res.json();
+  return <pre>{JSON.stringify(data, null, 2)}</pre>;
+}
+
 
 Q5: Explain getStaticPaths
 A: Used with dynamic routes to pre-render specific paths at build time.
@@ -296,6 +323,16 @@ A: next/link does client-side routing (faster, no reload), <a> tag reloads the p
 
 Q11: What is Image Optimization in Next.js?
 A: <Image /> automatically optimizes image size and format for performance.
+ it Resizes large images to the size needed by the device,Lazy-loads images,Serves responsive images with srcset
+ import Image from "next/image";
+ <Image
+        src="/images/profile.jpg"
+        alt="Profile"
+        width={300}
+        height={300}
+        quality={80}
+        priority
+      />
 
 Q12: What is Middleware in Next.js?
 A: Runs before request is completed, used for auth, redirects, or rewrites.
@@ -307,100 +344,123 @@ Q14: What is ISR (Incremental Static Regeneration)?
 A: Allows static pages to update at runtime after a set interval (revalidate).
 
 Q15: What is next/head used for?
-A: To modify <head> tags dynamically (title, meta tags).
+A: To modify <head> tags dynamically (title, meta tags).it improve SEO and Custom scripts like Google Analytics
+ import Head from "next/head";
+<Head>
+    <title>My Portfolio</title>
+    <meta name="description" content="Frontend Developer in Bangalore" />
+    <meta property="og:title" content="Portfolio Site" />
+</Head>
 
 Q16: What is next/script?
-A: Used to control script loading strategy (lazyOnload, beforeInteractive, etc.).
+A: Used to control script loading strategy (lazyOnload, beforeInteractive, etc.).it will load script only when needed to improve performance.
+<Script
+        src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"
+        strategy="afterInteractive"
+      />
 
 Q17: How to handle API fetching in Next.js 13 app router?
 A: Use async server components with fetch directly inside component.
 
 Q18: What is Dynamic Routing in Next.js?
 A: File-based routing with parameters using [id].js files.
+// pages/users/[id].js
+import { useRouter } from "next/router";
+
+export default function User() {
+  const router = useRouter();
+  const { id } = router.query; // get dynamic value from URL
+
+  return <h1>User ID: {id}</h1>;
+}
 
 Q19: What are Layouts and Templates in Next.js 13?
 A: Layouts persist between routes; templates re-render on navigation.
-
-Q20: How to deploy Next.js app?
-A: Vercel (recommended), or Node server with next build + next start.
-dynamic route [segment] → For routes like /user/[id], dynamic by parameter.
-optional catch-all [...segment] → Matches /a, /a/b, /a/b/c.
-optional [ [ ...segment ] ] → Same but optional (works with or without param).
-
-private folder (folder) → Grouping folder not part of route path.
-underscore _folder → Conventionally means internal folder (ignored by Next).
-
-Styled JSX in Next.js
-Built-in CSS-in-JS for component-level styling using <style jsx> tag.
-
-Client-side vs Server-side Rendering
-CSR: Render in browser (fast navigation).
-SSR: Render on server before sending HTML (better SEO).
-
-How to improve SEO
-Use SSR/SSG, meta tags, sitemap, semantic HTML, image alt, clean URLs.
-
-Layouts and Templates
- Layouts = Common UI (like Navbar/Footer).
- Templates = Predefined page structures reused across routes.
-
-Optimized data fetching (getStaticProps)
-Yes getStaticProps pre-renders pages at build time for faster load.
-
-export async function getStaticProps() {
-  const res = await fetch('https://jsonplaceholder.typicode.com/users');
-  const users = await res.json();
-
-  return {
-    props: { users }, // passed to the component
-  };
-}
-
-export default function Users({ users }) {
+Layouts = Common UI (like Navbar/Footer).
+Templates = Predefined page structures reused across routes.
+export default function HomeLayout({ children }) {
   return (
-    <div>
-      <h2>User List</h2>
-      {users.map(u => (
-        <p key={u.id}>{u.name}</p>
-      ))}
+    <div className="structure">
+      <Header />
+      <main>{children}</main>
+      <Footer />
     </div>
   );
 }
 
 
-Types of styling in Next.js
+Q20: all route and folder Next.js app?
+A: 
+dynamic route [segment] → For routes like /user/[id], dynamic by parameter.
+optional catch-all [...segment] → Matches /a, /a/b, /a/b/c.
+optional [ [ ...segment ] ] → Same but optional (works with or without param).
+private folder (folder) → Grouping folder not part of route path.
+underscore _folder → Conventionally means internal folder (ignored by Next).
+
+Q21: Styled JSX in Next.js
+Built-in CSS-in-JS for component-level styling using <style jsx> tag.
+
+Q22: How to improve SEO
+Use SSR/SSG, meta tags, sitemap, semantic HTML, image alt, clean URLs.
+
+Q23: Optimized data fetching (getStaticProps)
+Yes getStaticProps pre-renders pages at build time for faster load.
+
+Q24: Types of styling in Next.js
 CSS Modules, Styled JSX, Tailwind CSS, Global CSS, Styled-components
 
-Dynamic imports in Next.js
+Q25: Dynamic imports in Next.js
 Using next/dynamic for lazy loading components
 const Component = dynamic(() => import('../Components'));
 
-Environment variables in Next.js
+Q26: Environment variables in Next.js
 Use .env.local, access with process.env.NEXT_PUBLIC_... for client-side.
 
-Optimize performance
+Q27: Optimize performance
 Use Image component, code-splitting, caching, getStaticProps, lazy loading, CDN.
 
-Dynamic Props in Next.js
-// pages/users/[id].js
-export async function getStaticPaths() {
-  const res = await fetch('https://jsonplaceholder.typicode.com/users');
-  const users = await res.json();
+Q28: suspense and fallback
+React Suspense allows components to wait for async data
+and show a fallback UI (like a loader) while waiting.
 
-  const paths = users.map(user => ({
-    params: { id: user.id.toString() }
-  }));
+import { Suspense } from "react";
+import Users from "./Users";
 
-  return { paths, fallback: false };
+export default function Page() {
+  return (
+    <div>
+      <h2>Dashboard</h2>
+      <Suspense fallback={<p>Loading users...</p>}>
+        <Users />
+      </Suspense>
+    </div>
+  );
 }
-
-export async function getStaticProps({ params }) {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/users/${params.id}`);
-  const user = await res.json();
-
-  return { props: { user } };
-}
-
-export default function User({ user }) {
-  return <h2>{user.name}</h2>;
-}
+Q29: app folder structure
+app/
+ ├─ layout.jsx             // Root layout for all pages
+ ├─ page.jsx               // Home page 
+ ├─ loading.jsx            // Default loading 
+ ├─ error.jsx              // Global error boundary
+ ├─ not-found.jsx          // Custom 404 page
+ │
+ ├─ users/
+ │   ├─ page.jsx           // Route: /users
+ │   ├─ [id]/page.jsx      // Dynamic Route: /users/1
+ │   ├─ loading.jsx        //  loader
+ │   ├─ error.jsx          //  error handler
+ │
+ ├─ components/
+ │   ├─ Header.jsx
+ │   ├─ Footer.jsx
+ │   └─ Breadcrumb.jsx
+ │
+ ├─ lib/
+ │   └─ fetchData.js       
+ │
+ ├─ styles/
+ │   └─ globals.css
+ |   └─ mixin.module.scss
+ │
+ └─ api/                   
+     └─ users/route.js
