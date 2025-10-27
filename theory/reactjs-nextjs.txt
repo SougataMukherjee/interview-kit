@@ -464,3 +464,11 @@ app/
  │
  └─ api/                   
      └─ users/route.js
+
+Q30:All Route Handlers (Next.js App Router)
+Used inside app/api/route.js (or [route]/route.js)
+GET read and fetch data
+POST create data
+PUT  Update full data
+PATCH update partial data
+DELETE  remove data

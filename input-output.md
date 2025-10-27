@@ -1108,3 +1108,19 @@ function higherOrder(a, addReference) {
 }
 console.log(higherOrder(30, add)); //50
 ```
+
+### Question 81: what will be the output?
+
+```js
+console.log("1");
+setTimeout(function(){
+    setTimeout(function(){
+    	console.log("3");
+    }, 1000);
+	console.log("2");
+}, 1000);
+setTimeout(function(){
+	console.log("4");
+}, 1000);
+console.log("5");//1 5 2 4 3
+```

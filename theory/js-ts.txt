@@ -477,6 +477,19 @@ Q61: Cross-Browser Scripting
  Write JS that works same on all browsers (handle compatibility).
 Q62: ES6 Features
  let/const, arrow fn, template literals, classes, modules, promises, destructuring
+
+ ES5 Class Concept
+ ES5 didn’t have class keyword — used constructor functions + prototypes
+ function Person(name) {
+  this.name = name;
+}
+Person.prototype.greet = function() {
+  return "Hi " + this.name;
+};
+
+const p = new Person("Sam");
+console.log(p.greet()); // Hi Sam
+
 Q63:CORS 
  Cross-Origin Resource Sharing – allows API access from different domains.
 Q64:Access DOM (4 ways)
@@ -499,6 +512,16 @@ Webpack
 
 Module bundler (combines JS, CSS, imgs into build).
 
+Use of Content-Type
+
+Tells the browser what type of data is being sent.
+Examples:
+
+application/json → JSON data
+
+text/html → HTML
+
+multipart/form-data → File uploads
 
 ====================
 TYPESCRIPT THEORY NOTES
