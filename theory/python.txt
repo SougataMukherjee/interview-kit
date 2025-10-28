@@ -1,0 +1,62 @@
+What is Python?
+High-level, interpreted, dynamically typed, and object-oriented programming language.
+
+What are Python’s data types?
+int, float, str, bool, list, tuple, set, dict.
+
+Difference between list and tuple?
+List is mutable; Tuple is immutable.
+
+What is a dictionary?
+Unordered collection of key-value pairs.
+
+What is PEP 8?
+Python’s style guide for writing clean code.
+
+What is a lambda function?
+Small anonymous function using lambda keyword.
+Example: lambda x: x*x
+
+What is *args and **kwargs?
+*args = variable positional args, **kwargs = variable keyword args.
+
+What is the difference between shallow and deep copy?
+Shallow copy copies reference; deep copy copies object recursively.
+
+How is memory managed in Python?
+Using garbage collection and reference counting.
+
+What are Python decorators?
+Functions that modify other functions’ behavior.
+Example: @decorator_name
+
+What is the difference between is and ==?
+is → compares identity; == → compares values.
+
+What is a generator?
+Function that yields values one by one using yield.
+
+What is list comprehension?
+Short syntax to create lists.
+Example: [x*x for x in range(5)]
+
+What is pickling in Python?
+Converting Python object into byte stream using pickle module.
+
+Explain Python’s Global Interpreter Lock (GIL).
+It allows only one thread to execute Python code at a time.
+
+What is difference between local and global variable?
+Local defined inside a function; global defined outside.
+
+What is a module and package?
+Module = single .py file; Package = folder with __init__.py.
+
+What is __init__ in Python?
+Constructor method used to initialize object state.
+
+What is exception handling?
+Handling runtime errors using try, except, finally.
+
+What is difference between deepcopy and copy?
+copy() copies one level; deepcopy() copies all nested objects.
