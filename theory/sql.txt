@@ -8,6 +8,9 @@ Q2: Difference between SQL and NoSQL?
 A: SQL → structured tables with schema.
    NoSQL → flexible schema (JSON, documents, key-value).
 
+Execution Order
+FROM → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT/TOP
+
 Q3: Types of SQL Commands:
 A:
 DDL (Data Definition Language): CREATE, ALTER, DROP, TRUNCATE
@@ -16,12 +19,11 @@ DCL (Data Control Language): GRANT, REVOKE
 TCL (Transaction Control Language): COMMIT, ROLLBACK, SAVEPOINT
 DQL (Data Query Language): SELECT
 
-Note: DDL vs DML
 
 Note:DELETE vs DROP vs TRUNCATE
-DELETE → removes rows (can rollback)
+DELETE → removes rows and keeps table (can rollback)
 TRUNCATE → removes all rows (no rollback)
-DROP → removes table
+DROP → removes entire table
 
 Note:WHERE vs HAVING
 WHERE → before grouping
@@ -98,8 +100,34 @@ Consistency - Maintains valid state
 Isolation - Transactions don’t interfere
 Durability - Changes are permanent
 
+Q15: DB vs DBMS 
+DB = data storage;
+DBMS = software to manage it (e.g., MySQL, PostgreSQL)
+
+Q16: Schema / Table
+Schema = blueprint;
+Table = actual data.
+
+Q17:SET vs JOIN
+SET → combines results vertically (UNION, INTERSECT)
+JOIN → combines horizontally (based on keys)
+
+Q18:UNION ALL vs UNION 
+UNION ALL → includes duplicates
+UNION → removes duplicates
+
+Q19:Aggregate vs Window Function
+Aggregate → summarizes (SUM, AVG)
+Window → works per row with context (RANK, ROW_NUMBER)
+
+Q20:Stored Procedure 
+Predefined SQL block stored in DB for reuse
+
+
+
 ========================
 SQL NOTES
+========================
 large object
 a)clob(character large object) this is used to store the character upto 4 gb of size where in varchar max store 4000
 b)blob(binary large object)this is used to store binary number of images,videosfile upto 4gb size

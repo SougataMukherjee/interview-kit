@@ -1,0 +1,200 @@
+Sample Table: customer
+
+| id | first_name | country | score | email         |
+| -- | ---------- | ------- | ----- | ------------- |
+| 1  | Sam        | India   | 450   | sam@email.com |
+| 2  | Sou        | USA     | 0     | sou@email.com |
+| 3  | Rik        | Germany | 700   | rik@email.com |
+| 4  | Mia        | India   | 900   | mia@email.com |
+| 5  | Leo        | UK      | 350   | leo@email.com |
+| 6  | Ava        | Germany | 820   | ava@email.com |
+
+
+Basic Select Queries:
+========================
+SELECT * FROM customer;  
+-- Select all columns
+
+SELECT name, country FROM customer;  
+-- Select specific columns
+
+SELECT DISTINCT country FROM customer;  
+-- Remove duplicate country values
+
+SELECT TOP 3 * FROM customer;  
+-- Return only top 3 rows
+
+SELECT TOP 3 * FROM customer ORDER BY score DESC;  
+-- Return top 3 customers with the highest scores
+
+Filtering Data
+========================
+SELECT * FROM customer WHERE score != 0;
+
+SELECT first_name, country FROM customer WHERE country = 'India';
+
+SELECT * FROM customer WHERE country = 'USA' AND NOT score > 500;
+
+SELECT * FROM customer WHERE score BETWEEN 100 AND 500;
+
+SELECT * FROM customer WHERE country IN ('Germany', 'USA');
+
+SELECT * FROM customer WHERE first_name LIKE 'M%';
+-- Names starting with M
+
+SELECT * FROM customer WHERE first_name LIKE '%M_';
+-- Names ending with M and one extra character
+
+Sorting:
+SELECT * FROM customer ORDER BY score DESC;
+-- Sort by score in descending order
+
+SELECT * FROM customer ORDER BY country ASC, score DESC;
+-- Sort by country (A–Z), then by score (high to low)
+
+Grouping and Aggregation
+=========================
+
+SELECT country, SUM(score) AS total FROM customer GROUP BY country;
+-- Sum of scores by country
+
+SELECT country, SUM(score) AS total 
+FROM customer 
+GROUP BY country 
+HAVING SUM(score) > 800;
+-- Filter after grouping
+
+SELECT id, country, AVG(score) AS avg_score 
+FROM customer 
+WHERE score != 0 
+GROUP BY country 
+HAVING AVG(score) >= 430;
+
+Table Alter and Update
+========================
+ALTER TABLE customer ADD email VARCHAR(50) NOT NULL;
+-- Add new column
+
+UPDATE customer SET score = 0, country = 'UK' 
+WHERE id = 10 AND score IS NULL;
+-- Update rows with conditions
+
+Joins
+==========
+Inner Join
+
+Returns only matching rows from both tables.
+SELECT * FROM customer 
+INNER JOIN orders ON customer.id = orders.customer_id;
+
+Left Join
+
+Returns all rows from left and matching from right.
+SELECT c.id, c.first_name, o.order_id, o.sales 
+FROM customer c 
+LEFT JOIN orders o ON c.id = o.customer_id;
+
+Full Join
+
+Returns all rows from both tables.
+SELECT c.id, c.first_name, o.order_id, o.sales 
+FROM customer c 
+FULL JOIN orders o ON c.id = o.customer_id;
+
+Left Anti Join
+
+Rows from left that have no match in right.
+SELECT c.id, c.first_name 
+FROM customer c 
+LEFT JOIN orders o ON c.id = o.customer_id 
+WHERE o.order_id IS NULL;
+
+Right Anti Join
+
+Rows from right that have no match in left.
+SELECT o.order_id, o.sales 
+FROM orders o 
+LEFT JOIN customer c ON c.id = o.customer_id 
+WHERE c.id IS NULL;
+
+
+Full Anti Join
+
+Rows that don’t match in either table.
+SELECT c.id, o.order_id 
+FROM customer c 
+LEFT JOIN orders o ON c.id = o.customer_id 
+WHERE c.id IS NULL OR o.order_id IS NULL;
+
+Set operator
+============
+Used to combine results of multiple queries.
+Rules:
+Columns and datatypes must match.
+
+ORDER BY is allowed only once at the end.
+UNION
+Returns unique rows from both queries.
+SELECT c.id, c.name FROM customer 
+UNION 
+SELECT o.id, o.name FROM orders;
+
+
+EXCEPT (MINUS)
+Returns rows in first query not in the second.
+SELECT c.id, c.name FROM customer 
+EXCEPT 
+SELECT o.id, o.name FROM orders;
+
+INTERSECT
+Returns only common rows between both queries.
+SELECT c.id, c.name FROM customer 
+INTERSECT 
+SELECT o.id, o.name FROM orders;
+
+
+Functions
+==================
+1. String Functions
+SELECT CONCAT(name, ' ', country) AS name_country FROM customer;
+SELECT UPPER(name) AS up_name, LOWER(country) AS low_country FROM customer;
+SELECT name, LEN(TRIM(name)) AS len_name FROM customer;
+SELECT REPLACE('123-456-7890', '-', '/') AS clean_phone;
+SELECT LEFT(name, 2) AS first_2_char, RIGHT(name, 2) AS last_2_char FROM customer;
+SELECT SUBSTRING(TRIM(name), 1, 4) AS sub_name FROM customer;
+
+2. Date Functions
+SELECT YEAR(created_at), MONTH(created_at), DAY(created_at) FROM customer;
+SELECT FORMAT(created_at, 'MM-dd-yyyy') AS date_format FROM customer;
+SELECT DATEDIFF(DAY, start_date, end_date) AS days_diff FROM orders;
+SELECT ISDATE('2024-10-01') AS valid_date;
+
+3.Window Function
+SELECT order_id, product_id, 
+SUM(sales) OVER(PARTITION BY product_id) AS total_sales 
+FROM orders;
+
+Type and Null Handling
+======================
+SELECT CAST('123' AS INT) AS string_to_int;
+SELECT ISNULL(score, 0) AS safe_score FROM customer;
+SELECT COALESCE(email, 'N/A') AS email_value FROM customer;
+SELECT NULLIF(score, 0) AS null_if_zero FROM customer;
+
+case statements
+===============
+SELECT score, 
+  CASE WHEN score IS NULL THEN 1 ELSE 0 END AS score_flag 
+FROM customer;
+
+SELECT id, score, 
+  CASE 
+    WHEN score > 100 THEN 'High' 
+    WHEN score > 50 THEN 'Medium' 
+    ELSE 'Low' 
+  END AS score_category 
+FROM customer;
+
+
+
+
