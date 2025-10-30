@@ -25,7 +25,6 @@ Width = content + padding + border (margin lies outside).
 Content → Padding → Border → Margin  
 Example:
 
-
 Q3: Explain CSS Specificity Order.
 A:
 Inline style > ID > Class > Element  
@@ -87,8 +86,6 @@ div:hover { color: red; }
 Animation: runs automatically with @keyframes.
 @keyframes move { from{left:0;} to{left:100px;} }
 div { animation: move 2s infinite; }
-
-
 
 Q10: Pseudo classes and elements.
 A:
@@ -155,7 +152,6 @@ Superscript & Subscript:
 H<sub>2</sub>O → water  
 x<sup>2</sup> → square
 
-
 Q20:CSS Font Fallback
 Multiple fonts listed in order of priority.
 If first fails, next is used.
@@ -172,6 +168,7 @@ outline: 2px solid blue;
 Q21:display:none vs visibility:hidden
 display:none → removes element from layout
 visibility:hidden → hides but keeps layout space
+example:
 
 Q22: CSS Selectors
 Select elements based on name, class, id, attribute, etc.
@@ -345,7 +342,6 @@ Add `dark:` variant.
 Q10: Difference between @apply and utility classes
 
 @apply: Used in CSS files to compose utilities into one class.
-
 Utility classes: Used directly in HTML.
 
 Q11: How to optimize Tailwind build size?

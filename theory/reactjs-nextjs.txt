@@ -3,29 +3,29 @@ REACT THEORY NOTES
 ==============================
 
 Q1: What is Virtual DOM?How React Manages Virtual DOM?
-A: A lightweight JS representation of the real DOM. React updates only changed nodes, improving performance.
+ A lightweight JS representation of the real DOM. React updates only changed nodes, improving performance.
 React keeps a virtual copy of the DOM → compares (diff) → updates only changed parts.
 
 Q2: What is Reconciliation?
-A: The diffing process where React compares old and new virtual DOM trees and updates only changed parts.
+ The diffing process where React compares old and new virtual DOM trees and updates only changed parts.
 
 How diffing algorithm works in Virtual DOM
-→ React compares old and new virtual DOM trees, updates only changed nodes (O(n) optimization).
+ React compares old and new virtual DOM trees, updates only changed nodes (O(n) optimization).
 
 Q3: Functional vs Class Components
-A: Functional - simpler, uses hooks.
-   Class - uses lifecycle methods, more boilerplate.
+ Functional - simpler, uses hooks.
+ Class - uses lifecycle methods, more boilerplate.
 
 Q4: What are Hooks in React?
-A: Functions that let you use React features without classes (e.g. useState, useEffect, useMemo, useCallback).
+ Functions that let you use React features without classes (e.g. useState, useEffect, useMemo, useCallback).
 
 Q5: Explain useState
-A: Manages local state in functional components.
+ Manages local state in functional components.
 Example:
 const [count, setCount] = useState(0);
 
 Q6: Explain useEffect
-A: Performs side effects after render.(API calls, event, etc)
+ Performs side effects after render.(API calls, event, etc)
 Example:
 useEffect(() => { console.log('runs after render'); }, []);
 
@@ -34,72 +34,68 @@ useEffect(()=>{console.log("Mount")},[]); // Mount
 useEffect(()=>{console.log("Update")},[val]); // Update
 useEffect(()=>()=>console.log("Unmount"),[]); // Unmount
 
-
 Q7: useMemo vs useCallback
-A:
 useMemo → memoizes computed value
 const [count, setCount] = useState(0);
-
   const double = useMemo(() => {
     console.log("Calculating...");
     return count * 2;
   }, [count]);
 useCallback → memoizes/caches function reference
 const [count, setCount] = useState(0);
-
   const handleClick = useCallback(() => {
     setCount(c => c + 1);
   }, []);
 
 
 Q8: What is Prop Drilling?
-A: Passing props deeply through multiple components. Solved using Context API.
+ Passing props deeply through multiple components. Solved using Context API.
 
 Q9: What is Context API?
-A: Provides global state without prop drilling and solution for props drilling.
+ Provides global state without prop drilling and solution for props drilling.
 Example:
 const UserContext = createContext();
 
 Q10: What is React.memo?
-A: Prevents unnecessary re-renders of functional components when props don’t change.
+ Prevents unnecessary re-renders of functional components when props don’t change.
 
 Q11: Controlled vs Uncontrolled Components
-A:
 Controlled - state managed by React.
 Uncontrolled - managed by DOM via refs.
 
 Q12: What is useRef?
-A: Used to access DOM elements or persist mutable values without re-render.
+ Used to access DOM elements or persist mutable values without re-render.
 Example:
 const inputRef = useRef();
-When do you need to use refs?
+-When do you need to use refs?
 To directly access DOM elements or React elements.
 Use case: focus input, play video, integrate 3rd-party lib.
 
 Q13: Explain React Fiber
-A: Internal engine for scheduling rendering tasks efficiently.
+ Internal engine for scheduling rendering tasks efficiently.
 
 Q14: Difference between keys in React list
-A: Unique key helps React identify elements and track updates efficiently.
+ Unique key helps React identify elements and track updates efficiently.
 
 Q15: Lifecycle methods in class component
-A:
 Mounting → componentDidMount
 Updating → componentDidUpdate
 Unmounting → componentWillUnmount
 
 componentDidMount vs useEffect
 componentDidMount (class) = runs once after mount.
+componentDidMount() → Used only once in a class component; runs after the component is mounted.
 useEffect(()=>{},[]) (hook) = same behavior in functional components.
+useEffect() → Used in functional components; you can have multiple useEffect hooks for different side effects, and control when they run using dependency arrays
 
 Q16: What is HOC (Higher Order Component)?
-A: A function that takes a component and returns a new component with added functionality.
+ A function that takes a component and returns a new component with added functionality.
 
 Q17: What is React Fragment?
-A: <></> wrapper to avoid adding extra DOM nodes.
+<></> wrapper to avoid adding extra DOM nodes.
 
 Q18: Error boundaries and limitation
-A: Components that catch JS errors in child tree and display fallback UI.
+Components that catch JS errors in child tree and display fallback UI.
 but Error Boundaries cannot catch:
      Errors inside event handlers.
      Errors in asynchronous code(like setTimeout,fetch)
@@ -112,21 +108,17 @@ class ErrorBoundary extends React.Component {
     return this.state.hasError ? <h3>Something went wrong</h3> : this.props.children;
   }
 }
-
 and use like <ErrorBoundary><MyComponent/></ErrorBoundary>
 
 
 Q19: Difference between state and props
-A:
 State - internal, mutable.
 Props - external, immutable.
 
 Q20: How does React handle events?
-A: Through synthetic events, which wrap native events for cross-browser compatibility.
+Through synthetic events, which wrap native events for cross-browser compatibility.
 Virtual DOM → In-memory copy of real DOM for faster UI diff & updates.
-
 SPA (Single Page App) → One HTML loaded once; updates view via JS routing.
-
 Babel → JS compiler that converts modern JS/JSX → browser-compatible code.
 HOC (Higher-Order Component) → Function that takes a component and returns a new one with extra features.
 
@@ -185,68 +177,65 @@ axios.post('/users',{name:'Sam'});
 axios.put('/user/1',{name:'A'});
 axios.delete('/user/1');
 
-Library vs Framework
+Q30: Library vs Framework
 Library: you control flow (React)
 Framework: it controls flow (Angular)
 
-React vs React DOM
+Q31: React vs React DOM
 React → core logic
 ReactDOM → renders UI in browser
 
-JSX
+Q32: JSX
 JS + HTML
 const el = <h1>Hello {name}</h1>;
 
-How do you print falsy values in JSX?
+Q33:How do you print falsy values in JSX?
  Wrap in {String(value)} or conditional render.{String(false)}  // prints "false"
 
- Is it possible to use React without JSX?
+Q34.Is it possible to use React without JSX?
  Yes.
  React.createElement('h1', null, 'Hello');
 
-How JSX prevents Injection Attacks?
+Q35:How JSX prevents Injection Attacks?
  JSX escapes values before rendering → prevents XSS.
  <div>{userInput}</div> // safe
 
-
-Props vs State
-
+Q36: Props vs State
 Props: read-only
 State: mutable (internal data)
 
-types of conditional rendering
+Q37: types of conditional rendering
 isLogged ? <Home/> : <Login/>
 status && <Loader/>
 msg || "No message"
 
-Folder Structure
-
+Q38: Folder Structure
 React: src/components, hooks, pages, utils
 Next.js: app/, pages/, components/, public/
 
-Purpose of forwardRef?
+Q39: Purpose of forwardRef?
 Pass ref from parent → child component.
 const Input = React.forwardRef((props, ref) => <input ref={ref} />);
 
-What is Suspense component?
+Q40. What is Suspense component?
  Used to show fallback UI while loading async content (like lazy components).
 <Suspense fallback={<p>Loading...</p>}> <MyComp /> </Suspense>
 
-How to prevent component from rendering?
+Q41. How to prevent component from rendering?
 Return null inside render.
 if(!isVisible) return null;
 
-What are portals in React?
+Q42. What are portals in React?
 Render children outside parent DOM hierarchy.
 ReactDOM.createPortal(child, domNode);
 
-Why not call setState in componentWillUnmount()?
+Q43. Why not call setState in componentWillUnmount()?
 Component already unmounted → causes memory leak warning.
 
-Is constructor mandatory in React class component?
+Q44. Is constructor mandatory in React class component?
 No. Only needed when using this.state or binding methods.
 
-How do you pass arguments to event handler?
+Q45. How do you pass arguments to event handler?
  Use arrow function.
  onClick={() => handleClick(id)}
 
@@ -258,22 +247,19 @@ NEXT.JS THEORY NOTES
 ==============================
 
 Q1: What is Next.js?
-A: A React framework for server-side rendering, static site generation, and optimized performance.
+ A React framework for server-side rendering, static site generation, and optimized performance.
 
 Q2: CSR vs SSR vs SSG
-A:
 CSR - Rendered on client (useEffect),its render in browser for fast navigation
 SSR - Rendered on server per request (getServerSideProps),Render on server before sending HTML (better SEO)
 SSG - Pre-built HTML at build time (getStaticProps)
 
-
 Q3: Explain getStaticProps
-A: Used for static generation; runs at build time only and provides props to page and Generates static HTML.
+Used for static generation; runs at build time only and provides props to page and Generates static HTML.
 we use when Data changes rarely
 export async function getStaticProps() {
   const res = await fetch('https://jsonplaceholder.typicode.com/users');
   const users = await res.json();
-
   return {
     props: { users }, // passed to the component
   };
@@ -291,38 +277,36 @@ export default function Users({ users }) {
 }
 
 Q4: Explain getServerSideProps
-A: Runs on each request; fetches data on server before rendering.Data fetched fresh each time.
+Runs on each request; fetches data on server before rendering.Data fetched fresh each time.
 export default async function Page() {
   const res = await fetch("https://api.example.com/data", { cache: "no-store" });
   const data = await res.json();
   return <pre>{JSON.stringify(data, null, 2)}</pre>;
 }
 
-
 Q5: Explain getStaticPaths
-A: Used with dynamic routes to pre-render specific paths at build time.
+Used with dynamic routes to pre-render specific paths at build time.
 
 Q6: Difference between pages and app router
-A:
 - Pages router: uses /pages directory, older version.
 - App router: introduced in Next.js 13, uses /app directory, server components, and layout.js.
 
 Q7: What are Server Components?
-A: Components rendered on the server — faster, smaller bundles, no client JS needed.
+Components rendered on the server — faster, smaller bundles, no client JS needed.
 
 Q8: What are Client Components?
-A: Components rendered in the browser using "use client" directive.
+Components rendered in the browser using "use client" directive.
 
 Q9: How to create API routes in Next.js?
-A: Create serverless functions inside /pages/api or /app/api folder each file becomes an API endpoint.
+Create serverless functions inside /pages/api or /app/api folder each file becomes an API endpoint.
 Example:
 export default function handler(req, res) { res.json({ msg: 'Hello' }) }
 
 Q10: Difference between next/link and a tag
-A: next/link does client-side routing (faster, no reload), <a> tag reloads the page.
+ next/link does client-side routing (faster, no reload), <a> tag reloads the page.
 
 Q11: What is Image Optimization in Next.js?
-A: <Image /> automatically optimizes image size and format for performance.
+ <Image /> automatically optimizes image size and format for performance.
  it Resizes large images to the size needed by the device,Lazy-loads images,Serves responsive images with srcset
  import Image from "next/image";
  <Image
@@ -335,16 +319,16 @@ A: <Image /> automatically optimizes image size and format for performance.
       />
 
 Q12: What is Middleware in Next.js?
-A: Runs before request is completed, used for auth, redirects, or rewrites.
+ Runs before request is completed, used for auth, redirects, or rewrites.
 
 Q13: How to handle environment variables in Next.js?
-A: Stored in .env.local and accessed via process.env.NAME
+ Stored in .env.local and accessed via process.env.NAME
 
 Q14: What is ISR (Incremental Static Regeneration)?
-A: Allows static pages to update at runtime after a set interval (revalidate).
+ Allows static pages to update at runtime after a set interval (revalidate).
 
 Q15: What is next/head used for?
-A: To modify <head> tags dynamically (title, meta tags).it improve SEO and Custom scripts like Google Analytics
+ To modify <head> tags dynamically (title, meta tags).it improve SEO and Custom scripts like Google Analytics
  import Head from "next/head";
 <Head>
     <title>My Portfolio</title>
@@ -353,29 +337,28 @@ A: To modify <head> tags dynamically (title, meta tags).it improve SEO and Custo
 </Head>
 
 Q16: What is next/script?
-A: Used to control script loading strategy (lazyOnload, beforeInteractive, etc.).it will load script only when needed to improve performance.
+ Used to control script loading strategy (lazyOnload, beforeInteractive, etc.).it will load script only when needed to improve performance.
 <Script
         src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"
         strategy="afterInteractive"
       />
 
 Q17: How to handle API fetching in Next.js 13 app router?
-A: Use async server components with fetch directly inside component.
+ Use async server components with fetch directly inside component.
 
 Q18: What is Dynamic Routing in Next.js?
-A: File-based routing with parameters using [id].js files.
+ File-based routing with parameters using [id].js files.
 // pages/users/[id].js
 import { useRouter } from "next/router";
 
 export default function User() {
   const router = useRouter();
   const { id } = router.query; // get dynamic value from URL
-
   return <h1>User ID: {id}</h1>;
 }
 
 Q19: What are Layouts and Templates in Next.js 13?
-A: Layouts persist between routes; templates re-render on navigation.
+Layouts persist between routes; templates re-render on navigation.
 Layouts = Common UI (like Navbar/Footer).
 Templates = Predefined page structures reused across routes.
 export default function HomeLayout({ children }) {
@@ -388,9 +371,7 @@ export default function HomeLayout({ children }) {
   );
 }
 
-
 Q20: all route and folder Next.js app?
-A: 
 dynamic route [segment] → For routes like /user/[id], dynamic by parameter.
 optional catch-all [...segment] → Matches /a, /a/b, /a/b/c.
 optional [ [ ...segment ] ] → Same but optional (works with or without param).
@@ -422,10 +403,8 @@ Use Image component, code-splitting, caching, getStaticProps, lazy loading, CDN.
 Q28: suspense and fallback
 React Suspense allows components to wait for async data
 and show a fallback UI (like a loader) while waiting.
-
 import { Suspense } from "react";
 import Users from "./Users";
-
 export default function Page() {
   return (
     <div>
@@ -436,6 +415,7 @@ export default function Page() {
     </div>
   );
 }
+
 Q29: app folder structure
 app/
  ├─ layout.jsx             // Root layout for all pages

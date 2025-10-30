@@ -36,7 +36,7 @@ export class HelloComponent {}
 
 3. What is a Module?
 
-Modules group related components, services, and directives together
+Modules is group related components, services, and directives together
 @NgModule({
   declarations: [HelloComponent],
   imports: [BrowserModule],

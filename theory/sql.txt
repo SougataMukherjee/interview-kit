@@ -1,24 +1,22 @@
 ====================
-SQL BASICS
+SQL NOTES
 ====================
 Q1: What is SQL?what is Schema?
-A: Structured Query Language used to store, retrieve, and manipulate data in relational databases.
+ Structured Query Language used to store, retrieve, and manipulate data in relational databases.
     Structure of database (tables, views, relations).
 Q2: Difference between SQL and NoSQL?
-A: SQL → structured tables with schema.
+ SQL → structured tables with schema.
    NoSQL → flexible schema (JSON, documents, key-value).
 
 Execution Order
 FROM → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT/TOP
 
 Q3: Types of SQL Commands:
-A:
 DDL (Data Definition Language): CREATE, ALTER, DROP, TRUNCATE
 DML (Data Manipulation Language): SELECT, INSERT, UPDATE, DELETE
 DCL (Data Control Language): GRANT, REVOKE
 TCL (Transaction Control Language): COMMIT, ROLLBACK, SAVEPOINT
 DQL (Data Query Language): SELECT
-
 
 Note:DELETE vs DROP vs TRUNCATE
 DELETE → removes rows and keeps table (can rollback)
@@ -29,59 +27,41 @@ Note:WHERE vs HAVING
 WHERE → before grouping
 HAVING → after grouping
 
-====================
-QUERY BASICS
-====================
 Q4: Get all records from Employee table
-A: SELECT * FROM Employee;
+ SELECT * FROM Employee;
 
 Q5: Get employees whose salary > 50000
-A: SELECT name, salary FROM Employee WHERE salary > 50000;
+ SELECT name, salary FROM Employee WHERE salary > 50000;
 
 Q6: Sort employees by name
-A: SELECT * FROM Employee ORDER BY name ASC;
+ SELECT * FROM Employee ORDER BY name ASC;
 
-====================
-JOINS
-====================
 Q7: Inner Join example
-A:
 SELECT e.name, d.dept_name
 FROM Employee e
 INNER JOIN Department d
 ON e.dept_id = d.id;
 
 Q8: Difference between LEFT JOIN and INNER JOIN
-A:
 INNER JOIN → common records only
 LEFT JOIN → all from left + matched from right
 
-====================
-AGGREGATE & GROUPING
-====================
 Q9: Find total employees per department
-A:
 SELECT dept_id, COUNT(*) as total
 FROM Employee
 GROUP BY dept_id;
 
 Q10: Filter grouped results with HAVING
-A:
 SELECT dept_id, COUNT(*) as total
 FROM Employee
 GROUP BY dept_id
 HAVING COUNT(*) > 5;
 
-====================
-ADVANCED
-====================
 Q11: Find 2nd highest salary
-A:
 SELECT MAX(salary) FROM Employee
 WHERE salary < (SELECT MAX(salary) FROM Employee);
 
 Q12: What is a CTE (WITH clause)?
-A:
 Temporary result used in next SELECT.
 Example:
 WITH HighSalary AS (
@@ -90,11 +70,10 @@ WITH HighSalary AS (
 SELECT * FROM HighSalary WHERE dept_id=3;
 
 Q13: What is indexing?
-A: Data structure to speed up SELECT queries by avoiding full table scans.
+Data structure to speed up SELECT queries by avoiding full table scans.
 Speeds up search using pointers
 
 Q14: Explain ACID properties
-A:
 Atomicity - All or nothing
 Consistency - Maintains valid state
 Isolation - Transactions don’t interfere
@@ -122,7 +101,6 @@ Window → works per row with context (RANK, ROW_NUMBER)
 
 Q20:Stored Procedure 
 Predefined SQL block stored in DB for reuse
-
 
 
 ========================
@@ -259,176 +237,5 @@ VARCHAR → variable length
 SQL vs NoSQL
 SQL → structured tables
 NoSQL → unstructured (JSON, key-value, doc)
-=========================
-CREATE TABLE Customers (
-  CustomerID INT PRIMARY KEY,
-  CustomerName VARCHAR(100) UNIQUE NOT NULL,
-  ContactName VARCHAR(100),
-  Address VARCHAR(150),
-  City VARCHAR(50),
-  PostalCode VARCHAR(10),
-  Country VARCHAR(50)
-);
 
-CREATE TABLE Products (
-  ProductID INT PRIMARY KEY,
-  ProductName VARCHAR(100),
-  Price DECIMAL(10,2)
-);
-
-CREATE TABLE OrderDetails (
-  OrderID INT,
-  ProductID INT,
-  Quantity INT
-);
-
-INSERT INTO Customers (CustomerID, CustomerName, ContactName, Address, City, PostalCode, Country) VALUES
-(1, 'Sam', 'Boss1', 'BK street', '12209', 'Germany'),
-(2, 'Mike', 'Boss2', 'Green Garden', 'México D.F.', '05021', 'Mexico'),
-(3, 'Jake', 'Boss3', 'MK houl', 'Madrid', '28023', 'Spain'),
-(4, 'Rupai', 'Boss4', '5 sq road', 'London', 'WA1 1DP', 'UK'),
-(5, 'Rik', 'Boss5', 'BK colony', 'Mannheim', '68163', 'Germany'),
-(6, 'Sou', NULL, 'Lord Bunglo', 'Milan', '20100', 'Italy');
-
-INSERT INTO Products (ProductID, ProductName, Price) VALUES
-(1, 'Chais', 18.00),
-(2, 'Chang', 19.00),
-(3, 'Aniseed Syrup', 10.00),
-(4, 'Chef Anton''s Cajun Seasoning', 22.00),
-(5, 'Chef Anton''s Gumbo Mix', 21.35);
-
-INSERT INTO OrderDetails (OrderID, ProductID, Quantity) VALUES
-(101, 1, 10),
-(102, 2, 20),
-(103, 3, 15),
-(104, 4, 25);
-
-
-SELECT * FROM Customers;
--- Shows all rows and columns from Customers table
--- +-------------+---------------+-------------+-------------+----------+-------------+----------+
--- | CustomerID  | CustomerName  | ContactName | Address     | City     | PostalCode  | Country  |
--- +-------------+---------------+-------------+-------------+----------+-------------+----------+
--- | 1 | Sam   | Boss1 | BK street    | 12209     | Germany   |
--- | 2 | Mike  | Boss2 | Green Garden | México D.F.| Mexico   |
--- | 3 | Jake  | Boss3 | MK houl      | Madrid    | Spain     |
--- | 4 | Rupai | Boss4 | 5 sq road    | London    | UK        |
--- | 5 | Rik   | Boss5 | BK colony    | Mannheim  | Germany   |
--- | 6 | Sou   | NULL  | Lord Bunglo  | Milan     | Italy     |
-
-SELECT CustomerName, City FROM Customers;
--- Displays only specific columns
--- +--------------+------------+
--- | CustomerName | City       |
--- +--------------+------------+
--- | Sam          | 12209      |
--- | Mike         | México D.F.|
--- | Jake         | Madrid     |
--- | Rupai        | London     |
--- | Rik          | Mannheim   |
--- | Sou          | Milan      |
-
-
-SELECT DISTINCT Country FROM Customers;
--- Removes duplicate country names
--- +----------+
--- | Country  |
--- +----------+
--- | Germany  |
--- | Mexico   |
--- | Spain    |
--- | UK       |
--- | Italy    |
-
-
-SELECT * FROM Customers WHERE Country='Mexico';
--- Filters customers only from Mexico
--- +-------------+----------+----------+--------------+-------------+----------+
--- | CustomerID  | Name     | Contact  | Address      | City        | Country  |
--- +-------------+----------+----------+--------------+-------------+----------+
--- | 2 | Mike | Boss2 | Green Garden | México D.F. | Mexico |
-
-
-SELECT * FROM Products ORDER BY Price;
--- Sorts products in ascending order of price
--- +-----------+----------------------------+--------+
--- | ProductID | ProductName                | Price  |
--- +-----------+----------------------------+--------+
--- | 3 | Aniseed Syrup              | 10.00 |
--- | 1 | Chais                      | 18.00 |
--- | 2 | Chang                      | 19.00 |
--- | 5 | Chef Anton's Gumbo Mix     | 21.35 |
--- | 4 | Chef Anton's Cajun Seasoning| 22.00 |
-
-
-SELECT * FROM Customers WHERE Country='Germany' OR Country='Spain';
--- Shows customers either from Germany or Spain
-
-
-SELECT * FROM Customers WHERE NOT Country='Spain';
--- Shows customers not from Spain
-
-SELECT TOP 3 * FROM Customers;  -- For MySQL use: SELECT * FROM Customers LIMIT 3;
--- Shows only first 3 rows
-
-SELECT MIN(Price) FROM Products;
--- Shows smallest price value
--- +------------+
--- | MIN(Price) |
--- +------------+
--- | 10.00      |
-
-SELECT COUNT(*) FROM Products;
--- Counts total number of rows
--- +----------+
--- | COUNT(*) |
--- +----------+
--- | 5        |
-
-SELECT SUM(Quantity) FROM OrderDetails;
--- Adds up all quantities
--- +---------------+
--- | SUM(Quantity) |
--- +---------------+
--- | 70            |
-
-
-SELECT AVG(Price) FROM Products;
--- Finds average price
--- +------------+
--- | AVG(Price) |
--- +------------+
--- | 18.47      |
-
-SELECT * FROM Customers WHERE CustomerName LIKE 'a%';
--- Finds customer names starting with 'a'
--- (No result since none starts with 'a')
-
-
-SELECT * FROM Customers WHERE Country IN ('Germany', 'France', 'UK');
--- Shows only rows where Country matches any in the list
-
-SELECT * FROM Products WHERE Price BETWEEN 10 AND 20;
--- Filters rows where price lies between 10 and 20
-
-SELECT CustomerID AS ID FROM Customers;
--- Renames column CustomerID to ID in output
--- +----+
--- | ID |
--- +----+
--- | 1  |
--- | 2  |
--- | 3  |
--- | 4  |
--- | 5  |
--- | 6  |
-
-SELECT ProductName, AVG(Price) AS price
-FROM Products
-GROUP BY ProductName;
-
-SELECT * FROM Customers WHERE LOWER(CustomerName) = 'sam';//search for customer name 'Sam'
-
-SELECT * FROM Customers
-WHERE CustomerName LIKE 'R%' OR CustomerName LIKE 'S%';//customer name starts with R or S
 
