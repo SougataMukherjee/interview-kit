@@ -1,0 +1,159 @@
+====================
+ANGULAR NOTES
+====================
+
+1. What is Angular? What is the folder structure in Angular?
+
+Angular is a front-end framework developed by Google for building single-page applications (SPAs) using HTML, CSS, and TypeScript.
+Angular projects follow a modular folder structure for scalability and maintainability.
+
+src/
+ ┣ app/
+ ┃ ┣ components/ (UI part)
+ ┃ ┣ services/   (API or business logic)
+ ┃ ┣ models/     (interfaces or types)
+ ┃ ┣ app.module.ts
+ ┃ ┣ app.component.ts
+ ┗ assets/
+ ┗ environments/
+
+
+2. What are Components in Angular?
+Components are the building blocks of Angular applications — they control a part of the UI.
+@Component({
+  selector: 'app-hello',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  styleUrl: './user.scss',
+  template:  `
+    <h2>Home</h2>
+    <p>Welcome! You are logged in.</p>
+    <button (click)="logout()">Logout</button>
+  `
+})
+export class HelloComponent {}
+
+
+3. What is a Module?
+
+Modules group related components, services, and directives together
+@NgModule({
+  declarations: [HelloComponent],
+  imports: [BrowserModule],
+  bootstrap: [HelloComponent]
+})
+export class AppModule {}
+
+4. What is Data Binding?
+
+It’s the connection between component (TS) and template (HTML).
+<p>{{ name }}</p> <!-- Interpolation -->
+
+5. What are Directives?
+
+Directives change the behavior or look of elements in the DOM.
+<p *ngIf="show">Visible only if true</p>
+
+6. What is ngFor and ngIf?
+
+*ngFor → Loop items
+*ngIf → Conditional display
+<p *ngFor="let item of items">{{ item }}</p>
+<p *ngIf="isLoggedIn">Welcome back!</p>
+
+7.What is a Service in Angular?
+
+Services are used to share data or logic across components
+@Injectable({ providedIn: 'root' })
+export class DataService {
+  getData() { return ['A', 'B', 'C']; }
+}
+
+8. What are Pipes?
+
+Pipes transform data in templates.
+<p>{{ name | uppercase }}</p>
+
+9. What is Routing in Angular?
+
+Routing allows navigation between different components (pages).
+const routes = [
+  { path: 'home', component: HomeComponent },
+  { path: 'about', component: AboutComponent }
+];
+
+
+11. What are Lifecycle Hooks in Angular?
+Lifecycle hooks allow you to tap into key moments of a component’s life (creation, update, destruction).
+Common Hooks:
+ngOnInit() → runs once after component loads
+ngOnChanges() → runs when input values change
+ngOnDestroy() → runs before component is removed
+
+12.How do you make an HTTP call in Angular?
+Using the HttpClient service.
+getPost(id: number): Observable<Post> {
+  return this.http.get<Post>(`${this.baseUrl}/posts/${id}`);
+}
+
+
+13.What are Observables in Angular?
+Observables (from RxJS) are used to handle asynchronous data — like API calls or user events.
+this.http.get('https://api.example.com/data').subscribe(res => {
+  console.log(res);
+});
+
+
+14.What is RxJS?
+
+RxJS (Reactive Extensions for JavaScript) is a library for reactive programming using Observables, allowing you to manage async data streams easily.
+import { of } from 'rxjs';
+of(1, 2, 3).subscribe(x => console.log(x));
+
+15.What is Lazy Loading in Angular?
+
+Lazy loading loads modules only when required, improving performance.
+{ path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) }
+
+16.What is (ngSubmit) in Angular?
+(ngSubmit) is an event binding used with forms. It calls a function when the form is submitted
+Here onLogin() is triggered when the form is submitted.
+ngModule did two-way data binding — syncs data between component and view.
+<form (ngSubmit)="onLogin()">
+  <input [(ngModel)]="username" />
+</form>
+
+17.What is (click) or (mouseenter) in Angular?
+These are event bindings that execute code when a DOM event occurs.
+<button (click)="onIncrement()">+</button>
+<div (mouseenter)="handleEvent($event)">Hover me</div>
+
+
+18.What is @Input() and @Output()?
+Used for parent-child component communication.
+
+@Input() → pass data from parent → child
+@Output() → send data from child → parent
+@Input() data: string = '';
+@Output() getChildData = new EventEmitter<string[]>();
+
+19.What is [src] and {{ }} in Angular?
+Used for property binding and interpolation
+<img [src]="blog.image" alt="{{blog.title}}">
+[src] binds to a property; {{ }} interpolates string values
+
+20.What is [routerLink]?
+Used for client-side navigation.
+<a [routerLink]="['/blog', blog.id]">View Blog</a>
+
+21. What does the onLogin() function do here?
+It validates user input and navigates on success.
+onLogin() {
+  if (this.auth.login(this.username, this.password)) {
+    this.router.navigate(['/dashboard']);
+  } else {
+    alert('Invalid credentials');
+  }
+}
+
+
