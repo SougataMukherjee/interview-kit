@@ -80,6 +80,7 @@ SELECT DISTINCT Country FROM Customers;
 
 
 SELECT * FROM Customers WHERE Country='Mexico';
+--Fetch all country from customer SELECT * FROM Customers WHERE Country = ?
 -- Filters customers only from Mexico
 -- +-------------+----------+----------+--------------+-------------+----------+
 -- | CustomerID  | Name     | Contact  | Address      | City        | Country  |
