@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Modal({ onClose, children }) {
+export function Modal({ onClose, children }) {
   return (
     <div
       style={{
