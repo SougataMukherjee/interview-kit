@@ -136,9 +136,27 @@ async function getData(){
 
 Q18: What is Debounce & Throttle?
 Debounce: delay execution till user stops typing.
+Runs after user stops typing or triggering for a certain time
+Useful for: Search bars, input validation, API calls
+
+import { useState, useEffect } from "react";
+
+export default function SearchBox() {
+  const [text, setText] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      console.log("Searching for:", text);
+    }, 500); // wait 0.5s after user stops typing
+    return () => clearTimeout(timer);
+  }, [text]);
+
+  return <input onChange={(e) => setText(e.target.value)} placeholder="Search..." />;
+}
+
 Throttle: limit execution in interval.
-Example:
-function debounce(fn, delay){ let timer; return (...a)=>{clearTimeout(timer); timer=setTimeout(()=>fn(...a),delay);} }
+Runs the function once every fixed time, even if triggered multiple times.
+Useful for: Scroll, resize, mouse move events.
 
 Q19: Polyfill Example (map)
 Array.prototype.myMap = function(cb){

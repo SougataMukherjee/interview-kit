@@ -36,11 +36,21 @@ useEffect(()=>()=>console.log("Unmount"),[]); // Unmount
 
 Q7: useMemo vs useCallback
 useMemo → memoizes computed value
+exp 1.
 const [count, setCount] = useState(0);
   const double = useMemo(() => {
     console.log("Calculating...");
     return count * 2;
   }, [count]);
+exp 2.
+ const total = useMemo(() => {
+    let sum = 0;
+    for (let i = 0; i < arr.length; i++) {
+      sum += arr[i];
+    }
+    return sum;
+  }, [arr]);
+
 useCallback → memoizes/caches function reference
 const [count, setCount] = useState(0);
   const handleClick = useCallback(() => {
@@ -326,6 +336,16 @@ Q13: How to handle environment variables in Next.js?
 
 Q14: What is ISR (Incremental Static Regeneration)?
  Allows static pages to update at runtime after a set interval (revalidate).
+ Why use:
+To keep content fresh (like blogs or product pages) while still using fast static generation.
+export async function getStaticProps() {
+  const data = await fetchData();
+  return {
+    props: { data },
+    revalidate: 60, // re-build this page every 60 sec
+  };
+}
+
 
 Q15: What is next/head used for?
  To modify <head> tags dynamically (title, meta tags).it improve SEO and Custom scripts like Google Analytics

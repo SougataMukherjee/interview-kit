@@ -26,7 +26,7 @@ const cards = [
     desc: 'Relaxing ocean waves.',
   },
 ];
-
+//using params we can take data from parent no need to use usePathname because its use 'use client'
 export default function CardDetail({ params }) {
   const { id } = params;
   const card = cards.find((c) => c.id.toString() === id);
