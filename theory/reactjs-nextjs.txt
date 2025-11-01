@@ -3,8 +3,16 @@ REACT THEORY NOTES
 ==============================
 
 Q1: What is Virtual DOM?How React Manages Virtual DOM?
- A lightweight JS representation of the real DOM. React updates only changed nodes, improving performance.
-React keeps a virtual copy of the DOM → compares (diff) → updates only changed parts.
+Virtual DOM is a lightweight JavaScript copy of the Real DOM.
+React doesn't update the browser DOM directly. It updates the Virtual DOM first, compares it with the old one, and then updates only the changed parts in the Real DOM — which makes it fast
+          User Action (e.g., button click)
+                        ↓
+               React creates New Virtual DOM
+                        ↓
+         Compare with Old Virtual DOM (Diffing)
+                        ↓
+       Update only changed part in Real DOM (Fast)
+
 
 Q2: What is Reconciliation?
  The diffing process where React compares old and new virtual DOM trees and updates only changed parts.
@@ -88,9 +96,13 @@ Q14: Difference between keys in React list
  Unique key helps React identify elements and track updates efficiently.
 
 Q15: Lifecycle methods in class component
-Mounting → componentDidMount
-Updating → componentDidUpdate
-Unmounting → componentWillUnmount
+Mounting → Component is created and added to the UI ,it runs once after initial render
+          best for api calls,setting timers
+Updating → Component re-renders when state/props change, it runs after every update
+          Used to react to state/prop changes (e.g., data refresh)
+Unmounting → Component is removed from the UI,Runs before component is destroyed its use for cleanup(clear timers, remove event listeners)
+             Mounting     →     Updating     →     Unmounting
+ (componentDidMount)  (componentDidUpdate)  (componentWillUnmount)
 
 componentDidMount vs useEffect
 componentDidMount (class) = runs once after mount.
@@ -98,17 +110,18 @@ componentDidMount() → Used only once in a class component; runs after the comp
 useEffect(()=>{},[]) (hook) = same behavior in functional components.
 useEffect() → Used in functional components; you can have multiple useEffect hooks for different side effects, and control when they run using dependency arrays
 
-Q16: What is HOC (Higher Order Component)?
- A function that takes a component and returns a new component with added functionality.
+Q16: What is HOC (Higher Order Component)? why we use?
+ A Higher-Order Component (HOC) is a function that takes a component as input and returns a new enhanced component with extra features (without modifying the original component).
+ To reuse logic across multiple components (e.g., authentication check, logging, theme, APIs).
+ HOC = Component → Enhanced Component
+
 
 Q17: What is React Fragment?
 <></> wrapper to avoid adding extra DOM nodes.
 
 Q18: Error boundaries and limitation
-Components that catch JS errors in child tree and display fallback UI.
-but Error Boundaries cannot catch:
-     Errors inside event handlers.
-     Errors in asynchronous code(like setTimeout,fetch)
+Error Boundaries are special React components that catch runtime errors in child components and show a fallback UI instead of breaking the whole app.
+They catch UI rendering errors, but not event handler errors and errors in asynchronous code(like setTimeout,fetch)
 
 Q19. how to handle error in react?
 class ErrorBoundary extends React.Component {
@@ -122,8 +135,14 @@ and use like <ErrorBoundary><MyComponent/></ErrorBoundary>
 
 
 Q19: Difference between state and props
-State - internal, mutable.
-Props - external, immutable.
+State - internal, mutable(can modify), use for dynamic data.
+Props - external, immutable, use for passing data to child components.
+Parent Component (holds props/state)
+        |
+        |  passes data (props)
+        ▼
+ Child Component (receives props only)
+
 
 Q20: How does React handle events?
 Through synthetic events, which wrap native events for cross-browser compatibility.
@@ -138,8 +157,18 @@ import("./math").then(math => {
 });
 
 Q21. Route & Protected Route
-Route: Defines which component to show for a path.
-Protected Route: Restricts access (e.g. only logged-in users).
+Route: Defines which page or component should render for a specific URL path.
+Protected Route: A route that only allows access if the user is authenticated (e.g., logged-in).
+If not logged in → redirect to login page
+User → Clicks /dashboard
+         │
+         ▼
+   Is user logged in?
+     /           \
+    No            Yes
+    ▼             ▼
+ Redirect → /login   Show Dashboard Page
+
 
 Q22. Render Props
 Share logic by passing a function as a prop that returns JSX.
@@ -182,10 +211,25 @@ Share logic between components using function prop
 <Data render={data => <List data={data}/>}/>
 
 Q29: Axios
+Axios is a promise-based HTTP client used to make API calls from browser
+It helps send GET, POST, PUT, DELETE requests easily.
 axios.get('/users');
 axios.post('/users',{name:'Sam'});
 axios.put('/user/1',{name:'A'});
 axios.delete('/user/1');
+Client (React / Next.js / Node)
+        |
+        |  Axios Request
+        v
+---------------------------------
+|           Server API          |
+|  (Handles DB, Auth, Logic)    |
+---------------------------------
+        ^
+        |  Response (JSON)
+        |
+   Back to Client UI
+
 
 Q30: Library vs Framework
 Library: you control flow (React)
@@ -265,8 +309,12 @@ SSR - Rendered on server per request (getServerSideProps),Render on server befor
 SSG - Pre-built HTML at build time (getStaticProps)
 
 Q3: Explain getStaticProps
-Used for static generation; runs at build time only and provides props to page and Generates static HTML.
-we use when Data changes rarely
+getStaticProps is used for Static Site Generation (SSG) in Next.js.
+It runs only at build time and generates static HTML, making the page fast.
+Use it when data rarely changes (e.g., blogs, docs, product list)
+
+Build Time → Fetch Data → Pre-render Page → Static HTML Served
+
 export async function getStaticProps() {
   const res = await fetch('https://jsonplaceholder.typicode.com/users');
   const users = await res.json();
@@ -287,15 +335,56 @@ export default function Users({ users }) {
 }
 
 Q4: Explain getServerSideProps
-Runs on each request; fetches data on server before rendering.Data fetched fresh each time.
-export default async function Page() {
-  const res = await fetch("https://api.example.com/data", { cache: "no-store" });
+getServerSideProps runs on the server for every request, fetches data, and sends it to the page before rendering.
+When to use:
+Data must be fresh on each page load (e.g., dashboard, user profile, stock price, weather, admin pages).
+benefit:
+No client-side fetch needed
+Runs on every request (not cached)
+SEO-friendly because content comes ready from server
+
+export async function getServerSideProps() {
+  const res = await fetch("https://api.example.com/data");
   const data = await res.json();
+
+  return { props: { data } };
+}
+
+export default function Page({ data }) {
   return <pre>{JSON.stringify(data, null, 2)}</pre>;
 }
 
+
 Q5: Explain getStaticPaths
-Used with dynamic routes to pre-render specific paths at build time.
+getStaticPaths is used in Next.js with dynamic routes to tell Next.js which dynamic pages to pre-build at build time.
+Used together with getStaticProps for Static Site Generation (SSG).
+why:
+When a page has a dynamic route like /posts/[id]
+We want only some specific pages to generate at build time
+Improves performance by serving pre-rendered HTML
+
+export async function getStaticPaths() {
+  return {
+    paths: [
+      { params: { id: "1" } },
+      { params: { id: "2" } }
+    ],
+    fallback: false
+  };
+}
+
+export async function getStaticProps({ params }) {
+  return {
+    props: {
+      id: params.id
+    }
+  };
+}
+
+export default function Post({ id }) {
+  return <h2>Post Number: {id}</h2>;
+}
+
 
 Q6: Difference between pages and app router
 - Pages router: uses /pages directory, older version.
@@ -329,7 +418,12 @@ Q11: What is Image Optimization in Next.js?
       />
 
 Q12: What is Middleware in Next.js?
- Runs before request is completed, used for auth, redirects, or rewrites.
+Middleware runs before a request is completed. It can check the request and decide to allow, block, redirect, or rewrite the user before reaching a page or API.
+why:
+Authentication / Protect routes
+Redirect users based on role or login
+Request → Middleware → (Allow / Redirect / Rewrite / Block) → Page/API Route
+in middleware.ts file write logic in next js
 
 Q13: How to handle environment variables in Next.js?
  Stored in .env.local and accessed via process.env.NAME

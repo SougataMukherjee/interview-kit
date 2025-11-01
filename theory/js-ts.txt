@@ -38,17 +38,34 @@ function outer() {
 }
 
 Q6: Difference: var, let, const
-var -> function scoped
-let, const -> block scoped
-const cannot be reassigned.
+var -> function scoped, can be redeclared and hoisted with undefined
+let, const -> block scoped,let cannot be reassigned but const cannot be reassigned.
+function demo() {
+  if (true) {
+    var x = 10;
+    let y = 20;
+    const z = 30;
+  }
+  console.log(x); // ✅ works (var → function scope)
+  console.log(y); // ❌ error (let → block scope)
+  console.log(z); // ❌ error (const → block scope)
+}
+demo();
 
 Q7: What is Event Loop?
 Handles async operations. Executes sync code first, then callbacks from queue.
 Example:
-console.log('a');
-setTimeout(()=>console.log('b'),0);
-console.log('c');
-// Output: a c b
+console.log("a");
+setTimeout(() => {
+  console.log("b");
+  setTimeout(() => {
+    console.log("c");
+  }, 1000);
+
+}, 1000);
+console.log("d");
+
+// Output: a d b c
 
 Q8:Sync vs Async
 Sync → one by one
@@ -66,11 +83,24 @@ IIFE (Immediately Invoked Function Expression) (function(){ console.log("Run onc
 Anonymous Function let f=function(args){}
 
 Q11: Shallow vs Deep Copy
-Shallow: copies reference
-Deep: copies values recursively.
+Shallow: Copies only the top-level values.
+If the object contains another object, only the reference is copied, not the actual nested data.
+So changing nested values affects both copies.
+Deep: Creates a completely independent copy of all levels of the object.
+Changing nested values does not affect the original.
 Example:
-let a = {x:1};
-let b = {...a}; // shallow copy
+Original Object
+a → { x:1, y:{ z:2 } }
+
+Shallow Copy:
+b = { ...a }
+a.y ───────► { z:2 } ◄────── b.y    (same reference)
+
+Deep Copy:
+b = JSON.parse(JSON.stringify(a))
+a.y ──► { z:2 }     b.y ──► { z:2 }   (separate copies)
+
+
 
 Q12. What are Promises?
 Used to handle async operations, It has 3 states: pending → resolved → rejected
@@ -78,8 +108,18 @@ Example:
 new Promise((res, rej)=>res(5)).then(console.log);
 
 Q13. Promise.all vs Promise.race
-Promise.all() → waits all
-Promise.race() → first settled
+Promise.all() → Runs multiple promises in parallel and waits until all are finished.If any one fails, the whole result fails
+Promise.race() → Runs multiple promises in parallel and returns the result of the first one that finishes (success or fail)
+Promise.all([P1, P2, P3])
+   P1 ----✅
+   P2 --------✅
+   P3 ------------✅
+Result → after last one finishes
+Promise.race([P1, P2, P3])
+   P1 ----✅  ← finishes first → return this one
+   P2 --------✅
+   P3 ------------✅
+
 
 Q14. How to fetch API using Promise?
 fetch("https://api.example.com/data")
@@ -88,12 +128,23 @@ fetch("https://api.example.com/data")
   .catch(err => console.log(err));
 
 Q15. create a Promise and resolve on Button click
-let btn = document.querySelector("button");
+import { useState } from "react";
 
-let promise = new Promise(resolve => {
-  btn.addEventListener("click", () => resolve("Button clicked!"));
-});
-promise.then(msg => console.log(msg));
+export default function App() {
+  function createClickPromise() {
+    return new Promise((resolve) => {
+      resolve("Button clicked!");
+    });
+  }
+  function handleClick() {
+    createClickPromise().then((msg) => console.log(msg));
+  }
+  return (
+    <button onClick={handleClick}>
+      Click Me
+    </button>
+  );
+}
 
 Q16. using promise fetch a data,if the fetch fails it should automatically retry after the given delay, up to the maximum number of attempts
 function retryFetch(url, maxSteps, delay) {
@@ -130,9 +181,27 @@ fetch(url).catch(err => console.error(err));
 Q17. Async/Await
 Syntax sugar over Promises.
 Example:
-async function getData(){
-  const data = await fetch(url);
+import { useEffect, useState } from "react";
+function App() {
+  const [data, setData] = useState(null);
+  async function getData() {
+    const res = await fetch("https://jsonplaceholder.typicode.com/users");
+    const result = await res.json();
+    setData(result);
+  }
+  useEffect(() => {
+    getData();
+  }, []);
+
+  return (
+    <div>
+      <h3>Users Data</h3>
+      {data && data.map(u => <p key={u.id}>{u.name}</p>)}
+    </div>
+  );
 }
+export default App;
+
 
 Q18: What is Debounce & Throttle?
 Debounce: delay execution till user stops typing.
@@ -169,14 +238,25 @@ Array.prototype.myMap = function(cb){
 
 Q20: Call, Apply, Bind
 All used to set 'this' manually.
-fn.call(obj, a,b);
-fn.apply(obj, [a,b]);
-fn.bind(obj)(a,b);
+function greet(greeting, emoji) {
+  console.log(`${greeting}, ${this.name}! ${emoji}`);
+}
+greet.call(person, "Hi", "😊");     // Hi, Alice! 😊
+greet.apply(person, ["Hello", "👋"]); // Hello, Alice! 👋
+const greetAlice = greet.bind(person);
+greetAlice("Hey", "😎");           // Hey, Alice! 😎
 
 Q21: What is Currying?
-Breaking function into multiple single-arg calls.
+Currying is the process of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument
 Example:
-function add(a){return b=>a+b;}
+function add(a) {
+  return function(b) {
+    return a + b;
+  };
+}
+const add5 = add(5);
+console.log(add5(3)); // 8
+
 
 Q22: What is Prototype?
 JS uses prototypal inheritance. Every object has a hidden [[Prototype]].
@@ -197,7 +277,13 @@ sessionStorage -> clears when tab closes
 
 Q26: Spread vs Rest
 Spread -> expands [...arr]
+const nums = [1, 2, 3];
+const newNums = [...nums, 4, 5]; // [1, 2, 3, 4, 5]
 Rest -> collects (...args)
+function sum(...args) {
+  return args.reduce((a, b) => a + b, 0);
+}
+sum(1, 2, 3, 4);
 
 Q27: Deep Clone Object
 JSON.parse(JSON.stringify(obj));
@@ -212,9 +298,14 @@ Q29: Difference Between == and ===
 === checks type + value
 
 Q30: Difference Between slice, splice, split
-slice -> copy array portion
-splice -> modify array
+slice -> copy array portion,doesn’t change original array
+splice -> modify array,change original array
+ [1, 2, 3, 4, 5]
+slice(1,4)  -> [2, 3, 4]   (copy only)
+splice(1,3) -> [2, 3, 4]   (removes from original: arr -> [1,5])
 split -> convert string → array
+"a,b,c"
+split(",")  -> ['a','b','c']
 
 Q31: Event Bubbling vs Capturing
 Bubbling: inner → outer (Event moves from child → parent)
@@ -258,10 +349,12 @@ Example:
 export const x = 1; 
 import { x } from './file.js';
 
-
-Q38: Difference between shallow and deep copy.
-Shallow copy: copies only top-level properties (e.g., spread operator).
-Deep copy: copies all nested objects (e.g., structuredClone, recursion).
+Q38:Use of Content-Type
+Tells the browser what type of data is being sent.
+Examples:
+application/json → JSON data
+text/html → HTML
+multipart/form-data → File uploads
 
 Q39: What is destructuring?
 Extract values from arrays or objects easily:
@@ -269,9 +362,19 @@ const [a, b] = [1, 2];
 const {name, age} = person;
 
 Q40: What is a generator function?
-Function that can pause/resume with yield.
-Defined with function*.
-Used for lazy evaluation or async flows.
+A generator function can pause and resume execution using yield.
+Defined with function* syntax.
+Useful for lazy evaluation or async flows.
+function* gen() {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+const g = gen();
+console.log(g.next().value); // 1
+console.log(g.next().value); // 2
+console.log(g.next().value); // 3
+
 
 Q41: Explain the concept of immutability.
 Data shouldn’t be modified directly; instead, create new copies.
@@ -283,8 +386,12 @@ use script tag to include js in html
 src, type, async, defer, crossorigin
 
 Q43: When to use defer / async
-defer → loads JS in background, runs after HTML parsing, best for most scripts.
+defer → loads JS in background, runs after HTML parsing, best for most scripts,Best for scripts that rely on the DOM.
 async → runs as soon as loaded, may block DOM. Good for analytics.
+HTML Parsing ──────► DOM Ready ──► Defer JS runs
+        \
+         \► Async JS runs whenever it finishes loading
+
 
 Q44:Use of "use strict"
 Makes JS more secure: prevents undeclared variables, silent errors.
@@ -327,6 +434,7 @@ getData(() => {
     });
   });
 });
+
 Q51:call back hell solved by Promise Chain
 its readable and handle error easily
 getData()
@@ -407,29 +515,52 @@ Q68:Cookies
 Small data stored in browser; sent with every HTTP request.
 
 Q69 Array Methods
-push() → adds element to end.
-pop() → removes element from end.
-unshift() → adds element to start.
-shift() → removes element from start.
+push() → adds element to end. 
+        [1,2].push(3) → [1,2,3]
+pop() → removes element from end. 
+        [1,2,3].pop() → [1,2]
+unshift() → adds element to start. 
+          [2,3].unshift(1) → [1,2,3]
+shift() → removes element from start. 
+        [1,2,3].shift() → [2,3]
 concat() → joins two arrays.
-slice() → returns part of array.
+        [1].concat([2,3]) → [1,2,3]
+slice() → returns part of array. 
+        [1,2,3,4].slice(1,3) → [2,3]
 splice() → adds/removes elements at position.
-indexOf() → finds first index of value.
+         [1,2,3].splice(1,1,9) → [1,9,3]
+indexOf() → finds first index of value. 
+        [1,2,3].indexOf(2) → 1
 includes() → checks if value exists.
+        [1,2,3].includes(2) → true
 join() → joins array elements into string.
-reverse() → reverses array order.
-sort() → sorts array elements.
+         [1,2,3].join('-') → "1-2-3"
+reverse() → reverses array order. 
+        [1,2,3].reverse() → [3,2,1]
+sort() → sorts array elements. 
+        [3,1,2].sort() → [1,2,3]
 map() → returns new array by applying function.
+         [1,2].map(x=>x*2) → [2,4]
 filter() → returns new array with matching elements.
+        [1,2,3].filter(x=>x>1) → [2,3]
 reduce() → combines all elements into single value.
-forEach() → runs function for each element.
+       [1,2,3].reduce((a,b)=>a+b) → 6
+forEach() → runs function for each element. 
+      [1,2].forEach(x=>console.log(x))
 find() → returns first matching element.
+       [1,2,3].find(x=>x>1) → 2
 findIndex() → returns index of first match.
+      [1,2,3].findIndex(x=>x>1) → 1
 every() → checks if all elements pass test.
+      [2,4].every(x=>x%2===0) → true
 some() → checks if any element passes test.
+      [1,2].some(x=>x>1) → true
 flat() → flattens nested arrays.
+      [1,[2,3]].flat() → [1,2,3]
 fill() → fills array with given value.
+      [1,2,3].fill(0) → [0,0,0]
 from() → creates array from iterable.
+      Array.from('abc') → ['a','b','c']
 
 Array CRUD
 let a=[1,2,3];
@@ -440,33 +571,59 @@ a[0]=9;     // update
 
 Q70:String Methods
 charAt() → returns character at index.
+        "Hello".charAt(1) → "e"
 charCodeAt() → returns ASCII of character.
+        "A".charCodeAt(0) → 65
 concat() → joins two strings.
+        "Hello".concat(" World") → "Hello World"
 includes() → checks if substring exists.
+        "Hello".includes("lo") → true
 indexOf() → finds first index of substring.
+        "Hello".indexOf("l") → 2
 lastIndexOf() → finds last index of substring.
+        "Hello".lastIndexOf("l") → 3
 slice() → extracts part of string.
+        "Hello".slice(1,4) → "ell"
 substring() → extracts part by index.
+        "Hello".substring(1,4) → "ell"
 replace() → replaces part of string.
+        "Hello".replace("H","J") → "Jello"
 split() → splits string into array.
+        "a,b,c".split(",") → ["a","b","c"]
 trim() → removes spaces from both ends.
+        " hi ".trim() → "hi"
 toUpperCase() → converts to uppercase.
+        "hi".toUpperCase() → "HI"
 toLowerCase() → converts to lowercase.
+        "HI".toLowerCase() → "hi"
 startsWith() → checks if string starts with given text.
+        "Hello".startsWith("He") → true
 endsWith() → checks if string ends with given text.
+        "Hello".endsWith("lo") → true
 repeat() → repeats string given times.
+        "Hi".repeat(3) → "HiHiHi"
 
 Q71:Object Methods
 keys() → returns array of property names.
+        Object.keys({a:1,b:2}) → ["a","b"]
 values() → returns array of property values.
+        Object.values({a:1,b:2}) → [1,2]
 entries() → returns array of [key, value] pairs.
+        Object.entries({a:1}) → [["a",1]]
 assign() → copies values from one object to another.
+        Object.assign({}, {a:1}) → {a:1}
 hasOwnProperty() → checks if key exists in object.
+        ({a:1}).hasOwnProperty("a") → true
 delete → removes property from object.
+        let obj={a:1}; delete obj.a → {}
 freeze() → makes object immutable.
+        Object.freeze({a:1}) can't change a
 seal() → prevents adding or removing keys.
+        Object.seal({a:1}) can't add/delete keys
 create() → creates object with given prototype.
+        Object.create(Array.prototype) → []
 toString() → returns string form of object.
+        ({a:1}).toString() → "[object Object]"
 
 Q72: Pass by Value → Copy of value passed (primitive).
 Pass by Reference → Reference (address) passed (object/array).
@@ -513,86 +670,134 @@ Cache DOM nodes, use documentFragment, batch updates
 Q80: Webpack
 Module bundler (combines JS, CSS, imgs into build).
 
-Q81:Use of Content-Type
-Tells the browser what type of data is being sent.
-Examples:
-application/json → JSON data
-text/html → HTML
-multipart/form-data → File uploads
+
 
 ====================
 TYPESCRIPT THEORY NOTES
 ====================
 
-1️⃣ What is TypeScript?
+Q1: What is TypeScript?
 Superset of JS adding static typing + compiler checks.
 
-2️⃣ why use it over JavaScript:
+Q2: why use it over JavaScript:
 - Early error detection
 - Better IntelliSense
 - Type safety in large apps
 
-3️⃣ Basic Types:
+Q3: Basic Types:
 string, number, boolean, any, void, unknown, null, undefined
 
-4️⃣ Interface Example:
+Q4: Interface Example:
 interface User {
   name: string;
   age: number;
 }
 
-5️⃣ Type Alias:
+Q5: Type Alias:
 type Status = "loading" | "success" | "error";
 
-6️⃣ Optional and Readonly Properties:
+Q6: Optional and Readonly Properties:
 interface User { name: string; age?: number; readonly id: number; }
 
-7️⃣ Generics:
-function identity<T>(arg: T): T { return arg; }
+Q7: Generics:
+Generics allow you to write reusable functions or classes that can work with any data type while maintaining type safety.
+function identity<T>(arg: T): T {
+  return arg;
+}
+let str = identity<string>("Hello"); // type T is string
+let num = identity<number>(42);      // type T is number
 
-8️⃣ Union and Intersection Types:
+Q8: Union and Intersection Types:
+Union (|) is a variable can hold one of multiple types
 let val: string | number;
-type A = {x:number}; type B = {y:string};
+val = 5;     
+val = "Hi";
+Intersection (&) Combines multiple types into one. Variable/object must satisfy all types.
+type A = { x: number };
+type B = { y: string };
 type C = A & B;
+const obj: C = { x: 10, y: "hello" }; 
 
-9️⃣ Enum:
+Q9: Enum:
 Used to define named constants:
 enum Color { Red, Green, Blue }
 enum Direction { Up, Down, Left, Right }
 
-10️⃣ Difference between Interface and Type
+Q10: Difference between Interface and Type
 Interface -> extendable
 Type -> can use union/intersection
 
-11️⃣ Utility Types:
-Partial<T>, Pick<T,K>, Omit<T,K>, Readonly<T>
+Q11: Utility Types:
+Partial<T>:Makes all properties of a type optional.
+interface User {
+  name: string;
+  age: number;
+}
 
-12️⃣ Type Assertion:
+const updateUser: Partial<User> = {
+  name: "Alice" // age is optional now
+};
+
+Pick<T,K>:Selects a subset of properties from a type.
+interface User {
+  name: string;
+  age: number;
+  email: string;
+}
+
+const userContact: Pick<User, "name" | "email"> = {
+  name: "Bob",
+  email: "bob@example.com"
+};
+
+Omit<T,K>:Removes specified properties from a type.
+interface User {
+  name: string;
+  age: number;
+  password: string;
+}
+
+const publicUser: Omit<User, "password"> = {
+  name: "Charlie",
+  age: 25
+};
+Readonly<T>:Makes all properties of a type read-only
+interface User {
+  name: string;
+  age: number;
+}
+const user: Readonly<User> = {
+  name: "Dave",
+  age: 30
+};
+user.age = 31;//error
+
+Q12: Type Assertion:
 let val: any = "hello";
 let len = (val as string).length;
 
-13️⃣ Difference between any and unknown and never
+Q13: Difference between any and unknown and never
 any -> unsafe
 unknown -> needs type check before use
 
-14️⃣ What are Decorators?
+Q14: What are Decorators?
 Experimental feature for class modification.
 Special syntax to add metadata or modify classes/functions
 Example:
 @Logger
 class User {}
 
-15️⃣ Difference between TypeScript and JavaScript
+Q15: Difference between TypeScript and JavaScript
 TS -> compiled language
 JS -> interpreted
 TS adds types; JS doesn’t.
 
-16. What is type narrowing?
+Q16: What is type narrowing?
 Process of refining a variable’s type based on conditions.
 Example:
 if (typeof x === 'string') { x.toUpperCase(); }
 
-17. What are type guards?
+Q17: What are type guards?
 Functions or checks that help narrow down types at runtime.
 Example:
 

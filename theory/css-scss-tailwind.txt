@@ -2,54 +2,43 @@
 CSS NOTES
 ====================
 
-Is CSS case-sensitive?
+Q1: Is CSS case-sensitive?
 No (selectors & properties are not), but values like class names in HTML are.
-
 CSS3 Features & Advantages:
-
 Rounded corners (border-radius)
-
 Animations & transitions
-
 Media queries (responsive)
 
-Q1: Difference between inline, block, and inline-block?
-A:
+Q2: Difference between inline, block, and inline-block?
 - inline: width/height not applicable (span, a)
 - block: takes full width (div, p)
 - inline-block: behaves inline but allows width/height.
 
-Q2: What is the Box Model?
-A:
+Q3: What is the Box Model?
 Width = content + padding + border (margin lies outside).
 Content → Padding → Border → Margin  
 Example:
 
-Q3: Explain CSS Specificity Order.
-A:
+Q4: Explain CSS Specificity Order.
 Inline style > ID > Class > Element  
 Example:
 #id > .class > div
-
 Duplicate ID Problem:
 IDs must be unique — use classes instead.
 
-Favicon:
+Q5:Favicon:
 Small icon in browser tab.
 <link rel="icon" href="favicon.ico">
 
-
-Q4: Position properties?
-A:
+Q6: Position properties?
 - static (default)
 - relative (moves within itself) Moves relative to its normal position.
 - absolute (relative to nearest non-static) Positioned relative to the nearest positioned ancestor.
 - fixed (relative to viewport) Stays fixed relative to viewport (even when scrolling).
 - sticky (hybrid) Acts relative until scroll crosses threshold, then sticks
 
-Q5: Flexbox Basics.
+Q7: Flexbox Basics.
 flexbox useful for 1D layout (row or column).
-A:
 .container {
   display: flex;
   justify-content: center;
@@ -57,8 +46,7 @@ A:
   gap: 10px;
 }
 
-Q6: Grid Basics.
-A:
+Q8: Grid Basics.
 Grid useful for 2D layout (rows and columns)
 .container {
   display: grid;
@@ -66,19 +54,16 @@ Grid useful for 2D layout (rows and columns)
   gap: 10px;
 }
 
-Q7: z-index and stacking context?
-A:
+Q9: z-index and stacking context?
 z-index works only for positioned elements (relative, absolute, fixed).
 
-Q8: Responsive Design.
-A:
+Q10: Responsive Design.
 Use media queries:
 @media (max-width: 768px) {
   .container { flex-direction: column; }
 }
 
-Q9: Difference between transition and animation?
-A:
+Q11: Difference between transition and animation?
 Transition: smooth change between two states.Needs trigger (hover, active).
 div { transition: all 0.3s; }
 div:hover { color: red; }
@@ -87,58 +72,87 @@ Animation: runs automatically with @keyframes.
 @keyframes move { from{left:0;} to{left:100px;} }
 div { animation: move 2s infinite; }
 
-Q10: Pseudo classes and elements.
-A:
+Q12: Pseudo classes and elements.
 Pseudo-class: Targets state (e.g., :hover, :focus,:nth-child(2)).
 Pseudo-element: Targets part of element (e.g., ::before, ::after)
 
-Q11: Difference between margin and padding
+Q13: Difference between margin and padding
 Margin: Space outside the element’s border.
 Padding: Space inside the element’s border, around content.
 
-Q12: What are CSS combinators?
+Q14: What are CSS combinators?
 Define relationships between selectors:
 Descendant (space), Child (>), Adjacent sibling (+), General sibling (~).
+<div class="parent">
+  <p>Paragraph 1</p>
+  <p>Paragraph 2</p>
+  <span>Span 1</span>
+  <span>Span 2</span>
+</div>
 
-Q13: How do you handle browser compatibility in CSS?
+.parent p { color: blue; }      /* Descendant: all <p> inside .parent */
+.parent > p { font-weight: bold; } /* Child: only direct <p> children */
+p + span { color: red; }        /* Adjacent sibling: span immediately after <p> */
+p ~ span { background: yellow; } /* General sibling: all spans after <p> */
 
-Use vendor prefixes (-webkit-, -moz-).
-Use Autoprefixer/PostCSS.
-Test in multiple browsers; use @supports or CSS resets.
+Q15: How do you handle browser compatibility in CSS?
+Vendor Prefixes: Add browser-specific prefixes to CSS properties.
+display: -webkit-box;   /* Safari/Chrome older */
+display: -moz-box;      /* Firefox older */
+display: flex;          /* Modern browsers */
+Feature Queries / Fallbacks: Use @supports or CSS resets.
+@supports (display: grid) {
+  .container {
+    display: grid;
+  }
+}
 
-Q14:Difference between em, rem, %, and px
+Q16:Difference between em, rem, %, and px
 px: Absolute pixel value.
 em: Relative to parent font-size.
 rem: Relative to root (html) font-size.
 %: Relative to parent element size.
 
-Q15: What are CSS variables and how to use them?
+Q17: What are CSS variables and how to use them?
 Reusable custom properties:
 :root { --main-color: blue; }
 h1 { color: var(--main-color); }
 
-Q16: @property
+Q18: @property
 Defines custom CSS properties with type and defaults.
-Used with animations for better control.
+Helps in animations and transitions for custom properties
 @property --x {
   syntax: "<length>";
   initial-value: 0px;
   inherits: false;
 }
-div { transition: --x 1s; }
+div {
+  --x: 0px;
+  width: var(--x);
+  transition: --x 1s;
+}
 
-Q17:CSS Math Functions
+div:hover {
+  --x: 100px; /* width will smoothly animate */
+}
+
+Q19:CSS Math Functions
 calc() → perform calculations (width: calc(100% - 50px);)
 min() → picks smallest (width: min(80%, 600px);)
 max() → picks largest (width: max(50%, 200px);)
 clamp() → range limit (font-size: clamp(14px, 2vw, 20px);)
 
-Q18::global 
-Used to apply styles globally in scoped CSS files.
-:global(.btn) { color: red; }
-Without :global, styles are limited to component scope.
+Q20::global 
+we can apply styles globally even inside scoped CSS files.
+/* styles.module.css (style apply globally not only in component level) */
+:global(.btn) {
+  color: red;
+}
+.localDiv {
+  background: yellow;
+}
 
-Q19:CSS Attribute Selectors
+Q21:CSS Attribute Selectors
 [attr] → elements with that attribute
 [attr=value] → exact match
 [attr^=val] → starts with
@@ -148,29 +162,29 @@ Example: input[type="text"]
 Selects elements by attribute.
 input[type="text"] { color: blue; }
 
-Superscript & Subscript:
+Q22: Superscript & Subscript:
 H<sub>2</sub>O → water  
 x<sup>2</sup> → square
 
-Q20:CSS Font Fallback
+Q23:CSS Font Fallback
 Multiple fonts listed in order of priority.
 If first fails, next is used.
 Example:
 font-family: "Roboto", "Arial", sans-serif;
 
-Q21:Border vs Outline
+Q24:Border vs Outline
 Border → part of element box, affects layout.
 Outline → drawn outside border, doesn’t affect size.
 Example:
 border: 2px solid red;
 outline: 2px solid blue;
 
-Q21:display:none vs visibility:hidden
+Q25:display:none vs visibility:hidden
 display:none → removes element from layout
 visibility:hidden → hides but keeps layout space
 example:
 
-Q22: CSS Selectors
+Q26: CSS Selectors
 Select elements based on name, class, id, attribute, etc.
 Examples:
 #id → by id
@@ -192,14 +206,11 @@ Start for modern browsers → make sure old browsers still work.
 Start simple → add advanced features if browser supports.
  Example: Plain form → add JS validation later.
 
-Grouping vs Nesting
+Q27: Grouping vs Nesting
 Grouping: Combine selectors with comma.
 h1, h2 { color: red; }
 Nesting (in SCSS)
 nav { a { color: blue; } }
-
-
-
 
 ==============================
 SCSS THEORY
