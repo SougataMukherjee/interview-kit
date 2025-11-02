@@ -30,12 +30,23 @@ Q4: What are Hooks in React?
 Q5: Explain useState
  Manages local state in functional components.
 Example:
-const [count, setCount] = useState(0);
+const [name, setName] = useState("");
+const [age, setAge] = useState(0);
+const [isActive, setIsActive] = useState(true);
+const [form, setForm] = useState({ name: "", email: "" });
+const [items, setItems] = useState([]);
+
 
 Q6: Explain useEffect
  Performs side effects after render.(API calls, event, etc)
 Example:
-useEffect(() => { console.log('runs after render'); }, []);
+useEffect(() => { console.log('runs after render only once'); }, []);
+useEffect(() => { console.log('Run on State/Prop Change'); }, [count]);
+useEffect(() => { console.log('Run on Every Render'); });
+useEffect(() => { async function fetchData(){console.log('run async data')}fetchData() }, []);
+useEffect(() => { const timer = setInterval(() => console.log("Running after 1 sec"), 1000);return () => {
+    clearInterval(timer); // cleanup
+  }; },[]);
 
 Q6: Lifecycle using useEffect
 useEffect(()=>{console.log("Mount")},[]); // Mount
@@ -94,6 +105,15 @@ Q13: Explain React Fiber
 
 Q14: Difference between keys in React list
  Unique key helps React identify elements and track updates efficiently.
+ const users = [
+  { id: 1, name: "Sam" },
+  { id: 2, name: "John" }
+];
+
+{users.map(user => (
+  <li key={user.id}>{user.name}</li>
+))}
+
 
 Q15: Lifecycle methods in class component
 Mounting → Component is created and added to the UI ,it runs once after initial render
@@ -269,7 +289,26 @@ Next.js: app/, pages/, components/, public/
 
 Q39: Purpose of forwardRef?
 Pass ref from parent → child component.
-const Input = React.forwardRef((props, ref) => <input ref={ref} />);
+When parent needs to control child’s DOM element (focus, scroll, value).
+import React, { useRef } from "react";
+
+const Input = React.forwardRef((props, ref) => {
+  return <input ref={ref} placeholder="Type here..." />;
+});
+
+export default function Parent() {
+  const inputRef = useRef();
+  function focusInput() {
+    inputRef.current.focus(); // parent accessing child input
+  }
+  return (
+    <>
+      <Input ref={inputRef} />
+      <button onClick={focusInput}>Focus Input</button>
+    </>
+  );
+}
+
 
 Q40. What is Suspense component?
  Used to show fallback UI while loading async content (like lazy components).
@@ -281,7 +320,28 @@ if(!isVisible) return null;
 
 Q42. What are portals in React?
 Render children outside parent DOM hierarchy.
-ReactDOM.createPortal(child, domNode);
+// index.html
+<div id="root"></div>
+<div id="modal-root"></div>
+// Modal.js
+import { createPortal } from "react-dom";
+
+export default function Modal({ children }) {
+  return createPortal(
+    <div className="modal">{children}</div>,
+    document.getElementById("modal-root")
+  );
+}
+// App.js
+export default function App() {
+  return (
+    <>
+      <h1>Parent Component</h1>
+      <Modal>Hello from Portal!</Modal>
+    </>
+  );
+}
+
 
 Q43. Why not call setState in componentWillUnmount()?
 Component already unmounted → causes memory leak warning.
@@ -292,9 +352,6 @@ No. Only needed when using this.state or binding methods.
 Q45. How do you pass arguments to event handler?
  Use arrow function.
  onClick={() => handleClick(id)}
-
-
-
 
 =========================
 NEXT.JS THEORY NOTES 
@@ -398,9 +455,19 @@ each folder represent a segment of the url path
 
 Q7: What are Server Components?
 Components rendered on the server — faster, smaller bundles, no client JS needed.
+(Client)
+   |
+   |  Receives HTML only
+   v
+(Server) --- renders component ---> sends ready HTML to browser
 
 Q8: What are Client Components?
 Components rendered in the browser using "use client" directive.
+(Server) ---> sends JS + component code ---> (Client Browser runs it)
+                                  |
+                                  v
+                          JS executes in browser
+
 
 Q9: How to create API routes in Next.js?
 Create serverless functions inside /pages/api or /app/api folder each file becomes an API endpoint.
@@ -446,15 +513,18 @@ export async function getStaticProps() {
   };
 }
 
-
 Q15: What is next/head used for?
  To modify <head> tags dynamically (title, meta tags).it improve SEO and Custom scripts like Google Analytics
  import Head from "next/head";
-<Head>
-    <title>My Portfolio</title>
-    <meta name="description" content="Frontend Developer in Bangalore" />
-    <meta property="og:title" content="Portfolio Site" />
-</Head>
+export default function CustomHead({ title, description }) {
+  return (
+    <Head>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta property="og:title" content={title} />
+    </Head>
+  );
+}
 
 Q16: What is next/script?
  Used to control script loading strategy (lazyOnload, beforeInteractive, etc.).it will load script only when needed to improve performance.
@@ -522,9 +592,18 @@ To avoid accidental routing & keep clean structure we use.
 app/_components/Button.jsx   ✅ no route
 app/profile/page.jsx         ✅ route: /profile
 
-
 Q21: Styled JSX in Next.js
-Built-in CSS-in-JS for component-level styling using <style jsx> tag.
+Built-in CSS-in-JS for component-level styling using <style jsx> tag.Styles apply only to this component (scoped).
+<div className="card">
+  <style jsx>{`
+        .card {
+          border-radius: 5px;
+        }
+        h3 {
+          color: brown;
+        }
+      `}</style>
+</div>
 
 Q22: How to improve SEO
 Use SSR/SSG, meta tags, sitemap, semantic HTML, image alt, clean URLs.
@@ -679,8 +758,11 @@ It is added inside <script type="application/ld+json">
 
 Q36:What is Routing Metadata?
 Metadata controls page title, description, icons.
-Example inside page.js:
-export const metadata = { title: "Home Page", description: "Welcome" };
+// page.js
+export const metadata = {
+  title: "Home Page",
+  description: "Welcome",
+};
 
 Q37: What is Prefetching?
 Next.js automatically downloads next page code + data before user clicks, improving navigation speed.

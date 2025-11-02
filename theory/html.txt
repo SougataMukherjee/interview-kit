@@ -4,9 +4,10 @@ HTML NOTES
 
 Q1: web browser and how it works
 web browser is a s/w application for retrieving presenting info on www e.g google chrome
-
 When a browser loads a webpage, it first downloads the HTML file and starts parsing it to build the DOM tree.
 Then it fetches and parses CSS and combines both into a Render Tree.Finally, it executes JavaScript
+
+User → Browser → DNS/Server → Render → Page
 
 Q2: why <br> called empty element?
 because it has no content
@@ -49,6 +50,10 @@ Q10: What are HTML meta tags?
 Examples:
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+UTF-8 is the most common encoding and supports almost all characters in all languages.
+viewport → Controls layout on mobile devices.
+width=device-width → Sets the viewport width equal to the device width.
+initial-scale=1.0 → Sets the initial zoom level when the page loads.
 
 Q11: What are global attributes in HTML?
  Attributes applicable to any element.
@@ -70,9 +75,9 @@ HTML Parsing: |---parsing---|
 Q13: What are forms in HTML?
 Forms collect user input using <form>, <input>, <textarea>, <select>, <button>.
 Example:
-<form>
+<form id="my-form">
   <input type="text" placeholder="Name" />
-  <button>Submit</button>
+  <button type="submit">Submit</button>
 </form>
 
 Q14: Difference between GET and POST method?

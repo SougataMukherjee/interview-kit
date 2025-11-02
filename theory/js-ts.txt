@@ -73,8 +73,16 @@ Async → doesn’t block next
 
 Q9: What is 'this' keyword?
 Refers to current context.
-In function -> global/window
-In object -> that object.
+Global Code
+  this → window (browser)
+Object
+  obj.method()
+       |
+       └── this → obj
+Regular Function
+  this → depends on caller
+Arrow Function
+  this → parent scope (not its own)
 
 Q10: Arrow function vs normal function vs IIFE vs Anonymous function
 Normal Function function add(a, b) { return a + b; }
@@ -99,8 +107,6 @@ a.y ───────► { z:2 } ◄────── b.y    (same referenc
 Deep Copy:
 b = JSON.parse(JSON.stringify(a))
 a.y ──► { z:2 }     b.y ──► { z:2 }   (separate copies)
-
-
 
 Q12. What are Promises?
 Used to handle async operations, It has 3 states: pending → resolved → rejected
@@ -179,7 +185,10 @@ fetch(url).catch(err => console.error(err));
 
 
 Q17. Async/Await
-Syntax sugar over Promises.
+Async/Await is a simplified way to work with Promises. It makes asynchronous code look and behave like synchronous code, which is easier to read and write.
+What problem it solves:
+Avoids callback hell and complex .then() chaining in Promises
+Makes async code more readable, cleaner, and easier to handle errors using try…catch
 Example:
 import { useEffect, useState } from "react";
 function App() {
@@ -227,6 +236,31 @@ Throttle: limit execution in interval.
 Runs the function once every fixed time, even if triggered multiple times.
 Useful for: Scroll, resize, mouse move events.
 
+import { useState, useRef } from "react";
+
+export default function ThrottleInput() {
+  const [text, setText] = useState("");
+  const throttleRef = useRef(false);
+
+  function handleChange(e) {
+    const value = e.target.value;
+
+    if (throttleRef.current) return; // block if within throttle time
+
+    throttleRef.current = true;
+    console.log("Throttled Value:", value);
+
+    setTimeout(() => {
+      throttleRef.current = false; // allow next execution after 1s
+    }, 2000);
+
+    setText(value);
+  }
+
+  return <input onChange={handleChange} placeholder="Type fast to test throttle..." />;
+}
+
+
 Q19: Polyfill Example (map)
 Array.prototype.myMap = function(cb){
   let res=[];
@@ -237,7 +271,8 @@ Array.prototype.myMap = function(cb){
 }
 
 Q20: Call, Apply, Bind
-All used to set 'this' manually.
+To manually control the value of this when borrowing a function from another object or ensuring a function always runs with a specific context.
+
 function greet(greeting, emoji) {
   console.log(`${greeting}, ${this.name}! ${emoji}`);
 }
@@ -264,7 +299,11 @@ Objects inherit from __proto__ → links to [[Prototype]]
 
 Q23: Difference: undefined vs null
 undefined -> declared but not assigned
+let a;      
+console.log(a);  // undefined
 null -> intentional empty value.
+let b = null;   
+console.log(b);  // null
 
 Q24: Event Delegation
 Attach single listener to parent.
@@ -273,7 +312,12 @@ ul.addEventListener('click',(e)=>{ if(e.target.tagName==='LI') console.log(e.tar
 
 Q25: LocalStorage vs SessionStorage with exp
 localStorage -> persists after reload and permanent until cleared.
+localStorage.setItem("name", "Sam");
+console.log(localStorage.getItem("name")); // Sam
+
 sessionStorage -> clears when tab closes
+sessionStorage.setItem("sessionName", "SamSession");
+console.log(sessionStorage.getItem("sessionName")); // SamSession
 
 Q26: Spread vs Rest
 Spread -> expands [...arr]
@@ -309,12 +353,33 @@ split(",")  -> ['a','b','c']
 
 Q31: Event Bubbling vs Capturing
 Bubbling: inner → outer (Event moves from child → parent)
-<div onClick={()=>alert("Parent")}>
-  <button onClick={()=>alert("Child")}>Click</button>
+Clicking the button → shows "Child clicked" → then "Parent clicked"
+<div id="parent">
+  <button id="child">Click Me</button>
 </div>
+<script>
+  document.getElementById("parent").addEventListener("click", () => alert("Parent clicked"));
+  document.getElementById("child").addEventListener("click", () => alert("Child clicked"));
+</script>
+
 
 Capturing: outer → inner
-addEventListener(type, fn, true) → capturing
+<div id="parent">
+  <button id="child">Click Me</button>
+</div>
+<script>
+  document.getElementById("parent").addEventListener(
+    "click",
+    () => alert("Parent clicked"),
+    true // Capturing phase
+  );
+
+  document.getElementById("child").addEventListener(
+    "click",
+    () => alert("Child clicked"),
+    true // Capturing phase
+  );
+</script>
 
 Q32: What is Temporal Dead Zone (TDZ)?
 Zone where variable exists but can’t be accessed before initialization.
@@ -339,6 +404,16 @@ JS is single-threaded; event loop manages async execution.
 Microtasks: Promises.
 Macrotasks: setTimeout, DOM events.
 Microtasks run before next render cycle.
+Synchronous Code
+      ↓
+  Microtasks (Promises)
+      ↓
+   Render/Update
+      ↓
+  Macrotasks (setTimeout, Events)
+      ↓
+      ⤵ Repeat
+
 
 Q37: What are modules in JavaScript?
 Break code into reusable files using export and import.
@@ -421,7 +496,10 @@ function add(a,b){ } add(2,3);
 
 Q49:Callback Function
 Function passed into another function to run after a task completes.
-setTimeout(()=>console.log("done"),1000);
+setTimeout(()=>console.log("Arrow function"),1000);
+setTimeout(function() {console.log("Anonymous function");}, 1000);
+function greet() { console.log("Name function");} setTimeout(greet, 500);
+
 
 Q50:Pyramid of Doom (Callback Hell)
 When many callbacks are nested inside each other — code becomes deep, messy, and hard to read.
@@ -450,9 +528,13 @@ Used to create multiple similar objects.
 function User(n){this.name=n;}
 let u=new User("Sam");
 
-Q53: Constructor Function
-function User(name){this.name=name;}
-let u=new User('Sam');
+Q53: why Constructor Function
+To create multiple objects with the same structure and properties without manually writing each object.
+function User(name) {
+  this.name = name;
+}
+let u = new User('Sam');
+console.log(u.name); // Sam
 
 Q54: Strings are Immutable
 Once created, can’t be changed—new copy made on edit.
@@ -501,7 +583,13 @@ clientX → mouse position in viewport.
 scrollX → amount page scrolled horizontally
 
 Q65:Mouse Events
-click, dblclick, mousedown, mouseup, mousemove, mouseenter, mouseleave
+click:Fired when the user presses and releases the mouse button on an element.
+dblclick:Fired when the user double-clicks an element.
+mousedown:Fired when the mouse button is pressed down on an element (before releasing).
+mouseup:Fired when the mouse button is released over an element.
+mousemove:Fired when the mouse pointer is moved over an element.
+mouseenter:Fired when the mouse pointer enters the boundary of an element.Unlike mouseover, it does not bubble.
+mouseleave:Fired when the mouse pointer leaves the boundary of an element.Unlike mouseout, it does not bubble.
 
 Q66:DOMContentLoaded
 Fires when HTML fully parsed (before images).
@@ -652,10 +740,10 @@ Q76:CORS
  Cross-Origin Resource Sharing – allows API access from different domains.
 
 Q77:Access DOM (4 ways)
-getElementById()
-getElementsByClassName()
-querySelector()
-querySelectorAll()
+getElementById() Selects a single element by its id.
+getElementsByClassName() Selects all elements with a specific class
+querySelector() Selects the first element matching a CSS selector.
+querySelectorAll() Selects all elements matching a CSS selector. Returns NodeList
 
 Q78:Event Emitter 
 Object that listens (on) and triggers (emit) events.
@@ -678,6 +766,12 @@ TYPESCRIPT THEORY NOTES
 
 Q1: What is TypeScript?
 Superset of JS adding static typing + compiler checks.
++---------------------+
+|      TypeScript     |
+|  +---------------+  |
+|  |  JavaScript   |  |
+|  +---------------+  |
++---------------------+
 
 Q2: why use it over JavaScript:
 - Early error detection
