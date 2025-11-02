@@ -1124,3 +1124,61 @@ setTimeout(function(){
 }, 1000);
 console.log("5");//1 5 2 4 3
 ```
+
+### Question 82: What will be the output?
+
+```js
+function first(){
+  console.log('first called')
+  function second(){
+    console.log('second called')
+    function third(){
+      console.log('third called')
+    }
+  }
+}
+```
+
+### Answer first called and Uncaught ReferenceError: second is not defined
+
+
+### Question 83: What will be the output?
+
+```js
+function fun1(){
+  console.log('key down')
+}
+function fun2(){
+  console.log('key up')
+}
+<input type="text" onkeydown="fun1()" onkeyup="fun2()"/>
+
+```
+### Answer: key down   key up
+
+### Question 84: What will be the output?
+
+```js
+JSON.parse('{"p":12}', (key, value) => typeof value === "number" ? value + 3 : value);
+
+
+```
+### Answer: { p: 15 }
+
+### Question 85: what will be the output?
+
+```js
+function display(){
+  var value1 = document.getElementById('p1').textContent;
+  var value2 = document.getElementById('p1').innerHTML;
+  document.getElementById('p2').innerHTML = value1 + value2;
+}
+<p onmouseover="display()" id="p1">this is first para</p>
+<p id="p2"></p>
+
+```
+
+### Answer:this is first para this is first para
+
+
+
