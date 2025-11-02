@@ -16,10 +16,23 @@ Q2: Difference between inline, block, and inline-block?
 
 Q3: What is the Box Model?
 Width = content + padding + border (margin lies outside).
-Content → Padding → Border → Margin  
+Total Width = margin + border + padding + content 
 Example:
++-----------------------+
+|      Margin           |
+|  +-----------------+  |
+|  |    Border       |  |
+|  | +-------------+ |  |
+|  | |  Padding    | |  |
+|  | | +---------+ | |  |
+|  | | | Content | | |  |
+|  | | +---------+ | |  |
+|  | +-------------+ |  |
+|  +-----------------+  |
++-----------------------+
 
-Q4: Explain CSS Specificity Order.
+
+Q4: Explain CSS Specificity Order.(Highest → Lowest)
 Inline style > ID > Class > Element  
 Example:
 #id > .class > div
@@ -107,10 +120,13 @@ Feature Queries / Fallbacks: Use @supports or CSS resets.
   }
 }
 
-Q16:Difference between em, rem, %, and px
+Q16:Difference between em, rem, %, vw, vh, fr and px
 px: Absolute pixel value.
-em: Relative to parent font-size.
-rem: Relative to root (html) font-size.
+em: Relative to parent font-size.Example: if parent font-size = 16px → 2em = 32px
+rem: Relative to root (html) font-size.Example: if html font-size = 16px → 2rem = 32px
+vw: Relative to 1% of viewport width (browser width) Example: 50vw = half of the screen width
+vh:Relative to 1% of viewport height (browser height).Example: 100vh = full visible screen height
+fr:Used in CSS Grid, means fractional unit of available space.Example: grid-template-columns: 1fr 2fr → 1 part vs 2 parts
 %: Relative to parent element size.
 
 Q17: What are CSS variables and how to use them?
@@ -180,9 +196,8 @@ border: 2px solid red;
 outline: 2px solid blue;
 
 Q25:display:none vs visibility:hidden
-display:none → removes element from layout
-visibility:hidden → hides but keeps layout space
-example:
+display:none → Element is removed from layout (no space reserved)
+visibility:hidden → Element is hidden but still occupies space
 
 Q26: CSS Selectors
 Select elements based on name, class, id, attribute, etc.
@@ -211,6 +226,11 @@ Grouping: Combine selectors with comma.
 h1, h2 { color: red; }
 Nesting (in SCSS)
 nav { a { color: blue; } }
+
+Q28:Cascading rules
+When two styles have same specificity:
+✔ Last rule written wins (order matters)
+✔ More specific selector beats less specific one (like !important override all rules)
 
 ==============================
 SCSS THEORY

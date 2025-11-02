@@ -1137,6 +1137,9 @@ function first(){
     }
   }
 }
+first();
+second();
+third();
 ```
 
 ### Answer first called and Uncaught ReferenceError: second is not defined
