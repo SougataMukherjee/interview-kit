@@ -1,9 +1,5 @@
-'use client';
-import { useParams } from 'next/navigation';
-
-export default function BlogPage() {
-  const params = useParams(); 
-  const slugPath = params.slug.join('/'); // convert array to string
+export default function BlogPage({ params }) {
+  const slugPath = params.slug.join('/'); // array → string
 
   const blogs = [
     { id: 1, title: 'Next.js Tips', path: '2025/next-js-tips', content: 'Next.js tips content...' },
