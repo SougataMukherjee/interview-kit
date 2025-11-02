@@ -6,6 +6,7 @@ export default function App() {
   const timerRef = useRef(null);
 
   useEffect(() => {
+    
     if (isRunning) {
       timerRef.current = setInterval(() => {
         setTime((prev) => prev + 1);

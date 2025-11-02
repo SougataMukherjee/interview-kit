@@ -296,12 +296,13 @@ Q45. How do you pass arguments to event handler?
 
 
 
-==============================
+=========================
 NEXT.JS THEORY NOTES 
-==============================
+=========================
 
 Q1: What is Next.js?
- A React framework for server-side rendering, static site generation, and optimized performance.
+ React is not feasible to create a fully-featured application for production.
+ Next js is a React framework for routing, server-side rendering(optimize rendering), static site generation, and optimized performance.
 
 Q2: CSR vs SSR vs SSG
 CSR - Rendered on client (useEffect),its render in browser for fast navigation
@@ -389,6 +390,11 @@ export default function Post({ id }) {
 Q6: Difference between pages and app router
 - Pages router: uses /pages directory, older version.
 - App router: introduced in Next.js 13, uses /app directory, server components, and layout.js.
+
+routing rules:
+all route must live inside the app folder
+route file must be name either page.js or page.tsx
+each folder represent a segment of the url path
 
 Q7: What are Server Components?
 Components rendered on the server — faster, smaller bundles, no client JS needed.
@@ -487,10 +493,35 @@ export default function HomeLayout({ children }) {
 
 Q20: all route and folder Next.js app?
 dynamic route [segment] → For routes like /user/[id], dynamic by parameter.
-optional catch-all [...segment] → Matches /a, /a/b, /a/b/c.
-optional [ [ ...segment ] ] → Same but optional (works with or without param).
-private folder (folder) → Grouping folder not part of route path.
-underscore _folder → Conventionally means internal folder (ignored by Next).
+
+catch-all route [...segment] → Captures 1 or more URL segments.
+File: app/blog/[...slug]/page.jsx
+URL supported:
+✔ /blog/a
+✔ /blog/a/1
+✔ /blog/a/1/react
+optional catch all route [ [ ...segment ] ] → Captures 0 or more URL segments.(work with or without params)
+File: app/blog/[[...slug]]/page.jsx
+URL supported:
+✔ /blog       (empty slug allowed)
+✔ /blog/a
+✔ /blog/a/1/nextjs
+
+private folder / Route group (folder) → Grouping folder not part of route path.Route groups organize routes without affecting URL path.
+app/(auth)/login/page.jsx
+app/(auth)/register/page.jsx
+
+but in url it will detect
+/login
+/register
+/dashboard
+
+
+underscore _folder / Private Folder → Conventionally means internal folder (ignored by Next).Any folder starting with _ won’t be treated as a route.
+To avoid accidental routing & keep clean structure we use.
+app/_components/Button.jsx   ✅ no route
+app/profile/page.jsx         ✅ route: /profile
+
 
 Q21: Styled JSX in Next.js
 Built-in CSS-in-JS for component-level styling using <style jsx> tag.
@@ -506,7 +537,7 @@ CSS Modules, Styled JSX, Tailwind CSS, Global CSS, Styled-components
 
 Q25: Dynamic imports in Next.js
 Using next/dynamic for lazy loading components
-const Component = dynamic(() => import('../Components'));
+const Component = dynamic(() => import('../Components'), { ssr: false });
 
 Q26: Environment variables in Next.js
 Use .env.local, access with process.env.NEXT_PUBLIC_... for client-side.
@@ -532,32 +563,70 @@ export default function Page() {
 
 Q29: app folder structure
 app/
- ├─ layout.jsx             // Root layout for all pages
- ├─ page.jsx               // Home page 
- ├─ loading.jsx            // Default loading 
- ├─ error.jsx              // Global error boundary
- ├─ not-found.jsx          // Custom 404 page
+ ├─ layout.jsx                        // Root layout for all pages
+ ├─ page.jsx                          // Home page
+ ├─ loading.jsx                       // Default loading
+ ├─ error.jsx                         // Global error boundary
+ ├─ not-found.jsx                     // Custom 404 page
  │
  ├─ users/
- │   ├─ page.jsx           // Route: /users
- │   ├─ [id]/page.jsx      // Dynamic Route: /users/1
- │   ├─ loading.jsx        //  loader
- │   ├─ error.jsx          //  error handler
+ │   ├─ page.jsx                      // /users
+ │   ├─ [id]/page.jsx                 // /users/1
+ │   ├─ loading.jsx                   // loader
+ │   ├─ error.jsx                     // error handler
  │
- ├─ components/
+ ├─ blog/
+ │   ├─ page.jsx                      // /blog
+ │   └─ [...slug]/page.jsx            // Catch-all route: /blog/a/1
+ │
+ ├─ components/                       // Shared/reusable components
  │   ├─ Header.jsx
  │   ├─ Footer.jsx
- │   └─ Breadcrumb.jsx
+ │   ├─ Breadcrumb.jsx
+ │   ├─ UI/                           // UI reusable components like button, modal…
+ │   │   ├─ Button.jsx
+ │   │   └─ Card.jsx
  │
- ├─ lib/
- │   └─ fetchData.js       
+ ├─ context/                          // Context API state
+ │   ├─ ThemeContext.jsx
+ │   └─ UserContext.jsx
+ │
+ ├─ store/                            // Redux store (Redux Toolkit)
+ │   ├─ index.js                      // Setup store
+ │   ├─ slices/
+ │   │   ├─ userSlice.js
+ │   │   └─ themeSlice.js
+ │   └─ hooks.js                      // useAppDispatch, useAppSelector
+ │
+ ├─ api/                              // App Router API endpoints
+ │   ├─ users/route.js                // GET, POST for users
+ │   └─ auth/route.js                 // Auth login/logout
+ │
+ ├─ lib/                              // Server helpers, DB, API handlers
+ │   ├─ fetchData.js
+ │   └─ axiosClient.js
+ │
+ ├─ utils/                            // Utility/helper functions
+ │   ├─ formatDate.js
+ │   ├─ validateEmail.js
+ │   └─ calculateAge.js
+ │
+ ├─ types/                            // TypeScript types or JS JSDoc
+ │   ├─ userTypes.js
+ │   ├─ apiResponseTypes.js
+ │   └─ index.js
+ │
+ ├─ constants/                        // App constants
+ │   ├─ apiEndpoints.js
+ │   ├─ roles.js
+ │   └─ messages.js
  │
  ├─ styles/
- │   └─ globals.css
- |   └─ mixin.module.scss
+ │   ├─ globals.css
+ │   ├─ mixin.module.scss
+ │   └─ variables.scss
  │
- └─ api/                   
-     └─ users/route.js
+ └─ middleware.js                     // Middlewares (Auth, redirects, etc.)
 
 Q30:All Route Handlers (Next.js App Router)
 Used inside app/api/route.js (or [route]/route.js)
@@ -566,3 +635,161 @@ POST create data
 PUT  Update full data
 PATCH update partial data
 DELETE  remove data
+
+Q31: When to use no-store and when force-cache?
+no-store: Use when data changes very frequently and must always be fresh.
+Example: fetching live stock price, user dashboard data.
+fetch('/api/data', { cache: 'no-store' })
+
+force-cache: Use when data does not change often. Browser/server stores it and reuses for future requests.
+Example: product list, blog list, FAQs.
+fetch('/api/products', { cache: 'force-cache' })
+
+Q32: How to authenticated with clerk?
+Install Clerk → wrap app with <ClerkProvider>
+Use components like <SignIn />, <UserButton />
+Use auth() in server components or API to get logged-in user.
+
+import { auth } from "@clerk/nextjs/server";
+
+export default async function Dashboard() {
+  const { userId } = auth();
+  if (!userId) return <div>Please login</div>;
+  return <div>Welcome User {userId}</div>;
+}
+
+Q33: What are Cookies & How They Help in Next.js?
+Cookies store small data in the browser and persist between page loads.
+Useful for: authentication, theme, cart, tokens.
+Next.js provides helpers like:
+import { cookies } from "next/headers";
+const cookieStore = cookies();
+
+Q34: What are Web Vitals & Why Used in Analytics?
+Web Vitals are key performance metrics used to measure user experience on the web.
+They help track: speed, interactivity, layout stability.
+
+Q35: What is JSON-LD?
+JSON-LD is a structured data format used for SEO to help Google understand your content.
+It is added inside <script type="application/ld+json">
+
+<script type="application/ld+json">
+{ "@context": "https://schema.org", "@type": "Article", "headline": "Next.js Tips" }
+</script>
+
+Q36:What is Routing Metadata?
+Metadata controls page title, description, icons.
+Example inside page.js:
+export const metadata = { title: "Home Page", description: "Welcome" };
+
+Q37: What is Prefetching?
+Next.js automatically downloads next page code + data before user clicks, improving navigation speed.
+Example: <Link prefetch={true}> loads data in background.
+
+Q38:Server-Side Rendering (SSR) vs Client-Side Rendering (CSR)
+SSR: HTML generated on server for each request. Good for SEO and fast first page load.
+CSR: Page loads blank and React renders on client. Good for dynamic apps but slower first load.
+
+Q39: When do we use use server and its use case?
+"use server" is written in a function to run it on the server.
+Used for server actions like DB write, sending emails, file upload, secure operations.
+"use server";
+export async function saveUser(data) { /* DB write code */ }
+
+Q40: How to Handle Errors with Error Boundary?
+Create an error.jsx in a route to catch UI errors.It catches runtime rendering errors and avoids page crash.
+"use client";
+export default function Error({ error, reset }) {
+  return <button onClick={() => reset()}>Try Again</button>;
+}
+
+Q41: Are { params } Promise-based? Why we use them?
+params are not a promise. They are plain object values passed by Next.js based on the URL.
+We use them to access dynamic URL values like product ID, blog slug
+
+export default function Page({ params }) { console.log(params.id) }
+
+Q42: How searchParams is different from params?
+params → comes from dynamic URL structure (path).
+/product/10 → params.id = 10
+searchParams → comes from query string.
+/product/10?sort=asc → searchParams.sort = asc
+
+Q43: How Nested Route is Different from Dynamic Route?
+Nested route: folder inside folder → creates UI hierarchy.
+app/dashboard/settings/page.jsx → /dashboard/settings
+
+Dynamic route: [id] captures dynamic value.
+app/product/[id]/page.jsx → /product/45
+
+Q44:Use Case of next.config.js and tsconfig.json
+next.config.js: Configure Next.js behavior like images, redirects, env variables, experimental flags.
+tsconfig.json: Configure TypeScript compiler rules like path aliases, strict mode, include/exclude files.
+
+Q45: Default Export vs Named Export (Component Level)
+Default export: when a file returns one main component.
+export default function Header() {}
+Named export: when file has multiple components/hooks/helpers to export.
+export function Button() {}
+export function Card() {}
+
+Q46:What is Hydration
+Hydration is the process where browser takes static HTML from server and attaches React event listeners to make it interactive.
+Diagram:
+Server renders HTML → Client receives → React attaches JS to make clickable
+
+Q47:Static Render vs Dynamic Render
+Static Render: HTML generated at build time. Fast & cached. Good for blogs, docs.
+Dynamic Render: HTML generated per request. Needed for auth pages, dashboards, personalized data.
+
+Q48:Parallel Routes
+Parallel Routes in Next.js allow you to render multiple pages at the same time in the same layout, side-by-side or layered, without replacing the main content.
+They are created using folders that start with @ (example: @modal, @chat, @feed, etc.).
+Parallel Routes let you load additional UI sections independently — like a image gallery popup, sidebar without losing the current page state.
+
+app/
+├─ gallery/
+│  ├─ layout.jsx            // Layout that defines UI regions (slots)
+│  ├─ page.jsx              // Default page when no image selected
+│  ├─ @list/                // Parallel route #1 (image list)
+│  │   └─ page.jsx
+│  ├─ @preview/             // Parallel route #2 (image preview)
+│  │   └─ page.jsx          // Default empty state if no image chosen
+│  └─ @preview/[id]/
+│      └─ page.jsx          // Preview specific image by ID
+
+Q49:router.back vs router.push vs redirect()
+-router.back()
+Works like browser Back button
+Takes user to previous page in history
+If no history, sometimes stays on same page
+
+-router.push('/dashboard')
+Button click → go to another page and navigate to a new route programmatically
+Adds a new entry to browser history like After submitting a form and going to success page
+
+-redirect('/login)
+Server-side navigation, use in protected private page and If user not authenticated
+Stops code execution immediately and redirects
+Does NOT add to browser history (user cannot go back)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
