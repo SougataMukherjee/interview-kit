@@ -943,11 +943,47 @@ Server-side navigation, use in protected private page and If user not authentica
 Stops code execution immediately and redirects
 Does NOT add to browser history (user cannot go back)
 
-
-
-
-
-
+Q50: give all useful hooks use in nextjs
+useRouter – Provides navigation and route information in Next.js.
+import { useRouter } from 'next/navigation';
+export default function RouterExample() {
+  const router = useRouter();
+  return <button onClick={() => router.push('/about')}>Go to About</button>;
+}
+usePathname – Returns the current URL pathname in App Router.
+import { usePathname } from 'next/navigation';
+export default function PathnameExample() {
+  const pathname = usePathname();
+  return <div>Current Path: {pathname}</div>;
+}
+useSearchParams – Read and update query parameters in the URL.
+import { useSearchParams } from 'next/navigation';
+export default function SearchParamsExample() {
+  const searchParams = useSearchParams();
+  const name = searchParams.get('name');
+  return <div>Name: {name}</div>;
+}
+useParams - Access dynamic route parameters.
+import { useParams } from 'next/navigation';
+export default function ParamsExample() {
+  const params = useParams();
+  return <div>Post ID: {params.id}</div>; // for route like /post/[id]
+}
+useTransition → Track and manage navigation/loading state in app router.useTransition runs after the initial render, then the state update inside startTransition is processed asynchronously after the render.
+'use client';
+import { useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+export default function TransitionExample() {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  return (
+    <button
+      onClick={() => startTransition(() => router.push('/dashboard'))}
+    >
+      {isPending ? 'Loading...' : 'Go to Dashboard'}
+    </button>
+  );
+}
 
 
 
