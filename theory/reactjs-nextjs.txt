@@ -19,13 +19,38 @@ Q2: What is Reconciliation?
 
 How diffing algorithm works in Virtual DOM
  React compares old and new virtual DOM trees, updates only changed nodes (O(n) optimization).
-
+(State/Props Change)
+                         |
+                         v
+                 +----------------+
+                 | New Virtual DOM|
+                 +----------------+
+                          |
+                          v
+          +--------------------------------+
+          | React compares both Virtual DOM|
+          |     (Diffing Algorithm)        |
+          +--------------------------------+
+                      /       \
+                     /         \
+                    v           v
+        +----------------+   +----------------+
+        | Same Parts     |   | Changed Parts  |
+        | (No Update)    |   | (Mark for DOM  |
+        |                |   |    Update)     |
+        +----------------+   +----------------+
+                                   |
+                                   v
+                         +---------------------+
+                         |   Update Real DOM   |
+                         | (Only changed nodes)|
+                         +---------------------+
 Q3: Functional vs Class Components
  Functional - simpler, uses hooks.
- Class - uses lifecycle methods, more boilerplate.
+ Class - uses lifecycle methods, more boilerplate and harder to reuse logic between components without hooks and `this` keyword handling is confusing and error-prone.
 
 Q4: What are Hooks in React?
- Functions that let you use React features without classes (e.g. useState, useEffect, useMemo, useCallback).
+ Functions that let you use React features without classes (e.g. useState, useEffect, useMemo, useRef, useCallback, useContext).
 
 Q5: Explain useState
  Manages local state in functional components.
@@ -79,6 +104,13 @@ const [count, setCount] = useState(0);
 
 Q8: What is Prop Drilling?
  Passing props deeply through multiple components. Solved using Context API.
+ [Parent Component]
+        |
+        v
+[Child Component]
+        |
+        v
+[Grandchild Component]
 
 Q9: What is Context API?
  Provides global state without prop drilling and solution for props drilling.
@@ -87,6 +119,9 @@ const UserContext = createContext();
 
 Q10: What is React.memo?
  Prevents unnecessary re-renders of functional components when props don’t change.
+ const MyComponent = React.memo(({ name }) => {
+  return <div>{name}</div>;
+});
 
 Q11: Controlled vs Uncontrolled Components
 Controlled - state managed by React.
@@ -101,7 +136,16 @@ To directly access DOM elements or React elements.
 Use case: focus input, play video, integrate 3rd-party lib.
 
 Q13: Explain React Fiber
- Internal engine for scheduling rendering tasks efficiently.
+ React Fiber is the internal engine of React responsible for scheduling rendering tasks efficiently.
+ It allows React to pause, resume, and prioritize updates, making UI rendering smoother.
+ Render Request
+      |
+   Fiber Engine
+  /      |      \
+High   Medium   Low Priority
+Task   Task      Task
+  \      |      /
+   UI Update
 
 Q14: Difference between keys in React list
  Unique key helps React identify elements and track updates efficiently.
@@ -192,7 +236,23 @@ User → Clicks /dashboard
 
 Q22. Render Props
 Share logic by passing a function as a prop that returns JSX.
-<Data render={(data) => <List data={data}/>}/>
+Why use: To share logic between components without repeating code.
+function Data({ render }) {
+  const data = ['Apple', 'Banana', 'Cherry'];
+  return render(data);
+}
+
+function List({ data }) {
+  return (
+    <ul>
+      {data.map((item, i) => <li key={i}>{item}</li>)}
+    </ul>
+  );
+}
+
+// Usage
+<Data render={(data) => <List data={data} />} />
+
 
 Q23.React.createElement vs React.cloneElement
 createElement: Creates a new element.
@@ -214,8 +274,16 @@ Q25.Types of API Calls
 GET (read), POST (create), PUT/PATCH (update), DELETE (remove).
 
 Q26.Type Checking with PropTypes
+Why use: To validate props passed to a component and catch bugs early.
 import PropTypes from 'prop-types';
-Comp.propTypes = { name: PropTypes.string.isRequired };
+
+function Comp({ name }) {
+  return <h1>Hello, {name}</h1>;
+}
+
+Comp.propTypes = {
+  name: PropTypes.string.isRequired
+};
 
 Q27. React 18 Features
   1.Automatic Batching:Combines multiple state updates into one render.
@@ -444,9 +512,12 @@ export default function Post({ id }) {
 }
 
 
-Q6: Difference between pages and app router
+Q6: Difference between pages and app router? Why App Router is preferred over Pages Router?
 - Pages router: uses /pages directory, older version.
 - App router: introduced in Next.js 13, uses /app directory, server components, and layout.js.
+
+App router is preferred because App router provides better flexibility with nested layouts, server components, and improved routing.
+and Encourages modular architecture and reusability of UI components using layout and template
 
 routing rules:
 all route must live inside the app folder
@@ -486,7 +557,13 @@ Q11: What is Image Optimization in Next.js?
         alt="Profile"
         width={300}
         height={300}
+        style={{}}                  
+        className=""
+        layout="fixed" | "responsive" | "fill"
         quality={80}
+        loading="lazy" | "eager"
+        objectFit="cover" | "contain" | "fill"
+        placeholder="blur"
         priority
       />
 
@@ -648,6 +725,16 @@ app/
  ├─ error.jsx                         // Global error boundary
  ├─ not-found.jsx                     // Custom 404 page
  │
+ ├─ (auth)/                            // Authentication related pages
+ │   ├─ register/
+ │   │   ├─ page.jsx                  // /register
+ │   │   └─ _components/              // Private components for register
+ │   │       └─ RegisterForm.jsx
+ │   ├─ login/
+ │   │   ├─ page.jsx                  // /login
+ │   │   └─ _components/              // Private components for login
+ │   │       └─ LoginForm.jsx
+ │
  ├─ users/
  │   ├─ page.jsx                      // /users
  │   ├─ [id]/page.jsx                 // /users/1
@@ -658,13 +745,14 @@ app/
  │   ├─ page.jsx                      // /blog
  │   └─ [...slug]/page.jsx            // Catch-all route: /blog/a/1
  │
- ├─ components/                       // Shared/reusable components
+ ├─ _components/                      // Shared/reusable private components
  │   ├─ Header.jsx
  │   ├─ Footer.jsx
  │   ├─ Breadcrumb.jsx
  │   ├─ UI/                           // UI reusable components like button, modal…
  │   │   ├─ Button.jsx
  │   │   └─ Card.jsx
+ │   └─ ExamplePrivateComponent.jsx
  │
  ├─ context/                          // Context API state
  │   ├─ ThemeContext.jsx
@@ -706,6 +794,7 @@ app/
  │   └─ variables.scss
  │
  └─ middleware.js                     // Middlewares (Auth, redirects, etc.)
+
 
 Q30:All Route Handlers (Next.js App Router)
 Used inside app/api/route.js (or [route]/route.js)
@@ -830,15 +919,14 @@ They are created using folders that start with @ (example: @modal, @chat, @feed,
 Parallel Routes let you load additional UI sections independently — like a image gallery popup, sidebar without losing the current page state.
 
 app/
-├─ gallery/
-│  ├─ layout.jsx            // Layout that defines UI regions (slots)
-│  ├─ page.jsx              // Default page when no image selected
-│  ├─ @list/                // Parallel route #1 (image list)
+├─ dashboard/
+│  ├─ layout.jsx            // Layout that defines left and right slots
+│  ├─ page.jsx              // Default dashboard main page
+│  ├─ @left/                // Parallel route #1 (Left panel)
 │  │   └─ page.jsx
-│  ├─ @preview/             // Parallel route #2 (image preview)
-│  │   └─ page.jsx          // Default empty state if no image chosen
-│  └─ @preview/[id]/
-│      └─ page.jsx          // Preview specific image by ID
+│  ├─ @right/               // Parallel route #2 (Right panel)
+│  │   └─ page.jsx
+
 
 Q49:router.back vs router.push vs redirect()
 -router.back()

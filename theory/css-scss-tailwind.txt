@@ -2,12 +2,19 @@
 CSS NOTES
 ====================
 
-Q1: Is CSS case-sensitive?
+Q1: what is CSS? Is CSS case-sensitive? Different ways to include CSS in a webpage?
+CSS, which stands for Cascading Style Sheets, is a style sheet language used in web development to control the presentation and formatting of HTML documents
+
 No (selectors & properties are not), but values like class names in HTML are.
 CSS3 Features & Advantages:
 Rounded corners (border-radius)
 Animations & transitions
 Media queries (responsive)
+
+3 ways we can include css in webpage
+1.Inline CSS <p style="color:red;">Hello</p>
+2.Internal CSS <style> p{color:red;} </style>
+3.External CSS <link rel="stylesheet" href="style.css">
 
 Q2: Difference between inline, block, and inline-block?
 - inline: width/height not applicable (span, a)
@@ -50,8 +57,11 @@ Q6: Position properties?
 - fixed (relative to viewport) Stays fixed relative to viewport (even when scrolling).
 - sticky (hybrid) Acts relative until scroll crosses threshold, then sticks
 
-Q7: Flexbox Basics.
+Q7: Flexbox Basics. Float property advantage over Flex
 flexbox useful for 1D layout (row or column).
+Float was used to wrap text around images (flex cannot do this)
+<img src="pic.jpg" style="float:left; width:100px;"> Text wraps around image.
+
 .container {
   display: flex;
   justify-content: center;
@@ -231,6 +241,20 @@ Q28:Cascading rules
 When two styles have same specificity:
 ✔ Last rule written wins (order matters)
 ✔ More specific selector beats less specific one (like !important override all rules)
+
+Q29::nth-child() vs :nth-of-type()
+:nth-child() Selects based on position among all siblings
+:nth-of-type() Selects based on position of same tag type
+<p>1</p>
+<span>2</span>
+<p>3</p>
+
+p:nth-child(2) ❌ (No match)
+p:nth-of-type(2) ✅ selects 2nd <p>
+
+Q30:How to center an element horizontally?
+-using margin .box { width:200px; margin:0 auto; }
+-using flex .parent { display:flex; justify-content:center; }
 
 ==============================
 SCSS THEORY

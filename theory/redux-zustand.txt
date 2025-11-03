@@ -3,7 +3,18 @@ REDUX THEORY NOTES
 ==============================
 
 Q1.What is Redux and why is it used?
-Redux is a state management library for React that stores the app’s global state in a single source of truth, making data flow predictable and debugging easier.
+Redux is a state management JS library for React that stores the app’s to making data flow global 
+
+[UI Component] 
+     ↓ dispatch action
+[Action] ---------------------> [Reducer] 
+                                   ↓
+                              [New State]
+                                   ↓
+                              [Store Updated]
+                                   ↓
+                             [UI Re-rendered]
+
 
 Q2.What are the core principles of Redux?
 Single source of truth (one store)

@@ -2,12 +2,29 @@
 HTML NOTES
 ====================
 
-Q1: web browser and how it works
+Q1: web browser and how it works?
 web browser is a s/w application for retrieving presenting info on www e.g google chrome
 When a browser loads a webpage, it first downloads the HTML file and starts parsing it to build the DOM tree.
 Then it fetches and parses CSS and combines both into a Render Tree.Finally, it executes JavaScript
+User enters URL
+      ↓
+Browser sends request
+      ↓
+DNS finds server IP
+      ↓
+Server sends HTML, CSS, JS
+      ↓
+Browser:
+ HTML → DOM
+ CSS → CSSOM
+ DOM + CSSOM → Render Tree
+      ↓
+Layout & Paint
+      ↓
+JavaScript runs
+      ↓
+Web Page displayed
 
-User → Browser → DNS/Server → Render → Page
 
 Q2: why <br> called empty element?
 because it has no content
@@ -22,10 +39,11 @@ html 1.0 html2.0 html 3 html 4 html 5
 HTML5 features
 new element new attribute multimedia 2d 3d drawing support
 
-Q5: What are semantic tags? Give examples.
+Q5: What are semantic tags? Give examples and benefits
 A: A semantic element clearly describes its meaning to both the browser and the developer.
 Examples of non-semantic elements: <div> and <span> - Tells nothing about its content.
 Examples of semantic elements: <img>, <table>, <header>,<nav>,<footer>, <article> - Clearly defines its content.
+benefits:Improves readability & code clarity for developers, improve SEO and Accessibility friendly – screen readers understand sections easily.
 
 Q6: What is the difference between <div> and <section>?
 A: <div> is a generic container, no semantic meaning.
@@ -93,8 +111,8 @@ console.log(div.dataset.id);   // Output: "101"
 
 
 Q16: What is the difference between <b> and <strong>, <i> and <em>?
-- <b> and <i>: purely stylistic.
-- <strong> and <em>: semantic emphasis for screen readers and SEO.
+- <b> and <strong>: b represent bold text(visual only) but strong is a semantic tag and bold by default and accessibility and seo friendly.
+- <i> and <em>: i represent italic text(visual only) but em is a semantic tag and italic by default and accessibility and seo friendly.
 
 Q17: What is the purpose of <link> tag?
  Used to link external resources like CSS files or icons.
@@ -146,8 +164,11 @@ Q26: What is the difference between HTMLCollection and NodeList?
 - NodeList: static, doesn’t auto-update.
 
 Q27: What are ARIA roles?
- Accessibility roles that describe elements to assistive technologies.
-Example: <button role="switch"></button>
+ARIA (Accessible Rich Internet Applications) roles provide extra semantic meaning to HTML elements so that screen readers and assistive technologies can understand their purpose.
+Example: <div role="button" tabindex="0">Open Menu</div>
+<button role="switch" aria-checked="false">
+  Dark Mode
+</button>
 
 Q28: What is Shadow DOM?
  A scoped subtree inside a web component that encapsulates styles and markup.
@@ -176,7 +197,7 @@ Example: <iframe src="https://example.com"></iframe>
 
 Q33: What is cross-origin resource sharing (CORS)?
 A security feature that restricts how resources can be fetched from another domain.
-
+it improves Security and avoids browser blocking of cross-domain API requests
 Q33: How do you optimize HTML for SEO?
 - Use semantic tags
 - Proper headings (H3–H6)

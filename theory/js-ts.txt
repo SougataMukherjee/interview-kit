@@ -46,7 +46,7 @@ function demo() {
     let y = 20;
     const z = 30;
   }
-  console.log(x); // ✅ works (var → function scope)
+  console.log(x); // ✅ works (var → function scope) var will not work outside the function
   console.log(y); // ❌ error (let → block scope)
   console.log(z); // ❌ error (const → block scope)
 }
@@ -306,7 +306,8 @@ let b = null;
 console.log(b);  // null
 
 Q24: Event Delegation
-Attach single listener to parent.
+Event Delegation is used to handle events efficiently by adding a single event listener on a parent element instead of adding multiple listeners to each child element.
+Benefits:Improves performance (fewer listeners in DOM) and Improves performance (fewer listeners in DOM)
 Example:
 ul.addEventListener('click',(e)=>{ if(e.target.tagName==='LI') console.log(e.target.textContent) })
 
@@ -324,10 +325,11 @@ Spread -> expands [...arr]
 const nums = [1, 2, 3];
 const newNums = [...nums, 4, 5]; // [1, 2, 3, 4, 5]
 Rest -> collects (...args)
-function sum(...args) {
-  return args.reduce((a, b) => a + b, 0);
+function sum(...numbers) {
+  return numbers.map((x) => x + 5);
 }
-sum(1, 2, 3, 4);
+const result = sum(4, 5, 6, 7); // [9, 10, 11, 12]
+
 
 Q27: Deep Clone Object
 JSON.parse(JSON.stringify(obj));
@@ -351,9 +353,20 @@ split -> convert string → array
 "a,b,c"
 split(",")  -> ['a','b','c']
 
-Q31: Event Bubbling vs Capturing
+Q31: Event Bubbling(default) vs Capturing
 Bubbling: inner → outer (Event moves from child → parent)
 Clicking the button → shows "Child clicked" → then "Parent clicked"
+┌───────────────────────────────┐
+│           PARENT               │
+│   (executes second)            │
+│   ▲                            │
+│   │  Bubbling ↑                │
+│   │                            │
+│   ┌─────────────────────────┐  │
+│   │         CHILD            │  │
+│   │   (clicked first)        │  │
+│   └─────────────────────────┘  │
+└───────────────────────────────┘
 <div id="parent">
   <button id="child">Click Me</button>
 </div>
@@ -363,7 +376,17 @@ Clicking the button → shows "Child clicked" → then "Parent clicked"
 </script>
 
 
-Capturing: outer → inner
+Capturing: outer/parent → inner/child
+┌───────────────────────────────┐
+│           PARENT               │
+│   (executes first)             │
+│   ▼  Capturing ↓               │
+│                                │
+│   ┌─────────────────────────┐  │
+│   │         CHILD            │  │
+│   │   (executes second)      │  │
+│   └─────────────────────────┘  │
+└───────────────────────────────┘
 <div id="parent">
   <button id="child">Click Me</button>
 </div>
@@ -391,13 +414,21 @@ Every JS object inherits from a prototype object.
 Shared methods are defined on the prototype to save memory.
 Example: Object.create(proto) creates a new object inheriting from proto.
 
-Q34: Difference between call, apply, and bind.
-call: fn.call(this, arg1, arg2) → calls immediately.
-apply: fn.apply(this, [args]) → same but takes array.
-bind: fn.bind(this) → returns new function for later call.
+Q34: Webpack
+Module bundler (combines JS, CSS, imgs into build).
 
 Q35: What are higher-order functions?
 Functions that take another function as argument or return one (e.g., map, filter, reduce).
+Higher-order functions either take other functions as arguments or Return functions.
+function multiplier(factor) {
+  return function (number) {
+    return number * factor;
+  };
+}
+
+const double = multiplier(2);
+console.log(double(5)); // 10
+
 
 Q36: Explain the event loop and microtask queue.
 JS is single-threaded; event loop manages async execution.
@@ -461,8 +492,11 @@ use script tag to include js in html
 src, type, async, defer, crossorigin
 
 Q43: When to use defer / async
+both load scripts asynchronously.
 defer → loads JS in background, runs after HTML parsing, best for most scripts,Best for scripts that rely on the DOM.
+<script defer src="defer.js"></script>
 async → runs as soon as loaded, may block DOM. Good for analytics.
+<script async src="async.js"></script>
 HTML Parsing ──────► DOM Ready ──► Defer JS runs
         \
          \► Async JS runs whenever it finishes loading
@@ -528,13 +562,28 @@ Used to create multiple similar objects.
 function User(n){this.name=n;}
 let u=new User("Sam");
 
-Q53: why Constructor Function
+Q53: why Constructor Function? what is Prototype Inheritance?
 To create multiple objects with the same structure and properties without manually writing each object.
 function User(name) {
   this.name = name;
 }
 let u = new User('Sam');
 console.log(u.name); // Sam
+
+Prototype Inheritance is a feature in JavaScript where objects can inherit properties and methods from another object through the prototype chain.
+function User(name) {
+  this.name = name; 
+}
+
+User.prototype.sayHello = function () {
+  console.log("Hello, " + this.name);
+};
+let u1 = new User("Sam");
+let u2 = new User("John");
+
+u1.sayHello(); // Hello, Sam
+u2.sayHello(); // Hello, John
+
 
 Q54: Strings are Immutable
 Once created, can’t be changed—new copy made on edit.
@@ -713,9 +762,17 @@ create() → creates object with given prototype.
 toString() → returns string form of object.
         ({a:1}).toString() → "[object Object]"
 
-Q72: Pass by Value → Copy of value passed (primitive).
-Pass by Reference → Reference (address) passed (object/array).
-
+Q72: what is pass by value and pass by reference
+Pass by Value → Copy of value passed (primitive).when you do not want original data to change.
+   let a = 10;
+    function change(x) { x = 20; }
+    change(a);
+    console.log(a); // 10
+Pass by Reference → Reference (address) passed (object/array).when you want to modify the original object/array from a function.
+let obj = { name: "Sam" };
+    function change(o) { o.name = "John"; }
+    change(obj);
+    console.log(obj.name); // John 
 Q73: Pure Function → Same input → same output, no side effects.
 Impure Function → Depends on external/state change.
 
@@ -754,10 +811,6 @@ event.emit('hi');
 
 Q79: Optimize DOM Traversal 
 Cache DOM nodes, use documentFragment, batch updates
-
-Q80: Webpack
-Module bundler (combines JS, CSS, imgs into build).
-
 
 
 ====================
