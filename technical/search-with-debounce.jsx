@@ -1,57 +1,36 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
-const App = () => {
-  const [data, setData] = useState();
-  const [isDebounce, setDebounce] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [countdown, setCountdown] = useState(10);
-  const debounceTimer = useRef(null);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (isDebounce) {
-        setCountdown(countdown - 1);
-      }
-    }, 1000);
-    if (countdown === 0) {
-      clearTimeout(timer);
-      setCountdown(10);
-    }
-    console.log(countdown);
-  }, [isDebounce, countdown, isLoading]);
-  useEffect(() => {
-    return () => {
-      if (debounceTimer.current) {
-        clearTimeout(debounceTimer.current);
-      }
-    };
-  }, []);
+export default function App() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+
   const fetchData = async () => {
-    const response = await fetch("https://jsonplaceholder.typicode.com/users");
-    const json = await response.json();
+    setLoading(true);
+    const res = await fetch("https://jsonplaceholder.typicode.com/users");
+    const json = await res.json();
     setData(json);
-    console.log(json, data);
+    setLoading(false);
+    setCountdown(10);
   };
-  const handleClick = () => {
-    if (isDebounce) return;
-    setDebounce(true);
-    fetchData();
-    setIsLoading(true);
-    debounceTimer.current = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
 
-    debounceTimer.current = setTimeout(() => {
-      setDebounce(false);
-    }, 10000);
+  const handleClick = () => {
+    if (countdown > 0) return; // debounce active
+    fetchData();
   };
+
+ 
+  useEffect(() => {
+    if (countdown === 0) return;
+    const id = setTimeout(() => setCountdown(countdown - 1), 1000);
+    return () => clearTimeout(id);
+  }, [countdown]);
 
   return (
     <div>
-      <button onClick={handleClick}>Click Here</button>
-      {isDebounce && countdown > 0 && <div>{countdown} seconds remaining</div>}
-      {isLoading && <div>Data is loading !</div>}
-      {isLoading ? <p>Loading...</p> : <div>{JSON.stringify(data)}</div>}
+      <button onClick={handleClick}>Fetch Users</button>
+      {countdown > 0 && <div>Wait {countdown}s to click again</div>}
+      {loading ? <p>Loading...</p> : <pre>{JSON.stringify(data, null, 2)}</pre>}
     </div>
   );
-};
-export default App;
+}

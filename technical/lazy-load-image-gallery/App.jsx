@@ -1,55 +1,33 @@
-import { useEffect, useRef, useState } from "react";
-import "./styles.css";
+import { useState, useEffect } from "react";
 
-const App = () => {
+export default function App() {
   const [images, setImages] = useState([]);
-  const observerRef = useRef(null);
 
   useEffect(() => {
-    const imgList = Array.from({ length: 50 }, (_, i) => ({
-      id: i,
-      src: `https://picsum.photos/id/${i + 10}/400/250`,
-    }));
-    setImages(imgList);
+    const imgUrls = [];
+    for (let i = 10; i < 30; i++) {
+      imgUrls.push(`https://picsum.photos/id/${i}/400/250`);
+    }
+    setImages(imgUrls);
   }, []);
 
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            img.src = img.dataset.src;
-            observer.unobserve(img);
-          }
-        });
-      },
-      {
-        rootMargin: "100px",
-        threshold: 0.1,
-      }
-    );
-
-    const { current: observer } = observerRef;
-    const imgs = document.querySelectorAll(".lazy-img");
-    imgs.forEach((img) => observer.observe(img));
-
-    return () => observer.disconnect();
-  }, [images]);
-
   return (
-    <div className="gallery">
-      {images.map((img) => (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gap: "10px",
+      }}
+    >
+      {images.map((src, i) => (
         <img
-          key={img.id}
-          data-src={img.src}
-          src="https://via.placeholder.com/400x250?text=Loading..."
-          alt={`Random ${img.id}`}
-          className="lazy-img"
+          key={i}
+          src={src}
+          loading="lazy"
+          alt={`Random ${i}`}
+          style={{ width: "100%" }}
         />
       ))}
     </div>
   );
-};
-
-export default App;
+}

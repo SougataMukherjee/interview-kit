@@ -1,31 +1,24 @@
 import { useState } from "react";
-import validate from "./Formvalidation";
-import "bootstrap/dist/css/bootstrap.min.css";
+import validate from "./FormValidation";
 import { Button, Alert } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function App() {
   const [values, setValues] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
   const [showAlert, setShowAlert] = useState(false);
 
-  const handleSubmit = (event) => {
-    if (event) event.preventDefault();
+  const handleChange = (e) =>
+    setValues({ ...values, [e.target.name]: e.target.value });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const validationErrors = validate(values);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
       setShowAlert(true);
       setTimeout(() => setShowAlert(false), 2000);
-    } else {
-      setShowAlert(false);
     }
-  };
-
-  const handleChange = (event) => {
-    event.persist();
-    setValues((prev) => ({
-      ...prev,
-      [event.target.name]: event.target.value,
-    }));
   };
 
   return (
@@ -40,30 +33,26 @@ export default function App() {
         </Alert>
       )}
       <div>
-        <label htmlFor="email">Email</label>
+        <label>Email</label>
         <input
-          className="email"
           type="email"
           name="email"
+          value={values.email}
           onChange={handleChange}
-          onBlur={() => {}}
-          value={values.email || ""}
         />
         {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
       </div>
       <div>
-        <label htmlFor="password">Password</label>
+        <label>Password</label>
         <input
-          className="password"
           type="password"
           name="password"
+          value={values.password}
           onChange={handleChange}
-          onBlur={() => {}}
-          value={values.password || ""}
         />
         {errors.password && <p style={{ color: "red" }}>{errors.password}</p>}
       </div>
-      <Button className="btn btn-success mt-2" type="submit">
+      <Button type="submit" className="mt-2 btn btn-success">
         Submit
       </Button>
     </form>

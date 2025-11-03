@@ -1,60 +1,61 @@
-import "./styles.css";
 import { useState } from "react";
+
 export default function App() {
-  const [doc, setDoc] = useState({ name: "", age: 0 });
-  const [form, setForm] = useState([]);
+  const [doc, setDoc] = useState({ name: "", age: "" });
+  const [list, setList] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editIndex !== null) {
-      const updated = [...form];
-      updated[editIndex] = doc;
-      setForm(updated);
+      list[editIndex] = doc;
+      setList([...list]);
       setEditIndex(null);
     } else {
-      setForm([...form, doc]);
+      setList([...list, doc]);
     }
-    setDoc({ name: "", age: 0 });
+    setDoc({ name: "", age: "" });
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDoc({ ...doc, [name]: value });
   };
-  const handleDelete = (index) => {
-    setForm(form.filter((_, i) => i !== index));
-  };
-
-  const handleEdit = (i) => {
-    setDoc(form[i]);
-    setEditIndex(i);
-  };
-
   return (
-    <div className="App">
-      <form>
-        <input name="name" value={doc.name} onChange={handleChange} />
-        <input name="age" value={doc.age} onChange={handleChange} />
-        <button onClick={handleSubmit} type="submit">
-          Submit
-        </button>
-        {form.length > 0 ? (
-          <ul>
-            {form.map((data, i) => (
-              <li key={i}>
-                {data.name} — {data.age}
-                <button type="button" onClick={() => handleEdit(i)}>
-                  Edit
-                </button>
-                <button type="button" onClick={() => handleDelete(i)}>
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          "no docx found"
-        )}
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          name="name"
+          value={doc.name}
+          onChange={handleChange}
+          placeholder="Name"
+        />
+        <input
+          name="age"
+          value={doc.age}
+          onChange={handleChange}
+          placeholder="Age"
+        />
+        <button type="submit">{editIndex !== null ? "Update" : "Add"}</button>
       </form>
+
+      <ul>
+        {list.map((item, i) => (
+          <li key={i}>
+            {item.name} — {item.age}{" "}
+            <button
+              onClick={() => {
+                setDoc(item);
+                setEditIndex(i);
+              }}
+            >
+              Edit
+            </button>
+            <button onClick={() => setList(list.filter((_, idx) => idx !== i))}>
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
