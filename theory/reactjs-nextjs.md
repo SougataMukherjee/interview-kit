@@ -1,4 +1,4 @@
-==============================
+
 REACT THEORY NOTES 
 ==============================
 
@@ -55,16 +55,18 @@ How diffing algorithm works in Virtual DOM
 **Q5: Explain useState**
  Manages local state in functional components.
 Example:
+```js
 const [name, setName] = useState("");
 const [age, setAge] = useState(0);
 const [isActive, setIsActive] = useState(true);
 const [form, setForm] = useState({ name: "", email: "" });
 const [items, setItems] = useState([]);
-
+```
 
 **Q6: Explain useEffect**
  Performs side effects after render.(API calls, event, etc)
 Example:
+```js
 useEffect(() => { console.log('runs after render only once'); }, []);
 useEffect(() => { console.log('Run on State/Prop Change'); }, [count]);
 useEffect(() => { console.log('Run on Every Render'); });
@@ -72,21 +74,26 @@ useEffect(() => { async function fetchData(){console.log('run async data')}fetch
 useEffect(() => { const timer = setInterval(() => console.log("Running after 1 sec"), 1000);return () => {
     clearInterval(timer); // cleanup
   }; },[]);
+  ```
 
 **Q6: Lifecycle using useEffect**
+```js
 useEffect(()=>{console.log("Mount")},[]); // Mount
 useEffect(()=>{console.log("Update")},[val]); // Update
 useEffect(()=>()=>console.log("Unmount"),[]); // Unmount
-
+```
 **Q7: useMemo vs useCallback**
 useMemo → memoizes computed value
 exp 1.
+```js
 const [count, setCount] = useState(0);
   const double = useMemo(() => {
     console.log("Calculating...");
     return count * 2;
   }, [count]);
+  ```
 exp 2.
+```js
  const total = useMemo(() => {
     let sum = 0;
     for (let i = 0; i < arr.length; i++) {
@@ -94,13 +101,14 @@ exp 2.
     }
     return sum;
   }, [arr]);
-
+```
 useCallback → memoizes/caches function reference
+```js
 const [count, setCount] = useState(0);
   const handleClick = useCallback(() => {
     setCount(c => c + 1);
   }, []);
-
+```
 
 **Q8: What is Prop Drilling?**
  Passing props deeply through multiple components. Solved using Context API.
@@ -119,9 +127,11 @@ const UserContext = createContext();
 
 **Q10: What is React.memo?**
  Prevents unnecessary re-renders of functional components when props don’t change.
+ ```js
  const MyComponent = React.memo(({ name }) => {
   return <div>{name}</div>;
 });
+```
 
 **Q11: Controlled vs Uncontrolled Components**
 Controlled - state managed by React.
@@ -149,6 +159,7 @@ Task   Task      Task
 
 **Q14: Difference between keys in React list**
  Unique key helps React identify elements and track updates efficiently.
+ ```js
  const users = [
   { id: 1, name: "Sam" },
   { id: 2, name: "John" }
@@ -157,7 +168,7 @@ Task   Task      Task
 {users.map(user => (
   <li key={user.id}>{user.name}</li>
 ))}
-
+```
 
 **Q15: Lifecycle methods in class component**
 Mounting → Component is created and added to the UI ,it runs once after initial render
@@ -188,6 +199,7 @@ Error Boundaries are special React components that catch runtime errors in child
 They catch UI rendering errors, but not event handler errors and errors in asynchronous code(like setTimeout,fetch)
 
 **Q19. how to handle error in react?**
+```js
 class ErrorBoundary extends React.Component {
   state = { hasError: false };
   componentDidCatch() { this.setState({ hasError: true }); }
@@ -195,7 +207,11 @@ class ErrorBoundary extends React.Component {
     return this.state.hasError ? <h3>Something went wrong</h3> : this.props.children;
   }
 }
-and use like <ErrorBoundary><MyComponent/></ErrorBoundary>
+```
+and use like 
+```js
+<ErrorBoundary><MyComponent/></ErrorBoundary>
+```
 
 
 **Q19: Difference between state and props**
@@ -216,9 +232,11 @@ Babel → JS compiler that converts modern JS/JSX → browser-compatible code.
 HOC (Higher-Order Component) → Function that takes a component and returns a new one with extra features.
 
 Code-split / Lazy-load → Load parts of app only when needed for better performance
+```js
 import("./math").then(math => {
   console.log(math.add(16, 20)); 
 });
+```
 
 **Q21. Route & Protected Route**
 Route: Defines which page or component should render for a specific URL path.
@@ -237,6 +255,7 @@ User → Clicks /dashboard
 **Q22. Render Props**
 Share logic by passing a function as a prop that returns JSX.
 Why use: To share logic between components without repeating code.
+```js
 function Data({ render }) {
   const data = ['Apple', 'Banana', 'Cherry'];
   return render(data);
@@ -252,10 +271,11 @@ function List({ data }) {
 
 // Usage
 <Data render={(data) => <List data={data} />} />
-
+```
 
 **Q23.React.createElement vs React.cloneElement**
 createElement: Creates a new element.
+```js
 function Greeting({ name }) {
   return React.createElement(
     'h1',
@@ -263,6 +283,7 @@ function Greeting({ name }) {
     'Hello'
   );
 }
+```
 cloneElement: Copies an element and adds new props/children.
 
 **Q24. Event-driven Architecture**
@@ -275,6 +296,7 @@ GET (read), POST (create), PUT/PATCH (update), DELETE (remove).
 
 **Q26.Type Checking with PropTypes**
 Why use: To validate props passed to a component and catch bugs early.
+```js
 import PropTypes from 'prop-types';
 
 function Comp({ name }) {
@@ -284,15 +306,20 @@ function Comp({ name }) {
 Comp.propTypes = {
   name: PropTypes.string.isRequired
 };
+```
 
 **Q27. React 18 Features**
   1.Automatic Batching:Combines multiple state updates into one render.
+  ```js
   fetch('/api').then(()=>{
  setA(1); setB(2); setC(3); // only 1 re-render
 });
+```
   2.Transitions:Used for non-urgent updates
+  ```js
   import { startTransition } from 'react';
 startTransition(() => setPage('home'));
+```
 
 **Q28: Render Props**
 Share logic between components using function prop
@@ -336,11 +363,15 @@ const el = <h1>Hello {name}</h1>;
 
 **Q34.Is it possible to use React without JSX?**
  Yes.
+ ```js
  React.createElement('h1', null, 'Hello');
+ ```
 
 **Q35:How JSX prevents Injection Attacks?**
  JSX escapes values before rendering → prevents XSS.
+ ```js
  <div>{userInput}</div> // safe
+ ```
 
 **Q36: Props vs State**
 Props: read-only
@@ -358,6 +389,7 @@ Next.js: app/, pages/, components/, public/
 **Q39: Purpose of forwardRef?**
 Pass ref from parent → child component.
 When parent needs to control child’s DOM element (focus, scroll, value).
+```js
 import React, { useRef } from "react";
 
 const Input = React.forwardRef((props, ref) => {
@@ -376,7 +408,7 @@ export default function Parent() {
     </>
   );
 }
-
+```
 
 **Q40. What is Suspense component?**
  Used to show fallback UI while loading async content (like lazy components).
@@ -388,6 +420,7 @@ if(!isVisible) return null;
 
 **Q42. What are portals in React?**
 Render children outside parent DOM hierarchy.
+```js
 // index.html
 <div id="root"></div>
 <div id="modal-root"></div>
@@ -409,7 +442,7 @@ export default function App() {
     </>
   );
 }
-
+```
 
 **Q43. Why not call setState in componentWillUnmount()?**
 Component already unmounted → causes memory leak warning.
@@ -419,9 +452,11 @@ No. Only needed when using this.state or binding methods.
 
 **Q45. How do you pass arguments to event handler?**
  Use arrow function.
+ ```js
  onClick={() => handleClick(id)}
+ ```
 
-=========================
+
 NEXT.JS THEORY NOTES 
 =========================
 
@@ -440,7 +475,7 @@ It runs only at build time and generates static HTML, making the page fast.
 Use it when data rarely changes (e.g., blogs, docs, product list)
 
 Build Time → Fetch Data → Pre-render Page → Static HTML Served
-
+```js
 export async function getStaticProps() {
   const res = await fetch('https://jsonplaceholder.typicode.com/users');
   const users = await res.json();
@@ -459,7 +494,7 @@ export default function Users({ users }) {
     </div>
   );
 }
-
+```
 **Q4: Explain getServerSideProps**
 getServerSideProps runs on the server for every request, fetches data, and sends it to the page before rendering.
 When to use:
@@ -468,7 +503,7 @@ benefit:
 No client-side fetch needed
 Runs on every request (not cached)
 SEO-friendly because content comes ready from server
-
+```js
 export async function getServerSideProps() {
   const res = await fetch("https://api.example.com/data");
   const data = await res.json();
@@ -480,7 +515,7 @@ export default function Page({ data }) {
   return <pre>{JSON.stringify(data, null, 2)}</pre>;
 }
 
-
+```
 **Q5: Explain getStaticPaths**
 getStaticPaths is used in Next.js with dynamic routes to tell Next.js which dynamic pages to pre-build at build time.
 Used together with getStaticProps for Static Site Generation (SSG).
@@ -488,7 +523,7 @@ why:
 When a page has a dynamic route like /posts/[id]
 We want only some specific pages to generate at build time
 Improves performance by serving pre-rendered HTML
-
+```js
 export async function getStaticPaths() {
   return {
     paths: [
@@ -510,7 +545,7 @@ export async function getStaticProps({ params }) {
 export default function Post({ id }) {
   return <h2>Post Number: {id}</h2>;
 }
-
+```
 
 **Q6: Difference between pages and app router? Why App Router is preferred over Pages Router?**
 - Pages router: uses /pages directory, older version.
@@ -551,6 +586,7 @@ export default function handler(req, res) { res.json({ msg: 'Hello' }) }
 **Q11: What is Image Optimization in Next.js?**
  <Image /> automatically optimizes image size and format for performance.
  it Resizes large images to the size needed by the device,Lazy-loads images,Serves responsive images with srcset
+ ```js
  import Image from "next/image";
  <Image
         src="/images/profile.jpg"
@@ -566,6 +602,7 @@ export default function handler(req, res) { res.json({ msg: 'Hello' }) }
         placeholder="blur"
         priority
       />
+      ```
 
 **Q12: What is Middleware in Next.js?**
 Middleware runs before a request is completed. It can check the request and decide to allow, block, redirect, or rewrite the user before reaching a page or API.
@@ -582,6 +619,7 @@ in middleware.ts file write logic in next js
  Allows static pages to update at runtime after a set interval (revalidate).
  Why use:
 To keep content fresh (like blogs or product pages) while still using fast static generation.
+```js
 export async function getStaticProps() {
   const data = await fetchData();
   return {
@@ -589,9 +627,10 @@ export async function getStaticProps() {
     revalidate: 60, // re-build this page every 60 sec
   };
 }
-
+```
 **Q15: What is next/head used for?**
  To modify <head> tags dynamically (title, meta tags).it improve SEO and Custom scripts like Google Analytics
+ ```js
  import Head from "next/head";
 export default function CustomHead({ title, description }) {
   return (
@@ -602,19 +641,22 @@ export default function CustomHead({ title, description }) {
     </Head>
   );
 }
-
+```
 **Q16: What is next/script?**
  Used to control script loading strategy (lazyOnload, beforeInteractive, etc.).it will load script only when needed to improve performance.
+ ```js
 <Script
         src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"
         strategy="afterInteractive"
       />
+  ```
 
 **Q17: How to handle API fetching in Next.js 13 app router?**
  Use async server components with fetch directly inside component.
 
 **Q18: What is Dynamic Routing in Next.js?**
  File-based routing with parameters using [id].js files.
+ ```js
 // pages/users/[id].js
 import { useRouter } from "next/router";
 
@@ -623,11 +665,12 @@ export default function User() {
   const { id } = router.query; // get dynamic value from URL
   return <h1>User ID: {id}</h1>;
 }
-
+```
 **Q19: What are Layouts and Templates in Next.js 13?**
 Layouts persist between routes; templates re-render on navigation.
 Layouts = Common UI (like Navbar/Footer).
 Templates = Predefined page structures reused across routes.
+```js
 export default function HomeLayout({ children }) {
   return (
     <div className="structure">
@@ -637,7 +680,7 @@ export default function HomeLayout({ children }) {
     </div>
   );
 }
-
+```
 **Q20: all route and folder Next.js app?**
 dynamic route [segment] → For routes like /user/[id], dynamic by parameter.
 
@@ -670,6 +713,7 @@ app/profile/page.jsx         ✅ route: /profile
 
 **Q21: Styled JSX in Next.js**
 Built-in CSS-in-JS for component-level styling using <style jsx> tag.Styles apply only to this component (scoped).
+```js
 <div className="card">
   <style jsx>{`
         .card {
@@ -680,7 +724,7 @@ Built-in CSS-in-JS for component-level styling using <style jsx> tag.Styles appl
         }
       `}</style>
 </div>
-
+```
 **Q22: How to improve SEO**
 Use SSR/SSG, meta tags, sitemap, semantic HTML, image alt, clean URLs.
 
@@ -703,6 +747,7 @@ Use Image component, code-splitting, caching, getStaticProps, lazy loading, CDN.
 **Q28: suspense and fallback**
 React Suspense allows components to wait for async data
 and show a fallback UI (like a loader) while waiting.
+```js
 import { Suspense } from "react";
 import Users from "./Users";
 export default function Page() {
@@ -715,7 +760,7 @@ export default function Page() {
     </div>
   );
 }
-
+```
 **Q29: app folder structure**
 app/
  ├─ layout.jsx                        // Root layout for all pages
@@ -816,7 +861,7 @@ fetch('/api/products', { cache: 'force-cache' })
 Install Clerk → wrap app with <ClerkProvider>
 Use components like <SignIn />, <UserButton />
 Use auth() in server components or API to get logged-in user.
-
+```js
 import { auth } from "@clerk/nextjs/server";
 
 export default async function Dashboard() {
@@ -824,13 +869,15 @@ export default async function Dashboard() {
   if (!userId) return <div>Please login</div>;
   return <div>Welcome User {userId}</div>;
 }
-
+```
 **Q33: What are Cookies & How They Help in Next.js?**
 Cookies store small data in the browser and persist between page loads.
 Useful for: authentication, theme, cart, tokens.
 Next.js provides helpers like:
+```js
 import { cookies } from "next/headers";
 const cookieStore = cookies();
+```
 
 **Q34: What are Web Vitals & Why Used in Analytics?**
 Web Vitals are key performance metrics used to measure user experience on the web.
@@ -839,18 +886,21 @@ They help track: speed, interactivity, layout stability.
 **Q35: What is JSON-LD?**
 JSON-LD is a structured data format used for SEO to help Google understand your content.
 It is added inside <script type="application/ld+json">
-
+```js
 <script type="application/ld+json">
 { "@context": "https://schema.org", "@type": "Article", "headline": "Next.js Tips" }
 </script>
+```
 
 **Q36:What is Routing Metadata?**
 Metadata controls page title, description, icons.
+```js
 // page.js
 export const metadata = {
   title: "Home Page",
   description: "Welcome",
 };
+```
 
 **Q37: What is Prefetching?**
 Next.js automatically downloads next page code + data before user clicks, improving navigation speed.
@@ -863,21 +913,27 @@ CSR: Page loads blank and React renders on client. Good for dynamic apps but slo
 **Q39: When do we use use server and its use case?**
 "use server" is written in a function to run it on the server.
 Used for server actions like DB write, sending emails, file upload, secure operations.
+```js
 "use server";
 export async function saveUser(data) { /* DB write code */ }
+```
 
 **Q40: How to Handle Errors with Error Boundary?**
 Create an error.jsx in a route to catch UI errors.It catches runtime rendering errors and avoids page crash.
+```js
 "use client";
 export default function Error({ error, reset }) {
   return <button onClick={() => reset()}>Try Again</button>;
 }
+```
 
 **Q41: Are { params } Promise-based? Why we use them?**
 params are not a promise. They are plain object values passed by Next.js based on the URL.
 We use them to access dynamic URL values like product ID, blog slug
-
-export default function Page({ params }) { console.log(params.id) }
+```js
+export default function Page({ params })
+ { console.log(params.id) }
+ ```
 
 **Q42: How searchParams is different from params?**
 params → comes from dynamic URL structure (path).
@@ -944,31 +1000,40 @@ Does NOT add to browser history (user cannot go back)
 
 **Q50: give all useful hooks use in nextjs**
 useRouter – Provides navigation and route information in Next.js.
+```js
 import { useRouter } from 'next/navigation';
 export default function RouterExample() {
   const router = useRouter();
   return <button onClick={() => router.push('/about')}>Go to About</button>;
 }
+```
 usePathname – Returns the current URL pathname in App Router.
+```js
 import { usePathname } from 'next/navigation';
 export default function PathnameExample() {
   const pathname = usePathname();
   return <div>Current Path: {pathname}</div>;
 }
+```
 useSearchParams – Read and update query parameters in the URL.
+```js
 import { useSearchParams } from 'next/navigation';
 export default function SearchParamsExample() {
   const searchParams = useSearchParams();
   const name = searchParams.get('name');
   return <div>Name: {name}</div>;
 }
+```
 useParams - Access dynamic route parameters.
+```js
 import { useParams } from 'next/navigation';
 export default function ParamsExample() {
   const params = useParams();
   return <div>Post ID: {params.id}</div>; // for route like /post/[id]
 }
+```
 useTransition → Track and manage navigation/loading state in app router.useTransition runs after the initial render, then the state update inside startTransition is processed asynchronously after the render.
+```js
 'use client';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
@@ -983,6 +1048,7 @@ export default function TransitionExample() {
     </button>
   );
 }
+```
 
 
 

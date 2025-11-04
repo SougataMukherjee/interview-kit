@@ -1,4 +1,4 @@
-=======================
+
 JAVASCRIPT THEORY NOTES
 =======================
 
@@ -152,12 +152,15 @@ Promise.race([P1, P2, P3])
 
 
 **Q14. How to fetch API using Promise?**
+```js
 fetch("https://api.example.com/data")
   .then(res => res.json())
   .then(data => console.log(data))
   .catch(err => console.log(err));
+  ```
 
 **Q15. create a Promise and resolve on Button click**
+```js
 import { useState } from "react";
 
 export default function App() {
@@ -175,8 +178,9 @@ export default function App() {
     </button>
   );
 }
-
+```
 **Q16. using promise fetch a data,if the fetch fails it should automatically retry after the given delay, up to the maximum number of attempts**
+```js
 function retryFetch(url, maxSteps, delay) {
   let attempt = 0;
 
@@ -202,7 +206,7 @@ function retryFetch(url, maxSteps, delay) {
 retryFetch("https://dummyjson.com/posts/1", 3, 1000)
   .then(data => console.log(data))
   .catch(err => console.error(err));
-
+```
 How to handle error in Promise
 Use .catch() or try...catch inside async/await.
 fetch(url).catch(err => console.error(err));
@@ -214,6 +218,7 @@ What problem it solves:
 Avoids callback hell and complex .then() chaining in Promises
 Makes async code more readable, cleaner, and easier to handle errors using try…catch
 Example:
+```js
 import { useEffect, useState } from "react";
 function App() {
   const [data, setData] = useState(null);
@@ -234,13 +239,13 @@ function App() {
   );
 }
 export default App;
-
+```
 
 **Q18: What is Debounce & Throttle?**
 Debounce: delay execution till user stops typing.
 Runs after user stops typing or triggering for a certain time
 Useful for: Search bars, input validation, API calls
-
+```js
 import { useState, useEffect } from "react";
 
 export default function SearchBox() {
@@ -255,11 +260,12 @@ export default function SearchBox() {
 
   return <input onChange={(e) => setText(e.target.value)} placeholder="Search..." />;
 }
+```
 
 Throttle: limit execution in interval.
 Runs the function once every fixed time, even if triggered multiple times.
 Useful for: Scroll, resize, mouse move events.
-
+```js
 import { useState, useRef } from "react";
 
 export default function ThrottleInput() {
@@ -283,9 +289,10 @@ export default function ThrottleInput() {
 
   return <input onChange={handleChange} placeholder="Type fast to test throttle..." />;
 }
-
+```
 
 **Q19: Polyfill Example (map)**
+```js
 Array.prototype.myMap = function(cb){
   let res=[];
   for(let i=0;i<this.length;i++){
@@ -293,10 +300,11 @@ Array.prototype.myMap = function(cb){
   }
   return res;
 }
-
+```
 **Q20: Call, Apply, Bind**
 To manually control the value of this when borrowing a function from another object or ensuring a function always runs with a specific context.
 
+```js
 function greet(greeting, emoji) {
   console.log(`${greeting}, ${this.name}! ${emoji}`);
 }
@@ -304,10 +312,12 @@ greet.call(person, "Hi", "😊");     // Hi, Alice! 😊
 greet.apply(person, ["Hello", "👋"]); // Hello, Alice! 👋
 const greetAlice = greet.bind(person);
 greetAlice("Hey", "😎");           // Hey, Alice! 😎
+```
 
 **Q21: What is Currying?**
 Currying is the process of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument
 Example:
+```js
 function add(a) {
   return function(b) {
     return a + b;
@@ -315,44 +325,57 @@ function add(a) {
 }
 const add5 = add(5);
 console.log(add5(3)); // 8
-
-
+```
 **Q22: What is Prototype?**
 JS uses prototypal inheritance. Every object has a hidden [[Prototype]].
 Objects inherit from __proto__ → links to [[Prototype]]
 
 **Q23: Difference: undefined vs null**
 undefined -> declared but not assigned
+```js
 let a;      
 console.log(a);  // undefined
+```
 null -> intentional empty value.
+```js
 let b = null;   
 console.log(b);  // null
+```
 
 **Q24: Event Delegation**
 Event Delegation is used to handle events efficiently by adding a single event listener on a parent element instead of adding multiple listeners to each child element.
 Benefits:Improves performance (fewer listeners in DOM) and Improves performance (fewer listeners in DOM)
 Example:
+```js
 ul.addEventListener('click',(e)=>{ if(e.target.tagName==='LI') console.log(e.target.textContent) })
+```
 
 **Q25: LocalStorage vs SessionStorage with exp**
 localStorage -> persists after reload and permanent until cleared.
+```js
 localStorage.setItem("name", "Sam");
 console.log(localStorage.getItem("name")); // Sam
+```
 
 sessionStorage -> clears when tab closes
+```js
 sessionStorage.setItem("sessionName", "SamSession");
 console.log(sessionStorage.getItem("sessionName")); // SamSession
+```
 
 **Q26: Spread vs Rest**
 Spread -> expands [...arr]
+```js
 const nums = [1, 2, 3];
 const newNums = [...nums, 4, 5]; // [1, 2, 3, 4, 5]
+```
 Rest -> collects (...args)
+```js
 function sum(...numbers) {
   return numbers.map((x) => x + 5);
 }
 const result = sum(4, 5, 6, 7); // [9, 10, 11, 12]
+```
 
 
 **Q27: Deep Clone Object**
@@ -391,6 +414,7 @@ Clicking the button → shows "Child clicked" → then "Parent clicked"
 │   │   (clicked first)        │  │
 │   └─────────────────────────┘  │
 └───────────────────────────────┘
+```js
 <div id="parent">
   <button id="child">Click Me</button>
 </div>
@@ -398,7 +422,7 @@ Clicking the button → shows "Child clicked" → then "Parent clicked"
   document.getElementById("parent").addEventListener("click", () => alert("Parent clicked"));
   document.getElementById("child").addEventListener("click", () => alert("Child clicked"));
 </script>
-
+```
 
 Capturing: outer/parent → inner/child
 ┌───────────────────────────────┐
@@ -411,6 +435,7 @@ Capturing: outer/parent → inner/child
 │   │   (executes second)      │  │
 │   └─────────────────────────┘  │
 └───────────────────────────────┘
+```js
 <div id="parent">
   <button id="child">Click Me</button>
 </div>
@@ -427,7 +452,7 @@ Capturing: outer/parent → inner/child
     true // Capturing phase
   );
 </script>
-
+```
 **Q32: What is Temporal Dead Zone (TDZ)?**
 Zone where variable exists but can’t be accessed before initialization.
 
@@ -444,6 +469,7 @@ Module bundler (combines JS, CSS, imgs into build).
 **Q35: What are higher-order functions?**
 Functions that take another function as argument or return one (e.g., map, filter, reduce).
 Higher-order functions either take other functions as arguments or Return functions.
+```js
 function multiplier(factor) {
   return function (number) {
     return number * factor;
@@ -452,7 +478,7 @@ function multiplier(factor) {
 
 const double = multiplier(2);
 console.log(double(5)); // 10
-
+```
 
 **Q36: Explain the event loop and microtask queue.**
 JS is single-threaded; event loop manages async execution.
@@ -476,8 +502,10 @@ Types:
 Named export
 Default export
 Example:
+```js
 export const x = 1; 
 import { x } from './file.js';
+```
 
 **Q38:Use of Content-Type**
 Tells the browser what type of data is being sent.
@@ -488,13 +516,16 @@ multipart/form-data → File uploads
 
 **Q39: What is destructuring?**
 Extract values from arrays or objects easily:
+```js
 const [a, b] = [1, 2];
 const {name, age} = person;
+```
 
 **Q40: What is a generator function?**
 A generator function can pause and resume execution using yield.
 Defined with function* syntax.
 Useful for lazy evaluation or async flows.
+```js
 function* gen() {
   yield 1;
   yield 2;
@@ -504,7 +535,7 @@ const g = gen();
 console.log(g.next().value); // 1
 console.log(g.next().value); // 2
 console.log(g.next().value); // 3
-
+```
 
 **Q41: Explain the concept of immutability.**
 Data shouldn’t be modified directly; instead, create new copies.
@@ -528,8 +559,10 @@ HTML Parsing ──────► DOM Ready ──► Defer JS runs
 
 **Q44:Use of "use strict"**
 Makes JS more secure: prevents undeclared variables, silent errors.
-"use strict"; x = 5;//error
-but x = 5;//no error 
+```js
+"use strict"; 
+x = 5;//error
+``` 
 
 **Q45:Data Types in JS (Primitive vs Non-Primitive)**
 Primitive: single value (immutable)(String, Number, boolean, null, undefined, symbol, bigint).
@@ -561,6 +594,7 @@ function greet() { console.log("Name function");} setTimeout(greet, 500);
 
 **Q50:Pyramid of Doom (Callback Hell)**
 When many callbacks are nested inside each other — code becomes deep, messy, and hard to read.
+```js
 getData(() => {
   processData(() => {
     saveData(() => {
@@ -570,9 +604,10 @@ getData(() => {
     });
   });
 });
-
+```
 **Q51:call back hell solved by Promise Chain**
 its readable and handle error easily
+```js
 getData()
   .then(processData)
   .then(saveData)
@@ -580,21 +615,28 @@ getData()
   .then(() => console.log("Done"))
   .catch(err => console.log("Error:", err));
 
-
+```
 **Q52: Constructor**
 Used to create multiple similar objects.
-function User(n){this.name=n;}
+```js
+function User(n){
+  this.name=n;
+  }
 let u=new User("Sam");
+```
 
 **Q53: why Constructor Function? what is Prototype Inheritance?**
 To create multiple objects with the same structure and properties without manually writing each object.
+```js
 function User(name) {
   this.name = name;
 }
 let u = new User('Sam');
 console.log(u.name); // Sam
+```
 
 Prototype Inheritance is a feature in JavaScript where objects can inherit properties and methods from another object through the prototype chain.
+```js
 function User(name) {
   this.name = name; 
 }
@@ -607,7 +649,7 @@ let u2 = new User("John");
 
 u1.sayHello(); // Hello, Sam
 u2.sayHello(); // Hello, John
-
+```
 
 **Q54: Strings are Immutable**
 Once created, can’t be changed—new copy made on edit.
@@ -615,16 +657,20 @@ Once created, can’t be changed—new copy made on edit.
 **Q55:new Array() vs []**
 new Array(3) creates empty slots, [] creates actual array.
 Prefer [].
-Example: const fruits=['Apple','Banana','Orange']
+Example:
+```js 
+const fruits=['Apple','Banana','Orange']
         const fruits=new Array('Apple','Banana','Orange')
-
+```
 **Q56: create object without using new**
+```js
 const obj1 = {}; 
 const obj2 = Object.create(null);
 const obj3 = {name:"Sam"};
 const obj4 = Object.assign({}, {a:1});
 function makeObj(){return {id:1}}
 const obj5 = makeObj();
+```
 
 **Q57: Web APIs (browser features)**
 fetch(), setTimeout(), setInterval(), localStorage, sessionStorage,
@@ -788,11 +834,14 @@ toString() → returns string form of object.
 
 **Q72: what is pass by value and pass by reference**
 Pass by Value → Copy of value passed (primitive).when you do not want original data to change.
+```js
    let a = 10;
     function change(x) { x = 20; }
     change(a);
     console.log(a); // 10
+```
 Pass by Reference → Reference (address) passed (object/array).when you want to modify the original object/array from a function.
+
 let obj = { name: "Sam" };
     function change(o) { o.name = "John"; }
     change(obj);
@@ -807,6 +856,7 @@ Impure Function → Depends on external/state change.
  let/const, arrow fn, template literals, classes, modules, promises, destructuring
  ES5 Class Concept
  ES5 didn’t have class keyword — used constructor functions + prototypes
+ ```js
  function Person(name) {
   this.name = name;
 }
@@ -816,7 +866,7 @@ Person.prototype.greet = function() {
 
 const p = new Person("Sam");
 console.log(p.greet()); // Hi Sam
-
+```
 **Q76:CORS** 
  Cross-Origin Resource Sharing – allows API access from different domains.
 
@@ -828,16 +878,17 @@ querySelectorAll() Selects all elements matching a CSS selector. Returns NodeLis
 
 **Q78:Event Emitter**
 Object that listens (on) and triggers (emit) events.
+```js
 const EventEmitter = require('events');
 const event = new EventEmitter();
 event.on('hi', ()=>console.log('Hello!'));
 event.emit('hi');
+```
 
 **Q79: Optimize DOM Traversal**
 Cache DOM nodes, use documentFragment, batch updates
 
 
-====================
 TYPESCRIPT THEORY NOTES
 ====================
 
@@ -872,34 +923,41 @@ interface User { name: string; age?: number; readonly id: number; }
 
 **Q7: Generics:**
 Generics allow you to write reusable functions or classes that can work with any data type while maintaining type safety.
+```js
 function identity<T>(arg: T): T {
   return arg;
 }
 let str = identity<string>("Hello"); // type T is string
 let num = identity<number>(42);      // type T is number
+```
 
 **Q8: Union and Intersection Types:**
 Union (|) is a variable can hold one of multiple types
 let val: string | number;
+```js
 val = 5;     
 val = "Hi";
+```
 Intersection (&) Combines multiple types into one. Variable/object must satisfy all types.
+```js
 type A = { x: number };
 type B = { y: string };
 type C = A & B;
 const obj: C = { x: 10, y: "hello" }; 
-
+```
 **Q9: Enum:**
 Used to define named constants:
+```js
 enum Color { Red, Green, Blue }
 enum Direction { Up, Down, Left, Right }
-
+```
 **Q10: Difference between Interface and Type**
 Interface -> extendable
 Type -> can use union/intersection
 
 **Q11: Utility Types:**
 Partial<T>:Makes all properties of a type optional.
+```js
 interface User {
   name: string;
   age: number;
@@ -908,8 +966,9 @@ interface User {
 const updateUser: Partial<User> = {
   name: "Alice" // age is optional now
 };
-
+```
 Pick<T,K>:Selects a subset of properties from a type.
+```js
 interface User {
   name: string;
   age: number;
@@ -920,8 +979,9 @@ const userContact: Pick<User, "name" | "email"> = {
   name: "Bob",
   email: "bob@example.com"
 };
-
+```
 Omit<T,K>:Removes specified properties from a type.
+```js
 interface User {
   name: string;
   age: number;
@@ -932,7 +992,9 @@ const publicUser: Omit<User, "password"> = {
   name: "Charlie",
   age: 25
 };
+```
 Readonly<T>:Makes all properties of a type read-only
+```js
 interface User {
   name: string;
   age: number;
@@ -942,7 +1004,7 @@ const user: Readonly<User> = {
   age: 30
 };
 user.age = 31;//error
-
+```
 **Q12: Type Assertion:**
 let val: any = "hello";
 let len = (val as string).length;
@@ -955,9 +1017,10 @@ unknown -> needs type check before use
 Experimental feature for class modification.
 Special syntax to add metadata or modify classes/functions
 Example:
+```js
 @Logger
 class User {}
-
+```
 **Q15: Difference between TypeScript and JavaScript**
 TS -> compiled language
 JS -> interpreted
@@ -966,12 +1029,14 @@ TS adds types; JS doesn’t.
 **Q16: What is type narrowing?**
 Process of refining a variable’s type based on conditions.
 Example:
+```js
 if (typeof x === 'string') { x.toUpperCase(); }
-
+```
 **Q17: What are type guards?**
 Functions or checks that help narrow down types at runtime.
 Example:
-
+```js
 function isString(x: unknown): x is string {
   return typeof x === 'string';
 }
+```
