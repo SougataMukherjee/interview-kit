@@ -6,9 +6,20 @@ JAVASCRIPT THEORY NOTES
 JavaScript is a lightweight, case sensitive scripting language.
 JS was created to add logic to web pages;  initial name was "LiveScript" then marketing—syntax inspired by Java, but not related.
 
-**Q2: what are JavaScript engine?**
+**Q2: what are JavaScript engine? how js works internally**
 a javascript engine is a computer programme that execute javascript code developed by web browser vender.
 Example: chrome we have V8 firefox we have SpiderMonkey
+```txt
+Call Stack (executes code)
+               ↓
+         Web APIs (async work)
+               ↓
+      Callback Queue (waiting)
+               ↓
+         Event Loop (checks & pushes)
+               ↓
+      Back to Call Stack (runs again)
+```
 
 **Q3: JavaScript vs ECMAScript**
 JavaScript → language used in browsers.
@@ -293,6 +304,17 @@ export default function ThrottleInput() {
 
   return <input onChange={handleChange} placeholder="Type fast to test throttle..." />;
 }
+```
+```txt
+Debounce (send last)                     Throttle (send once per interval)
+---------------------------------------------------------------
+User:   A → A → A → A                     User:   A → A → A → A → A → A
+              ↘  ↘  ↘                                      ↓           ↓
+Wait:     [reset][reset][wait]            Delay:   |---delay---| |---delay---|
+
+Server:                     A              Server:  A---------------------A
+                            ↑                        ↑                     ↑
+                     Only last sent            First sent           Next sent after delay
 ```
 
 **Q19: Polyfill Example (map)**

@@ -1,8 +1,8 @@
-====================
+
 CSS NOTES
 ====================
 
-Q1: what is CSS? Is CSS case-sensitive? Different ways to include CSS in a webpage?
+**Q1: what is CSS? Is CSS case-sensitive? Different ways to include CSS in a webpage?**
 CSS, which stands for Cascading Style Sheets, is a style sheet language used in web development to control the presentation and formatting of HTML documents
 
 No (selectors & properties are not), but values like class names in HTML are.
@@ -12,19 +12,29 @@ Animations & transitions
 Media queries (responsive)
 
 3 ways we can include css in webpage
-1.Inline CSS <p style="color:red;">Hello</p>
-2.Internal CSS <style> p{color:red;} </style>
-3.External CSS <link rel="stylesheet" href="style.css">
+1.Inline CSS 
+```js
+<p style="color:red;">Hello</p>
+```
+2.Internal CSS 
+```js
+<style> p{color:red;} </style>
+```
+3.External CSS 
+```js
+<link rel="stylesheet" href="style.css">
+```
 
-Q2: Difference between inline, block, and inline-block?
+**Q2: Difference between inline, block, and inline-block?**
 - inline: width/height not applicable (span, a)
 - block: takes full width (div, p)
 - inline-block: behaves inline but allows width/height.
 
-Q3: What is the Box Model?
+**Q3: What is the Box Model?**
 Width = content + padding + border (margin lies outside).
 Total Width = margin + border + padding + content 
 Example:
+```txt
 +-----------------------+
 |      Margin           |
 |  +-----------------+  |
@@ -37,29 +47,32 @@ Example:
 |  | +-------------+ |  |
 |  +-----------------+  |
 +-----------------------+
+```
 
-
-Q4: Explain CSS Specificity Order.(Highest → Lowest)
+**Q4: Explain CSS Specificity Order.(Highest → Lowest)**
 Inline style > ID > Class > Element  
 Example:
 #id > .class > div
 Duplicate ID Problem:
 IDs must be unique — use classes instead.
 
-Q5:Favicon:
+**Q5:Favicon:**
 Small icon in browser tab.
+```js
 <link rel="icon" href="favicon.ico">
+```
 
-Q6: Position properties?
+**Q6: Position properties?**
 - static (default)
 - relative (moves within itself) Moves relative to its normal position.
 - absolute (relative to nearest non-static) Positioned relative to the nearest positioned ancestor.
 - fixed (relative to viewport) Stays fixed relative to viewport (even when scrolling).
 - sticky (hybrid) Acts relative until scroll crosses threshold, then sticks
 
-Q7: Flexbox Basics. Float property advantage over Flex
+**Q7: Flexbox Basics. Float property advantage over Flex**
 flexbox useful for 1D layout (row or column).
 Float was used to wrap text around images (flex cannot do this)
+```js
 <img src="pic.jpg" style="float:left; width:100px;"> Text wraps around image.
 
 .container {
@@ -68,44 +81,51 @@ Float was used to wrap text around images (flex cannot do this)
   align-items: center;
   gap: 10px;
 }
+```
 
-Q8: Grid Basics.
+**Q8: Grid Basics.**
 Grid useful for 2D layout (rows and columns)
+```js
 .container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
-
-Q9: z-index and stacking context?
+```
+**Q9: z-index and stacking context?**
 z-index works only for positioned elements (relative, absolute, fixed).
 
-Q10: Responsive Design.
+**Q10: Responsive Design.**
 Use media queries:
+```js
 @media (max-width: 768px) {
   .container { flex-direction: column; }
 }
+```
 
-Q11: Difference between transition and animation?
+**Q11: Difference between transition and animation?**
 Transition: smooth change between two states.Needs trigger (hover, active).
+```js
 div { transition: all 0.3s; }
 div:hover { color: red; }
-
+```
 Animation: runs automatically with @keyframes.
+```js
 @keyframes move { from{left:0;} to{left:100px;} }
 div { animation: move 2s infinite; }
-
-Q12: Pseudo classes and elements.
+```
+**Q12: Pseudo classes and elements.**
 Pseudo-class: Targets state (e.g., :hover, :focus,:nth-child(2)).
 Pseudo-element: Targets part of element (e.g., ::before, ::after)
 
-Q13: Difference between margin and padding
+**Q13: Difference between margin and padding**
 Margin: Space outside the element’s border.
 Padding: Space inside the element’s border, around content.
 
-Q14: What are CSS combinators?
+**Q14: What are CSS combinators?**
 Define relationships between selectors:
 Descendant (space), Child (>), Adjacent sibling (+), General sibling (~).
+```js
 <div class="parent">
   <p>Paragraph 1</p>
   <p>Paragraph 2</p>
@@ -117,20 +137,22 @@ Descendant (space), Child (>), Adjacent sibling (+), General sibling (~).
 .parent > p { font-weight: bold; } /* Child: only direct <p> children */
 p + span { color: red; }        /* Adjacent sibling: span immediately after <p> */
 p ~ span { background: yellow; } /* General sibling: all spans after <p> */
-
-Q15: How do you handle browser compatibility in CSS?
+```
+**Q15: How do you handle browser compatibility in CSS?**
 Vendor Prefixes: Add browser-specific prefixes to CSS properties.
 display: -webkit-box;   /* Safari/Chrome older */
 display: -moz-box;      /* Firefox older */
 display: flex;          /* Modern browsers */
 Feature Queries / Fallbacks: Use @supports or CSS resets.
+```js
 @supports (display: grid) {
   .container {
     display: grid;
   }
 }
+```
 
-Q16:Difference between em, rem, %, vw, vh, fr and px
+**Q16:Difference between em, rem, %, vw, vh, fr and px**
 px: Absolute pixel value.
 em: Relative to parent font-size.Example: if parent font-size = 16px → 2em = 32px
 rem: Relative to root (html) font-size.Example: if html font-size = 16px → 2rem = 32px
@@ -139,14 +161,16 @@ vh:Relative to 1% of viewport height (browser height).Example: 100vh = full visi
 fr:Used in CSS Grid, means fractional unit of available space.Example: grid-template-columns: 1fr 2fr → 1 part vs 2 parts
 %: Relative to parent element size.
 
-Q17: What are CSS variables and how to use them?
+**Q17: What are CSS variables and how to use them?**
 Reusable custom properties:
+```js
 :root { --main-color: blue; }
 h1 { color: var(--main-color); }
-
-Q18: @property
+```
+**Q18: @property**
 Defines custom CSS properties with type and defaults.
 Helps in animations and transitions for custom properties
+```js
 @property --x {
   syntax: "<length>";
   initial-value: 0px;
@@ -161,24 +185,25 @@ div {
 div:hover {
   --x: 100px; /* width will smoothly animate */
 }
-
-Q19:CSS Math Functions
+```
+**Q19:CSS Math Functions**
 calc() → perform calculations (width: calc(100% - 50px);)
 min() → picks smallest (width: min(80%, 600px);)
 max() → picks largest (width: max(50%, 200px);)
 clamp() → range limit (font-size: clamp(14px, 2vw, 20px);)
 
-Q20::global 
+**Q20::global**
 we can apply styles globally even inside scoped CSS files.
 /* styles.module.css (style apply globally not only in component level) */
+```js
 :global(.btn) {
   color: red;
 }
 .localDiv {
   background: yellow;
 }
-
-Q21:CSS Attribute Selectors
+```
+**Q21:CSS Attribute Selectors**
 [attr] → elements with that attribute
 [attr=value] → exact match
 [attr^=val] → starts with
@@ -192,24 +217,25 @@ Q22: Superscript & Subscript:
 H<sub>2</sub>O → water  
 x<sup>2</sup> → square
 
-Q23:CSS Font Fallback
+**Q23:CSS Font Fallback**
 Multiple fonts listed in order of priority.
 If first fails, next is used.
 Example:
 font-family: "Roboto", "Arial", sans-serif;
 
-Q24:Border vs Outline
+**Q24:Border vs Outline**
 Border → part of element box, affects layout.
 Outline → drawn outside border, doesn’t affect size.
 Example:
+```js
 border: 2px solid red;
 outline: 2px solid blue;
-
-Q25:display:none vs visibility:hidden
+```
+**Q25:display:none vs visibility:hidden**
 display:none → Element is removed from layout (no space reserved)
 visibility:hidden → Element is hidden but still occupies space
 
-Q26: CSS Selectors
+**Q26: CSS Selectors**
 Select elements based on name, class, id, attribute, etc.
 Examples:
 #id → by id
@@ -231,66 +257,70 @@ Start for modern browsers → make sure old browsers still work.
 Start simple → add advanced features if browser supports.
  Example: Plain form → add JS validation later.
 
-Q27: Grouping vs Nesting
+**Q27: Grouping vs Nesting**
 Grouping: Combine selectors with comma.
+```js
 h1, h2 { color: red; }
+```
 Nesting (in SCSS)
+```js
 nav { a { color: blue; } }
-
-Q28:Cascading rules
+```
+**Q28:Cascading rules**
 When two styles have same specificity:
 ✔ Last rule written wins (order matters)
 ✔ More specific selector beats less specific one (like !important override all rules)
 
-Q29::nth-child() vs :nth-of-type()
+**Q29::nth-child() vs :nth-of-type()**
 :nth-child() Selects based on position among all siblings
 :nth-of-type() Selects based on position of same tag type
+```js
 <p>1</p>
 <span>2</span>
 <p>3</p>
 
 p:nth-child(2) ❌ (No match)
 p:nth-of-type(2) ✅ selects 2nd <p>
-
-Q30:How to center an element horizontally?
+```
+**Q30:How to center an element horizontally?**
 -using margin .box { width:200px; margin:0 auto; }
 -using flex .parent { display:flex; justify-content:center; }
 
-==============================
+
 SCSS THEORY
 ==============================
 
-Q1: What is SCSS and how does it differ from CSS?
+**Q1: What is SCSS and how does it differ from CSS?**
 A: CSS preprocessor with variables, nesting, mixins, and partials.
 Compiles to standard CSS for browsers.
 
-Q2: Variables and scoped
-A:
+**Q2: Variables and scoped**
 Variables store reusable values and Scoped globally or within blocks.
+```js
 $primary: #3490dc;
 body { color: $primary; }
-
-Q3: Nesting
-A:
+```
+**Q3: Nesting**
+```js
 nav {
   ul {
     li { color: red; }
   }
 }
-
-Q4: Mixins and Include
-A:
+```
+**Q4: Mixins and Include**
 @mixin: Reusable block with parameters (like a function).
+```js
 @mixin flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .container { @include flex-center; }
-
-Q5: Extends
-A:
+```
+**Q5: Extends**
 @extend: Inherits all styles of another selector.
+```js
 %btn {
   padding: 10px;
   border-radius: 5px;
@@ -299,106 +329,106 @@ A:
   @extend %btn;
   background: blue;
 }
-
-Q6: Partials and Import
-A:
+```
+**Q6: Partials and Import**
 Create _variables.scss, then import:
 @import 'variables';
 Why easy to insert file with @import?
 Simplifies maintenance — one CSS file can include others
 
-
-Q7: Operators
-A:
+**Q7: Operators**
+```js
 width: (100% / 3);
-
-Q8: Functions
-A:
+```
+**Q8: Functions**
+```js
 lighten($color, 20%);
 darken($color, 10%);
-
-Q9: Loops & Conditionals
-A:
+```
+**Q9: Loops & Conditionals**
+```js
 @for $i from 1 through 3 {
   .m-#{$i} { margin: #{$i * 5}px; }
 }
+```
 
-Q10: SCSS Compilation
-A:
+**Q10: SCSS Compilation**
 Use `sass input.scss output.css` to compile.
 
-Q11: What are placeholders (%) in SCSS?
+**Q11: What are placeholders (%) in SCSS?**
 Define styles that can only be extended (not compiled by themselves).
+```js
 %btn { padding: 10px; }
 .submit { @extend %btn; }
+```
 
-
-Q12:How do control directives like @if, @for, @each work?
+**Q12:How do control directives like @if, @for, @each work?**
 Allow logic in SCSS:
+```js
 @if $theme == dark { ... }
 @for $i from 1 through 5 { ... }
 @each $color in red, blue { ... }
+```
 
 
-==============================
 TAILWIND CSS THEORY
 ==============================
 
-Q1: What is Tailwind CSS?
-A: Utility-first CSS framework — style directly in HTML using class names.
+**Q1: What is Tailwind CSS?**
+ Utility-first CSS framework — style directly in HTML using class names.
  Example:
+ ```js
 <div class="flex items-center justifsy-between p-4 bg-blue-500 text-white">Navbar</div>
+```
 
-Q2: What are utility-first CSS frameworks?
+**Q2: What are utility-first CSS frameworks?**
 Frameworks where styling is applied via small, reusable utility classes (e.g., p-4, text-center).
 
-Q3: Advantages:
+**Q3: Advantages:**
 - No writing custom CSS
 - Small bundle (JIT)
 - Mobile-first by default
 
-Q4: Responsive Classes
-A:
+**Q4: Responsive Classes**
+```js
 <p class="text-lg md:text-2xl lg:text-4xl">Responsive text</p>
 <div class="text-sm md:text-lg lg:text-xl"></div>
-
-
-
-Q5: Hover & State Variants
-A:
+```
+**Q5: Hover & State Variants**
+```js
 <button class="bg-blue-500 hover:bg-blue-700">Click</button>
-
-Q6: Custom Theme
-A:
+```
+**Q6: Custom Theme**
 Add in tailwind.config.js
 tailwind.config.js is responsible for theme,variants,and custom utility
+```js
 theme: {
   extend: {
     colors: { primary: '#1e40af' },
   },
 }
-
-Q7: Conditional Styling
-A:
+```
+**Q7: Conditional Styling**
+```js
 <div class={`${isActive ? "bg-green-500" : "bg-gray-500"}`}></div>
-
-Q8: Plugins
-A:
+```
+**Q8: Plugins**
 Forms, Typography, Line Clamp.
 
-Q9: How to enable dark mode in Tailwind?
-A:
+**Q9: How to enable dark mode in Tailwind?**
 Set in config
 darkMode: 'class' or 'media'
 then
 Add `dark:` variant.
+```js
 <div class="bg-white dark:bg-black"></div>
+```
 
-Q10: Difference between @apply and utility classes
+**Q10: Difference between @apply and utility classes**
 
 @apply: Used in CSS files to compose utilities into one class.
 Utility classes: Used directly in HTML.
 
-Q11: How to optimize Tailwind build size?
+**Q11: How to optimize Tailwind build size?**
 Enable purge/content mode in config to remove unused styles during production build.
 
