@@ -140,15 +140,19 @@ new Promise((res, rej)=>res(5)).then(console.log);
 **Q13. Promise.all vs Promise.race**
 Promise.all() → Runs multiple promises in parallel and waits until all are finished.If any one fails, the whole result fails
 Promise.race() → Runs multiple promises in parallel and returns the result of the first one that finishes (success or fail)
+```txt
 Promise.all([P1, P2, P3])
    P1 ----✅
    P2 --------✅
    P3 ------------✅
+```
 Result → after last one finishes
+```txt
 Promise.race([P1, P2, P3])
    P1 ----✅  ← finishes first → return this one
    P2 --------✅
    P3 ------------✅
+  ```
 
 
 **Q14. How to fetch API using Promise?**
@@ -729,52 +733,100 @@ isNaN('abc') → true
 Small data stored in browser; sent with every HTTP request.
 
 **Q69 Array Methods**
-push() → adds element to end. 
+push() → adds element to end.
+```js 
         [1,2].push(3) → [1,2,3]
+  ```
 pop() → removes element from end. 
+```js
         [1,2,3].pop() → [1,2]
+  ```
 unshift() → adds element to start. 
+  ```js
           [2,3].unshift(1) → [1,2,3]
-shift() → removes element from start. 
+  ```
+shift() → removes element from start.
+```js 
         [1,2,3].shift() → [2,3]
+```
 concat() → joins two arrays.
+```js
         [1].concat([2,3]) → [1,2,3]
+  ```
 slice() → returns part of array. 
+```js
         [1,2,3,4].slice(1,3) → [2,3]
+```
 splice() → adds/removes elements at position.
+```js
          [1,2,3].splice(1,1,9) → [1,9,3]
-indexOf() → finds first index of value. 
+```
+indexOf() → finds first index of value.
+```js 
         [1,2,3].indexOf(2) → 1
+  ```
 includes() → checks if value exists.
+  ```js
         [1,2,3].includes(2) → true
+```
 join() → joins array elements into string.
+```js
          [1,2,3].join('-') → "1-2-3"
+  ```
 reverse() → reverses array order. 
+```js
         [1,2,3].reverse() → [3,2,1]
+```
 sort() → sorts array elements. 
+```js
         [3,1,2].sort() → [1,2,3]
+  ```
 map() → returns new array by applying function.
+```js
          [1,2].map(x=>x*2) → [2,4]
+  ```
 filter() → returns new array with matching elements.
+```js
         [1,2,3].filter(x=>x>1) → [2,3]
+```
 reduce() → combines all elements into single value.
+```js
        [1,2,3].reduce((a,b)=>a+b) → 6
-forEach() → runs function for each element. 
+
+```
+forEach() → runs function for each element.
+```js
       [1,2].forEach(x=>console.log(x))
+```
 find() → returns first matching element.
+```js
        [1,2,3].find(x=>x>1) → 2
+```
 findIndex() → returns index of first match.
+```js
       [1,2,3].findIndex(x=>x>1) → 1
+```
 every() → checks if all elements pass test.
+```js
       [2,4].every(x=>x%2===0) → true
+```
 some() → checks if any element passes test.
+```js
       [1,2].some(x=>x>1) → true
+```
 flat() → flattens nested arrays.
+```js
       [1,[2,3]].flat() → [1,2,3]
+```
 fill() → fills array with given value.
+```js
       [1,2,3].fill(0) → [0,0,0]
+```
 from() → creates array from iterable.
+```js
       Array.from('abc') → ['a','b','c']
+
+```
 
 Array CRUD
 let a=[1,2,3];
@@ -785,59 +837,113 @@ a[0]=9;     // update
 
 **Q70:String Methods**
 charAt() → returns character at index.
+```js
         "Hello".charAt(1) → "e"
+```
 charCodeAt() → returns ASCII of character.
+```js
         "A".charCodeAt(0) → 65
+```
 concat() → joins two strings.
+```js
         "Hello".concat(" World") → "Hello World"
+  ```
 includes() → checks if substring exists.
+```js
         "Hello".includes("lo") → true
+```
 indexOf() → finds first index of substring.
+```js
         "Hello".indexOf("l") → 2
+```
 lastIndexOf() → finds last index of substring.
+```js
         "Hello".lastIndexOf("l") → 3
+  ```
 slice() → extracts part of string.
+```js
         "Hello".slice(1,4) → "ell"
+```
 substring() → extracts part by index.
+```js
         "Hello".substring(1,4) → "ell"
+  ```
 replace() → replaces part of string.
+```js
         "Hello".replace("H","J") → "Jello"
+  ```
 split() → splits string into array.
+```js
         "a,b,c".split(",") → ["a","b","c"]
+```
 trim() → removes spaces from both ends.
+```js
         " hi ".trim() → "hi"
+
+```
 toUpperCase() → converts to uppercase.
+```js
         "hi".toUpperCase() → "HI"
+  ```
 toLowerCase() → converts to lowercase.
+```js
         "HI".toLowerCase() → "hi"
+  ```
 startsWith() → checks if string starts with given text.
+```js
         "Hello".startsWith("He") → true
+  ```
 endsWith() → checks if string ends with given text.
+```js
         "Hello".endsWith("lo") → true
+```
 repeat() → repeats string given times.
+```js
         "Hi".repeat(3) → "HiHiHi"
+  ```
 
 **Q71:Object Methods**
 keys() → returns array of property names.
+```js
         Object.keys({a:1,b:2}) → ["a","b"]
+  ```
 values() → returns array of property values.
+```js
         Object.values({a:1,b:2}) → [1,2]
+  ```
 entries() → returns array of [key, value] pairs.
+```js
         Object.entries({a:1}) → [["a",1]]
+  ```
 assign() → copies values from one object to another.
+```js
         Object.assign({}, {a:1}) → {a:1}
+```
 hasOwnProperty() → checks if key exists in object.
+```js
         ({a:1}).hasOwnProperty("a") → true
+```
 delete → removes property from object.
+```js
         let obj={a:1}; delete obj.a → {}
+```
 freeze() → makes object immutable.
+```js
         Object.freeze({a:1}) can't change a
+```
 seal() → prevents adding or removing keys.
+```js
         Object.seal({a:1}) can't add/delete keys
+```
 create() → creates object with given prototype.
+```js
         Object.create(Array.prototype) → []
+  ```
 toString() → returns string form of object.
+```js
         ({a:1}).toString() → "[object Object]"
+
+```
 
 **Q72: what is pass by value and pass by reference**
 Pass by Value → Copy of value passed (primitive).when you do not want original data to change.

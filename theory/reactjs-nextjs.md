@@ -368,7 +368,9 @@ ReactDOM → renders UI in browser
 
 **Q32: JSX**
 JS + HTML
+```js
 const el = <h1>Hello {name}</h1>;
+```
 
 **Q33:How do you print falsy values in JSX?**
  Wrap in {String(value)} or conditional render.{String(false)}  // prints "false"
@@ -424,7 +426,9 @@ export default function Parent() {
 
 **Q40. What is Suspense component?**
  Used to show fallback UI while loading async content (like lazy components).
+ ```js
 <Suspense fallback={<p>Loading...</p>}> <MyComp /> </Suspense>
+```
 
 **Q41. How to prevent component from rendering?**
 Return null inside render.
@@ -601,6 +605,7 @@ export default function handler(req, res) { res.json({ msg: 'Hello' }) }
 **Q11: What is Image Optimization in Next.js?**
  <Image /> automatically optimizes image size and format for performance.
  it Resizes large images to the size needed by the device,Lazy-loads images,Serves responsive images with srcset
+ 
  ```js
  import Image from "next/image";
  <Image
@@ -617,7 +622,7 @@ export default function handler(req, res) { res.json({ msg: 'Hello' }) }
         placeholder="blur"
         priority
       />
-      ```
+```
 
 **Q12: What is Middleware in Next.js?**
 Middleware runs before a request is completed. It can check the request and decide to allow, block, redirect, or rewrite the user before reaching a page or API.
