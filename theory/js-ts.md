@@ -403,6 +403,7 @@ split(",")  -> ['a','b','c']
 **Q31: Event Bubbling(default) vs Capturing**
 Bubbling: inner → outer (Event moves from child → parent)
 Clicking the button → shows "Child clicked" → then "Parent clicked"
+```txt
 ┌───────────────────────────────┐
 │           PARENT               │
 │   (executes second)            │
@@ -414,6 +415,7 @@ Clicking the button → shows "Child clicked" → then "Parent clicked"
 │   │   (clicked first)        │  │
 │   └─────────────────────────┘  │
 └───────────────────────────────┘
+```
 ```js
 <div id="parent">
   <button id="child">Click Me</button>
@@ -425,6 +427,7 @@ Clicking the button → shows "Child clicked" → then "Parent clicked"
 ```
 
 Capturing: outer/parent → inner/child
+```txt
 ┌───────────────────────────────┐
 │           PARENT               │
 │   (executes first)             │
@@ -435,6 +438,7 @@ Capturing: outer/parent → inner/child
 │   │   (executes second)      │  │
 │   └─────────────────────────┘  │
 └───────────────────────────────┘
+```
 ```js
 <div id="parent">
   <button id="child">Click Me</button>
@@ -485,6 +489,7 @@ JS is single-threaded; event loop manages async execution.
 Microtasks: Promises.
 Macrotasks: setTimeout, DOM events.
 Microtasks run before next render cycle.
+```txt
 Synchronous Code
       ↓
   Microtasks (Promises)
@@ -494,7 +499,7 @@ Synchronous Code
   Macrotasks (setTimeout, Events)
       ↓
       ⤵ Repeat
-
+```
 
 **Q37: What are modules in JavaScript?**
 Break code into reusable files using export and import.
@@ -552,9 +557,11 @@ defer → loads JS in background, runs after HTML parsing, best for most scripts
 <script defer src="defer.js"></script>
 async → runs as soon as loaded, may block DOM. Good for analytics.
 <script async src="async.js"></script>
+```txt
 HTML Parsing ──────► DOM Ready ──► Defer JS runs
         \
          \► Async JS runs whenever it finishes loading
+```
 
 
 **Q44:Use of "use strict"**
@@ -894,12 +901,14 @@ TYPESCRIPT THEORY NOTES
 
 **Q1: What is TypeScript?**
 Superset of JS adding static typing + compiler checks.
+```txt
 +---------------------+
 |      TypeScript     |
 |  +---------------+  |
 |  |  JavaScript   |  |
 |  +---------------+  |
 +---------------------+
+```
 
 **Q2: why use it over JavaScript:**
 - Early error detection

@@ -5,6 +5,7 @@ REACT THEORY NOTES
 **Q1: What is Virtual DOM?How React Manages Virtual DOM?**
 Virtual DOM is a lightweight JavaScript copy of the Real DOM.
 React doesn't update the browser DOM directly. It updates the Virtual DOM first, compares it with the old one, and then updates only the changed parts in the Real DOM — which makes it fast
+```txt
           User Action (e.g., button click)
                         ↓
                React creates New Virtual DOM
@@ -12,13 +13,14 @@ React doesn't update the browser DOM directly. It updates the Virtual DOM first,
          Compare with Old Virtual DOM (Diffing)
                         ↓
        Update only changed part in Real DOM (Fast)
-
+```
 
 **Q2: What is Reconciliation?**
  The diffing process where React compares old and new virtual DOM trees and updates only changed parts.
 
 How diffing algorithm works in Virtual DOM
  React compares old and new virtual DOM trees, updates only changed nodes (O(n) optimization).
+ ```txt
 (State/Props Change)
                          |
                          v
@@ -45,6 +47,7 @@ How diffing algorithm works in Virtual DOM
                          |   Update Real DOM   |
                          | (Only changed nodes)|
                          +---------------------+
+  ```
 **Q3: Functional vs Class Components**
  Functional - simpler, uses hooks.
  Class - uses lifecycle methods, more boilerplate and harder to reuse logic between components without hooks and `this` keyword handling is confusing and error-prone.
@@ -112,6 +115,7 @@ const [count, setCount] = useState(0);
 
 **Q8: What is Prop Drilling?**
  Passing props deeply through multiple components. Solved using Context API.
+ ```txt
  [Parent Component]
         |
         v
@@ -119,6 +123,7 @@ const [count, setCount] = useState(0);
         |
         v
 [Grandchild Component]
+```
 
 **Q9: What is Context API?**
  Provides global state without prop drilling and solution for props drilling.
@@ -148,6 +153,7 @@ Use case: focus input, play video, integrate 3rd-party lib.
 **Q13: Explain React Fiber**
  React Fiber is the internal engine of React responsible for scheduling rendering tasks efficiently.
  It allows React to pause, resume, and prioritize updates, making UI rendering smoother.
+ ```txt
  Render Request
       |
    Fiber Engine
@@ -156,7 +162,7 @@ High   Medium   Low Priority
 Task   Task      Task
   \      |      /
    UI Update
-
+```
 **Q14: Difference between keys in React list**
  Unique key helps React identify elements and track updates efficiently.
  ```js
@@ -176,8 +182,10 @@ Mounting → Component is created and added to the UI ,it runs once after initia
 Updating → Component re-renders when state/props change, it runs after every update
           Used to react to state/prop changes (e.g., data refresh)
 Unmounting → Component is removed from the UI,Runs before component is destroyed its use for cleanup(clear timers, remove event listeners)
+```txt
              Mounting     →     Updating     →     Unmounting
  (componentDidMount)  (componentDidUpdate)  (componentWillUnmount)
+ ```
 
 componentDidMount vs useEffect
 componentDidMount (class) = runs once after mount.
@@ -217,11 +225,13 @@ and use like
 **Q19: Difference between state and props**
 State - internal, mutable(can modify), use for dynamic data.
 Props - external, immutable, use for passing data to child components.
+```txt
 Parent Component (holds props/state)
         |
         |  passes data (props)
         ▼
  Child Component (receives props only)
+ ```
 
 
 **Q20: How does React handle events?**
@@ -242,6 +252,7 @@ import("./math").then(math => {
 Route: Defines which page or component should render for a specific URL path.
 Protected Route: A route that only allows access if the user is authenticated (e.g., logged-in).
 If not logged in → redirect to login page
+```txt
 User → Clicks /dashboard
          │
          ▼
@@ -250,7 +261,7 @@ User → Clicks /dashboard
     No            Yes
     ▼             ▼
  Redirect → /login   Show Dashboard Page
-
+```
 
 **Q22. Render Props**
 Share logic by passing a function as a prop that returns JSX.
@@ -332,6 +343,7 @@ axios.get('/users');
 axios.post('/users',{name:'Sam'});
 axios.put('/user/1',{name:'A'});
 axios.delete('/user/1');
+```txt
 Client (React / Next.js / Node)
         |
         |  Axios Request
@@ -344,7 +356,7 @@ Client (React / Next.js / Node)
         |  Response (JSON)
         |
    Back to Client UI
-
+```
 
 **Q30: Library vs Framework**
 Library: you control flow (React)
@@ -561,19 +573,22 @@ each folder represent a segment of the url path
 
 **Q7: What are Server Components?**
 Components rendered on the server — faster, smaller bundles, no client JS needed.
+```txt
 (Client)
    |
    |  Receives HTML only
    v
 (Server) --- renders component ---> sends ready HTML to browser
+```
 
-Q8: What are Client Components?
+**Q8: What are Client Components?**
 Components rendered in the browser using "use client" directive.
+```txt
 (Server) ---> sends JS + component code ---> (Client Browser runs it)
                                   |
                                   v
                           JS executes in browser
-
+```
 
 **Q9: How to create API routes in Next.js?**
 Create serverless functions inside /pages/api or /app/api folder each file becomes an API endpoint.
@@ -762,6 +777,7 @@ export default function Page() {
 }
 ```
 **Q29: app folder structure**
+```txt
 app/
  ├─ layout.jsx                        // Root layout for all pages
  ├─ page.jsx                          // Home page
@@ -838,7 +854,7 @@ app/
  │   └─ variables.scss
  │
  └─ middleware.js                     // Middlewares (Auth, redirects, etc.)
-
+```
 
 **Q30:All Route Handlers (Next.js App Router)**
 Used inside app/api/route.js (or [route]/route.js)
@@ -972,7 +988,7 @@ Dynamic Render: HTML generated per request. Needed for auth pages, dashboards, p
 Parallel Routes in Next.js allow you to render multiple pages at the same time in the same layout, side-by-side or layered, without replacing the main content.
 They are created using folders that start with @ (example: @modal, @chat, @feed, etc.).
 Parallel Routes let you load additional UI sections independently — like a image gallery popup, sidebar without losing the current page state.
-
+```txt
 app/
 ├─ dashboard/
 │  ├─ layout.jsx            // Layout that defines left and right slots
@@ -982,7 +998,7 @@ app/
 │  ├─ @right/               // Parallel route #2 (Right panel)
 │  │   └─ page.jsx
 
-
+```
 **Q49:router.back vs router.push vs redirect()**
 -router.back()
 Works like browser Back button
