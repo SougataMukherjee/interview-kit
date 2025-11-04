@@ -213,9 +213,9 @@ Example: <iframe src="https://example.com"></iframe>
 A security feature that restricts how resources can be fetched from another domain.
 it improves Security and avoids browser blocking of cross-domain API requests
 **Q33: How do you optimize HTML for SEO?**
-- Use semantic tags
-- Proper headings (H3–H6)
-- Meta description
+- Use semantic tags ( header, main, article, nav )
+- Proper headings ( H3–H6 )
+- Meta tag - title, description, viewport
 - Alt attributes for images
 - Structured data
 
@@ -285,14 +285,28 @@ Example:
   <tr><td>Sam</td><td>25</td></tr>
 </table>
 ```
-**Q43: HTML Forms**
+**Q43: HTML Forms handle form state and validation**
 → action defines where data goes.
 → <input> collects info, <submit> sends it.
+Form States:
+- Empty: Form fields are untouched or no value entered.
+- Valid: Input matches required rules (e.g., correct email or pattern).
+- Invalid: Input breaks rules (e.g., wrong format, missing required value).
+- Submitted: Form is submitted (can check via :valid and :invalid before/after submit).
+Validation:
+- Use attributes like required, min, max, minlength, maxlength, pattern
+-Use :valid and :invalid pseudo class to style based on validation state
 ```js
 <form action="/submit">
-  <input type="text" name="user">
-  <input type="submit" value="Send">
+  <input type="email" required placeholder="Enter Email" />
+  <button type="submit">Submit</button>
 </form>
+
+<style>
+  input:invalid { border: 2px solid red; }
+  input:valid { border: 2px solid green; }
+</style>
+
 ```
 
 **Q44:HTML Video and Controls**

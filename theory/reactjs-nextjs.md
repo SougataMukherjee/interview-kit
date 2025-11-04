@@ -397,8 +397,32 @@ status && <Loader/>
 msg || "No message"
 
 **Q38: Folder Structure**
-React: src/components, hooks, pages, utils
-Next.js: app/, pages/, components/, public/
+```txt
+project/
+├─ public/                    // static public files
+│   ├─ images/                // static images
+│   ├─ favicon.ico
+│   └─ index.html
+├─ src/
+│   ├─ assets/                // fonts, icons, svgs, local images
+│   ├─ components/            // reusable UI components
+│   ├─ pages/                 // Route pages (React Router)
+│   ├─ context/               // React Context providers
+│   ├─ hooks/                 // custom hooks
+│   ├─ utils/                 // helper functions
+│   ├─ constants/             // app constants (URLs, configs)
+│   ├─ types/                 // TypeScript types & interfaces
+│   ├─ services/              // API services (axios/fetch)
+│   ├─ styles/                // global.css, tailwind, variables.css
+│   ├─ router/                // route config
+│   ├─ App.tsx
+│   └─ main.tsx
+├─ .env                       // environment variables
+├─ package.json
+└─ dist/ or build/            // production build output
+
+```
+
 
 **Q39: Purpose of forwardRef?**
 Pass ref from parent → child component.
@@ -471,7 +495,9 @@ No. Only needed when using this.state or binding methods.
  ```js
  onClick={() => handleClick(id)}
  ```
-
+**Q46. Profiling & React Fiber**
+React Fiber: Internal architecture that breaks UI work into small units so rendering can be paused, resumed, or aborted.
+Profiling: Measure which components re-render, how long rendering took, and optimize.
 
 NEXT.JS THEORY NOTES 
 =========================
@@ -605,7 +631,7 @@ export default function handler(req, res) { res.json({ msg: 'Hello' }) }
 **Q11: What is Image Optimization in Next.js?**
  <Image /> automatically optimizes image size and format for performance.
  it Resizes large images to the size needed by the device,Lazy-loads images,Serves responsive images with srcset
- 
+
  ```js
  import Image from "next/image";
  <Image
@@ -1070,7 +1096,11 @@ export default function TransitionExample() {
   );
 }
 ```
+**Q51: Streaming & Performance**
+Streaming sends HTML/data to the browser in chunks, not waiting for full response → page renders faster, better perceived performance, especially with SSR
 
+**Q52:Edge Function in Next.js**
+Serverless functions deployed at edge locations (CDN edge). Run close to user → ultra-low latency for auth, redirects, caching.
 
 
 

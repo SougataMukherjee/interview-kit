@@ -141,11 +141,21 @@ b = JSON.parse(JSON.stringify(a))
 a.y ──► { z:2 }     b.y ──► { z:2 }   (separate copies)
 ```
 
-**Q12. What are Promises?**
+**Q12. What are Promises? Build Own Promise for Microtask**
 Used to handle async operations, It has 3 states: pending → resolved → rejected
 Example:
 ```js
 new Promise((res, rej)=>res(5)).then(console.log);
+```
+build own promise
+```js
+const myPromise = (executor) => {
+  const thenCallbacks = [];
+  executor((value) =>
+    queueMicrotask(() => thenCallbacks.forEach(cb => cb(value)))
+  );
+  return { then(cb) { thenCallbacks.push(cb); return this; } };
+};
 ```
 
 **Q13. Promise.all vs Promise.race**
@@ -1023,6 +1033,78 @@ event.emit('hi');
 **Q79: Optimize DOM Traversal**
 Cache DOM nodes, use documentFragment, batch updates
 
+**Q80: Bundling vs Chunking**
+bundling Combine many files → 1 optimized file
+chunking Break large bundle into smaller lazy-loaded chunks
+
+**81: ESM vs ES6**
+ES6: A language version (includes classes, let/const, arrow functions).
+ESM: The module system using import/export.
+
+**82: Task Scheduler & LRU Cache**
+A Task Scheduler executes tasks in a planned order, usually with delay or priority.
+Example use cases: running API calls sequentially, retry logic, scheduled jobs, animations, pausing long loops.
+
+```js
+function createLRUCache(limit) {
+  const cache = new Map(); // maintains insertion order
+
+  return {
+    get(key) {
+      if (!cache.has(key)) return -1;
+      const value = cache.get(key);
+
+      // Move to end (most recently used)
+      cache.delete(key);
+      cache.set(key, value);
+      return value;
+    },
+
+    set(key, value) {
+      if (cache.has(key)) {
+        cache.delete(key); // remove old
+      } else if (cache.size === limit) {
+        // Remove least recently used (first item)
+        const firstKey = cache.keys().next().value;
+        cache.delete(firstKey);
+      }
+      cache.set(key, value);
+    },
+
+    show() {
+      console.log([...cache]);
+    }
+  };
+}
+
+// Usage
+const lru = createLRUCache(3);
+lru.set("a", 1);
+lru.set("b", 2);
+lru.set("c", 3);
+lru.get("a");     // "a" becomes most used
+lru.set("d", 4);  // removes "b" (least used)
+lru.show();       // [ ['c',3], ['a',1], ['d',4] ]
+
+```
+**83. How to Test Code Using Jest in JS**
+install jest npm install --save-dev jest and script package.json "test": "jest"
+in sum.js
+```js
+export function sum(a, b) {
+  return a + b;
+}
+
+```
+in sum.test.js
+```js
+import { sum } from './sum';
+
+test("adds numbers", () => {
+  expect(sum(2, 3)).toBe(5);
+});
+
+```
 
 TYPESCRIPT THEORY NOTES
 ====================

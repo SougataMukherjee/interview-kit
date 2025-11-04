@@ -374,7 +374,8 @@ Allow logic in SCSS:
 TAILWIND CSS THEORY
 ==============================
 
-**Q1: What is Tailwind CSS?**
+**Q1:what is Atomic CSS? What is Tailwind CSS?**
+ Atomic css are single-purpose utility classes (e.g., p-4, flex, text-red-500)
  Utility-first CSS framework — style directly in HTML using class names.
  Example:
  ```js
@@ -383,7 +384,7 @@ TAILWIND CSS THEORY
 
 **Q2: What are utility-first CSS frameworks?**
 Frameworks where styling is applied via small, reusable utility classes (e.g., p-4, text-center).
-
+no unused CSS, smaller bundle, no naming conflicts, faster rendering
 **Q3: Advantages:**
 - No writing custom CSS
 - Small bundle (JIT)
