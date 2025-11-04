@@ -2,21 +2,22 @@
 JAVASCRIPT THEORY NOTES
 =======================
 
-Q1: what is JavaScript? why name called JavaScript?
+**Q1: what is JavaScript? why name called JavaScript?**
 JavaScript is a lightweight, case sensitive scripting language.
 JS was created to add logic to web pages;  initial name was "LiveScript" then marketing—syntax inspired by Java, but not related.
 
-Q2: what are JavaScript engine?
+**Q2: what are JavaScript engine?**
 a javascript engine is a computer programme that execute javascript code developed by web browser vender.
 Example: chrome we have V8 firefox we have SpiderMonkey
 
-Q3: JavaScript vs ECMAScript
+**Q3: JavaScript vs ECMAScript**
 JavaScript → language used in browsers.
 ECMAScript → standard/spec that JS follows.
 
-Q4: What is Hoisting?
+**Q4: What is Hoisting?**
 Variables and functions are moved to top of scope during compilation.
 Example:
+```js
 console.log(a); // undefined
 var a = 5;
 
@@ -25,10 +26,11 @@ function foo(){
   var a =5;
 }
 foo()
-
-Q5: What is Closure?
+```
+**Q5: What is Closure?**
 inner function remembers parent scope even after function ends.
 Example:
+```js
 function outer() {
   let count = 0;
   return function inner() {
@@ -36,10 +38,11 @@ function outer() {
     console.log(count);
   }
 }
-
-Q6: Difference: var, let, const
+```
+**Q6: Difference: var, let, const**
 var -> function scoped, can be redeclared and hoisted with undefined
 let, const -> block scoped,let cannot be reassigned but const cannot be reassigned.
+```js
 function demo() {
   if (true) {
     var x = 10;
@@ -51,10 +54,11 @@ function demo() {
   console.log(z); // ❌ error (const → block scope)
 }
 demo();
-
-Q7: What is Event Loop?
+```
+**Q7: What is Event Loop?**
 Handles async operations. Executes sync code first, then callbacks from queue.
 Example:
+```js
 console.log("a");
 setTimeout(() => {
   console.log("b");
@@ -66,12 +70,13 @@ setTimeout(() => {
 console.log("d");
 
 // Output: a d b c
+```
 
-Q8:Sync vs Async
+**Q8:Sync vs Async**
 Sync → one by one
 Async → doesn’t block next
 
-Q9: What is 'this' keyword?
+**Q9: What is 'this' keyword?**
 Refers to current context.
 Global Code
   this → window (browser)
@@ -84,13 +89,25 @@ Regular Function
 Arrow Function
   this → parent scope (not its own)
 
-Q10: Arrow function vs normal function vs IIFE vs Anonymous function
-Normal Function function add(a, b) { return a + b; }
-Arrow Function  const add = (a, b) => a + b;
-IIFE (Immediately Invoked Function Expression) (function(){ console.log("Run once"); })();
-Anonymous Function let f=function(args){}
+**Q10: Arrow function vs normal function vs IIFE vs Anonymous function**
+Normal Function 
+```js
+function add(a, b) { return a + b; }
+```
+Arrow Function  
+ ```js 
+ const add = (a, b) => a + b;
+ ```
+IIFE (Immediately Invoked Function Expression) 
+```js
+(function(){ console.log("Run once"); })();
+```
+Anonymous Function 
+```js
+let f=function(args){}
+```
 
-Q11: Shallow vs Deep Copy
+**Q11: Shallow vs Deep Copy**
 Shallow: Copies only the top-level values.
 If the object contains another object, only the reference is copied, not the actual nested data.
 So changing nested values affects both copies.
@@ -98,22 +115,29 @@ Deep: Creates a completely independent copy of all levels of the object.
 Changing nested values does not affect the original.
 Example:
 Original Object
+```js
 a → { x:1, y:{ z:2 } }
-
+```
 Shallow Copy:
+```js
 b = { ...a }
 a.y ───────► { z:2 } ◄────── b.y    (same reference)
+```
 
 Deep Copy:
+```js
 b = JSON.parse(JSON.stringify(a))
 a.y ──► { z:2 }     b.y ──► { z:2 }   (separate copies)
+```
 
-Q12. What are Promises?
+**Q12. What are Promises?**
 Used to handle async operations, It has 3 states: pending → resolved → rejected
 Example:
+```js
 new Promise((res, rej)=>res(5)).then(console.log);
+```
 
-Q13. Promise.all vs Promise.race
+**Q13. Promise.all vs Promise.race**
 Promise.all() → Runs multiple promises in parallel and waits until all are finished.If any one fails, the whole result fails
 Promise.race() → Runs multiple promises in parallel and returns the result of the first one that finishes (success or fail)
 Promise.all([P1, P2, P3])
@@ -127,13 +151,13 @@ Promise.race([P1, P2, P3])
    P3 ------------✅
 
 
-Q14. How to fetch API using Promise?
+**Q14. How to fetch API using Promise?**
 fetch("https://api.example.com/data")
   .then(res => res.json())
   .then(data => console.log(data))
   .catch(err => console.log(err));
 
-Q15. create a Promise and resolve on Button click
+**Q15. create a Promise and resolve on Button click**
 import { useState } from "react";
 
 export default function App() {
@@ -152,7 +176,7 @@ export default function App() {
   );
 }
 
-Q16. using promise fetch a data,if the fetch fails it should automatically retry after the given delay, up to the maximum number of attempts
+**Q16. using promise fetch a data,if the fetch fails it should automatically retry after the given delay, up to the maximum number of attempts**
 function retryFetch(url, maxSteps, delay) {
   let attempt = 0;
 
@@ -184,7 +208,7 @@ Use .catch() or try...catch inside async/await.
 fetch(url).catch(err => console.error(err));
 
 
-Q17. Async/Await
+**Q17. Async/Await**
 Async/Await is a simplified way to work with Promises. It makes asynchronous code look and behave like synchronous code, which is easier to read and write.
 What problem it solves:
 Avoids callback hell and complex .then() chaining in Promises
@@ -212,7 +236,7 @@ function App() {
 export default App;
 
 
-Q18: What is Debounce & Throttle?
+**Q18: What is Debounce & Throttle?**
 Debounce: delay execution till user stops typing.
 Runs after user stops typing or triggering for a certain time
 Useful for: Search bars, input validation, API calls
@@ -261,7 +285,7 @@ export default function ThrottleInput() {
 }
 
 
-Q19: Polyfill Example (map)
+**Q19: Polyfill Example (map)**
 Array.prototype.myMap = function(cb){
   let res=[];
   for(let i=0;i<this.length;i++){
@@ -270,7 +294,7 @@ Array.prototype.myMap = function(cb){
   return res;
 }
 
-Q20: Call, Apply, Bind
+**Q20: Call, Apply, Bind**
 To manually control the value of this when borrowing a function from another object or ensuring a function always runs with a specific context.
 
 function greet(greeting, emoji) {
@@ -281,7 +305,7 @@ greet.apply(person, ["Hello", "👋"]); // Hello, Alice! 👋
 const greetAlice = greet.bind(person);
 greetAlice("Hey", "😎");           // Hey, Alice! 😎
 
-Q21: What is Currying?
+**Q21: What is Currying?**
 Currying is the process of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument
 Example:
 function add(a) {
@@ -293,11 +317,11 @@ const add5 = add(5);
 console.log(add5(3)); // 8
 
 
-Q22: What is Prototype?
+**Q22: What is Prototype?**
 JS uses prototypal inheritance. Every object has a hidden [[Prototype]].
 Objects inherit from __proto__ → links to [[Prototype]]
 
-Q23: Difference: undefined vs null
+**Q23: Difference: undefined vs null**
 undefined -> declared but not assigned
 let a;      
 console.log(a);  // undefined
@@ -305,13 +329,13 @@ null -> intentional empty value.
 let b = null;   
 console.log(b);  // null
 
-Q24: Event Delegation
+**Q24: Event Delegation**
 Event Delegation is used to handle events efficiently by adding a single event listener on a parent element instead of adding multiple listeners to each child element.
 Benefits:Improves performance (fewer listeners in DOM) and Improves performance (fewer listeners in DOM)
 Example:
 ul.addEventListener('click',(e)=>{ if(e.target.tagName==='LI') console.log(e.target.textContent) })
 
-Q25: LocalStorage vs SessionStorage with exp
+**Q25: LocalStorage vs SessionStorage with exp**
 localStorage -> persists after reload and permanent until cleared.
 localStorage.setItem("name", "Sam");
 console.log(localStorage.getItem("name")); // Sam
@@ -320,7 +344,7 @@ sessionStorage -> clears when tab closes
 sessionStorage.setItem("sessionName", "SamSession");
 console.log(sessionStorage.getItem("sessionName")); // SamSession
 
-Q26: Spread vs Rest
+**Q26: Spread vs Rest**
 Spread -> expands [...arr]
 const nums = [1, 2, 3];
 const newNums = [...nums, 4, 5]; // [1, 2, 3, 4, 5]
@@ -331,19 +355,19 @@ function sum(...numbers) {
 const result = sum(4, 5, 6, 7); // [9, 10, 11, 12]
 
 
-Q27: Deep Clone Object
+**Q27: Deep Clone Object**
 JSON.parse(JSON.stringify(obj));
 NOTE:JSON.stringify() → Object → String
      JSON.parse() → String → Object
 
-Q28: Optional Chaining
+**Q28: Optional Chaining**
 Access nested property safely: user?.address?.city
 
-Q29: Difference Between == and ===
+**Q29: Difference Between == and ===**
 == does type coercion
 === checks type + value
 
-Q30: Difference Between slice, splice, split
+**Q30: Difference Between slice, splice, split**
 slice -> copy array portion,doesn’t change original array
 splice -> modify array,change original array
  [1, 2, 3, 4, 5]
@@ -353,7 +377,7 @@ split -> convert string → array
 "a,b,c"
 split(",")  -> ['a','b','c']
 
-Q31: Event Bubbling(default) vs Capturing
+**Q31: Event Bubbling(default) vs Capturing**
 Bubbling: inner → outer (Event moves from child → parent)
 Clicking the button → shows "Child clicked" → then "Parent clicked"
 ┌───────────────────────────────┐
@@ -404,20 +428,20 @@ Capturing: outer/parent → inner/child
   );
 </script>
 
-Q32: What is Temporal Dead Zone (TDZ)?
+**Q32: What is Temporal Dead Zone (TDZ)?**
 Zone where variable exists but can’t be accessed before initialization.
 
-Q33: Garbage Collection
+**Q33: Garbage Collection**
 JS automatically removes unused memory (unreferenced objects).
 Explain the concept of prototype and prototypal inheritance.
 Every JS object inherits from a prototype object.
 Shared methods are defined on the prototype to save memory.
 Example: Object.create(proto) creates a new object inheriting from proto.
 
-Q34: Webpack
+**Q34: Webpack**
 Module bundler (combines JS, CSS, imgs into build).
 
-Q35: What are higher-order functions?
+**Q35: What are higher-order functions?**
 Functions that take another function as argument or return one (e.g., map, filter, reduce).
 Higher-order functions either take other functions as arguments or Return functions.
 function multiplier(factor) {
@@ -430,7 +454,7 @@ const double = multiplier(2);
 console.log(double(5)); // 10
 
 
-Q36: Explain the event loop and microtask queue.
+**Q36: Explain the event loop and microtask queue.**
 JS is single-threaded; event loop manages async execution.
 Microtasks: Promises.
 Macrotasks: setTimeout, DOM events.
@@ -446,7 +470,7 @@ Synchronous Code
       ⤵ Repeat
 
 
-Q37: What are modules in JavaScript?
+**Q37: What are modules in JavaScript?**
 Break code into reusable files using export and import.
 Types:
 Named export
@@ -455,19 +479,19 @@ Example:
 export const x = 1; 
 import { x } from './file.js';
 
-Q38:Use of Content-Type
+**Q38:Use of Content-Type**
 Tells the browser what type of data is being sent.
 Examples:
 application/json → JSON data
 text/html → HTML
 multipart/form-data → File uploads
 
-Q39: What is destructuring?
+**Q39: What is destructuring?**
 Extract values from arrays or objects easily:
 const [a, b] = [1, 2];
 const {name, age} = person;
 
-Q40: What is a generator function?
+**Q40: What is a generator function?**
 A generator function can pause and resume execution using yield.
 Defined with function* syntax.
 Useful for lazy evaluation or async flows.
@@ -482,16 +506,16 @@ console.log(g.next().value); // 2
 console.log(g.next().value); // 3
 
 
-Q41: Explain the concept of immutability.
+**Q41: Explain the concept of immutability.**
 Data shouldn’t be modified directly; instead, create new copies.
 Important for React state and predictable behavior.
 
-Q42: All attributes of <script> tag
+**Q42: All attributes of <script> tag**
 use script tag to include js in html
 <script scr="index.js"></script>
 src, type, async, defer, crossorigin
 
-Q43: When to use defer / async
+**Q43: When to use defer / async**
 both load scripts asynchronously.
 defer → loads JS in background, runs after HTML parsing, best for most scripts,Best for scripts that rely on the DOM.
 <script defer src="defer.js"></script>
@@ -502,20 +526,20 @@ HTML Parsing ──────► DOM Ready ──► Defer JS runs
          \► Async JS runs whenever it finishes loading
 
 
-Q44:Use of "use strict"
+**Q44:Use of "use strict"**
 Makes JS more secure: prevents undeclared variables, silent errors.
 "use strict"; x = 5;//error
 but x = 5;//no error 
 
-Q45:Data Types in JS (Primitive vs Non-Primitive)
+**Q45:Data Types in JS (Primitive vs Non-Primitive)**
 Primitive: single value (immutable)(String, Number, boolean, null, undefined, symbol, bigint).
 Non-Primitive:(mutable) Object, Array, function,Date,Math.
 
-Q46:Null vs Undefined
+**Q46:Null vs Undefined**
 null → empty value set by user.
 undefined → declared but not assigned.
 
-Q47: types of operator
+**Q47: types of operator**
 Arithmetic:+,-,*,/,%,++,--
 Assignment: =,+=,-=,*=,/=
 Comparison:==,===,!=,!==,>,<,>=,<=
@@ -523,19 +547,19 @@ Logical: &&,||,!
 Bitwise: 
 Ternary:variable=(condition)?value1:value2
 
-Q48:Parameter vs Argument
+**Q48:Parameter vs Argument**
 Parameter = variable in function definition.
 Argument = actual value passed.
 function add(a,b){ } add(2,3);
 
-Q49:Callback Function
+**Q49:Callback Function**
 Function passed into another function to run after a task completes.
 setTimeout(()=>console.log("Arrow function"),1000);
 setTimeout(function() {console.log("Anonymous function");}, 1000);
 function greet() { console.log("Name function");} setTimeout(greet, 500);
 
 
-Q50:Pyramid of Doom (Callback Hell)
+**Q50:Pyramid of Doom (Callback Hell)**
 When many callbacks are nested inside each other — code becomes deep, messy, and hard to read.
 getData(() => {
   processData(() => {
@@ -547,7 +571,7 @@ getData(() => {
   });
 });
 
-Q51:call back hell solved by Promise Chain
+**Q51:call back hell solved by Promise Chain**
 its readable and handle error easily
 getData()
   .then(processData)
@@ -557,12 +581,12 @@ getData()
   .catch(err => console.log("Error:", err));
 
 
-Q52: Constructor
+**Q52: Constructor**
 Used to create multiple similar objects.
 function User(n){this.name=n;}
 let u=new User("Sam");
 
-Q53: why Constructor Function? what is Prototype Inheritance?
+**Q53: why Constructor Function? what is Prototype Inheritance?**
 To create multiple objects with the same structure and properties without manually writing each object.
 function User(name) {
   this.name = name;
@@ -585,16 +609,16 @@ u1.sayHello(); // Hello, Sam
 u2.sayHello(); // Hello, John
 
 
-Q54: Strings are Immutable
+**Q54: Strings are Immutable**
 Once created, can’t be changed—new copy made on edit.
 
-Q55:new Array() vs []
+**Q55:new Array() vs []**
 new Array(3) creates empty slots, [] creates actual array.
 Prefer [].
 Example: const fruits=['Apple','Banana','Orange']
         const fruits=new Array('Apple','Banana','Orange')
 
-Q56: create object without using new
+**Q56: create object without using new**
 const obj1 = {}; 
 const obj2 = Object.create(null);
 const obj3 = {name:"Sam"};
@@ -602,36 +626,36 @@ const obj4 = Object.assign({}, {a:1});
 function makeObj(){return {id:1}}
 const obj5 = makeObj();
 
-Q57: Web APIs (browser features)
+**Q57: Web APIs (browser features)**
 fetch(), setTimeout(), setInterval(), localStorage, sessionStorage,
 document, navigator, geolocation, history, console, alert()
 
-Q58: for of vs for in
+**Q58: for of vs for in**
 1. for of does not work with object but for in works with Object and array
 2. for of ignore extra properties which does not have index but for in does not ignore
 
-Q59:map vs forEach
+**Q59:map vs forEach**
 map returns new array; forEach just loops.
 
-Q60: instanceof
+**Q60: instanceof**
 Checks if object created from class.
 obj instanceof MyClass;
 
-Q61: Tree Shaking
+**Q61: Tree Shaking**
 Removes unused JS code during bundling.
 
-Q62: what is DOM and its advantage
+**Q62: what is DOM and its advantage**
 DOM: tree structure of HTML.
 Advantage: JS can dynamically change HTML/CSS
 
-Q63:Useful DOM Properties
+**Q63:Useful DOM Properties**
 .innerHTML, .textContent, .style, .classList, .value, .children, .parentElement
 
-Q64:clientX vs scrollX
+**Q64:clientX vs scrollX**
 clientX → mouse position in viewport.
 scrollX → amount page scrolled horizontally
 
-Q65:Mouse Events
+**Q65:Mouse Events**
 click:Fired when the user presses and releases the mouse button on an element.
 dblclick:Fired when the user double-clicks an element.
 mousedown:Fired when the mouse button is pressed down on an element (before releasing).
@@ -640,18 +664,18 @@ mousemove:Fired when the mouse pointer is moved over an element.
 mouseenter:Fired when the mouse pointer enters the boundary of an element.Unlike mouseover, it does not bubble.
 mouseleave:Fired when the mouse pointer leaves the boundary of an element.Unlike mouseout, it does not bubble.
 
-Q66:DOMContentLoaded
+**Q66:DOMContentLoaded**
 Fires when HTML fully parsed (before images).
 Helps run JS early.
 
-Q67: isNaN() and Number()
+**Q67: isNaN() and Number()**
 Checks if value is not number
 isNaN('abc') → true
 
-Q68:Cookies
+**Q68:Cookies**
 Small data stored in browser; sent with every HTTP request.
 
-Q69 Array Methods
+**Q69 Array Methods**
 push() → adds element to end. 
         [1,2].push(3) → [1,2,3]
 pop() → removes element from end. 
@@ -706,7 +730,7 @@ a.splice(1,1); // remove
 a[0]=9;     // update
 
 
-Q70:String Methods
+**Q70:String Methods**
 charAt() → returns character at index.
         "Hello".charAt(1) → "e"
 charCodeAt() → returns ASCII of character.
@@ -740,7 +764,7 @@ endsWith() → checks if string ends with given text.
 repeat() → repeats string given times.
         "Hi".repeat(3) → "HiHiHi"
 
-Q71:Object Methods
+**Q71:Object Methods**
 keys() → returns array of property names.
         Object.keys({a:1,b:2}) → ["a","b"]
 values() → returns array of property values.
@@ -762,7 +786,7 @@ create() → creates object with given prototype.
 toString() → returns string form of object.
         ({a:1}).toString() → "[object Object]"
 
-Q72: what is pass by value and pass by reference
+**Q72: what is pass by value and pass by reference**
 Pass by Value → Copy of value passed (primitive).when you do not want original data to change.
    let a = 10;
     function change(x) { x = 20; }
@@ -773,13 +797,13 @@ let obj = { name: "Sam" };
     function change(o) { o.name = "John"; }
     change(obj);
     console.log(obj.name); // John 
-Q73: Pure Function → Same input → same output, no side effects.
+**Q73: Pure Function → Same input → same output, no side effects.**
 Impure Function → Depends on external/state change.
 
-Q74: Cross-Browser Scripting 
+**Q74: Cross-Browser Scripting**
  Write JS that works same on all browsers (handle compatibility).
 
-Q75: ES6 Features
+**Q75: ES6 Features**
  let/const, arrow fn, template literals, classes, modules, promises, destructuring
  ES5 Class Concept
  ES5 didn’t have class keyword — used constructor functions + prototypes
@@ -793,23 +817,23 @@ Person.prototype.greet = function() {
 const p = new Person("Sam");
 console.log(p.greet()); // Hi Sam
 
-Q76:CORS 
+**Q76:CORS** 
  Cross-Origin Resource Sharing – allows API access from different domains.
 
-Q77:Access DOM (4 ways)
+**Q77:Access DOM (4 ways)**
 getElementById() Selects a single element by its id.
 getElementsByClassName() Selects all elements with a specific class
 querySelector() Selects the first element matching a CSS selector.
 querySelectorAll() Selects all elements matching a CSS selector. Returns NodeList
 
-Q78:Event Emitter 
+**Q78:Event Emitter**
 Object that listens (on) and triggers (emit) events.
 const EventEmitter = require('events');
 const event = new EventEmitter();
 event.on('hi', ()=>console.log('Hello!'));
 event.emit('hi');
 
-Q79: Optimize DOM Traversal 
+**Q79: Optimize DOM Traversal**
 Cache DOM nodes, use documentFragment, batch updates
 
 
@@ -817,7 +841,7 @@ Cache DOM nodes, use documentFragment, batch updates
 TYPESCRIPT THEORY NOTES
 ====================
 
-Q1: What is TypeScript?
+**Q1: What is TypeScript?**
 Superset of JS adding static typing + compiler checks.
 +---------------------+
 |      TypeScript     |
@@ -826,27 +850,27 @@ Superset of JS adding static typing + compiler checks.
 |  +---------------+  |
 +---------------------+
 
-Q2: why use it over JavaScript:
+**Q2: why use it over JavaScript:**
 - Early error detection
 - Better IntelliSense
 - Type safety in large apps
 
-Q3: Basic Types:
+**Q3: Basic Types:**
 string, number, boolean, any, void, unknown, null, undefined
 
-Q4: Interface Example:
+**Q4: Interface Example:**
 interface User {
   name: string;
   age: number;
 }
 
-Q5: Type Alias:
+**Q5: Type Alias:**
 type Status = "loading" | "success" | "error";
 
-Q6: Optional and Readonly Properties:
+**Q6: Optional and Readonly Properties:**
 interface User { name: string; age?: number; readonly id: number; }
 
-Q7: Generics:
+**Q7: Generics:**
 Generics allow you to write reusable functions or classes that can work with any data type while maintaining type safety.
 function identity<T>(arg: T): T {
   return arg;
@@ -854,7 +878,7 @@ function identity<T>(arg: T): T {
 let str = identity<string>("Hello"); // type T is string
 let num = identity<number>(42);      // type T is number
 
-Q8: Union and Intersection Types:
+**Q8: Union and Intersection Types:**
 Union (|) is a variable can hold one of multiple types
 let val: string | number;
 val = 5;     
@@ -865,16 +889,16 @@ type B = { y: string };
 type C = A & B;
 const obj: C = { x: 10, y: "hello" }; 
 
-Q9: Enum:
+**Q9: Enum:**
 Used to define named constants:
 enum Color { Red, Green, Blue }
 enum Direction { Up, Down, Left, Right }
 
-Q10: Difference between Interface and Type
+**Q10: Difference between Interface and Type**
 Interface -> extendable
 Type -> can use union/intersection
 
-Q11: Utility Types:
+**Q11: Utility Types:**
 Partial<T>:Makes all properties of a type optional.
 interface User {
   name: string;
@@ -919,32 +943,32 @@ const user: Readonly<User> = {
 };
 user.age = 31;//error
 
-Q12: Type Assertion:
+**Q12: Type Assertion:**
 let val: any = "hello";
 let len = (val as string).length;
 
-Q13: Difference between any and unknown and never
+**Q13: Difference between any and unknown and never**
 any -> unsafe
 unknown -> needs type check before use
 
-Q14: What are Decorators?
+**Q14: What are Decorators?**
 Experimental feature for class modification.
 Special syntax to add metadata or modify classes/functions
 Example:
 @Logger
 class User {}
 
-Q15: Difference between TypeScript and JavaScript
+**Q15: Difference between TypeScript and JavaScript**
 TS -> compiled language
 JS -> interpreted
 TS adds types; JS doesn’t.
 
-Q16: What is type narrowing?
+**Q16: What is type narrowing?**
 Process of refining a variable’s type based on conditions.
 Example:
 if (typeof x === 'string') { x.toUpperCase(); }
 
-Q17: What are type guards?
+**Q17: What are type guards?**
 Functions or checks that help narrow down types at runtime.
 Example:
 
