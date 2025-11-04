@@ -427,11 +427,22 @@ Access nested property safely: user?.address?.city
 === checks type + value
 
 **Q30: Difference Between slice, splice, split**
-slice -> copy array portion,doesn’t change original array
-splice -> modify array,change original array
- [1, 2, 3, 4, 5]
-slice(1,4)  -> [2, 3, 4]   (copy only)
-splice(1,3) -> [2, 3, 4]   (removes from original: arr -> [1,5])
+slice -> The slice() method is used to copy a portion of an array and return a new array.doesn’t change original array.It accepts two optional arguments: the starting index and the ending index
+```js
+const fruits = ['apple', 'orange', 'lemon'];
+const newFruit = fruits.slice(0, 1);
+console.log(newFruit); // Output: ['apple']
+```
+splice -> The splice() method is used to add, remove, or modify elements within an existing array. It modifies the original array.
+It typically takes three arguments,Starting Index: The index where changes should begin.
+Number of elements to delete: The count of elements to remove from the starting index.
+Elements to add/modify (optional): The new elements you want to insert or replace.
+```js
+const fruits = ['apple', 'orange', 'lemon'];
+fruits.splice(0, 1, 'banana'); 
+console.log(fruits); // Output: ['banana', 'orange', 'lemon']
+```
+
 split -> convert string → array
 "a,b,c"
 split(",")  -> ['a','b','c']

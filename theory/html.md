@@ -27,21 +27,21 @@ JavaScript runs
 Web Page displayed
 ```
 
-**Q2: why <br> called empty element?**
+**Q2: why br called empty element?**
 because it has no content
 
 **Q3: does hyperlink only apply to text?**
 text and image both
 
 **Q4: What is HTML and why is it important?**
-A: HTML (HyperText Markup Language) structures web content. It defines the layout and semantic meaning of elements (headings, paragraphs, links, forms, etc.).
+ HTML (HyperText Markup Language) structures web content. It defines the layout and semantic meaning of elements (headings, paragraphs, links, forms, etc.).
 version of html are
 html 1.0 html2.0 html 3 html 4 html 5
 HTML5 features
 new element new attribute multimedia 2d 3d drawing support
 
 **Q5: What are semantic tags? Give examples and benefits**
-A: A semantic element clearly describes its meaning to both the browser and the developer.
+ A semantic element clearly describes its meaning to both the browser and the developer.
 Examples of non-semantic elements: <div> and <span> - Tells nothing about its content.
 Examples of semantic elements: <img>, <table>, <header>,<nav>,<footer>, <article> - Clearly defines its content.
 benefits:Improves readability & code clarity for developers, improve SEO and Accessibility friendly – screen readers understand sections easily.
@@ -59,7 +59,7 @@ benefits:Improves readability & code clarity for developers, improve SEO and Acc
 ```
 
 **Q6: What is the difference between <div> and <section>?**
-A: <div> is a generic container, no semantic meaning.
+ <div> is a generic container, no semantic meaning.
 <section> groups related content with semantic meaning.
 
 **Q7: Field set**
@@ -112,6 +112,7 @@ Example:
   <button type="submit">Submit</button>
 </form>
 ```
+
 **Q14: Difference between GET and POST method?**
 - GET: sends data in URL, used for data retrieval.
 - POST: sends data in body, used for data creation or sensitive info.

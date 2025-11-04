@@ -87,30 +87,66 @@ useEffect(()=>()=>console.log("Unmount"),[]); // Unmount
 ```
 **Q7: useMemo vs useCallback**
 useMemo → memoizes computed value
-exp 1.
+exp.
 ```js
-const [count, setCount] = useState(0);
-  const double = useMemo(() => {
-    console.log("Calculating...");
-    return count * 2;
-  }, [count]);
-  ```
-exp 2.
-```js
- const total = useMemo(() => {
-    let sum = 0;
-    for (let i = 0; i < arr.length; i++) {
-      sum += arr[i];
-    }
-    return sum;
-  }, [arr]);
+import { useState, useMemo } from "react";
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  const expensiveTask = (input) => {
+    for (let i = 0; i < 100000; i++) {}
+    return input * 2;
+  };
+
+  // const doubleValue = () => expensiveTask(count);//UI is hanging after 2-3 times click on button
+  const doubleValue = useMemo(() => expensiveTask(count), [count]);
+
+  return (
+    <div className="App">
+      <p>Expensive Calculation: {doubleValue}</p>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increase Count</button>
+    </div>
+  );
+}
+
+export default App;
+
 ```
 useCallback → memoizes/caches function reference
 ```js
-const [count, setCount] = useState(0);
+// App.jsx
+import { useState, useCallback } from "react";
+import Child from "./Child";
+
+function App() {
+  const [count, setCount] = useState(0);
   const handleClick = useCallback(() => {
-    setCount(c => c + 1);
+    setCount((count) => count + 1);
   }, []);
+//if you not give call back unnecessory child render happen because we pass handleclick function 
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={handleClick}>Increase Count</button>
+
+      <Child onClick={handleClick} />
+    </div>
+  );
+}
+
+export default App;
+
+// Child.jsx
+import { memo } from "react";
+function Child({ onClick }) {
+  console.log("child rerender");
+  return <button onClick={onClick}>child count</button>;
+}
+export default memo(Child);
+
+
 ```
 
 **Q8: What is Prop Drilling?**
@@ -163,7 +199,7 @@ Task   Task      Task
   \      |      /
    UI Update
 ```
-**Q14: Difference between keys in React list**
+**Q14: Difference between keys in React list? what is List virtualization**
  Unique key helps React identify elements and track updates efficiently.
  ```js
  const users = [
@@ -175,6 +211,7 @@ Task   Task      Task
   <li key={user.id}>{user.name}</li>
 ))}
 ```
+List virtualization is a smart technique used to optimize the rendering of large lists by only displaying the items that are currently visible on the screen. Instead of rendering all the items at once
 
 **Q15: Lifecycle methods in class component**
 Mounting → Component is created and added to the UI ,it runs once after initial render
@@ -197,6 +234,14 @@ useEffect() → Used in functional components; you can have multiple useEffect h
  A Higher-Order Component (HOC) is a function that takes a component as input and returns a new enhanced component with extra features (without modifying the original component).
  To reuse logic across multiple components (e.g., authentication check, logging, theme, APIs).
  HOC = Component → Enhanced Component
+
+ ```js
+ function MyComponent(Component){
+  return function(){
+    return <Component someAttribute="somevalue"/>
+  }
+}
+ ```
 
 
 **Q17: What is React Fragment?**
@@ -507,9 +552,30 @@ NEXT.JS THEORY NOTES
  Next js is a React framework for routing, server-side rendering(optimize rendering), static site generation, and optimized performance.
 
 **Q2: CSR vs SSR vs SSG**
-CSR - Rendered on client (useEffect),its render in browser for fast navigation
-SSR - Rendered on server per request (getServerSideProps),Render on server before sending HTML (better SEO)
-SSG - Pre-built HTML at build time (getStaticProps)
+
+### 1. Static Site Generation (SSG)
+
+* **Process:** The page is **pre-rendered at build time**.
+* **Analogy:** Like a restaurant chef preparing a few commonly ordered dishes ahead of time.
+* **Pros/Cons:** Offers **best performance** and speed, as content is immediately ready to serve. However, it is **not suitable for highly dynamic content**.
+
+### 2. Server-Side Rendering (SSR)
+
+* **Process:** The page is **rendered on the server** for every user request.
+* **Analogy:** The chef prepares a different meal **fresh, on the spot** for every customer who orders.
+* **Pros/Cons:** Ensures the user always receives the **most up-to-date content**, but this process can hurt performance and slow down load times.
+
+### 3. Incremental Static Regeneration (ISR)
+
+* **Process:** A hybrid approach (used by frameworks like Next.js) that **pre-builds the page (like SSG)** but then **re-generates it on the server after a set time interval** (e.g., every 60 seconds).
+* **Analogy:** The prepared dishes are **refreshed every *X* minutes**. Customers will be served the old version until the new, fresh version is ready.
+* **Goal:** To **balance the speed of SSG with the freshness of SSR**.
+
+### 4. Client-Side Rendering (CSR)
+
+* **Process:** The entire JavaScript bundle is **loaded in the browser**, and the page rendering happens directly on the user's machine.
+* **Analogy:** Instead of giving you a dish, the restaurant serves you **all the raw ingredients, and you have to cook it yourself** at the table.
+* **Pros/Cons:** The initial page load can be slower because the browser has to download, parse, and execute all the JavaScript before displaying content.
 
 **Q3: Explain getStaticProps**
 getStaticProps is used for Static Site Generation (SSG) in Next.js.
@@ -781,7 +847,7 @@ Yes getStaticProps pre-renders pages at build time for faster load.
 CSS Modules, Styled JSX, Tailwind CSS, Global CSS, Styled-components
 
 **Q25: Dynamic imports in Next.js**
-Using next/dynamic for lazy loading components
+Using next/dynamic for lazy loading components, it will not load on initial render, load when its need 
 const Component = dynamic(() => import('../Components'), { ssr: false });
 
 **Q26: Environment variables in Next.js**
@@ -1101,6 +1167,12 @@ Streaming sends HTML/data to the browser in chunks, not waiting for full respons
 
 **Q52:Edge Function in Next.js**
 Serverless functions deployed at edge locations (CDN edge). Run close to user → ultra-low latency for auth, redirects, caching.
+
+**Q53: What is Hydration Error in Next.js?**
+A Hydration Error (specifically in Next.js or React SSR frameworks) occurs when the React tree rendered on the server (the initial HTML) does not match the React tree rendered on the client.
+The most common cause is accessing browser-specific APIs (like window or localStorage)
+we can resolve by inside a useEffect hook or by checking typeof window !== 'undefined')
+
 
 
 
