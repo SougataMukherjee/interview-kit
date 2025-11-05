@@ -76,9 +76,9 @@ Changes via pure functions (reducers)
 
 **Q3.What are actions, reducers, and the store?**  
 
-Actions → Objects describing what happened
-Reducers → Pure functions that update state
-Store → Holds the global state tree
+- Actions → Objects describing what happened
+- Reducers → Pure functions that update state
+- Store → Holds the global state tree
 
 **Q4.How does the Redux data flow work?**  
 
@@ -90,7 +90,8 @@ State is never mutated directly; always return a new object using spread or immu
 
 **Q6.Difference between Redux and Context API.**  
 
-Redux → Centralized store, better for complex state logic
+Redux → Centralized store, better for complex state logic  
+
 Context API → Simpler, but causes more re-renders for large apps
 
 **Q7.What are middleware functions in Redux?**  
@@ -112,7 +113,8 @@ createAsyncThunk → Handles async logic (like fetching data) easily
 
 **Q11.What is the purpose of useSelector and useDispatch?**  
 
-useSelector → Access Redux state in components
+useSelector → Access Redux state in components  
+
 useDispatch → Send actions to the store
 
 **Q12.What is the difference between local and global state?**  
