@@ -130,19 +130,24 @@ Example:
 
 **Q15: What are data-* attributes?**
 Used to store custom data in HTML elements.Accessible via JavaScript using dataset.
-Example: <div data-user="sam" data-id="101">Hello</div>
+Example: 
+```js
+<div data-user="sam" data-id="101">Hello</div>
 const div = document.querySelector('div');
 console.log(div.dataset.user); // Output: "sam"
 console.log(div.dataset.id);   // Output: "101"
-
+```
 
 **Q16: What is the difference between <b> and <strong>, <i> and <em>?**
-- <b> and <strong>: b represent bold text(visual only) but strong is a semantic tag and bold by default and accessibility and seo friendly.
-- <i> and <em>: i represent italic text(visual only) but em is a semantic tag and italic by default and accessibility and seo friendly.
+- b and strong: b represent bold text(visual only) but strong is a semantic tag and bold by default and accessibility and seo friendly.
+- i and em: i represent italic text(visual only) but em is a semantic tag and italic by default and accessibility and seo friendly.
 
-**Q17: What is the purpose of <link> tag?**
+**Q17: What is the purpose of link tag?**
  Used to link external resources like CSS files or icons.
-Example: <link rel="stylesheet" href="style.css">
+Example:
+```js
+ <link rel="stylesheet" href="style.css">
+ ```
 
 **Q18: What is accessibility (a11y)?**
  Making web pages usable for all users including people with disabilities.
@@ -159,7 +164,10 @@ Example: &lt; for < , &gt; for > , &nbsp; for space.
 
 **Q21: What is lazy loading for images?**
 A: Defers image loading until it enters the viewport.
-Example: <img src="img.jpg" loading="lazy" />
+Example:
+```js
+ <img src="img.jpg" loading="lazy" />
+```
 
 **Q22: What are the new features in HTML5?**
 - New semantic elements (<header>, <footer>, <article>, <nav>)
@@ -174,52 +182,64 @@ Example: <img src="img.jpg" loading="lazy" />
 - sessionStorage: clears when tab closes
 - cookies: small data sent with every HTTP request (used for auth/tracking)
 
-**Q24: What are <canvas> and <svg>?**
-- <canvas>: used for drawing via JavaScript (pixel-based)
-- <svg>: scalable vector graphics (markup-based)
+**Q24: What are canvas and svg?**
+- canvas: used for drawing via JavaScript (pixel-based)
+- svg: scalable vector graphics (markup-based)
 
-**Q25: Explain <template> tag.**
+**Q25: Explain template tag.**
 A: Defines reusable HTML content not rendered until cloned by JS.
 Example:
+```js
 <template id="card">
   <div class="card">Sample Card</div>
 </template>
-
+```
 **Q26: What is the difference between HTMLCollection and NodeList?**
 - HTMLCollection: live, updates automatically.
 - NodeList: static, doesn’t auto-update.
 
 **Q27: What are ARIA roles?**
 ARIA (Accessible Rich Internet Applications) roles provide extra semantic meaning to HTML elements so that screen readers and assistive technologies can understand their purpose.
-Example: <div role="button" tabindex="0">Open Menu</div>
+Example:
+```js
+ <div role="button" tabindex="0">Open Menu</div>
 <button role="switch" aria-checked="false">
   Dark Mode
 </button>
+```
 
 **Q28: What is Shadow DOM?**
  A scoped subtree inside a web component that encapsulates styles and markup.
  Encapsulates HTML structure and CSS styles, preventing them from affecting the main DOM
+```txt
  Main DOM
  ├── <div id="host">
  │     └── Shadow DOM
  │          ├── <style>p { color: red; }</style>
  │          └── <p>Shadow DOM content</p>
  └── <p>Normal DOM content</p>
+```
 
 **Q29: Explain difference between relative and absolute paths in HTML.**
 - Relative: based on current file location (e.g., ./images/pic.jpg)
 - Absolute: full URL (e.g., https://site.com/images/pic.jpg)
 
-**Q30: What is the difference between <noscript> and <script>?**
-<noscript> displays fallback content when JS is disabled.
+**Q30: What is the difference between noscript and script?**
+noscript displays fallback content when JS is disabled.
 
 **Q31: Explain contenteditable attribute.**
 Makes an element editable directly in the browser.
-Example: <div contenteditable="true"></div>
+Example: 
+```js
+<div contenteditable="true"></div>
+```
 
 **Q32: What is the purpose of <iframe>?**
 Used to embed another HTML page inside current page.
-Example: <iframe src="https://example.com"></iframe>
+Example:
+```js
+ <iframe src="https://example.com"></iframe>
+```
 
 **Q33: What is cross-origin resource sharing (CORS)?**
 A security feature that restricts how resources can be fetched from another domain.
@@ -231,17 +251,21 @@ it improves Security and avoids browser blocking of cross-domain API requests
 - Alt attributes for images
 - Structured data
 
-**Q34: Difference between <article>, <section>, and <aside>**
-<article> → Represents independent, self-contained content (e.g., blog post, news item).
-<section> → Groups related content within a document (e.g., chapters, tabs).
-<aside> → Holds secondary content (e.g., sidebar, ads, related links).
+**Q34: Difference between article, section, and aside**
+article → Represents independent, self-contained content (e.g., blog post, news item).
+section → Groups related content within a document (e.g., chapters, tabs).
+aside → Holds secondary content (e.g., sidebar, ads, related links).
 
 **Q35: What are HTML5 APIs (like localStorage, canvas, geolocation)?**
 localStorage / sessionStorage: Store key-value data in browser.
+```js
 localStorage.setItem('name', 'Sam');
 console.log(localStorage.getItem('name'));
+```
 Canvas API: Draw 2D graphics dynamically using JS.
+```js
 <canvas id="myCanvas" width="100" height="50"></canvas>
+```
 Geolocation API: Access user’s location (with permission).
 Drag & Drop, Web Storage, Web Workers, Audio/Video are also HTML5 APIs
 
@@ -249,12 +273,13 @@ Drag & Drop, Web Storage, Web Workers, Audio/Video are also HTML5 APIs
 Entities are used to display reserved or special characters in HTML.
 Characters are the actual visual symbols, entities are encoded forms.
 Example: &lt; displays <, &nbsp; displays a non-breaking space.
+```js
 <p>Character: <</p>
 <p>Entity: &lt;</p>
-
+```
 **Q37:Difference between <strong> and <b> tags**
-<b> → purely visual (bold text).
-<strong> → semantic; conveys importance (screen readers emphasize it).
+b → purely visual (bold text).
+strong → semantic; conveys importance (screen readers emphasize it).
 
 **Q38: How to lazy load images in HTML?**
 Use loading="lazy" attribute:
@@ -271,23 +296,29 @@ Can be nested inside each other.
 **Q39:HTML Attributes**
 → Provide extra info to elements.
 → Written inside the opening tag.
-Example: <img src="img.png" alt="photo">
+Example:
+```js
+<img src="img.png" alt="photo">
+```
 → Common ones: id, class, href, src, title, style
 
 **Q40:Blockquote for Quotations**
 → Used for long quoted text.
+```js
 <blockquote cite="https://example.com">
   This text is quoted from another source.
 </blockquote>
+```
 
-**Q41: <img> vs <picture> Elements**
-→ <img> → single image file.
-→ <picture> → multiple image sources for responsive design.
-<picture>
-  <source srcset="large.jpg" media="(min-width:800px)">
-  <img src="small.jpg" alt="photo">
-</picture>
-
+**Q41: img vs picture Elements**
+→ img → single image file.
+→ picture → multiple image sources for responsive design.
+```js
+  <picture>
+    <source srcset="large.jpg" media="(min-width:800px)">
+    <img src="small.jpg" alt="photo">
+  </picture>
+```
 **Q42:HTML Tables**
 → Used to display data in rows and columns.
 Example:
