@@ -893,8 +893,10 @@ export default function GET() {
 
 **Q12: What is Middleware in Next.js?**  
 
-Middleware runs before a request is completed. It can check the request and decide to allow, block, redirect, or rewrite the user before reaching a page or API.
-why:
+Middleware runs before a request is completed. It can check the request and decide to allow, block, redirect, or rewrite the user before reaching a page or API.  
+
+why?  
+
 Authentication / Protect routes
 Redirect users based on role or login
 Request → Middleware → (Allow / Redirect / Rewrite / Block) → Page/API Route
@@ -973,8 +975,10 @@ export default function User() {
 ```
 **Q19: What are Layouts and Templates in Next.js 13?**  
 
-Layouts persist between routes; templates re-render on navigation.
-Layouts = Common UI (like Navbar/Footer).
+Layouts persist between routes; templates re-render on navigation.  
+
+Layouts = Common UI (like Navbar/Footer).  
+
 Templates = Predefined page structures reused across routes.
 ```js
 export default function HomeLayout({ children }) {
@@ -1020,8 +1024,10 @@ but in url it will detect
 ```
 underscore _folder / Private Folder → Conventionally means internal folder (ignored by Next).Any folder starting with _ won’t be treated as a route.
 To avoid accidental routing & keep clean structure we use.
+```js
 app/_components/Button.jsx   ✅ no route
 app/profile/page.jsx         ✅ route: /profile
+```
 
 **Q21: Styled JSX in Next.js**  
 
@@ -1054,8 +1060,9 @@ CSS Modules, Styled JSX, Tailwind CSS, Global CSS, Styled-components
 **Q25: Dynamic imports in Next.js**  
 
 Using next/dynamic for lazy loading components, it will not load on initial render, load when its need 
+```js
 const Component = dynamic(() => import('../Components'), { ssr: false });
-
+```
 **Q26: Environment variables in Next.js**  
 
 Use .env.local, access with process.env.NEXT_PUBLIC_... for client-side.
@@ -1165,11 +1172,11 @@ app/
 **Q30:All Route Handlers (Next.js App Router)**  
 
 Used inside app/api/route.js (or [route]/route.js)
-GET read and fetch data
-POST create data
-PUT  Update full data
-PATCH update partial data
-DELETE  remove data
+- GET read and fetch data
+- POST create data
+- PUT  Update full data
+- PATCH update partial data
+- DELETE  remove data
 
 **Q31: When to use no-store and when force-cache?**  
 
@@ -1186,8 +1193,8 @@ fetch('/api/products', { cache: 'force-cache' })
 
 **Q32: How to authenticated with clerk?**  
 
-Install Clerk → wrap app with <ClerkProvider>
-Use components like <SignIn />, <UserButton />
+Install Clerk → wrap app with ClerkProvider
+Use components like SignIn , UserButton
 Use auth() in server components or API to get logged-in user.
 ```js
 import { auth } from "@clerk/nextjs/server";
