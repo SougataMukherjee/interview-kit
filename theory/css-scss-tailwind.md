@@ -9,9 +9,9 @@ CSS, which stands for Cascading Style Sheets, is a style sheet language used in 
 No (selectors & properties are not), but values like class names in HTML are.  
 
 CSS3 Features & Advantages:
-Rounded corners (border-radius)
-Animations & transitions
-Media queries (responsive)
+- Rounded corners (border-radius)
+- Animations & transitions
+- Media queries (responsive)
 
 3 ways we can include css in webpage
 1. Inline CSS 
@@ -27,7 +27,8 @@ Media queries (responsive)
 <link rel="stylesheet" href="style.css">
 ```
 
-**Q2: Difference between inline, block, and inline-block?**
+**Q2: Difference between inline, block, and inline-block?**  
+
 - inline: width/height not applicable (span, a)
 - block: takes full width (div, p)
 - inline-block: behaves inline but allows width/height.
@@ -53,7 +54,8 @@ Example:
 +-----------------------+
 ```
 
-**Q4: Explain CSS Specificity Order.(Highest → Lowest)**
+**Q4: Explain CSS Specificity Order.(Highest → Lowest)**  
+
 Inline style > ID > Class > Element  
 Example:
 ```txt
@@ -62,13 +64,15 @@ Example:
 Duplicate ID Problem:
 IDs must be unique — use classes instead.
 
-**Q5:Favicon:**
+**Q5:Favicon:**  
+
 Small icon in browser tab.
 ```js
 <link rel="icon" href="favicon.ico">
 ```
 
-**Q6: Position properties?**
+**Q6: Position properties?**  
+
 - static (default)
 - relative (moves within itself) Moves relative to its normal position.
 - absolute (relative to nearest non-static) Positioned relative to the nearest positioned ancestor.
