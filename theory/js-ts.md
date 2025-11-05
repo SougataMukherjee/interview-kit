@@ -137,7 +137,8 @@ let f=function(args){}
 
 Shallow: Copies only the top-level values.
 If the object contains another object, only the reference is copied, not the actual nested data.
-So changing nested values affects both copies.
+So changing nested values affects both copies.  
+
 Deep: Creates a completely independent copy of all levels of the object.
 Changing nested values does not affect the original.
 Example:
@@ -185,7 +186,6 @@ Promise.all([P1, P2, P3])
    P3 ------------✅
 ```
 Result → after last one finishes
-```txt
 Promise.allSettled() → Runs multiple promises in parallel and waits until all are completed, whether they succeed or fail. It never stops on error; instead, it returns the status and value/reason of each promise.
 ```txt
 Promise.allSettled([P1, P2, P3])
@@ -261,14 +261,16 @@ retryFetch("https://dummyjson.com/posts/1", 3, 1000)
   .then(data => console.log(data))
   .catch(err => console.error(err));
 ```
-How to handle error in Promise
+- How to handle error in Promise?  
+
 Use .catch() or try...catch inside async/await.
 fetch(url).catch(err => console.error(err));
 
 
 **Q17. Async/Await**  
 
-Async/Await is a simplified way to work with Promises. It makes asynchronous code look and behave like synchronous code, which is easier to read and write.
+Async/Await is a simplified way to work with Promises. It makes asynchronous code look and behave like synchronous code, which is easier to read and write.  
+
 What problem it solves:
 Avoids callback hell and complex .then() chaining in Promises
 Makes async code more readable, cleaner, and easier to handle errors using try…catch
@@ -415,11 +417,15 @@ console.log(b);  // null
 
 **Q24: Event Delegation**  
 
-Event Delegation is used to handle events efficiently by adding a single event listener on a parent element instead of adding multiple listeners to each child element.
+Event Delegation is used to handle events efficiently by adding a single event listener on a parent element instead of adding multiple listeners to each child element.  
+
 Benefits:Improves performance (fewer listeners in DOM) and Improves performance (fewer listeners in DOM)
 Example:
 ```js
-ul.addEventListener('click',(e)=>{ if(e.target.tagName==='LI') console.log(e.target.textContent) })
+ul.addEventListener('click',(e)=>{ 
+  if(e.target.tagName==='LI') 
+      console.log(e.target.textContent)
+   })
 ```
 
 **Q25: LocalStorage vs SessionStorage with exp**  
@@ -453,8 +459,9 @@ const result = sum(4, 5, 6, 7); // [9, 10, 11, 12]
 
 
 **Q27: Deep Clone Object**  
-
-JSON.parse(JSON.stringify(obj));
+```js
+JSON.parse(JSON.stringify(obj)); 
+```
 NOTE:JSON.stringify() → Object → String
      JSON.parse() → String → Object
 
@@ -464,21 +471,25 @@ Access nested property safely: user?.address?.city
 
 **Q29: Difference Between == and ===**  
 
-== does type coercion
+== does type coercion  
+
 === checks type + value
 
 **Q30: Difference Between slice, splice, split**  
 
-slice -> The slice() method is used to copy a portion of an array and return a new array.doesn’t change original array.It accepts two optional arguments: the starting index and the ending index
+slice -> The slice() method is used to copy a portion of an array and return a new array.doesn’t change original array.It accepts two optional arguments:
+- the starting index 
+- the ending index
 ```js
 const fruits = ['apple', 'orange', 'lemon'];
 const newFruit = fruits.slice(0, 1);
 console.log(newFruit); // Output: ['apple']
 ```
 splice -> The splice() method is used to add, remove, or modify elements within an existing array. It modifies the original array.
-It typically takes three arguments,Starting Index: The index where changes should begin.
-Number of elements to delete: The count of elements to remove from the starting index.
-Elements to add/modify (optional): The new elements you want to insert or replace.
+It typically takes three arguments,  
+- Starting Index: The index where changes should begin.
+- Number of elements to delete: The count of elements to remove from the starting index.
+- Elements to add/modify (optional): The new elements you want to insert or replace.
 ```js
 const fruits = ['apple', 'orange', 'lemon'];
 fruits.splice(0, 1, 'banana'); 
@@ -610,11 +621,12 @@ import { x } from './file.js';
 
 **Q38:Use of Content-Type**  
 
-Tells the browser what type of data is being sent.
+Tells the browser what type of data is being sent.  
+
 Examples:
-application/json → JSON data
-text/html → HTML
-multipart/form-data → File uploads
+- application/json → JSON data
+- text/html → HTML
+- multipart/form-data → File uploads
 
 **Q39: What is destructuring?**  
 
@@ -690,26 +702,36 @@ x = 5;//error
 
 **Q47: types of operator**  
 
-Arithmetic:+,-,*,/,%,++,--
-Assignment: =,+=,-=,*=,/=
-Comparison:==,===,!=,!==,>,<,>=,<=
-Logical: &&,||,!
+Arithmetic:+,-,*,/,%,++,--  
+
+Assignment: =,+=,-=,*=,/=  
+
+Comparison:==,===,!=,!==,>,<,>=,<=  
+
+Logical: &&,||,!  
+
 Bitwise: 
 Ternary:variable=(condition)?value1:value2
 
 **Q48:Parameter vs Argument**  
 
-Parameter = variable in function definition.
-Argument = actual value passed.
-function add(a,b){ } add(2,3);
+Parameter = variable in function definition.  
 
+Argument = actual value passed.
+```js
+function add(a,b){
+
+ } 
+ add(2,3);
+```
 **Q49:Callback Function**  
 
 Function passed into another function to run after a task completes.
+```js
 setTimeout(()=>console.log("Arrow function"),1000);
 setTimeout(function() {console.log("Anonymous function");}, 1000);
 function greet() { console.log("Name function");} setTimeout(greet, 500);
-
+```
 
 **Q50:Pyramid of Doom (Callback Hell)**  
 
@@ -813,7 +835,9 @@ map returns new array; forEach just loops.
 **Q60: instanceof**  
 
 Checks if object created from class.
+```js
 obj instanceof MyClass;
+```
 
 **Q61: Tree Shaking**  
 
@@ -821,7 +845,8 @@ Removes unused JS code during bundling.
 
 **Q62: what is DOM and its advantage**  
 
-DOM: tree structure of HTML.
+DOM: tree structure of HTML.  
+
 Advantage: JS can dynamically change HTML/CSS
 
 **Q63:Useful DOM Properties**  
@@ -835,13 +860,13 @@ Advantage: JS can dynamically change HTML/CSS
 
 **Q65:Mouse Events**  
 
-click:Fired when the user presses and releases the mouse button on an element.
-dblclick:Fired when the user double-clicks an element.
-mousedown:Fired when the mouse button is pressed down on an element (before releasing).
-mouseup:Fired when the mouse button is released over an element.
-mousemove:Fired when the mouse pointer is moved over an element.
-mouseenter:Fired when the mouse pointer enters the boundary of an element.Unlike mouseover, it does not bubble.
-mouseleave:Fired when the mouse pointer leaves the boundary of an element.Unlike mouseout, it does not bubble.
+- click:Fired when the user presses and releases the mouse button on an element.
+- dblclick:Fired when the user double-clicks an element.
+- mousedown:Fired when the mouse button is pressed down on an element (before releasing).
+- mouseup:Fired when the mouse button is released over an element.
+- mousemove:Fired when the mouse pointer is moved over an element.
+- mouseenter:Fired when the mouse pointer enters the boundary of an element.Unlike mouseover, it does not bubble.
+- mouseleave:Fired when the mouse pointer leaves the boundary of an element.Unlike mouseout, it does not bubble.
 
 **Q66:DOMContentLoaded**  
 
@@ -953,12 +978,6 @@ from() → creates array from iterable.
       Array.from('abc') → ['a','b','c']
 
 ```
-
-Array CRUD
-let a=[1,2,3];
-a.push(4);  // add
-a.splice(1,1); // remove
-a[0]=9;     // update
 
 
 **Q70:String Methods**  
@@ -1083,12 +1102,15 @@ Pass by Value → Copy of value passed (primitive).when you do not want original
     console.log(a); // 10
 ```
 Pass by Reference → Reference (address) passed (object/array).when you want to modify the original object/array from a function.
-
+```js
 let obj = { name: "Sam" };
     function change(o) { o.name = "John"; }
     change(obj);
     console.log(obj.name); // John 
-**Q73: Pure Function → Same input → same output, no side effects.**  
+```
+**Q73: Pure Function and Impure function**  
+
+Pure function → Same input → same output, no side effects. 
 
 Impure Function → Depends on external/state change.
 
@@ -1112,7 +1134,8 @@ Person.prototype.greet = function() {
 const p = new Person("Sam");
 console.log(p.greet()); // Hi Sam
 ```
-**Q76:CORS** 
+**Q76:CORS**  
+
  Cross-Origin Resource Sharing – allows API access from different domains.
 
 **Q77:Access DOM (4 ways)**  
@@ -1261,8 +1284,12 @@ interface User {
 type Status = "loading" | "success" | "error";
 
 **Q6: Optional and Readonly Properties:**  
-
-interface User { name: string; age?: number; readonly id: number; }
+```js
+interface User { 
+  name: string;
+  age?: number;
+  readonly id: number; }
+```
 
 **Q7: Generics:**  
 
@@ -1371,13 +1398,15 @@ const user: Readonly<User> = {
 user.age = 31;//error
 ```
 **Q12: Type Assertion:**  
-
+```js
 let val: any = "hello";
 let len = (val as string).length;
+```
 
 **Q13: Difference between any and unknown and never**  
 
-any -> unsafe
+any -> unsafe  
+
 unknown -> needs type check before use
 
 **Q14: What are Decorators?**  
@@ -1391,8 +1420,10 @@ class User {}
 ```
 **Q15: Difference between TypeScript and JavaScript**  
 
-TS -> compiled language
-JS -> interpreted
+TS -> compiled language  
+
+JS -> interpreted  
+
 TS adds types; JS doesn’t.
 
 **Q16: What is type narrowing?**  
@@ -1400,7 +1431,9 @@ TS adds types; JS doesn’t.
 Process of refining a variable’s type based on conditions.
 Example:
 ```js
-if (typeof x === 'string') { x.toUpperCase(); }
+if (typeof x === 'string') {
+   x.toUpperCase();
+  }
 ```
 **Q17: What are type guards?**  
 
