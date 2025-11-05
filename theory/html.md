@@ -2,7 +2,8 @@
 HTML NOTES
 ====================
 
-**Q1: web browser and how it works?**
+**Q1: web browser and how it works?**  
+
 web browser is a s/w application for retrieving presenting info on www e.g google chrome
 When a browser loads a webpage, it first downloads the HTML file and starts parsing it to build the DOM tree.
 Then it fetches and parses CSS and combines both into a Render Tree.Finally, it executes JavaScript
@@ -37,24 +38,31 @@ Then it fetches and parses CSS and combines both into a Render Tree.Finally, it 
 
 ```
 
-**Q2: why br called empty element?**
+**Q2: why br called empty element?**  
+
 because it has no content
 
-**Q3: does hyperlink only apply to text?**
+**Q3: does hyperlink only apply to text?**  
+
 text and image both
 
-**Q4: What is HTML and why is it important?**
- HTML (HyperText Markup Language) structures web content. It defines the layout and semantic meaning of elements (headings, paragraphs, links, forms, etc.).
-version of html are
+**Q4: What is HTML and why is it important?**  
+
+ HTML (HyperText Markup Language) structures web content. It defines the layout and semantic meaning of elements (headings, paragraphs, links, forms, etc.).  
+
+- version of html are  
+
 html 1.0 html2.0 html 3 html 4 html 5
-HTML5 features
+- HTML5 features  
+
 new element new attribute multimedia 2d 3d drawing support
 
-**Q5: What are semantic tags? Give examples and benefits**
+**Q5: What are semantic tags? Give examples and benefits**  
+
  A semantic element clearly describes its meaning to both the browser and the developer.
-Examples of non-semantic elements: <div> and <span> - Tells nothing about its content.
-Examples of semantic elements: <img>, <table>, <header>,<nav>,<footer>, <article> - Clearly defines its content.
-benefits:Improves readability & code clarity for developers, improve SEO and Accessibility friendly – screen readers understand sections easily.
+- Examples of non-semantic elements: div and span - Tells nothing about its content.
+- Examples of semantic elements: img, table, header,nav,footer, article - Clearly defines its content.
+- benefits:Improves readability & code clarity for developers, improve SEO and Accessibility friendly – screen readers understand sections easily.
 ```txt
 +-------------------------------+
 |            <header>           |
@@ -68,11 +76,13 @@ benefits:Improves readability & code clarity for developers, improve SEO and Acc
 +-------------------------------+
 ```
 
-**Q6: What is the difference between div and section?**
+**Q6: What is the difference between div and section?**  
+
  div is a generic container, no semantic meaning.
 section groups related content with semantic meaning.
 
-**Q7: Field set**
+**Q7: Field set**  
+
 fieldset element is used to group  related control in a single box
 ```js
 <fieldset>
@@ -84,22 +94,25 @@ fieldset element is used to group  related control in a single box
 - Block: starts on new line, takes full width (e.g., div, p)
 - Inline-block: stays inline but allows setting width/height.(e.g., make 3 div inline using inline-block)
 
-**Q9: What is DOCTYPE and why is it used?**
+**Q9: What is DOCTYPE and why is it used?**  
+
  <!DOCTYPE html> tells the browser to render the page in standards mode using HTML5 syntax.
 
-**Q10: What are HTML meta tags?**
+**Q10: What are HTML meta tags?**  
+
  meta provides metadata about a web page.
 Examples:
 ```js
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 ```
-UTF-8 is the most common encoding and supports almost all characters in all languages.
-viewport → Controls layout on mobile devices.
-width=device-width → Sets the viewport width equal to the device width.
+- UTF-8 is the most common encoding and supports almost all characters in all languages.
+- viewport → Controls layout on mobile devices.
+- width=device-width → Sets the viewport width equal to the device width.
 initial-scale=1.0 → Sets the initial zoom level when the page loads.
 
-**Q11: What are global attributes in HTML?**
+**Q11: What are global attributes in HTML?**  
+
  Attributes applicable to any element.
 Examples: id, class, style, title, data-*.
 
@@ -116,7 +129,8 @@ Examples: id, class, style, title, data-*.
   <script async> |---parsing---LOAD---EXECUTE---|
   <script defer> |---parsing---LOAD---|EXECUTE|`
 ```
-**Q13: What are forms in HTML?**
+**Q13: What are forms in HTML?**  
+
 Forms collect user input using form, input, textarea, select, button.
 Example:
 
@@ -131,7 +145,8 @@ Example:
 - GET: sends data in URL, used for data retrieval.
 - POST: sends data in body, used for data creation or sensitive info.
 
-**Q15: What are data-* attributes?**
+**Q15: What are data-* attributes?**  
+
 Used to store custom data in HTML elements.Accessible via JavaScript using dataset.
 Example: 
 ```js
@@ -145,34 +160,40 @@ console.log(div.dataset.id);   // Output: "101"
 - b and strong: b represent bold text(visual only) but strong is a semantic tag and bold by default and accessibility and seo friendly.
 - i and em: i represent italic text(visual only) but em is a semantic tag and italic by default and accessibility and seo friendly.
 
-**Q17: What is the purpose of link tag?**
+**Q17: What is the purpose of link tag?**  
+
  Used to link external resources like CSS files or icons.
 Example:
 ```js
  <link rel="stylesheet" href="style.css">
  ```
 
-**Q18: What is accessibility (a11y)?**
+**Q18: What is accessibility (a11y)?**  
+
  Making web pages usable for all users including people with disabilities.
 Use semantic HTML, ARIA roles, alt attributes, keyboard navigation.
 Use semantic HTML, ARIA roles, alt text, keyboard navigation, and proper color contrast
 
-**Q19: What is the difference between <img> alt and title attributes?**
+**Q19: What is the difference between <img> alt and title attributes?**  
+
 - alt: alternative text shown if image fails to load (important for accessibility)
 - title: tooltip text shown on hover.
 
-**Q20: What are HTML entities?**
+**Q20: What are HTML entities?**  
+
  Used to display reserved characters.
 Example: &lt; for < , &gt; for > , &nbsp; for space.
 
-**Q21: What is lazy loading for images?**
-A: Defers image loading until it enters the viewport.
+**Q21: What is lazy loading for images?**  
+
+ Defers image loading until it enters the viewport.
 Example:
 ```js
  <img src="img.jpg" loading="lazy" />
 ```
 
-**Q22: What are the new features in HTML5?**
+**Q22: What are the new features in HTML5?**  
+
 - New semantic elements (<header>, <footer>, <article>, <nav>)
 - Audio and video tags
 - Canvas and SVG
@@ -180,7 +201,8 @@ Example:
 - Geolocation API
 - Form enhancements (email, date, number)
 
-**Q23: What is the difference between localStorage, sessionStorage, and cookies?**
+**Q23: What is the difference between localStorage, sessionStorage, and cookies?**  
+
 - localStorage: persistent key-value storage
 - sessionStorage: clears when tab closes
 - cookies: small data sent with every HTTP request (used for auth/tracking)
@@ -189,19 +211,22 @@ Example:
 - canvas: used for drawing via JavaScript (pixel-based)
 - svg: scalable vector graphics (markup-based)
 
-**Q25: Explain template tag.**
-A: Defines reusable HTML content not rendered until cloned by JS.
+**Q25: Explain template tag.**  
+
+ Defines reusable HTML content not rendered until cloned by JS.
 Example:
 ```js
 <template id="card">
   <div class="card">Sample Card</div>
 </template>
 ```
-**Q26: What is the difference between HTMLCollection and NodeList?**
+**Q26: What is the difference between HTMLCollection and NodeList?**  
+
 - HTMLCollection: live, updates automatically.
 - NodeList: static, doesn’t auto-update.
 
-**Q27: What are ARIA roles?**
+**Q27: What are ARIA roles?**  
+
 ARIA (Accessible Rich Internet Applications) roles provide extra semantic meaning to HTML elements so that screen readers and assistive technologies can understand their purpose.
 Example:
 ```js
@@ -211,7 +236,8 @@ Example:
 </button>
 ```
 
-**Q28: What is Shadow DOM?**
+**Q28: What is Shadow DOM?**  
+
  A scoped subtree inside a web component that encapsulates styles and markup.
  Encapsulates HTML structure and CSS styles, preventing them from affecting the main DOM
 ```txt
@@ -227,39 +253,46 @@ Example:
 - Relative: based on current file location (e.g., ./images/pic.jpg)
 - Absolute: full URL (e.g., https://site.com/images/pic.jpg)
 
-**Q30: What is the difference between noscript and script?**
+**Q30: What is the difference between noscript and script?**  
+
 noscript displays fallback content when JS is disabled.
 
-**Q31: Explain contenteditable attribute.**
+**Q31: Explain contenteditable attribute.**  
+
 Makes an element editable directly in the browser.
 Example: 
 ```js
 <div contenteditable="true"></div>
 ```
 
-**Q32: What is the purpose of <iframe>?**
+**Q32: What is the purpose of <iframe>?**  
+
 Used to embed another HTML page inside current page.
 Example:
 ```js
  <iframe src="https://example.com"></iframe>
 ```
 
-**Q33: What is cross-origin resource sharing (CORS)?**
+**Q33: What is cross-origin resource sharing (CORS)?**  
+
 A security feature that restricts how resources can be fetched from another domain.
 it improves Security and avoids browser blocking of cross-domain API requests
-**Q33: How do you optimize HTML for SEO?**
+**Q33: How do you optimize HTML for SEO?**  
+
 - Use semantic tags ( header, main, article, nav )
 - Proper headings ( H3–H6 )
 - Meta tag - title, description, viewport
 - Alt attributes for images
 - Structured data
 
-**Q34: Difference between article, section, and aside**
+**Q34: Difference between article, section, and aside**  
+
 article → Represents independent, self-contained content (e.g., blog post, news item).
 section → Groups related content within a document (e.g., chapters, tabs).
 aside → Holds secondary content (e.g., sidebar, ads, related links).
 
-**Q35: What are HTML5 APIs (like localStorage, canvas, geolocation)?**
+**Q35: What are HTML5 APIs (like localStorage, canvas, geolocation)?**  
+
 localStorage / sessionStorage: Store key-value data in browser.
 ```js
 localStorage.setItem('name', 'Sam');
@@ -272,7 +305,8 @@ Canvas API: Draw 2D graphics dynamically using JS.
 Geolocation API: Access user’s location (with permission).
 Drag & Drop, Web Storage, Web Workers, Audio/Video are also HTML5 APIs
 
-**Q36: Difference between HTML entities and characters?**
+**Q36: Difference between HTML entities and characters?**  
+
 Entities are used to display reserved or special characters in HTML.
 Characters are the actual visual symbols, entities are encoded forms.
 Example: &lt; displays <, &nbsp; displays a non-breaking space.
@@ -280,11 +314,13 @@ Example: &lt; displays <, &nbsp; displays a non-breaking space.
 <p>Character: <</p>
 <p>Entity: &lt;</p>
 ```
-**Q37:Difference between strong and b tags**
+**Q37:Difference between strong and b tags**  
+
 b → purely visual (bold text).
 strong → semantic; conveys importance (screen readers emphasize it).
 
-**Q38: How to lazy load images in HTML?**
+**Q38: How to lazy load images in HTML?**  
+
 Use loading="lazy" attribute:
 ```js
 <img src="image.jpg" loading="lazy" alt="example">
@@ -292,12 +328,14 @@ Use loading="lazy" attribute:
 transition:
 css transition  allow you to change property value smoothly over a given duration 
 
-**Q38:HTML Elements**
+**Q38:HTML Elements**  
+
 Building blocks of a webpage (e.g., div, p, a).
  Each element has opening tag and closing tag.
 Can be nested inside each other.
 
-**Q39:HTML Attributes**
+**Q39:HTML Attributes**  
+
 → Provide extra info to elements.
 → Written inside the opening tag.
 Example:
@@ -306,7 +344,8 @@ Example:
 ```
 → Common ones: id, class, href, src, title, style
 
-**Q40:Blockquote for Quotations**
+**Q40:Blockquote for Quotations**  
+
 → Used for long quoted text.
 ```js
 <blockquote cite="https://example.com">
@@ -314,7 +353,8 @@ Example:
 </blockquote>
 ```
 
-**Q41: img vs picture Elements**
+**Q41: img vs picture Elements**  
+
 → img → single image file.
 → picture → multiple image sources for responsive design.
 ```js
@@ -323,7 +363,8 @@ Example:
     <img src="small.jpg" alt="photo">
   </picture>
 ```
-**Q42:HTML Tables**
+**Q42:HTML Tables**  
+
 → Used to display data in rows and columns.
 Example:
 ```js
@@ -332,7 +373,8 @@ Example:
   <tr><td>Sam</td><td>25</td></tr>
 </table>
 ```
-**Q43: HTML Forms handle form state and validation**
+**Q43: HTML Forms handle form state and validation**  
+
 → action defines where data goes.
 → <input> collects info, <submit> sends it.
 Form States:
@@ -356,7 +398,8 @@ Validation:
 
 ```
 
-**Q44:HTML Video and Controls**
+**Q44:HTML Video and Controls**  
+
 → Used to embed videos with play/pause buttons.
 ```js
 <video width="300" controls>

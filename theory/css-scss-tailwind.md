@@ -515,7 +515,8 @@ Add `dark:` variant.
 
 **Q10: Difference between @apply and utility classes**  
 
-@apply: Used in CSS files to compose utilities into one class.
+@apply: Used in CSS files to compose utilities into one class.  
+
 Utility classes: Used directly in HTML.
 
 **Q11: How to optimize Tailwind build size?**  
