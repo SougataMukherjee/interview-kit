@@ -3,19 +3,69 @@ REDUX THEORY NOTES
 ==============================
 
 **Q1.What is Redux and why is it used?**
-Redux is a state management JS library for React that stores the app’s to making data flow global 
-```txt
-[UI Component] 
-     ↓ dispatch action
-[Action] ---------------------> [Reducer] 
-                                   ↓
-                              [New State]
-                                   ↓
-                              [Store Updated]
-                                   ↓
-                             [UI Re-rendered]
-```
+Redux is a state management library that stores application data in one central store, making state predictable, shared, and easier to manage across components
+when use:
+- Large and complex state shared across many components(E commerce,dashboard,chat app,admin panel)
+- Frequent state updates (user actions, forms, filters, carts)
+- Multiple data sources (API calls, caching, async logic)
+- Scalable architecture (actions, reducer, store)
 
+```txt
+         (User Interaction)
+             UI Component
+                  │
+                  │ dispatch(action)
+                  ▼
+              ┌─────────┐
+              │ Action   │  (What happened?)
+              └─────────┘
+                  │
+                  ▼
+              ┌─────────┐
+              │ Reducer  │  (Update state based on action)
+              └─────────┘
+                  │
+                  ▼
+              ┌─────────┐
+              │  Store   │  (Holds updated global state)
+              └─────────┘
+                  │
+                  ▼
+           UI Re-Rendered with New State
+
+```
+```js
+// reducer.js
+const initialState = { count: 0 };
+
+export default function counterReducer(state = initialState, action) {
+  switch (action.type) {
+    case "INCREMENT":
+      return { ...state, count: state.count + 1 };
+    case "DECREMENT":
+      return { ...state, count: state.count - 1 };
+    default:
+      return state;
+  }
+}
+
+// component.jsx
+import { useSelector, useDispatch } from "react-redux";
+
+export default function Counter() {
+  const count = useSelector((state) => state.count);
+  const dispatch = useDispatch();
+
+  return (
+    <>
+      <h2>Count: {count}</h2>
+      <button onClick={() => dispatch({ type: "INCREMENT" })}>+</button>
+      <button onClick={() => dispatch({ type: "DECREMENT" })}>-</button>
+    </>
+  );
+}
+
+```
 
 **Q2.What are the core principles of Redux?**
 Single source of truth (one store)

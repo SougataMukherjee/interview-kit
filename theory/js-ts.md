@@ -180,11 +180,12 @@ Promise.allSettled([P1, P2, P3])
 
 ```
 Promise.race() → Runs multiple promises in parallel and returns the result of the first one that finishes (success or fail)
+```txt
 Promise.race([P1, P2, P3])
    P1 ----✅  ← finishes first → return this one
    P2 --------✅
    P3 ------------✅
-  ```
+```
 
 **Q14. How to fetch API using Promise?**
 ```js

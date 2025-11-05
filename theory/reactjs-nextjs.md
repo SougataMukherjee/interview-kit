@@ -1347,7 +1347,10 @@ export async function GET() {
 **Q53: What is Hydration Error in Next.js?**
 A Hydration Error (specifically in Next.js or React SSR frameworks) occurs when the React tree rendered on the server (the initial HTML) does not match the React tree rendered on the client.
 The most common cause is accessing browser-specific APIs (like window or localStorage)
-we can resolve by inside a useEffect hook or by checking typeof window !== 'undefined')
+we can resolve by inside a useEffect hook or by checking 
+```js
+typeof window !== 'undefined'
+```
 
 
 
