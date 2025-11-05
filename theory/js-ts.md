@@ -1247,8 +1247,8 @@ for (let i = 0; i < arr.length; i++) {
 ```
 
 
-TYPESCRIPT THEORY NOTES
-========================
+TYPESCRIPT NOTES
+================
 
 **Q1: What is TypeScript?**  
 
