@@ -287,9 +287,9 @@ it improves Security and avoids browser blocking of cross-domain API requests
 
 **Q35: Difference between article, section, and aside**  
 
-article → Represents independent, self-contained content (e.g., blog post, news item).
-section → Groups related content within a document (e.g., chapters, tabs).
-aside → Holds secondary content (e.g., sidebar, ads, related links).
+- article → Represents independent, self-contained content (e.g., blog post, news item).
+- section → Groups related content within a document (e.g., chapters, tabs).
+- aside → Holds secondary content (e.g., sidebar, ads, related links).
 
 **Q36: What are HTML5 APIs (like localStorage, canvas, geolocation)?**  
 
