@@ -14,15 +14,15 @@ Animations & transitions
 Media queries (responsive)
 
 3 ways we can include css in webpage
-1.Inline CSS 
+1. Inline CSS 
 ```js
 <p style="color:red;">Hello</p>
 ```
-2.Internal CSS 
+2. Internal CSS 
 ```js
 <style> p{color:red;} </style>
 ```
-3.External CSS 
+3. External CSS 
 ```js
 <link rel="stylesheet" href="style.css">
 ```
@@ -32,8 +32,10 @@ Media queries (responsive)
 - block: takes full width (div, p)
 - inline-block: behaves inline but allows width/height.
 
-**Q3: What is the Box Model?**
-Width = content + padding + border (margin lies outside).
+**Q3: What is the Box Model?**  
+
+Width = content + padding + border (margin lies outside).  
+
 Total Width = margin + border + padding + content 
 Example:
 ```txt
@@ -54,7 +56,9 @@ Example:
 **Q4: Explain CSS Specificity Order.(Highest → Lowest)**
 Inline style > ID > Class > Element  
 Example:
-#id > .class > div
+```txt
+#id > .class > div  
+```
 Duplicate ID Problem:
 IDs must be unique — use classes instead.
 
@@ -71,8 +75,10 @@ Small icon in browser tab.
 - fixed (relative to viewport) Stays fixed relative to viewport (even when scrolling).
 - sticky (hybrid) Acts relative until scroll crosses threshold, then sticks
 
-**Q7: Flexbox Basics. Float property advantage over Flex**
-flexbox useful for 1D layout (row or column).
+**Q7: Flexbox Basics. Float property advantage over Flex**  
+
+flexbox useful for 1D layout (row or column).  
+
 Float was used to wrap text around images (flex cannot do this)
 ```js
 <img src="pic.jpg" style="float:left; width:100px;"> Text wraps around image.
@@ -85,7 +91,8 @@ Float was used to wrap text around images (flex cannot do this)
 }
 ```
 
-**Q8: Grid Basics.**
+**Q8: Grid Basics.**  
+
 Grid useful for 2D layout (rows and columns)
 ```js
 .container {
@@ -94,10 +101,12 @@ Grid useful for 2D layout (rows and columns)
   gap: 10px;
 }
 ```
-**Q9: z-index and stacking context?**
+**Q9: z-index and stacking context?**  
+
 z-index works only for positioned elements (relative, absolute, fixed).
 
-**Q10: Responsive Design.**
+**Q10: Responsive Design.**  
+
 Use media queries:
 ```js
 @media (max-width: 768px) {
@@ -105,7 +114,8 @@ Use media queries:
 }
 ```
 
-**Q11: Difference between transition and animation?**
+**Q11: Difference between transition and animation?**  
+
 Transition: smooth change between two states.Needs trigger (hover, active).
 ```js
 div { transition: all 0.3s; }
@@ -120,11 +130,13 @@ div { animation: move 2s infinite; }
 Pseudo-class: Targets state (e.g., :hover, :focus,:nth-child(2)).
 Pseudo-element: Targets part of element (e.g., ::before, ::after)
 
-**Q13: Difference between margin and padding**
+**Q13: Difference between margin and padding**  
+
 Margin: Space outside the element’s border.
 Padding: Space inside the element’s border, around content.
 
-**Q14: What are CSS combinators?**
+**Q14: What are CSS combinators?**  
+
 Define relationships between selectors:
 Descendant (space), Child (>), Adjacent sibling (+), General sibling (~).
 ```js
@@ -140,7 +152,8 @@ Descendant (space), Child (>), Adjacent sibling (+), General sibling (~).
 p + span { color: red; }        /* Adjacent sibling: span immediately after <p> */
 p ~ span { background: yellow; } /* General sibling: all spans after <p> */
 ```
-**Q15: How do you handle browser compatibility in CSS?**
+**Q15: How do you handle browser compatibility in CSS?**  
+
 Vendor Prefixes: Add browser-specific prefixes to CSS properties.
 display: -webkit-box;   /* Safari/Chrome older */
 display: -moz-box;      /* Firefox older */
