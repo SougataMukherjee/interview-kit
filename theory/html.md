@@ -68,16 +68,17 @@ benefits:Improves readability & code clarity for developers, improve SEO and Acc
 +-------------------------------+
 ```
 
-**Q6: What is the difference between <div> and <section>?**
- <div> is a generic container, no semantic meaning.
-<section> groups related content with semantic meaning.
+**Q6: What is the difference between div and section?**
+ div is a generic container, no semantic meaning.
+section groups related content with semantic meaning.
 
 **Q7: Field set**
 fieldset element is used to group  related control in a single box
+```js
 <fieldset>
 	<lagend>contact</lagent>
 </fieldset>
-
+```
 **Q8: What is the difference between inline, block, and inline-block elements?**
 - Inline: does not start on new line (e.g., <span>, <a>)
 - Block: starts on new line, takes full width (e.g., <div>, <p>)
@@ -87,10 +88,12 @@ fieldset element is used to group  related control in a single box
  <!DOCTYPE html> tells the browser to render the page in standards mode using HTML5 syntax.
 
 **Q10: What are HTML meta tags?**
- <meta> provides metadata about a web page.
+ meta provides metadata about a web page.
 Examples:
+```js
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+```
 UTF-8 is the most common encoding and supports almost all characters in all languages.
 viewport → Controls layout on mobile devices.
 width=device-width → Sets the viewport width equal to the device width.
@@ -138,7 +141,7 @@ console.log(div.dataset.user); // Output: "sam"
 console.log(div.dataset.id);   // Output: "101"
 ```
 
-**Q16: What is the difference between <b> and <strong>, <i> and <em>?**
+**Q16: What is the difference between b and strong, i and em?**
 - b and strong: b represent bold text(visual only) but strong is a semantic tag and bold by default and accessibility and seo friendly.
 - i and em: i represent italic text(visual only) but em is a semantic tag and italic by default and accessibility and seo friendly.
 
