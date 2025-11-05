@@ -307,8 +307,10 @@ Drag & Drop, Web Storage, Web Workers, Audio/Video are also HTML5 APIs
 
 **Q37: Difference between HTML entities and characters?**  
 
-Entities are used to display reserved or special characters in HTML.
-Characters are the actual visual symbols, entities are encoded forms.
+Entities are used to display reserved or special characters in HTML.  
+
+Characters are the actual visual symbols, entities are encoded forms.  
+
 Example: &lt; displays <, &nbsp; displays a non-breaking space.
 ```js
 <p>Character: <</p>
@@ -316,7 +318,8 @@ Example: &lt; displays <, &nbsp; displays a non-breaking space.
 ```
 **Q38:Difference between strong and b tags**  
 
-b → purely visual (bold text).
+b → purely visual (bold text).  
+
 strong → semantic; conveys importance (screen readers emphasize it).
 
 **Q39: How to lazy load images in HTML?**  
@@ -336,7 +339,8 @@ Can be nested inside each other.
 
 **Q41:HTML Attributes**  
 
-→ Provide extra info to elements.
+→ Provide extra info to elements.  
+
 → Written inside the opening tag.
 Example:
 ```js
@@ -355,7 +359,8 @@ Example:
 
 **Q43: img vs picture Elements**  
 
-→ img → single image file.
+→ img → single image file.  
+
 → picture → multiple image sources for responsive design.
 ```js
   <picture>
@@ -375,8 +380,10 @@ Example:
 ```
 **Q45: HTML Forms handle form state and validation**  
 
-→ action defines where data goes.
-→ <input> collects info, <submit> sends it.
+→ action defines where data goes.  
+
+→ input collects info, submit sends it.  
+
 Form States:
 - Empty: Form fields are untouched or no value entered.
 - Valid: Input matches required rules (e.g., correct email or pattern).
