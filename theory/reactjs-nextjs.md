@@ -191,7 +191,9 @@ export default memo(Child);
 
 Provides global state without prop drilling and solution for props drilling.
 Example:
+```js
 const UserContext = createContext();
+```
 
 **Q10: What is React.memo?**  
 
@@ -308,9 +310,11 @@ export default function VirtualizedList() {
 **Q15: Lifecycle methods in class component**  
 
 Mounting → Component is created and added to the UI ,it runs once after initial render
-          best for api calls,setting timers
+          best for api calls,setting timers  
+
 Updating → Component re-renders when state/props change, it runs after every update
-          Used to react to state/prop changes (e.g., data refresh)
+          Used to react to state/prop changes (e.g., data refresh)  
+
 Unmounting → Component is removed from the UI,Runs before component is destroyed its use for cleanup(clear timers, remove event listeners)
 ```txt
              Mounting     →     Updating     →     Unmounting
@@ -327,7 +331,9 @@ useEffect() → Used in functional components; you can have multiple useEffect h
 
  A Higher-Order Component (HOC) is a function that takes a component as input and returns a new enhanced component with extra features (without modifying the original component).
  To reuse logic across multiple components (e.g., authentication check, logging, theme, APIs).
+ ```txt
  HOC = Component → Enhanced Component
+ ```
 
  ```js
  function MyComponent(Component){
@@ -379,10 +385,10 @@ Parent Component (holds props/state)
 **Q20: How does React handle events?**  
 
 Through synthetic events, which wrap native events for cross-browser compatibility.
-Virtual DOM → In-memory copy of real DOM for faster UI diff & updates.
-SPA (Single Page App) → One HTML loaded once; updates view via JS routing.
-Babel → JS compiler that converts modern JS/JSX → browser-compatible code.
-HOC (Higher-Order Component) → Function that takes a component and returns a new one with extra features.
+- Virtual DOM → In-memory copy of real DOM for faster UI diff & updates.
+- SPA (Single Page App) → One HTML loaded once; updates view via JS routing.
+- Babel → JS compiler that converts modern JS/JSX → browser-compatible code.
+- HOC (Higher-Order Component) → Function that takes a component and returns a new one with extra features.
 
 Code-split / Lazy-load → Load parts of app only when needed for better performance
 ```js
@@ -409,7 +415,8 @@ User → Clicks /dashboard
 
 **Q22. Render Props**  
 
-Share logic by passing a function as a prop that returns JSX.
+Share logic by passing a function as a prop that returns JSX.  
+
 Why use: To share logic between components without repeating code.
 ```js
 function Data({ render }) {
@@ -619,7 +626,9 @@ export default function Parent() {
 **Q41. How to prevent component from rendering?**  
 
 Return null inside render.
+```js
 if(!isVisible) return null;
+```
 
 **Q42. What are portals in React?**  
 
@@ -664,7 +673,8 @@ No. Only needed when using this.state or binding methods.
  ```
 **Q46. Profiling & React Fiber**  
 
-React Fiber: Internal architecture that breaks UI work into small units so rendering can be paused, resumed, or aborted.
+React Fiber: Internal architecture that breaks UI work into small units so rendering can be paused, resumed, or aborted.  
+
 Profiling: Measure which components re-render, how long rendering took, and optimize.
 
 **Q47.Render Phase vs Commit Phase in React**  
@@ -736,15 +746,18 @@ export default function Users({ users }) {
   );
 }
 ```
-📌 Note:
-❌ getStaticProps are NOT used in the Next.js App Router (/app),These methods belong only to the old Pages Router (/pages)
+📌 Note:  
+
+❌ getStaticProps are NOT used in the Next.js App Router (/app),These methods belong only to the old Pages Router (/pages)  
+
 ✅ In the App Router, we use: fetch(..., { cache: 'force-cache' })
 
 **Q4: Explain getServerSideProps**  
 
 getServerSideProps runs on the server for every request, fetches data, and sends it to the page before rendering.
 When to use:
-Data must be fresh on each page load (e.g., dashboard, user profile, stock price, weather, admin pages).
+Data must be fresh on each page load (e.g., dashboard, user profile, stock price, weather, admin pages).  
+
 benefit:
 No client-side fetch needed
 Runs on every request (not cached)
@@ -762,14 +775,17 @@ export default function Page({ data }) {
 }
 
 ```
-📌 Note:
-❌ getServerSideProps are NOT used in the Next.js App Router (/app),These methods belong only to the old Pages Router (/pages)
+📌 Note:  
+
+❌ getServerSideProps are NOT used in the Next.js App Router (/app),These methods belong only to the old Pages Router (/pages)  
+
 ✅ In the App Router, we use: fetch(..., { cache: 'no-store' })
 
 **Q5: Explain getStaticPaths**  
 
 getStaticPaths is used in Next.js with dynamic routes to tell Next.js which dynamic pages to pre-build at build time.
-Used together with getStaticProps for Static Site Generation (SSG).
+Used together with getStaticProps for Static Site Generation (SSG).  
+
 why:
 When a page has a dynamic route like /posts/[id]
 We want only some specific pages to generate at build time
@@ -797,8 +813,10 @@ export default function Post({ id }) {
   return <h2>Post Number: {id}</h2>;
 }
 ```
-📌 Note:
-❌ getStaticPaths are NOT used in the Next.js App Router (/app),These methods belong only to the old Pages Router (/pages)
+📌 Note:  
+
+❌ getStaticPaths are NOT used in the Next.js App Router (/app),These methods belong only to the old Pages Router (/pages)  
+
 ✅ In the App Router, we use: generateStaticParams
 
 **Q6: Difference between pages and app router? Why App Router is preferred over Pages Router?**  
@@ -809,10 +827,11 @@ export default function Post({ id }) {
 App router is preferred because App router provides better flexibility with nested layouts, server components, and improved routing.
 and Encourages modular architecture and reusability of UI components using layout and template
 
-routing rules:
-all route must live inside the app folder
-route file must be name either page.js or page.tsx
-each folder represent a segment of the url path
+***routing rules:***  
+
+- all route must live inside the app folder
+- route file must be name either page.js or page.tsx
+- each folder represent a segment of the url path
 
 **Q7: What are Server Components?**  
 
