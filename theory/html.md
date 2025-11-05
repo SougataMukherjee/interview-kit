@@ -7,24 +7,34 @@ web browser is a s/w application for retrieving presenting info on www e.g googl
 When a browser loads a webpage, it first downloads the HTML file and starts parsing it to build the DOM tree.
 Then it fetches and parses CSS and combines both into a Render Tree.Finally, it executes JavaScript
 ```txt
-User enters URL
-      ↓
-Browser sends request
-      ↓
-DNS finds server IP
-      ↓
-Server sends HTML, CSS, JS
-      ↓
-Browser:
- HTML → DOM
- CSS → CSSOM
- DOM + CSSOM → Render Tree
-      ↓
-Layout & Paint
-      ↓
-JavaScript runs
-      ↓
-Web Page displayed
+1️⃣ User Enters URL (e.g., https://google.com)
+          ↓
+2️⃣ Browser Checks Cache 
+   - If found → loads faster without server
+          ↓
+3️⃣ DNS Lookup → Finds Server IP
+   - Converts domain → IP address (e.g., 142.250.182.78)
+          ↓
+4️⃣ Browser Sends HTTP/HTTPS Request to Server
+   - Includes: headers, cookies, auth, data
+          ↓
+5️⃣ Server Processes Request & Sends Response
+   - HTML (structure), CSS (styles), JS (logic), Images, Fonts
+          ↓
+6️⃣ Browser Rendering Engine Starts Processing
+     HTML → DOM (Document Object Model)
+     CSS → CSSOM (CSS Object Model)
+     DOM + CSSOM → Render Tree (visible nodes)
+          ↓
+7️⃣ Layout (Reflow) & Paint
+   - Layout: position & size of elements
+   - Paint: colors, text, borders, images
+          ↓
+8️⃣ JavaScript Execution
+   - JS downloads → parsed → executed by JS Engine (V8)
+          ↓
+9️⃣ Web Page Displayed on Screen
+
 ```
 
 **Q2: why br called empty element?**
@@ -106,6 +116,7 @@ Examples: id, class, style, title, data-*.
 **Q13: What are forms in HTML?**
 Forms collect user input using <form>, <input>, <textarea>, <select>, <button>.
 Example:
+
 ```txt
 <form id="my-form">
   <input type="text" placeholder="Name" />
