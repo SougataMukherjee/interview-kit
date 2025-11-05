@@ -119,7 +119,8 @@ useDispatch → Send actions to the store
 
 **Q12.What is the difference between local and global state?**  
 
-Local state → Specific to one component (useState)
+Local state → Specific to one component (useState)  
+
 Global state → Shared across app (Redux store)
 
 **Q13.How to debug Redux apps?**  
