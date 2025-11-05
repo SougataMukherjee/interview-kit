@@ -39,7 +39,7 @@ function foo(){
 foo()
 ```
 **Q5: What is Closure?**
-inner function remembers parent scope even after function ends.
+A closure is a function that retains access to its outer function's variables, even after the outer function has finished executing. It "remembers" the environment in which it was created, allowing it to access variables outside its immediate scope.
 Example:
 ```js
 function outer() {
@@ -49,6 +49,9 @@ function outer() {
     console.log(count);
   }
 }
+const closure = outer();
+closure(); //1
+closure(); //2
 ```
 **Q6: Difference: var, let, const**
 var -> function scoped, can be redeclared and hoisted with undefined
@@ -67,7 +70,7 @@ function demo() {
 demo();
 ```
 **Q7: What is Event Loop?**
-Handles async operations. Executes sync code first, then callbacks from queue.
+The Event Loop in JavaScript manages how code is executed inside the browser. It runs all synchronous code first in the call stack, and when asynchronous tasks like setTimeout, promises, or API calls finish, their callbacks are moved to the task queues. The event loop continuously checks if the call stack is empty, and when it is, it pulls the next callback from the queue and pushes it to the stack for execution, ensuring JavaScript remains non-blocking and handles async operations smoothly.
 Example:
 ```js
 console.log("a");
@@ -160,7 +163,6 @@ const myPromise = (executor) => {
 
 **Q13. Promise.all vs Promise.race**
 Promise.all() → Runs multiple promises in parallel and waits until all are finished.If any one fails, the whole result fails
-Promise.race() → Runs multiple promises in parallel and returns the result of the first one that finishes (success or fail)
 ```txt
 Promise.all([P1, P2, P3])
    P1 ----✅
@@ -169,12 +171,20 @@ Promise.all([P1, P2, P3])
 ```
 Result → after last one finishes
 ```txt
+Promise.allSettled() → Runs multiple promises in parallel and waits until all are completed, whether they succeed or fail. It never stops on error; instead, it returns the status and value/reason of each promise.
+```txt
+Promise.allSettled([P1, P2, P3])
+   P1 ----✅  (fulfilled)
+   P2 --------❌  (rejected)
+   P3 ------------✅  (fulfilled)
+
+```
+Promise.race() → Runs multiple promises in parallel and returns the result of the first one that finishes (success or fail)
 Promise.race([P1, P2, P3])
    P1 ----✅  ← finishes first → return this one
    P2 --------✅
    P3 ------------✅
   ```
-
 
 **Q14. How to fetch API using Promise?**
 ```js
@@ -515,7 +525,7 @@ Shared methods are defined on the prototype to save memory.
 Example: Object.create(proto) creates a new object inheriting from proto.
 
 **Q34: Webpack**
-Module bundler (combines JS, CSS, imgs into build).
+Webpack is a module bundler that combines JavaScript, CSS, images, and other assets into an optimized build. It allows configuring different environments like development and production for separate builds. Webpack helps reduce bundle size using techniques like code splitting, tree shaking, and asset optimization. It supports various loaders for handling files and plugins for extending features such as minification, environment variables, caching, compression, and hot reloading. Overall, it streamlines the build process and improves performance for modern web apps.
 
 **Q35: What are higher-order functions?**
 Functions that take another function as argument or return one (e.g., map, filter, reduce).
@@ -1116,9 +1126,19 @@ test("adds numbers", () => {
 });
 
 ```
+**84. what is invariant?**
+An invariant is a condition that always remains true during the execution of a program or throughout every iteration of a loop. For example, in a loop that counts items in an array, an invariant could be that the counter will never exceed the array length. Consider this loop:
+```js
+let sum = 0;
+for (let i = 0; i < arr.length; i++) {
+  // Invariant: i is always between 0 and arr.length
+  sum += arr[i];
+}
+```
+
 
 TYPESCRIPT THEORY NOTES
-====================
+========================
 
 **Q1: What is TypeScript?**
 Superset of JS adding static typing + compiler checks.
@@ -1152,7 +1172,8 @@ type Status = "loading" | "success" | "error";
 interface User { name: string; age?: number; readonly id: number; }
 
 **Q7: Generics:**
-Generics allow you to write reusable functions or classes that can work with any data type while maintaining type safety.
+Generics help create reusable and flexible functions or classes that work with multiple data types without losing type safety. Instead of using any (which removes type checking) or writing separate functions for each type, generics allow one function to adapt to different types while still ensuring correct type inference. This avoids duplication, prevents runtime errors, and keeps code strongly typed and maintainable.
+
 ```js
 function identity<T>(arg: T): T {
   return arg;
@@ -1182,8 +1203,24 @@ enum Color { Red, Green, Blue }
 enum Direction { Up, Down, Left, Right }
 ```
 **Q10: Difference between Interface and Type**
-Interface -> extendable
-Type -> can use union/intersection
+Interface -> Best for object structure, especially when it needs to grow or extend
+```js
+interface User {
+  name: string;
+  age: number;
+}
+
+interface Admin extends User {
+  role: string;
+}
+
+```
+Type -> Best for complex type transformations, unions & advanced type compositions
+```js
+type Status = "success" | "error";       // Union
+type Point = { x: number } & { y: number }; // Intersection
+
+```
 
 **Q11: Utility Types:**
 Partial<T>:Makes all properties of a type optional.
