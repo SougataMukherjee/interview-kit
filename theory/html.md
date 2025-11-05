@@ -194,7 +194,7 @@ Example:
 
 **Q22: What are the new features in HTML5?**  
 
-- New semantic elements (<header>, <footer>, <article>, <nav>)
+- New semantic elements (header, footer, article, nav)
 - Audio and video tags
 - Canvas and SVG
 - LocalStorage, SessionStorage
@@ -277,7 +277,7 @@ Example:
 
 A security feature that restricts how resources can be fetched from another domain.
 it improves Security and avoids browser blocking of cross-domain API requests
-**Q33: How do you optimize HTML for SEO?**  
+**Q34: How do you optimize HTML for SEO?**  
 
 - Use semantic tags ( header, main, article, nav )
 - Proper headings ( H3–H6 )
@@ -285,13 +285,13 @@ it improves Security and avoids browser blocking of cross-domain API requests
 - Alt attributes for images
 - Structured data
 
-**Q34: Difference between article, section, and aside**  
+**Q35: Difference between article, section, and aside**  
 
 article → Represents independent, self-contained content (e.g., blog post, news item).
 section → Groups related content within a document (e.g., chapters, tabs).
 aside → Holds secondary content (e.g., sidebar, ads, related links).
 
-**Q35: What are HTML5 APIs (like localStorage, canvas, geolocation)?**  
+**Q36: What are HTML5 APIs (like localStorage, canvas, geolocation)?**  
 
 localStorage / sessionStorage: Store key-value data in browser.
 ```js
@@ -305,7 +305,7 @@ Canvas API: Draw 2D graphics dynamically using JS.
 Geolocation API: Access user’s location (with permission).
 Drag & Drop, Web Storage, Web Workers, Audio/Video are also HTML5 APIs
 
-**Q36: Difference between HTML entities and characters?**  
+**Q37: Difference between HTML entities and characters?**  
 
 Entities are used to display reserved or special characters in HTML.
 Characters are the actual visual symbols, entities are encoded forms.
@@ -314,12 +314,12 @@ Example: &lt; displays <, &nbsp; displays a non-breaking space.
 <p>Character: <</p>
 <p>Entity: &lt;</p>
 ```
-**Q37:Difference between strong and b tags**  
+**Q38:Difference between strong and b tags**  
 
 b → purely visual (bold text).
 strong → semantic; conveys importance (screen readers emphasize it).
 
-**Q38: How to lazy load images in HTML?**  
+**Q39: How to lazy load images in HTML?**  
 
 Use loading="lazy" attribute:
 ```js
@@ -328,13 +328,13 @@ Use loading="lazy" attribute:
 transition:
 css transition  allow you to change property value smoothly over a given duration 
 
-**Q38:HTML Elements**  
+**Q40:HTML Elements**  
 
 Building blocks of a webpage (e.g., div, p, a).
  Each element has opening tag and closing tag.
 Can be nested inside each other.
 
-**Q39:HTML Attributes**  
+**Q41:HTML Attributes**  
 
 → Provide extra info to elements.
 → Written inside the opening tag.
@@ -344,7 +344,7 @@ Example:
 ```
 → Common ones: id, class, href, src, title, style
 
-**Q40:Blockquote for Quotations**  
+**Q42:Blockquote for Quotations**  
 
 → Used for long quoted text.
 ```js
@@ -353,7 +353,7 @@ Example:
 </blockquote>
 ```
 
-**Q41: img vs picture Elements**  
+**Q43: img vs picture Elements**  
 
 → img → single image file.
 → picture → multiple image sources for responsive design.
@@ -363,7 +363,7 @@ Example:
     <img src="small.jpg" alt="photo">
   </picture>
 ```
-**Q42:HTML Tables**  
+**Q44:HTML Tables**  
 
 → Used to display data in rows and columns.
 Example:
@@ -373,7 +373,7 @@ Example:
   <tr><td>Sam</td><td>25</td></tr>
 </table>
 ```
-**Q43: HTML Forms handle form state and validation**  
+**Q45: HTML Forms handle form state and validation**  
 
 → action defines where data goes.
 → <input> collects info, <submit> sends it.
@@ -398,7 +398,7 @@ Validation:
 
 ```
 
-**Q44:HTML Video and Controls**  
+**Q46:HTML Video and Controls**  
 
 → Used to embed videos with play/pause buttons.
 ```js
