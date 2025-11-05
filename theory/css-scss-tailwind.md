@@ -82,17 +82,18 @@ Small icon in browser tab.
 **Q7: Flexbox Basics. Float property advantage over Flex**  
 
 flexbox useful for 1D layout (row or column).  
-
-Float was used to wrap text around images (flex cannot do this)
 ```js
-<img src="pic.jpg" style="float:left; width:100px;"> Text wraps around image.
-
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
 }
+```
+Float was used to wrap text around images (flex cannot do this)
+```js
+<img src="pic.jpg" style="float:left; width:100px;"> Text wraps around image.
+
 ```
 
 **Q8: Grid Basics.**  
