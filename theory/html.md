@@ -118,10 +118,10 @@ Forms collect user input using <form>, <input>, <textarea>, <select>, <button>.
 Example:
 
 ```txt
-<form id="my-form">
-  <input type="text" placeholder="Name" />
-  <button type="submit">Submit</button>
-</form>
+  <form id="my-form">
+    <input type="text" placeholder="Name" />
+    <button type="submit">Submit</button>
+  </form>
 ```
 
 **Q14: Difference between GET and POST method?**
