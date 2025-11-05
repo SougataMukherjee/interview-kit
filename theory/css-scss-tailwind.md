@@ -2,10 +2,12 @@
 CSS NOTES
 ====================
 
-**Q1: what is CSS? Is CSS case-sensitive? Different ways to include CSS in a webpage?**
+**Q1: what is CSS? Is CSS case-sensitive? Different ways to include CSS in a webpage?**  
+
 CSS, which stands for Cascading Style Sheets, is a style sheet language used in web development to control the presentation and formatting of HTML documents
 
-No (selectors & properties are not), but values like class names in HTML are.
+No (selectors & properties are not), but values like class names in HTML are.  
+
 CSS3 Features & Advantages:
 Rounded corners (border-radius)
 Animations & transitions
