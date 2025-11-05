@@ -549,29 +549,29 @@ NEXT.JS THEORY NOTES
 
 **Q1: What is Next.js?**
  React is not feasible to create a fully-featured application for production.
- Next js is a React framework for routing, server-side rendering(optimize rendering), static site generation, and optimized performance.
+ Next js is a React framework for routing, server-side rendering(optimize rendering), static site generation, and optimized performance and SEO friendly.
 
 **Q2: CSR vs SSR vs SSG**
 
-### 1. Static Site Generation (SSG)
+#### 1. Static Site Generation (SSG)
 
 * **Process:** The page is **pre-rendered at build time**.
 * **Analogy:** Like a restaurant chef preparing a few commonly ordered dishes ahead of time.
 * **Pros/Cons:** Offers **best performance** and speed, as content is immediately ready to serve. However, it is **not suitable for highly dynamic content**.
 
-### 2. Server-Side Rendering (SSR)
+#### 2. Server-Side Rendering (SSR)
 
 * **Process:** The page is **rendered on the server** for every user request.
 * **Analogy:** The chef prepares a different meal **fresh, on the spot** for every customer who orders.
 * **Pros/Cons:** Ensures the user always receives the **most up-to-date content**, but this process can hurt performance and slow down load times.
 
-### 3. Incremental Static Regeneration (ISR)
+#### 3. Incremental Static Regeneration (ISR)
 
 * **Process:** A hybrid approach (used by frameworks like Next.js) that **pre-builds the page (like SSG)** but then **re-generates it on the server after a set time interval** (e.g., every 60 seconds).
 * **Analogy:** The prepared dishes are **refreshed every *X* minutes**. Customers will be served the old version until the new, fresh version is ready.
 * **Goal:** To **balance the speed of SSG with the freshness of SSR**.
 
-### 4. Client-Side Rendering (CSR)
+#### 4. Client-Side Rendering (CSR)
 
 * **Process:** The entire JavaScript bundle is **loaded in the browser**, and the page rendering happens directly on the user's machine.
 * **Analogy:** Instead of giving you a dish, the restaurant serves you **all the raw ingredients, and you have to cook it yourself** at the table.
@@ -581,8 +581,9 @@ NEXT.JS THEORY NOTES
 getStaticProps is used for Static Site Generation (SSG) in Next.js.
 It runs only at build time and generates static HTML, making the page fast.
 Use it when data rarely changes (e.g., blogs, docs, product list)
-
+```txt
 Build Time → Fetch Data → Pre-render Page → Static HTML Served
+```
 ```js
 export async function getStaticProps() {
   const res = await fetch('https://jsonplaceholder.typicode.com/users');
@@ -603,6 +604,10 @@ export default function Users({ users }) {
   );
 }
 ```
+📌 Note:
+❌ getStaticProps are NOT used in the Next.js App Router (/app),These methods belong only to the old Pages Router (/pages)
+✅ In the App Router, we use: fetch(..., { cache: 'force-cache' })
+
 **Q4: Explain getServerSideProps**
 getServerSideProps runs on the server for every request, fetches data, and sends it to the page before rendering.
 When to use:
@@ -624,6 +629,10 @@ export default function Page({ data }) {
 }
 
 ```
+📌 Note:
+❌ getServerSideProps are NOT used in the Next.js App Router (/app),These methods belong only to the old Pages Router (/pages)
+✅ In the App Router, we use: fetch(..., { cache: 'no-store' })
+
 **Q5: Explain getStaticPaths**
 getStaticPaths is used in Next.js with dynamic routes to tell Next.js which dynamic pages to pre-build at build time.
 Used together with getStaticProps for Static Site Generation (SSG).
@@ -654,6 +663,9 @@ export default function Post({ id }) {
   return <h2>Post Number: {id}</h2>;
 }
 ```
+📌 Note:
+❌ getStaticPaths are NOT used in the Next.js App Router (/app),These methods belong only to the old Pages Router (/pages)
+✅ In the App Router, we use: generateStaticParams
 
 **Q6: Difference between pages and app router? Why App Router is preferred over Pages Router?**
 - Pages router: uses /pages directory, older version.
@@ -689,14 +701,18 @@ Components rendered in the browser using "use client" directive.
 **Q9: How to create API routes in Next.js?**
 Create serverless functions inside /pages/api or /app/api folder each file becomes an API endpoint.
 Example:
-export default function handler(req, res) { res.json({ msg: 'Hello' }) }
+```js
+export default function GET() { 
+  NextResponse.json(todos)
+}
+```
 
 **Q10: Difference between next/link and a tag**
  next/link does client-side routing (faster, no reload), <a> tag reloads the page.
 
 **Q11: What is Image Optimization in Next.js?**
  <Image /> automatically optimizes image size and format for performance.
- it Resizes large images to the size needed by the device,Lazy-loads images,Serves responsive images with srcset
+ it Resizes large images to the size needed by the device,Lazy-loads images,Built-in blur placeholder for better UX
 
  ```js
  import Image from "next/image";
@@ -732,13 +748,24 @@ in middleware.ts file write logic in next js
  Why use:
 To keep content fresh (like blogs or product pages) while still using fast static generation.
 ```js
-export async function getStaticProps() {
-  const data = await fetchData();
-  return {
-    props: { data },
-    revalidate: 60, // re-build this page every 60 sec
-  };
+// app/page.js
+export default async function Home() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/todos/1", {
+    // re-build this page every 10s
+    next: { revalidate: 10 },
+  });
+
+  const data = await res.json();
+
+  return (
+    <div>
+      <h1>ISR Example</h1>
+      <p>Todo Title: {data.title}</p>
+      <p>Page regenerated every 10 seconds</p>
+    </div>
+  );
 }
+
 ```
 **Q15: What is next/head used for?**
  To modify <head> tags dynamically (title, meta tags).it improve SEO and Custom scripts like Google Analytics
