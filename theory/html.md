@@ -114,7 +114,7 @@ Examples: id, class, style, title, data-*.
   <script defer> |---parsing---LOAD---|EXECUTE|`
 ```
 **Q13: What are forms in HTML?**
-Forms collect user input using <form>, <input>, <textarea>, <select>, <button>.
+Forms collect user input using form, input, textarea, select, button.
 Example:
 
 ```txt
