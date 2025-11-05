@@ -115,7 +115,9 @@ z-index works only for positioned elements (relative, absolute, fixed).
 Use media queries:
 ```js
 @media (max-width: 768px) {
-  .container { flex-direction: column; }
+  .container { 
+    flex-direction: column; 
+    }
 }
 ```
 
@@ -132,12 +134,14 @@ Animation: runs automatically with @keyframes.
 div { animation: move 2s infinite; }
 ```
 **Q12: Pseudo classes and elements.**
-Pseudo-class: Targets state (e.g., :hover, :focus,:nth-child(2)).
+Pseudo-class: Targets state (e.g., :hover, :focus,:nth-child(2)).  
+
 Pseudo-element: Targets part of element (e.g., ::before, ::after)
 
 **Q13: Difference between margin and padding**  
 
-Margin: Space outside the element’s border.
+Margin: Space outside the element’s border.  
+
 Padding: Space inside the element’s border, around content.
 
 **Q14: What are CSS combinators?**  
@@ -218,9 +222,12 @@ div:hover {
 ```
 **Q19:CSS Math Functions**  
 
-calc() → perform calculations (width: calc(100% - 50px);)
-min() → picks smallest (width: min(80%, 600px);)
-max() → picks largest (width: max(50%, 200px);)
+calc() → perform calculations (width: calc(100% - 50px);)  
+
+min() → picks smallest (width: min(80%, 600px);)  
+
+max() → picks largest (width: max(50%, 200px);)  
+
 clamp() → range limit (font-size: clamp(14px, 2vw, 20px);)
 
 **Q20::global**  
@@ -237,11 +244,16 @@ we can apply styles globally even inside scoped CSS files.
 ```
 **Q21:CSS Attribute Selectors**  
 
-[attr] → elements with that attribute
-[attr=value] → exact match
-[attr^=val] → starts with
-[attr$=val] → ends with
-[attr*=val] → contains substring
+[attr] → elements with that attribute  
+
+[attr=value] → exact match  
+
+[attr^=val] → starts with  
+
+[attr$=val] → ends with  
+
+[attr*=val] → contains substring  
+
 Example: input[type="text"]
 Selects elements by attribute.
 input[type="text"] { color: blue; }
@@ -255,13 +267,15 @@ x<sup>2</sup> → square
 **Q23:CSS Font Fallback**  
 
 Multiple fonts listed in order of priority.
-If first fails, next is used.
+If first fails, next is used.  
+
 Example:
 font-family: "Roboto", "Arial", sans-serif;
 
 **Q24:Border vs Outline**  
 
-Border → part of element box, affects layout.
+Border → part of element box, affects layout.  
+
 Outline → drawn outside border, doesn’t affect size.
 Example:
 ```js
@@ -270,13 +284,15 @@ outline: 2px solid blue;
 ```
 **Q25:display:none vs visibility:hidden**  
 
-display:none → Element is removed from layout (no space reserved)
+display:none → Element is removed from layout (no space reserved)  
+
 visibility:hidden → Element is hidden but still occupies space
 
 **Q26: CSS Selectors**  
 
 Select elements based on name, class, id, attribute, etc.
 Examples:
+```txt
 #id → by id
 .class → by class
 div → by tag
@@ -287,7 +303,9 @@ div ~ p → all following siblings
 * → universal
 :hover → on hover state
 :first-child, :last-child → positional selectors
-- Why @import only at top?
+```
+- Why @import only at top?  
+
 Because CSS loads top-down — later rules may not apply if file is not loaded first.
 - Graceful Degradation:
 Start for modern browsers → make sure old browsers still work.
@@ -308,13 +326,16 @@ nav { a { color: blue; } }
 ```
 **Q28:Cascading rules**  
 
-When two styles have same specificity:
-✔ Last rule written wins (order matters)
+When two styles have same specificity:  
+
+✔ Last rule written wins (order matters)  
+
 ✔ More specific selector beats less specific one (like !important override all rules)
 
 **Q29::nth-child() vs :nth-of-type()**  
 
-:nth-child() Selects based on position among all siblings
+:nth-child() Selects based on position among all siblings  
+
 :nth-of-type() Selects based on position of same tag type
 ```js
 <p>1</p>
@@ -326,8 +347,14 @@ p:nth-of-type(2) ✅ selects 2nd <p>
 ```
 **Q30:How to center an element horizontally?**  
 
--using margin .box { width:200px; margin:0 auto; }
--using flex .parent { display:flex; justify-content:center; }
+1. using margin 
+```js
+.box { width:200px; margin:0 auto; }
+```
+2. using flex 
+```js
+.parent { display:flex; justify-content:center; }
+```
 
 
 SCSS THEORY
@@ -335,7 +362,7 @@ SCSS THEORY
 
 **Q1: What is SCSS and how does it differ from CSS?**  
 
-A: CSS preprocessor with variables, nesting, mixins, and partials.
+CSS preprocessor with variables, nesting, mixins, and partials.
 Compiles to standard CSS for browsers.
 
 **Q2: Variables and scoped**  
@@ -380,8 +407,10 @@ nav {
 **Q6: Partials and Import**  
 
 Create _variables.scss, then import:
+```js
 @import 'variables';
-Why easy to insert file with @import?
+```
+- Why easy to insert file with @import?
 Simplifies maintenance — one CSS file can include others
 
 **Q7: Operators**
@@ -396,7 +425,9 @@ darken($color, 10%);
 **Q9: Loops & Conditionals**
 ```js
 @for $i from 1 through 3 {
-  .m-#{$i} { margin: #{$i * 5}px; }
+  .m-#{$i} { 
+     margin: #{$i * 5}px; 
+     }
 }
 ```
 
@@ -437,7 +468,8 @@ TAILWIND CSS THEORY
 **Q2: What are utility-first CSS frameworks?**  
 
 Frameworks where styling is applied via small, reusable utility classes (e.g., p-4, text-center).
-no unused CSS, smaller bundle, no naming conflicts, faster rendering
+no unused CSS, smaller bundle, no naming conflicts, faster rendering  
+
 **Q3: Advantages:**
 - No writing custom CSS
 - Small bundle (JIT)
