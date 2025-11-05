@@ -80,8 +80,8 @@ fieldset element is used to group  related control in a single box
 </fieldset>
 ```
 **Q8: What is the difference between inline, block, and inline-block elements?**
-- Inline: does not start on new line (e.g., <span>, <a>)
-- Block: starts on new line, takes full width (e.g., <div>, <p>)
+- Inline: does not start on new line (e.g., span, a)
+- Block: starts on new line, takes full width (e.g., div, p)
 - Inline-block: stays inline but allows setting width/height.(e.g., make 3 div inline using inline-block)
 
 **Q9: What is DOCTYPE and why is it used?**
@@ -280,20 +280,21 @@ Example: &lt; displays <, &nbsp; displays a non-breaking space.
 <p>Character: <</p>
 <p>Entity: &lt;</p>
 ```
-**Q37:Difference between <strong> and <b> tags**
+**Q37:Difference between strong and b tags**
 b → purely visual (bold text).
 strong → semantic; conveys importance (screen readers emphasize it).
 
 **Q38: How to lazy load images in HTML?**
 Use loading="lazy" attribute:
+```js
 <img src="image.jpg" loading="lazy" alt="example">
-
+```
 transition:
 css transition  allow you to change property value smoothly over a given duration 
 
 **Q38:HTML Elements**
-Building blocks of a webpage (e.g., <div>, <p>, <a>).
- Each element has opening <tag> and closing </tag>.
+Building blocks of a webpage (e.g., div, p, a).
+ Each element has opening tag and closing tag.
 Can be nested inside each other.
 
 **Q39:HTML Attributes**
@@ -357,9 +358,11 @@ Validation:
 
 **Q44:HTML Video and Controls**
 → Used to embed videos with play/pause buttons.
+```js
 <video width="300" controls>
   <source src="movie.mp4" type="video/mp4">
 </video>
+```
 
 
 
