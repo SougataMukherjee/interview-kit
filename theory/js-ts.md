@@ -186,6 +186,17 @@ Promise.all([P1, P2, P3])
    P3 ------------✅
 ```
 Result → after last one finishes
+```js
+const p1 = Promise.resolve("🍎 Apple");
+const p2 = Promise.resolve("🍌 Banana");
+const p3 = Promise.resolve("🍇 Grapes");
+
+Promise.all([p1, p2, p3]).then((result) => {
+  console.log(result); 
+  // ["🍎 Apple", "🍌 Banana", "🍇 Grapes"]
+});
+
+```
 Promise.allSettled() → Runs multiple promises in parallel and waits until all are completed, whether they succeed or fail. It never stops on error; instead, it returns the status and value/reason of each promise.
 ```txt
 Promise.allSettled([P1, P2, P3])
@@ -851,12 +862,70 @@ Advantage: JS can dynamically change HTML/CSS
 
 **Q63:Useful DOM Properties**  
 
-.innerHTML, .textContent, .style, .classList, .value, .children, .parentElement
+.innerHTML:Used when you need to insert HTML (e.g., cards list, table rows)
+```js
+<div id="box"></div>
+<script>
+  document.getElementById("box").innerHTML = "<b>Hello</b>";
+</script>
+
+```
+.textContent
+```js
+document.getElementById("box").textContent = "<b>Hello</b>";
+
+```
+.style
+```js
+const box = document.getElementById("box");
+box.style.background = "yellow";
+box.style.padding = "10px";
+
+```
+.classList Button active state, dark mode toggle, adding animations
+```js
+box.classList.add("active");
+box.classList.remove("error");
+box.classList.toggle("dark-mode");
+
+```
+.value Getting user input from forms, search box
+```js
+<input id="name" type="text">
+
+<script>
+  document.getElementById("name").value = "Sam";
+</script>
+
+```
+
+.children:Count number of list items, remove last child
+```js
+const items = document.getElementById("list").children;
+console.log(items.length); // number of li
+
+```
+.parentElement : Event delegation: find which parent wrapper was clicked
+```js
+const child = document.querySelector(".item");
+console.log(child.parentElement); // UL or parent container
+
+```
 
 **Q64:clientX vs scrollX**  
 
-- clientX → mouse position in viewport.
-- scrollX → amount page scrolled horizontally
+- clientX → Mouse position relative to visible viewport (ignores scrolling)
+- scrollX → Total horizontal scroll offset of the page
+
+```txt
+pageX = scrollX + clientX
+```
+```txt
+PAGE START ---- scrollX ----|---- clientX ---->
+^
+viewport left click
+```
+
 
 **Q65:Mouse Events**  
 
@@ -869,10 +938,12 @@ Advantage: JS can dynamically change HTML/CSS
 - mouseleave:Fired when the mouse pointer leaves the boundary of an element.Unlike mouseout, it does not bubble.
 
 **Q66:DOMContentLoaded**  
-
-Fires when HTML fully parsed (before images).
-Helps run JS early.
-
+DOMContentLoaded fires when the HTML is fully loaded and parsed, before images, CSS, and other assets finish loading, it helps to run js early
+```js
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("DOM is ready!");
+});
+```
 **Q67: isNaN() and Number()**  
 
 Checks if value is not number
@@ -1140,11 +1211,27 @@ console.log(p.greet()); // Hi Sam
 
 **Q77:Access DOM (4 ways)**  
 
-- getElementById() Selects a single element by its id.
-- getElementsByClassName() Selects all elements with a specific class
-- querySelector() Selects the first element matching a CSS selector.
-- querySelectorAll() Selects all elements matching a CSS selector. Returns NodeList
+- getElementById() Selects a single element by its id.You need one specific element with a unique ID (fastest and most direct)
+```js
+const title = document.getElementById("mainTitle");
 
+```
+- getElementsByClassName() You need multiple elements that share the same class, Good for bulk styling or looping through repeated elements
+```js
+const items = document.getElementsByClassName("menu-item");
+
+```
+- querySelector() Selects the first element matching a CSS selector.Supports complex selectors (.class, #id, div > p, [type="text"])
+```js
+const cardTitle = document.querySelector(".card > h3");
+const thirdItem = document.querySelector("ul li:nth-child(3)");
+
+```
+- querySelectorAll() Selects all elements matching a CSS selector. Returns NodeList
+```js
+const allLinks = document.querySelectorAll("nav a");
+
+```
 **Q78:Event Emitter**  
 
 Object that listens (on) and triggers (emit) events.
@@ -1246,6 +1333,19 @@ for (let i = 0; i < arr.length; i++) {
 }
 ```
 
+**85.What is WebSocket?**
+WebSocket is a communication protocol that creates a persistent, two-way (full-duplex) connection between client and server.
+- Chat apps, multiplayer games, live score updates, stock prices app we can use
+
+**86. What is RegExp? (Regular Expression)**
+RegExp (Regular Expression) is a pattern used to match, search, or replace text in strings
+```js
+const email = "test@mail.com";
+const pattern = /^[\\w.-]+@[\\w.-]+\\.\\w+$/;
+
+console.log(pattern.test(email)); // true
+
+```
 
 TYPESCRIPT NOTES
 ================

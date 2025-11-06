@@ -73,9 +73,48 @@ Small icon in browser tab.
 
 **Q6: Position properties?**  
 
-- static (default)
+- static (default)Cannot use top, left, right, bottom
+```js
+<div class="box">I am static</div>
+
+.box {
+  position: static;
+}
+
+```
 - relative (moves within itself) Moves relative to its normal position.
+```js
+<div class="parent">
+  <div class="box">Relative Box</div>
+</div>
+
+.box {
+  position: relative;
+  top: 10px;   /* moves down 10px */
+  left: 20px;  /* moves right 20px */
+}
+
+```
 - absolute (relative to nearest non-static) Positioned relative to the nearest positioned ancestor.
+```js
+<div class="parent">
+  <div class="badge">NEW</div>
+  <img src="product.jpg" width="150" />
+</div>
+.parent {
+  position: relative; /* parent becomes reference */
+}
+
+.badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: red;
+  color: white;
+  padding: 4px;
+}
+
+```
 - fixed (relative to viewport) Stays fixed relative to viewport (even when scrolling).
 - sticky (hybrid) Acts relative until scroll crosses threshold, then sticks
 
@@ -89,6 +128,35 @@ flexbox useful for 1D layout (row or column).
   align-items: center;
   gap: 10px;
 }
+```
+
+- Flex box with responsive wrap
+```js
+.parent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+```
+- fixed and flexible layout
+```js
+.parent {
+  display: flex;
+}
+.sidebar {
+  width: 200px;
+}
+.content {
+  flex: 1; 
+}
+
+```
+- flex grow shrink and flex basic
+```js
+.item {
+  flex: 1 0 200px; /* grow | shrink | basis */
+}
+
 ```
 Float was used to wrap text around images (flex cannot do this)
 ```js
@@ -105,6 +173,23 @@ Grid useful for 2D layout (rows and columns)
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
+```
+- grid area with grid template area
+```js
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar content"
+    "footer footer";
+  grid-template-columns: 200px 1fr;
+```
+- minimax for responsive shrink
+```js
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+}
+
 ```
 **Q9: z-index and stacking context?**  
 
@@ -244,19 +329,48 @@ we can apply styles globally even inside scoped CSS files.
 ```
 **Q21:CSS Attribute Selectors**  
 
-[attr] → elements with that attribute  
+[attr] → elements with that attribute eg:Highlight all required fields in a form.
 
-[attr=value] → exact match  
+```js
+input[required] {
+  border: 2px solid red;
+}
 
-[attr^=val] → starts with  
+```
 
-[attr$=val] → ends with  
+[attr=value] → exact match ,E.g: Style only buttons with type="submit". 
+```js
+button[type="submit"] {
+  background: green;
+  color: white;
+}
 
-[attr*=val] → contains substring  
+```
 
-Example: input[type="text"]
-Selects elements by attribute.
-input[type="text"] { color: blue; }
+[attr^=val] → starts with  e.g:Select links that start with https (secure URLs).
+```js
+a[href^="https"] {
+  color: green;
+}
+
+```
+
+[attr$=val] → ends with  e.g Style all image files ending with .png
+```js
+img[src$=".png"] {
+  border: 2px solid blue;
+}
+
+```
+
+[attr*=val] → contains substring  ,e.g: Select input fields whose placeholder contains 'name'
+```js
+input[placeholder*="name"] {
+  background: #fff3cd;
+}
+
+```
+
 
 **Q22: Superscript & Subscript:**  
 ```js
@@ -418,17 +532,33 @@ Simplifies maintenance — one CSS file can include others
 width: (100% / 3);
 ```
 **Q8: Functions**
+A SCSS function is like a JavaScript function but for CSS.it take input perform calculation and return output
 ```js
-lighten($color, 20%);
-darken($color, 10%);
+@function px-to-rem($px) {
+  @return $px / 16 * 1rem;
+}
+@function space($mul) {
+  @return $mul * 8px;
+}
+
+.title {
+  font-size: px-to-rem(32); // returns 2rem
+  padding: space(2); // return 16 px
+}
 ```
 **Q9: Loops & Conditionals**
 ```js
-@for $i from 1 through 3 {
-  .m-#{$i} { 
-     margin: #{$i * 5}px; 
-     }
+@for $i from 1 through 5 {
+  .m-#{$i} {
+    margin: #{$i * 4}px; // 4px, 8px, 12px...
+  }
 }
+.m-1 { margin: 4px; }
+.m-2 { margin: 8px; }
+.m-3 { margin: 12px; }
+.m-4 { margin: 16px; }
+.m-5 { margin: 20px; }
+
 ```
 
 **Q10: SCSS Compilation**  
