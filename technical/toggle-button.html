@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toggle Button</title>
+
+  <style>
+    .box {
+      width: 120px;
+      height: 120px;
+      background: lightgray;
+      margin-top: 15px;
+      transition: 0.3s;
+    }
+
+    .active {
+      background: lightgreen;
+      border: 2px solid green;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="toggleBtn">Toggle</button>
+  <div id="box" class="box"></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const btn = document.getElementById('toggleBtn');
+      const box = document.getElementById('box');
+
+      btn.addEventListener('click', function () {
+        // Toggle class using DOM manipulation
+        if (box.classList.contains('active')) {
+          box.classList.remove('active');
+        } else {
+          box.classList.add('active');
+        }
+      });
+
+    })();
+  </script>
+
+</body>
+</html>

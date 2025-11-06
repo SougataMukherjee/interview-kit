@@ -683,6 +683,74 @@ The Render Phase is when React evaluates components, compares the virtual DOM wi
 
 The Commit Phase is when React applies those changes to the actual DOM. This phase updates the UI in the browser, runs layout effects and useEffect, and finalizes the update. It is guaranteed to run once for each completed render and cannot be interrupted.
 
+**Q48. variation of inline style in jsx**  
+- 
+```js
+<p style={{ color: "red", background: "yellow" }}>Hello</p>
+```
+- 
+```js
+const baseStyle = { color: "blue", fontSize: "16px" };
+
+<p style={{ ...baseStyle, background: "pink" }}>Hello</p>
+
+```
+- 
+```js
+<p
+  style={
+    isDark
+      ? { ...baseStyle, background: "black", color: "white" }
+      : { ...baseStyle, background: "white" }
+  }
+>
+  Text
+</p>
+
+```
+- 
+```js
+<p
+  style={{
+    ...baseStyle,
+    ...(isDark
+      ? { background: "black", color: "white" }
+      : { background: "white" })
+  }}
+>
+  Text
+</p>
+
+```
+- 
+```js
+const text = { fontSize: "14px" };
+const restStyle = { padding: "10px" };
+const custom = { margin: "5px" };
+
+const combined = {
+  ...text,
+  ...(true ? restStyle : custom),
+  ...getAppStyle(),
+};
+
+<p style={combined}>Hello</p>
+
+```
+- 
+```js
+<p
+  style={{
+    ...baseStyle,
+    background: isActive ? "green" : undefined, // only adds if truthy
+    ...(hasError && { border: "1px solid red" }) // conditional property
+  }}
+>
+  Button
+</p>
+
+```
+
 NEXT.JS NOTES 
 =============
 

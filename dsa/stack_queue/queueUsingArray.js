@@ -3,12 +3,12 @@ class Queue {
     this.items = [];
   }
 
-  // add element to rear
+  // add element to rear like array push method
   enqueue(element) {
     this.items.push(element);
   }
 
-  // remove element from front
+  // remove element from front like array shift method
   dequeue() {
     if (this.isEmpty()) return "Queue is empty";
     return this.items.shift(); // removes first
