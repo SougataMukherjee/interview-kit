@@ -21,7 +21,10 @@ export default function App() {
 
  
   useEffect(() => {
+    
+    //When countdown reaches 0, effect stop running
     if (countdown === 0) return;
+    //decreases the countdown value by 1 every second until it reaches 0
     const id = setTimeout(() => setCountdown(countdown - 1), 1000);
     return () => clearTimeout(id);
   }, [countdown]);

@@ -1,58 +1,44 @@
 import { useState } from "react";
 
 export default function App() {
-  const [doc, setDoc] = useState({ name: "", age: "" });
-  const [list, setList] = useState([]);
+  const [text, setText] = useState("");
+  const [todos, setTodos] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const addOrUpdate = () => {
+    if (!text.trim()) return;
+
     if (editIndex !== null) {
-      list[editIndex] = doc;
-      setList([...list]);
+      todos[editIndex] = text;
+      setTodos([...todos]);
       setEditIndex(null);
     } else {
-      setList([...list, doc]);
+      setTodos([...todos, text]);
     }
-    setDoc({ name: "", age: "" });
+
+    setText("");
   };
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setDoc({ ...doc, [name]: value });
+
+  const editTodo = (i) => {
+    setText(todos[i]);
+    setEditIndex(i);
   };
+
+  const deleteTodo = (i) => {
+    setTodos(todos.filter((_, idx) => idx !== i));
+  };
+
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          name="name"
-          value={doc.name}
-          onChange={handleChange}
-          placeholder="Name"
-        />
-        <input
-          name="age"
-          value={doc.age}
-          onChange={handleChange}
-          placeholder="Age"
-        />
-        <button type="submit">{editIndex !== null ? "Update" : "Add"}</button>
-      </form>
+      <input value={text} onChange={(e) => setText(e.target.value)} />
+      <button onClick={addOrUpdate}>{editIndex !== null ? "Update" : "Add"}</button>
 
       <ul>
-        {list.map((item, i) => (
+        {todos.map((todo, i) => (
           <li key={i}>
-            {item.name} — {item.age}{" "}
-            <button
-              onClick={() => {
-                setDoc(item);
-                setEditIndex(i);
-              }}
-            >
-              Edit
-            </button>
-            <button onClick={() => setList(list.filter((_, idx) => idx !== i))}>
-              Delete
-            </button>
+            {todo}
+            <button onClick={() => editTodo(i)}>Edit</button>
+            <button onClick={() => deleteTodo(i)}>Delete</button>
           </li>
         ))}
       </ul>

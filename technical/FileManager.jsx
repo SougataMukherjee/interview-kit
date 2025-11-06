@@ -20,13 +20,25 @@ function Folder({ node }) {
 }
 
 export default function App() {
-  const data = {
-    name: "root",
-    folders: [
-      { name: "src", folders: [{ name: "App.js" }, { name: "index.js" }] },
-      { name: "public", folders: [{ name: "index.html" }] },
-    ],
-  };
+const data = {
+  name: "root",
+  folders: [
+    {
+      name: "src",
+      folders: [
+        { name: "App.js" },
+        { name: "index.js" }
+      ]
+    },
+    {
+      name: "public",
+      folders: [
+        { name: "index.html" }
+      ]
+    }
+  ]
+};
+
 
   return (
     <div>
