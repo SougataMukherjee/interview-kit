@@ -55,7 +55,7 @@ text and image both
 html 1.0 html2.0 html 3 html 4 html 5
 - HTML5 features  
 
-new element new attribute multimedia 2d 3d drawing support
+new element new attribute multimedia 2d 3d drawing support, drag and drop support
 
 **Q5: What are semantic tags? Give examples and benefits**  
 
@@ -87,6 +87,7 @@ fieldset element is used to group  related control in a single box
 ```js
 <fieldset>
 	<lagend>contact</lagent>
+  <label>Email: <input type="text" name="name"/></label>
 </fieldset>
 ```
 **Q8: What is the difference between inline, block, and inline-block elements?**
@@ -280,7 +281,7 @@ it improves Security and avoids browser blocking of cross-domain API requests
 **Q34: How do you optimize HTML for SEO?**  
 
 - Use semantic tags ( header, main, article, nav )
-- Proper headings ( H3–H6 )
+- Proper headings ( H1–H6 )
 - Meta tag - title, description, viewport
 - Alt attributes for images
 - Structured data
@@ -307,7 +308,7 @@ Drag & Drop, Web Storage, Web Workers, Audio/Video are also HTML5 APIs
 
 **Q37: Difference between HTML entities and characters?**  
 
-Entities are used to display reserved or special characters in HTML.  
+Entities are used to display reserved or special characters in HTML. such as greater than less than  
 
 Characters are the actual visual symbols, entities are encoded forms.  
 
@@ -413,6 +414,40 @@ Validation:
   <source src="movie.mp4" type="video/mp4">
 </video>
 ```
+**Q47: What is a Description List?**
+Used to display terms and descriptions (like glossary, FAQs)
+```js
+<dl>
+  <dt>HTML</dt>
+  <dd>Markup language for web pages.</dd>
+</dl>
 
+```
+**Q48: Ordered & Unordered List**  
+Ordered list <ol> → numbered list  
+
+Unordered list <ul> → bullet list
+```js
+<ol><li>One</li></ol>
+<ul><li>Item</li></ul>
+
+```
+**Q49: What is an Image Map?**  
+Clickable areas inside a single image, each linking to different pages.
+Use: dashboards, maps, diagrams.
+```js
+<img src="worldmap.jpg" usemap="#map">
+<map name="map">
+  <area shape="rect" coords="0,0,50,50" href="asia.html">
+</map>
+
+```
+**Q50:Marquee Tag**  
+
+<marquee> creates scrolling text/image.
+Deprecated in HTML5 (not recommended).
+```js
+<marquee>Scrolling Text</marquee>
+```
 
 

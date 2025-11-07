@@ -75,6 +75,12 @@ const [isActive, setIsActive] = useState(true);
 const [form, setForm] = useState({ name: "", email: "" });
 const [items, setItems] = useState([]);
 ```
+❌ No we can't update state directly — it won't trigger re-render & mutates data  
+```js
+setCount(count + 1); // ✅ correct
+count = count + 1;   // ❌ wrong
+
+```
 
 **Q6: Explain useEffect and useLayoutEffect**  
 
@@ -346,6 +352,13 @@ useEffect() → Used in functional components; you can have multiple useEffect h
 **Q17: What is React Fragment?**  
 
 <></> wrapper to avoid adding extra DOM nodes.
+
+```js
+<> <Comp1/><Comp2/> </>
+or
+<React.Fragment><Comp1/><Comp2/></React.Fragment>
+
+```
 
 **Q18: Error boundaries and limitation**  
 
@@ -633,6 +646,7 @@ if(!isVisible) return null;
 **Q42. What are portals in React?**  
 
 Render children outside parent DOM hierarchy.
+- children props used to pass nested JSX.
 ```js
 // index.html
 <div id="root"></div>
@@ -750,14 +764,26 @@ const combined = {
 </p>
 
 ```
+**Q49:Strict Mode**  
+Highlights potential problems in dev mode (like extra re-render check).
+```js
+<React.StrictMode>
+  <App />
+</React.StrictMode>
+
+```
 
 NEXT.JS NOTES 
 =============
 
-**Q1: What is Next.js?**  
+**Q1: What is Next.js? Drawbacks of React**  
 
  React is not feasible to create a fully-featured application for production.
- Next js is a React framework for routing, server-side rendering(optimize rendering), static site generation, and optimized performance and SEO friendly.
+ Next js is a React framework for routing, server-side rendering(optimize rendering), static site generation, and optimized performance and SEO friendly.  
+ drawback of react:
+ 1. Frequent re-render issues
+ 2. Requires extra libraries (routing, state mgmt)
+ 3. SEO and performance
 
 **Q2: CSR vs SSR vs SSG**  
 

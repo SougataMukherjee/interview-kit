@@ -66,7 +66,7 @@ IDs must be unique — use classes instead.
 
 **Q5:Favicon:**  
 
-Small icon in browser tab.
+Small icon in browser tab. size like 16*16,32*32,64*64...
 ```js
 <link rel="icon" href="favicon.ico">
 ```
@@ -219,9 +219,9 @@ Animation: runs automatically with @keyframes.
 div { animation: move 2s infinite; }
 ```
 **Q12: Pseudo classes and elements.**
-Pseudo-class: Targets state (e.g., :hover, :focus,:nth-child(2)).  
+Pseudo-class: use to style state (e.g., :hover, :focus,:nth-child(2),:nth-child(odd)).  
 
-Pseudo-element: Targets part of element (e.g., ::before, ::after)
+Pseudo-element: used to style particular part of element (e.g., ::before, ::after)
 
 **Q13: Difference between margin and padding**  
 
@@ -469,7 +469,49 @@ p:nth-of-type(2) ✅ selects 2nd <p>
 ```js
 .parent { display:flex; justify-content:center; }
 ```
+**Q31:Opacity**  
 
+Controls transparency of an element (0–1).
+```js
+.box { opacity: 0.5; }
+
+```
+**Q32:Universal Selector**  
+select all elements
+```js
+* { margin: 0; padding: 0; }
+
+```
+
+**Q33: Background Image**  
+```js
+body {
+  background-image: url("bg.jpg");
+  background-size: cover;       /* or contain */
+  background-position: center;
+}
+```
+**Q34: 2D Transform Functions**
+```txt
+| Function      | Example                             |
+| ------------- | ----------------------------------- |
+| `translate()` | `transform: translate(20px, 10px);` |
+| `rotate()`    | `transform: rotate(45deg);`         |
+| `scale()`     | `transform: scale(1.5);`            |
+| `skew()`      | `transform: skew(20deg);`           |
+
+```
+**Q35:Text Alignment**
+```js
+p { text-align: center; }
+
+```
+**Q36:Underline & Overline**
+```js
+p { text-decoration: underline; }
+h1 { text-decoration: overline; }
+
+```
 
 SCSS THEORY
 ==============================

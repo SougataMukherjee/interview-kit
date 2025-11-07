@@ -2,10 +2,17 @@
 JAVASCRIPT NOTES
 ================
 
-**Q1: what is JavaScript? why name called JavaScript?**  
+**Q1: what is JavaScript? why name called JavaScript? Ways to Import JS in HTML**  
 
 JavaScript is a lightweight, case sensitive scripting language.
-JS was created to add logic to web pages;  initial name was "LiveScript" then marketing—syntax inspired by Java, but not related.
+JS was created to add logic to web pages;  initial name was "LiveScript" then marketing—syntax inspired by Java, but not related.  
+3 ways to import js file
+```js
+<script src="app.js"></script>          <!-- normal -->
+<script src="app.js" defer></script>    <!-- runs after HTML parsed -->
+<script src="app.js" type="module"></script> <!-- ES modules -->
+
+```
 
 **Q2: what are JavaScript engine? how js works internally**  
 
@@ -59,7 +66,9 @@ const closure = outer();
 closure(); //1
 closure(); //2
 ```
-**Q6: Difference: var, let, const**  
+**Q6: JS Variables? Difference: var, let, const**  
+
+JavaScript variables are containers for data.  
 
 var -> function scoped, can be redeclared and hoisted with undefined  
 
@@ -102,7 +111,14 @@ console.log("d");
 
 **Q9: What is 'this' keyword?**  
 
-Refers to current context.
+Refers to current context.Value of this depends on how function is called.In arrow functions, this is lexical (inherits from parent scope).
+```js
+const obj = {
+  name: "Sam",
+  show() { console.log(this.name); } // Sam
+};
+
+```
 Global Code
   this → window (browser)
 Object
@@ -624,10 +640,15 @@ Break code into reusable files using export and import.
 Types:
 Named export
 Default export
-Example:
+Example 1:
 ```js
 export const x = 1; 
 import { x } from './file.js';
+```
+Example 2:
+```js
+export const add = (a,b)=>a+b;
+import { add } from "./util.js";
 ```
 
 **Q38:Use of Content-Type**  
@@ -835,9 +856,45 @@ const obj5 = makeObj();
 fetch(), setTimeout(), setInterval(), localStorage, sessionStorage,
 document, navigator, geolocation, history, console, alert()
 
-**Q58: for of vs for in**
+**Q58: for of vs for in  and if-else vs switch**
 1. for of does not work with object but for in works with Object and array
-2. for of ignore extra properties which does not have index but for in does not ignore
+2. for of ignore extra properties which does not have index but for in does not ignore  
+
+1. if-else for range or complex conditions
+```js
+let age = 20;
+
+if (age < 18) {
+  console.log("Minor");
+} else if (age >= 18 && age < 60) {
+  console.log("Adult");
+} else {
+  console.log("Senior Citizen");
+}
+
+```
+2. switch for multiple matches of same value
+
+```js
+let day = 6;
+
+switch (day) {
+  case 1:
+  case 2:
+  case 3:
+  case 4:
+  case 5:
+    console.log("Weekday");
+    break;
+  case 6:
+  case 7:
+    console.log("Weekend");
+    break;
+  default:
+    console.log("Invalid day");
+}
+
+```
 
 **Q59:map vs forEach**  
 
