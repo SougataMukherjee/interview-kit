@@ -425,12 +425,10 @@ Used to display terms and descriptions (like glossary, FAQs)
 ```
 **Q48: Ordered & Unordered List**  
 Ordered list <ol> → numbered list  
-
 Unordered list <ul> → bullet list
 ```js
-<ol><li>One</li></ol>
-<ul><li>Item</li></ul>
-
+  <ol><li>One</li></ol>
+  <ul><li>Item</li></ul>
 ```
 **Q49: What is an Image Map?**  
 Clickable areas inside a single image, each linking to different pages.
@@ -440,7 +438,6 @@ Use: dashboards, maps, diagrams.
 <map name="map">
   <area shape="rect" coords="0,0,50,50" href="asia.html">
 </map>
-
 ```
 **Q50:Marquee Tag**  
 
