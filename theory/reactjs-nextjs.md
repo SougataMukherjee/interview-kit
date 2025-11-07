@@ -58,8 +58,48 @@ How diffing algorithm works in Virtual DOM
 **Q3: Functional vs Class Components**  
 
 - Functional components are simpler to write and understand, use Hooks instead of lifecycle methods, avoid the complexity of this, make logic reuse easier through custom hooks, support better performance optimizations, work seamlessly with Concurrent Mode, enable streaming SSR for faster page load, and are the recommended modern approach in React.
-- Class components rely on lifecycle methods, involve more boilerplate, make code harder to reuse, require managing the this keyword, don’t align well with modern React features like Concurrent Mode and streaming SSR, and are now considered older and less preferred for new development.
+```js
+import { useState } from "react";
 
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>+</button>
+    </div>
+  );
+}
+
+export default Counter;
+
+```
+- Class components rely on lifecycle methods, involve more boilerplate, make code harder to reuse, require managing the this keyword, don’t align well with modern React features like Concurrent Mode and streaming SSR, and are now considered older and less preferred for new development.
+```js
+import React, { Component } from "react";
+
+class Counter extends Component {
+  constructor() {
+    super();
+    this.state = { count: 0 };
+  }
+
+  render() {
+    return (
+      <div>
+        <p>Count: {this.state.count}</p>
+        <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+          +
+        </button>
+      </div>
+    );
+  }
+}
+
+export default Counter;
+
+```
 **Q4: What are Hooks in React?**  
 
  Functions that let you use React features without classes (e.g. useState, useEffect, useMemo, useRef, useCallback, useContext).
