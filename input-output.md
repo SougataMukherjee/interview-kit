@@ -23,7 +23,7 @@ console.log(x == z);
 
 ### Answer:
 
-**Output:** `true  true`
+**Output:** `true  true because == converts values to same type before comparing`
 
 ### Question 3: What will be the output?
 
@@ -60,7 +60,7 @@ console.log(typeof z, z);
 
 ### Answer:
 
-**Output:** `string  ''`
+**Output:** `string  '' because when you use the + operator on arrays, JavaScript converts them to strings and then concatenates them.`
 
 ### Question 6: What will be the output?
 
@@ -97,7 +97,7 @@ console.log(y);
 
 ### Answer:
 
-**Output:** `false`
+**Output:** `false because x is a string and not a boolean and have truthy value`
 
 ### Question 9: What will be the output?
 
@@ -149,7 +149,7 @@ console.log(y);
 
 ### Answer:
 
-**Output:** `[ 2, 3, 4 ]`
+**Output:** `[ 2, 3, 4 ] because map() iterates only over the initial length, even if you modify the array inside it`
 
 ### Question 13: What will be the output?
 
@@ -161,7 +161,7 @@ console.log(x === y);
 
 ### Answer:
 
-**Output:** `false`
+**Output:** `false because they have same value but in different memory location`
 
 ### Question 14: What will be the output?
 
@@ -173,7 +173,7 @@ console.log("total = " + x + y);
 
 ### Answer:
 
-**Output:** `total = 1020`
+**Output:** `total = 1020 because + x → converts x to string`
 
 ### Question 15: What will be the output?
 
@@ -197,7 +197,7 @@ console.log(a);
 
 ### Answer:
 
-**Output:** `[ 1, 2, 4, 3 ]`
+**Output:** `[ 1, 2, 4, 3 ] because using post increment operator after value → returns old value first`
 
 ### Question 17: What will be the output?
 
@@ -244,7 +244,7 @@ console.log(x + x++);
 
 ### Answer:
 
-**Output:** `2`
+**Output:** `2 because by post increment returns old value 1, then increments x to 2`
 
 ### Question 21: What will be the output?
 
@@ -256,7 +256,7 @@ console.log(b);
 
 ### Answer:
 
-**Output:** `20`
+**Output:** `20 because comma operator evaluates multiple expressions but returns only the value of the last expression.`
 
 ### Question 22: What will be the output?
 
@@ -294,7 +294,7 @@ console.log(a);
 
 ### Answer:
 
-**Output:** `[ 1, 2, 3 ]`
+**Output:** `[ 1, 2, 3 ] because a and b are two different arrays in memory, When you modify b, it does not affect a`
 
 ### Question 25: What will be the output?
 
@@ -308,7 +308,7 @@ for (var i = 0; i < 3; i++) {
 
 ### Answer:
 
-**Output:** `3 3 3` if iteration was let then ` 0 1 2`
+**Output:** `3 3 3` if iteration was let then ` 0 1 2 because Because let creates a new block-scoped variable for each iteration.`
 
 ### Question 26: What will be the output?
 
@@ -335,7 +335,7 @@ var x = 5;
 
 ### Answer:
 
-**Output:** `5`
+**Output:** `5 because variable x declared with var outside the function is in the global scope.Inside the IIFE, since there is no local x, JavaScript looks up the scope chain and finds the global x.`
 
 ### Question 28: What will be the output?
 
@@ -360,7 +360,7 @@ console.log(typeof typeof 1);
 
 ### Answer:
 
-**Output:** `number  string`
+**Output:** `number  string because typeof "number"=string`
 
 ### Question 30: What will be the output?
 
@@ -399,7 +399,7 @@ getAge(21);
 
 ### Answer:
 
-**Output:** `object`
+**Output:** `object because The rest parameter (...args) collects all arguments into an array,in js array is typeof obj`
 
 ### Question 33: What will be the output?
 
@@ -414,7 +414,7 @@ set.has(1);
 
 ### Answer:
 
-**Output:** `true  true  false  true`
+**Output:** `true(object keys are always string)  true(1 auto-converts to "1")  false(Sets do not convert types)  true(1 exist in set)`
 
 ### Question 34: What will be the output?
 
@@ -427,7 +427,7 @@ set.has(1);
 
 ### Answer:
 
-**Output:** `[undefined, undefined, undefined]`
+**Output:** `[undefined, undefined, undefined] because map() always returns a new array with the return value of each iteration`
 
 ### Question 35: What will be the output?
 
@@ -459,7 +459,7 @@ test();
 
 ### Answer:
 
-**Output:** `5`
+**Output:** `5 because ocal x declaration is moved to the top of the function (but not its assignment)`
 
 ### Question 37: What will be the output?
 
@@ -473,18 +473,18 @@ console.log(b);
 
 ### Answer:
 
-**Output:** `both { x: 3, y: 2 }`
+**Output:** `both { x: 3, y: 2 } because do not copy the object — you only copy the reference (pointer) to the same object.So both a and b point to the same memory location.`
 
 ### Question 38: What will be the output?
 
 ```js
-console.log({} == {}); //false
-console.log({} === {}); //false
+console.log({} == {});
+console.log({} === {});
 ```
 
 ### Answer:
 
-**Output:** `false  false`
+**Output:** `false  false because Because each object has a different reference in memory, so they are not equal`
 
 ### Question 39: What will be the output?
 
@@ -538,7 +538,7 @@ console.log(lastName);
 
 ### Answer:
 
-**Output:** ` Sam  Muk`
+**Output:** ` Sam  Muk because Since firstName exists, default "Rupai" is ignored`
 
 ### Question 43: What will be the output?
 
