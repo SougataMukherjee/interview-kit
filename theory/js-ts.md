@@ -52,8 +52,7 @@ foo()
 ```
 **Q5: What is Closure?**  
 
-A Closure is when an inner function remembers outer function variables even after the outer function is finished. It "remembers" the environment in which it was created, allowing it to access variables outside its immediate scope.  
-Use case:Data privacy debouncing, throttling
+A closure is a function that retains access to its outer function's variables, even after the outer function has finished executing. It "remembers" the environment in which it was created, allowing it to access variables outside its immediate scope.
 Example:
 ```js
 function outer() {
@@ -177,17 +176,10 @@ a.y ──► { z:2 }     b.y ──► { z:2 }   (separate copies)
 
 **Q12. What are Promises? Build Own Promise for Microtask**  
 
-A Promise is an object that represents a value that may be available now, later, or never  
-
 Used to handle async operations, It has 3 states: pending → resolved → rejected
 Example:
 ```js
 new Promise((res, rej)=>res(5)).then(console.log);
-
-new Promise((resolve, reject) => {
-  setTimeout(() => resolve("Done"), 1000);
-}).then(console.log);
-
 ```
 build own promise
 ```js
@@ -421,8 +413,7 @@ greetAlice("Hey", "😎");           // Hey, Alice! 😎
 
 **Q21: What is Currying?**  
 
-Currying is the process of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument.  
-Use case: Reusability, function customization
+Currying is the process of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument
 Example:
 ```js
 function add(a) {
@@ -767,19 +758,12 @@ function add(a,b){
 ```
 **Q49:Callback Function**  
 
-A callback is a function passed as an argument to another function to run later.  
-Use case: Asynchronous tasks (e.g., setTimeout, API calls)
+Function passed into another function to run after a task completes.
 ```js
 setTimeout(()=>console.log("Arrow function"),1000);
 setTimeout(function() {console.log("Anonymous function");}, 1000);
 function greet() { console.log("Name function");} setTimeout(greet, 500);
-function greet(name, cb) {
-  cb(`Hello ${name}`);
-}
-greet("Sam", console.log);
 ```
-✅ Note: console.log is a function that can accept any number of arguments — including zero.
-If no argument is passed, it simply prints an empty line
 
 **Q50:Pyramid of Doom (Callback Hell)**  
 
