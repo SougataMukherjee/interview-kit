@@ -569,7 +569,7 @@ bark.animal = "dog";
 
 ### Answer:
 
-**Output:** `dog`
+**Output:** `dog because is simply adding a property named animal to the function object bark It does not affect how the function runs — it just stores extra data on it`
 
 ### Question 45: What will be the output?
 
@@ -597,7 +597,7 @@ const num = parseInt("7*6", 10);
 
 ### Answer:
 
-**Output:** `105   7`
+**Output:** `105   7(parseInt() reads a string from left to right and converts it to a number until it hits a non-numeric character)`
 
 ### Question 47: What will be the output?
 
@@ -612,7 +612,7 @@ console.log(a[b]);
 
 ### Answer:
 
-**Output:** `456`
+**Output:** `456 When you use an object as a key in a normal JavaScript object, it is automatically converted to a string. so a["[object Object]"] = 123; and a["[object Object]"] = 456;`
 
 ### Question 48: What will be the output?
 
@@ -642,7 +642,7 @@ console.log(a[b]);
 
 ### Answer:
 
-**Output:** `[1, 2, 0, 1, 2, 3]`
+**Output:** `[1, 2, 0, 1, 2, 3] because reduce start with initial value then it processes each array inside the outer array`
 
 ### Question 50: What will be the output?
 
@@ -652,7 +652,7 @@ console.log(a[b]);
 
 ### Answer:
 
-**Output:** `1 2 and undefined 3 and undefined 4`
+**Output:** `1 2 and undefined 3 and undefined 4 because When reduce() has no initial value x (accumulator) starts as the first element y (current value) starts as the second element`
 
 ### Question 51: What will be the output?
 
@@ -708,8 +708,8 @@ console.log(set);
 ```js
 const name = "Lydia";
 age = 21;
-console.log(delete name); //false
-console.log(delete age); //true
+console.log(delete name); 
+console.log(delete age);
 ```
 
 ### Answer:
@@ -735,10 +735,10 @@ const value = { number: 10 };
 const multiply = (x = { ...value }) => {
   console.log((x.number *= 2));
 };
-multiply(); //20
-multiply(); //20
-multiply(value); //20
-multiply(value); //40
+multiply();
+multiply(); 
+multiply(value); 
+multiply(value);
 ```
 
 ### Answer:
