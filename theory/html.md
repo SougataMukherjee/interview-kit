@@ -424,8 +424,8 @@ Used to display terms and descriptions (like glossary, FAQs)
 
 ```
 **Q48: Ordered & Unordered List**  
-Ordered list <ol> → numbered list  
-Unordered list <ul> → bullet list
+Ordered list ol → numbered list  
+Unordered list ul → bullet list
 ```js
   <ol><li>One</li></ol>
   <ul><li>Item</li></ul>
