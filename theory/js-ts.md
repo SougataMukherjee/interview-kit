@@ -40,7 +40,7 @@ ECMAScript → standard/spec that JS follows.
 
 **Q4: What is Hoisting?**  
 
-Variables and functions are moved to top of scope during compilation.
+Variables and functions declarations are moved to top of there scope before code execution.hoisting is not working on let and const its throwing reference error
 Example 1:
 ```js
 console.log(a); // undefined
@@ -100,10 +100,31 @@ closure(); //2
 
 JavaScript variables are containers for data.  
 
-var -> function scoped, can be redeclared and hoisted with undefined  
-
-let, const -> block scoped,let cannot be reassigned but const cannot be reassigned.
+var -> the scope of the variable define with the keyword "var". this is global scope.it is limited to the function within which it is defined ,calling function scope. 
 ```js
+function foo(){
+  var x='sam'//local scope or function scope
+}
+but
+var x="sam"//global scope
+if(true){
+  y="sou"//global scope
+}
+while(){
+  var z="sam"//global scope
+}
+switch(true){
+  var test='hello'//global scope
+}
+```
+
+let, const -> the scope of variable defined with the keyword 'let' or 'const' is limited to the block defined by curly brace called lexical variable scope.  
+difference between let and const is const variable can only one time declare and assign a value because it's a constant and const cannot be update or redeclared 
+```js
+{
+  let x='hello'//block scope
+}
+
 function demo() {
   if (true) {
     var x = 10;
@@ -167,16 +188,50 @@ Normal Function
 function add(a, b) { return a + b; }
 ```
 Arrow Function  
+- ES6 onwards introduce.arrow function does not support function declaration,it support only function expression.  
+- arrow function does not have own this binding and not suitable for call apply bind
  ```js 
+const arrow = () => { console.log('hi') };
+arrow();//hi
+const arrows = function() { console.log('hello') };
+arrows();//hello
+ const foo=name=>name;
+ console.log(foo("sam"))//sam
+ const fruit=()=>[ 'mango', 'banana' ];
+ console.log(fruit());//[ 'mango', 'banana' ]
+ const x=(a,b,...c)=>[a,b,c];
+ console.log(x('sam','mik','sou','rik'));[ 'sam', 'mik', [ 'sou', 'rik' ] ]
  const add = (a, b) => a + b;
+ console.log(add(10,20))//30
  ```
 IIFE (Immediately Invoked Function Expression) 
+if you want to avoid global scope partition use IIFE
 ```js
-(function(){ console.log("Run once"); })();
+problem
+var $='i am sam';
+var $='i am sou';
+console.log($)
+
+solution
+(function f1(){
+  var $='i am sam'
+  console.log($)
+})()
+(function f2(){
+  var $='i am sou'
+  console.log($)
+})()
 ```
 Anonymous Function 
+it is a function without having a name
 ```js
-let f=function(args){}
+let f=function(){
+  console.log('javascript')
+}
+or
+(function(){
+  console.log('javascript')
+})()
 ```
 
 **Q11: Shallow vs Deep Copy**  
@@ -523,7 +578,16 @@ Spread -> expands [...arr]
 const nums = [1, 2, 3];
 const newNums = [...nums, 4, 5]; // [1, 2, 3, 4, 5]
 ```
-Rest -> collects (...args)
+Rest -> it can hold infinite number of argument value as an array,it is not an array but internally store as an array.always rest should be the last parameter
+exp1
+```js
+function course(a,...rest){
+  let a=10;
+  return rest
+}
+console.log(course('js','java','python'));//['js','java','python']
+```
+exp2
 ```js
 function sum(...numbers) {
   return numbers.map((x) => x + 5);
@@ -641,6 +705,10 @@ Capturing: outer/parent → inner/child
 **Q32: What is Temporal Dead Zone (TDZ)?**  
 
 Zone where variable exists but can’t be accessed before initialization.
+```js
+console.log(a)
+var a='sam'
+```
 
 **Q33: Garbage Collection**  
 
@@ -787,13 +855,23 @@ x = 5;//error
 
 **Q45:Data Types in JS (Primitive vs Non-Primitive)**  
 
+data types are describe the type of data  
+
 - Primitive: single value (immutable)(String, Number, boolean, null, undefined, symbol, bigint).
 - Non-Primitive:(mutable) Object, Array, function,Date,Math.
 
 **Q46:Null vs Undefined**  
 
-- null → empty value set by user.
-- undefined → declared but not assigned.
+- null → empty value set by user.it represent absence of object value.null is not global property of global object
+```js
+var x=null
+console.log(typeof x)//object
+```
+- undefined → declared but not assigned.undefined is global property of global objet
+```js
+var x
+console.log(typeof x)//undefined
+```
 
 **Q47: types of operator**  
 
@@ -868,6 +946,14 @@ let u=new User("Sam");
 
 To create multiple objects with the same structure and properties without manually writing each object.
 ```js
+//exp 1
+const x=function(name,sol){
+  console.log(this)//point global object
+}
+x()
+console.log(this)//point global object
+
+//exp 2
 function User(name) {
   this.name = name;
 }
@@ -1301,7 +1387,7 @@ let obj = { name: "Sam" };
 ```
 **Q73: Pure Function and Impure function**  
 
-Pure function → Same input → same output, no side effects. 
+Pure function → Same input → same output, no side effects. it takes at least one arguments
 
 Impure Function → Depends on external/state change.
 
