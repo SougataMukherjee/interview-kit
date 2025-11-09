@@ -410,10 +410,13 @@ useEffect() → Used in functional components; you can have multiple useEffect h
  ```
 
  ```js
- function MyComponent(Component){
-  return function(){
-    return <Component someAttribute="somevalue"/>
-  }
+function withAuth(WrappedComponent) {
+  return function ({ isLoggedIn, ...props }) {
+    if (!isLoggedIn) {
+      return <p>🚫 Please login to access this page.</p>;
+    }
+    return <WrappedComponent {...props} />;
+  };
 }
  ```
 
@@ -452,8 +455,8 @@ and use like
 
 **Q19: Difference between state and props**  
 
-- State - internal, mutable(can modify), use for dynamic data.
-- Props - external, immutable, use for passing data to child components.
+- State - internal, mutable(can modify because it belongs to the component itself), use for dynamic data.
+- Props - external, immutable(because they are passed from parent to child and should not be changed by the child component), use for passing data to child components.
 ```txt
 Parent Component (holds props/state)
         |
@@ -840,7 +843,55 @@ Highlights potential problems in dev mode (like extra re-render check).
 </React.StrictMode>
 
 ```
+**Q50: how to prevent memory leak**  
+A memory leak happens when components keep holding data in memory even after they unmount, causing unnecessary memory usage  
+1. Clean up side effects in useEffect
+When using timers, subscriptions, or event listeners, always clean them up in the return function.
+```js
+useEffect(() => {
+  const timer = setInterval(() => {
+    console.log("Running...");
+  }, 1000);
 
+  return () => clearInterval(timer); // cleanup
+}, []);
+
+```
+2. Cancel API requests if component unmounts
+```js
+useEffect(() => {
+  let isMounted = true;
+
+  fetch("/api/data").then(res =>
+    res.json().then(data => {
+      if (isMounted) setData(data);
+    })
+  );
+
+  return () => {
+    isMounted = false;
+  };
+}, []);
+
+```
+3. Remove event listeners
+```js
+useEffect(() => {
+  function handleResize() {
+    console.log("resizing");
+  }
+
+  window.addEventListener("resize", handleResize);
+
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
+```
+4. Use useRef for values that should not trigger re-renders
+```js
+const valueRef = useRef(null);
+
+```
 NEXT.JS NOTES 
 =============
 
@@ -1223,6 +1274,7 @@ CSS Modules, Styled JSX, Tailwind CSS, Global CSS, Styled-components
 
 Using next/dynamic for lazy loading components, it will not load on initial render, load when its need 
 ```js
+import dynamic from "next/dynamic";
 const Component = dynamic(() => import('../Components'), { ssr: false });
 ```
 **Q26: Environment variables in Next.js**  

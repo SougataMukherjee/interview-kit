@@ -1,18 +1,6 @@
-const subjects = [
-  "Sougata Mukherjee",
-  "Rupai",
-  "Sam Muk",
-  "a group of girls",
-  "company CEO",
-  "Bus driver in Bangalore"
-];
+const subjects = ["Sougata Mukherjee","Rupai","Sam Muk","a group of girls","company CEO","Bus driver in Bangalore"];
 
-const actions = [
-  "cancels",
-  "swimming with",
-  "sleeps",
-  "celebrates"
-];
+const actions = ["cancels","swimming with","sleeps","celebrates"];
 function rand(arr){
     let index=Math.floor(Math.random()*arr.length)
     return arr[index]

@@ -1,3 +1,5 @@
+//1³ + 5³ + 3³ = 153
+
 let n=153,r,sum=0,temp;
 temp=n;
 while(temp>0){

@@ -48,7 +48,7 @@ text and image both
 
 **Q4: What is HTML and why is it important?**  
 
- HTML (HyperText Markup Language) structures web content. It defines the layout and semantic meaning of elements (headings, paragraphs, links, forms, etc.).  
+ HTML (HyperText(text with links that connect one page to another) Markup Language) structures web content. It defines the layout and semantic meaning of elements (headings, paragraphs, links, forms, etc.).  
 
 - version of html are  
 
@@ -253,7 +253,8 @@ Example:
 
 **Q29: Explain difference between relative and absolute paths in HTML.**
 - Relative: based on current file location (e.g., ./images/pic.jpg)
-- Absolute: full URL (e.g., https://site.com/images/pic.jpg)
+- Absolute: full URL (e.g., https://site.com/images/pic.jpg)  
+Absolute paths are recommended because they are stable, readable, and less likely to break when the file structure changes so many framework like Nextjs allow aliases like @
 
 **Q30: What is the difference between noscript and script?**  
 
@@ -363,11 +364,11 @@ Example:
 
 → img → single image file.  
 
-→ picture → multiple image sources for responsive design.
+→ picture → multiple image sources for responsive design so the browser can choose the best image based on screen size, device resolution.To improve performance and image clarity we use
 ```js
   <picture>
-    <source srcset="large.jpg" media="(min-width:800px)">
-    <img src="small.jpg" alt="photo">
+    <source srcset="product-large.webp" type="image/webp" media="(min-width: 1024px)">
+    <source srcset="product-medium.jpg" media="(min-width: 600px)">
   </picture>
 ```
 **Q44:HTML Tables**  
@@ -431,6 +432,7 @@ Unordered list ul → bullet list
   <ol><li>One</li></ol>
   <ul><li>Item</li></ul>
 ```
+order list types Number(1 default),Uppercase and lowercase letters(A B),Uppercase and lowercase Roman(I i),circle,dise,square
 **Q49: What is an Image Map?**  
 Clickable areas inside a single image, each linking to different pages.
 Use: dashboards, maps, diagrams.

@@ -4,7 +4,7 @@ CSS NOTES
 
 **Q1: what is CSS? Is CSS case-sensitive? Different ways to include CSS in a webpage?**  
 
-CSS, which stands for Cascading Style Sheets, is a style sheet language used in web development to control the presentation and formatting of HTML documents
+CSS, which stands for Cascading(styles apply in order of priority) Style Sheets, is a style sheet language used in web development to control the presentation and formatting of HTML documents
 
 No (selectors & properties are not), but values like class names in HTML are.  
 
@@ -116,7 +116,9 @@ Small icon in browser tab. size like 16*16,32*32,64*64...
 
 ```
 - fixed (relative to viewport) Stays fixed relative to viewport (even when scrolling).
-- sticky (hybrid) Acts relative until scroll crosses threshold, then sticks
+- sticky (hybrid) Acts relative until scroll crosses threshold, then sticks  
+
+Sticky sticks only inside its container after reaching a scroll position, while fixed stays in the same place on the screen no matter how much you scroll.
 
 **Q7: Flexbox Basics. Float property advantage over Flex**  
 
@@ -205,18 +207,99 @@ Use media queries:
     }
 }
 ```
+in project 
+```js
+$breakpoints: (
+  "xs": 480px,
+  "sm": 640px,
+  "md": 768px,
+  "lg": 1024px,
+  "xl": 1280px,
+);
+@mixin xs {
+  @media (max-width: map-get($breakpoints, "xs")) {
+    @content;
+  }
+}
+
+// Target "sm" range (481px to 640px)
+@mixin sm {
+  @media (min-width: (map-get($breakpoints, "xs") + 1)) and (max-width: map-get($breakpoints, "sm")) {
+    @content;
+  }
+}
+
+// Target "md" range (641px to 768px)
+@mixin md {
+  @media (min-width: (map-get($breakpoints, "sm") + 1)) and (max-width: map-get($breakpoints, "md")) {
+    @content;
+  }
+}
+
+// Target "lg" range (769px to 1024px)
+@mixin lg {
+  @media (min-width: (map-get($breakpoints, "md") + 1)) and (max-width: map-get($breakpoints, "lg")) {
+    @content;
+  }
+}
+
+// Target "xl" range (1025px to 1280px)
+@mixin xl {
+  @media (min-width: (map-get($breakpoints, "lg") + 1)) and (max-width: map-get($breakpoints, "xl")) {
+    @content;
+  }
+}
+@mixin groupXsSmMd {
+  @include xs {
+    @content;
+  }
+  @include sm {
+    @content;
+  }
+  @include md {
+    @content;
+  }
+}
+```
 
 **Q11: Difference between transition and animation?**  
 
 Transition: smooth change between two states.Needs trigger (hover, active).
 ```js
-div { transition: all 0.3s; }
-div:hover { color: red; }
+<button class="btn">Buy Now</button>
+
+<style>
+.btn {
+  background: blue;
+  color: white;
+  padding: 10px 20px;
+  transition: background 0.3s; /* smooth change */
+}
+
+.btn:hover {
+  background: darkblue; /* changes smoothly */
+}
+</style>
+
 ```
 Animation: runs automatically with @keyframes.
 ```js
-@keyframes move { from{left:0;} to{left:100px;} }
-div { animation: move 2s infinite; }
+<div class="bell">🔔</div>
+
+<style>
+.bell {
+  font-size: 40px;
+  animation: shake 0.6s infinite; /* runs automatically */
+}
+
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  50% { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
+}
+</style>
+
 ```
 **Q12: Pseudo classes and elements.**
 Pseudo-class: use to style state (e.g., :hover, :focus,:nth-child(2),:nth-child(odd)).  
@@ -384,7 +467,9 @@ Multiple fonts listed in order of priority.
 If first fails, next is used.  
 
 Example:
+```js
 font-family: "Roboto", "Arial", sans-serif;
+```
 
 **Q24:Border vs Outline**  
 
@@ -503,7 +588,13 @@ body {
 ```
 **Q35:Text Alignment**
 ```js
+p { text-align: left; } //default
+
 p { text-align: center; }
+p { text-align: right; }
+p { text-align: justify; }
+
+
 
 ```
 **Q36:Underline & Overline**
@@ -573,10 +664,22 @@ nav {
 }
 ```
 **Q6: Partials and Import**  
+A partial is an SCSS file whose name starts with an underscore (_).Example: _buttons.scss, _variables.scss. for organizing code and reusability we use
+```js
+styles/
+  _variables.scss
+  _mixins.scss
+  _header.scss
+  _footer.scss
+  main.scss
+
+```
 
 Create _variables.scss, then import:
 ```js
-@import 'variables';
+@import "variables";
+@import "header";
+@import "footer";
 ```
 - Why easy to insert file with @import?
 Simplifies maintenance — one CSS file can include others
@@ -654,10 +757,12 @@ TAILWIND CSS THEORY
 Frameworks where styling is applied via small, reusable utility classes (e.g., p-4, text-center).
 no unused CSS, smaller bundle, no naming conflicts, faster rendering  
 
-**Q3: Advantages:**
+**Q3: Advantages and disadvantage**
 - No writing custom CSS
 - Small bundle (JIT)
 - Mobile-first by default
+
+disadvantage is Hard to read, especially for large components
 
 **Q4: Responsive Classes**
 ```js

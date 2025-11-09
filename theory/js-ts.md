@@ -6,10 +6,12 @@ JAVASCRIPT NOTES
 
 JavaScript is a lightweight, case sensitive scripting language.
 JS was created to add logic to web pages;  initial name was "LiveScript" then marketing—syntax inspired by Java, but not related.  
+JavaScript is called a scripting language because it is not compiled beforehand — it runs line by line directly by the browser or runtime  
 3 ways to import js file
 ```js
 <script src="app.js"></script>          <!-- normal -->
 <script src="app.js" defer></script>    <!-- runs after HTML parsed -->
+<script src="app.js" async></script>    <!-- runs asynchronously -->
 <script src="app.js" type="module"></script> <!-- ES modules -->
 
 ```
@@ -39,7 +41,7 @@ ECMAScript → standard/spec that JS follows.
 **Q4: What is Hoisting?**  
 
 Variables and functions are moved to top of scope during compilation.
-Example:
+Example 1:
 ```js
 console.log(a); // undefined
 var a = 5;
@@ -49,6 +51,34 @@ function foo(){
   var a =5;
 }
 foo()
+```
+Example 2:
+```js
+foo(); // Works
+function foo() {
+  console.log("Hello");
+}
+but
+function foo() {
+  console.log(a); // undefined
+  var a = 10;
+}
+foo();
+
+
+```
+Example 3:
+```js
+{
+  console.log(a); // undefined
+  var a = 5;
+}
+
+{
+  console.log(b); // ReferenceError
+  let b = 10;
+}
+
 ```
 **Q5: What is Closure?**  
 
@@ -183,13 +213,30 @@ new Promise((res, rej)=>res(5)).then(console.log);
 ```
 build own promise
 ```js
-const myPromise = (executor) => {
-  const thenCallbacks = [];
-  executor((value) =>
-    queueMicrotask(() => thenCallbacks.forEach(cb => cb(value)))
-  );
-  return { then(cb) { thenCallbacks.push(cb); return this; } };
-};
+function MyPromise(executor) {
+  let onResolve;
+  function resolve(value) {
+    // call then callback when resolved
+    if (onResolve) onResolve(value);
+  }
+
+  // save .then callback
+  this.then = function (callback) {
+    onResolve = callback;
+  };
+
+  executor(resolve);
+}
+
+
+const p = new MyPromise(function (resolve) {
+  setTimeout(() => resolve("Done!"), 1000);
+});
+
+p.then((result) => {
+  console.log(result); // Done!
+});
+
 ```
 
 **Q13. Promise.all vs Promise.race**  
@@ -498,9 +545,15 @@ Access nested property safely: user?.address?.city
 
 **Q29: Difference Between == and ===**  
 
-== does type coercion  
+== Loose Equality Compares value only 
+```js
+console.log(5 == "5");     // true 
+```
 
-=== checks type + value
+=== Strict Equality Compare value and type
+```js
+console.log(5 === "5");   // false 
+```
 
 **Q30: Difference Between slice, splice, split**  
 
@@ -1329,45 +1382,46 @@ A Task Scheduler executes tasks in a planned order, usually with delay or priori
 Example use cases: running API calls sequentially, retry logic, scheduled jobs, animations, pausing long loops.
 
 ```js
-function createLRUCache(limit) {
-  const cache = new Map(); // maintains insertion order
+function LRUCache(limit) {
+  const cache = [];
 
   return {
     get(key) {
-      if (!cache.has(key)) return -1;
-      const value = cache.get(key);
+      const index = cache.findIndex(item => item.key === key);
+      if (index === -1) return -1;
 
-      // Move to end (most recently used)
-      cache.delete(key);
-      cache.set(key, value);
-      return value;
+      const item = cache.splice(index, 1)[0]; // remove item
+      cache.push(item); // add at end (most recent)
+      return item.value;
     },
 
     set(key, value) {
-      if (cache.has(key)) {
-        cache.delete(key); // remove old
-      } else if (cache.size === limit) {
-        // Remove least recently used (first item)
-        const firstKey = cache.keys().next().value;
-        cache.delete(firstKey);
+      const index = cache.findIndex(item => item.key === key);
+
+      if (index !== -1) {
+        cache.splice(index, 1); // remove old copy
+      } else if (cache.length === limit) {
+        cache.shift(); // remove least used (first)
       }
-      cache.set(key, value);
+
+      cache.push({ key, value }); // insert new at end
     },
 
     show() {
-      console.log([...cache]);
+      console.log(cache);
     }
   };
 }
 
 // Usage
-const lru = createLRUCache(3);
+const lru = LRUCache(3);
 lru.set("a", 1);
 lru.set("b", 2);
 lru.set("c", 3);
-lru.get("a");     // "a" becomes most used
-lru.set("d", 4);  // removes "b" (least used)
-lru.show();       // [ ['c',3], ['a',1], ['d',4] ]
+lru.get("a");     // a becomes most recent
+lru.set("d", 4);  // removes "b" (least recent)
+lru.show();       // [ {c:3}, {a:1}, {d:4} ]
+
 
 ```
 **83. How to Test Code Using Jest in JS**  
@@ -1413,6 +1467,16 @@ const pattern = /^[\\w.-]+@[\\w.-]+\\.\\w+$/;
 console.log(pattern.test(email)); // true
 
 ```
+**87.types of console methods**  
+
+console.log() print general messages 
+
+console.error() show error messages  
+console.warn() show warning messages  
+console.info() show informational message  
+console.table() display array or object in table
+console.time()  start a timer
+console.timeEnd() end timer and show time
 
 TYPESCRIPT NOTES
 ================

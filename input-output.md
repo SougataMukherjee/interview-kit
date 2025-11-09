@@ -743,19 +743,19 @@ multiply(value);
 
 ### Answer:
 
-**Output:** `20  20  20  40`
+**Output:** `20  20  20  40 for multiply() → default copy { number: 10 } but if you pass value 1st time value.number becomes 20 then 40 then 80`
 
 ### Question 57: What will be the output?
 
 ```js
 console.log(Number(2) === Number(2));
-console.log(Boolean(false) === Boolean(false));
 console.log(Symbol("foo") === Symbol("foo"));
+console.log(Boolean(false) === Boolean(false));
 ```
 
 ### Answer:
 
-**Output:** `true  true  false`
+**Output:** `true  false(Every time you create a Symbol, it is unique)  true(returns a primitive boolean value like false===false)`
 
 ### Question 58: What will be the output?
 
@@ -810,7 +810,7 @@ sumValues(...[1, 2, 3]);
 
 ### Answer:
 
-**Output:** `6`
+**Output:** `6 because it will spread ...[1, 2, 3]  in to  1, 2, 3`
 
 ### Question 62: What will be the output?
 
@@ -828,7 +828,7 @@ compareMembers(person);
 
 ### Answer:
 
-**Output:** `They are the same!`
+**Output:** `They are the same! because both point to same obj`
 
 ### Question 63: What will be the output?
 
@@ -859,7 +859,7 @@ var output = (function (x) {
 
 ### Answer:
 
-**Output:** `0 `
+**Output:** `0 its IIFE and is immediately executed with the value 0`
 
 ### Question 65: What will be the output?
 
@@ -1003,7 +1003,7 @@ for (const { name, age } of users) {
 
 ### Answer:
 
-**Output:**
+**Output:** 
 
 ### Question 74: What will be the output?
 
