@@ -1181,7 +1181,16 @@ function display(){
 
 ```
 
-### Answer:this is first para this is first para
+### Answer:this is first para this is first para  
 
-
+### Question 86: what will be the output?
+```js
+let x=1
+{
+    let x=2
+    
+}
+console.log(x)
+```
+### Answer: 1
 

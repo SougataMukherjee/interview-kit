@@ -294,13 +294,13 @@ Use .catch() or try...catch inside async/await.
 fetch(url).catch(err => console.error(err));
 
 
-**Q17. Async/Await**  
+**Q17. Async/Await? why its better than Promise**  
 
 Async/Await is a simplified way to work with Promises. It makes asynchronous code look and behave like synchronous code, which is easier to read and write.  
 
 What problem it solves:
-Avoids callback hell and complex .then() chaining in Promises
-Makes async code more readable, cleaner, and easier to handle errors using try…catch
+Avoids callback hell and complex .then() chaining in Promises Used to handle errors gracefully so app doesn't crash.
+Makes async code more readable single try..catch, cleaner, and easier to handle errors using try…catch
 Example:
 ```js
 import { useEffect, useState } from "react";
@@ -603,17 +603,27 @@ Webpack is a module bundler that combines JavaScript, CSS, images, and other ass
 
 **Q35: What are higher-order functions?**  
 
-Functions that take another function as argument or return one (e.g., map, filter, reduce).
-Higher-order functions either take other functions as arguments or Return functions.
+A function that takes another function as input OR returns a function. (e.g., map, filter, reduce).
+Higher-order functions either take other functions as arguments or Return functions.  
+why use? Reusability,code modularity
 ```js
-function multiplier(factor) {
-  return function (number) {
-    return number * factor;
+ function areaCalculator(shape) {
+  return function(arr) {
+    if (shape === "circle") {
+      return arr.map(r => Math.PI * r * r);
+    }
+    if (shape === "square") {
+      return arr.map(a => a * a);
+    }
   };
 }
 
-const double = multiplier(2);
-console.log(double(5)); // 10
+const circleAreas = areaCalculator("circle")([2, 3]);
+const squareAreas = areaCalculator("square")([2, 4]);
+
+console.log(circleAreas); // [12.56, 28.26]
+console.log(squareAreas); // [4, 16]
+
 ```
 
 **Q36: Explain the event loop and microtask queue.**  

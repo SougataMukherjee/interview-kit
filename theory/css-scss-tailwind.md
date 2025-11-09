@@ -254,7 +254,7 @@ display: -webkit-box;   /* Safari/Chrome older */
 display: -moz-box;      /* Firefox older */
 display: flex;          /* Modern browsers */
 ```
-Feature Queries / Fallbacks: Use @supports or CSS resets.
+Feature Queries / Fallbacks: Use @supports or CSS resets.If a CSS Property Is Not Supported use this
 ```js
 @supports (display: grid) {
   .container {
@@ -512,6 +512,18 @@ p { text-decoration: underline; }
 h1 { text-decoration: overline; }
 
 ```
+**Q37: Automatic Dark & Light Mode Based on Location**  
+use auto detect system theme
+```js
+.dark { background: #111; color: white; }
+.light { background: white; color: #111; }
+
+in js
+const hour = new Date().getHours();
+document.body.className = hour >= 18 || hour < 6 ? "dark" : "light";
+
+```
+
 
 SCSS THEORY
 ==============================

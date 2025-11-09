@@ -157,7 +157,7 @@ useEffect(()=>()=>console.log("Unmount"),[]); // Unmount
 **Q7: useMemo vs useCallback and how they are optimize performance**  
 
 useMemo → memoizes computed value
-exp.
+exp 1.
 ```js
 import { useState, useMemo } from "react";
 
@@ -182,6 +182,27 @@ function App() {
 }
 
 export default App;
+
+```
+exp 2:
+```js
+import { useState, useMemo } from "react";
+
+export default function App() {
+  const [count, setCount] = useState(0);
+
+  const cachedValue = useMemo(() => {
+    console.log("useMemo executed");
+    return count * 2;
+  }, [count]);
+
+  return (
+    <div>
+      <h3>{cachedValue}</h3>
+      <button onClick={() => setCount(count + 1)}>+</button>
+    </div>
+  );
+}
 
 ```
 useCallback → memoizes/caches function reference
@@ -243,7 +264,12 @@ const UserContext = createContext();
 
 **Q10: What is React.memo?**  
 
- Prevents unnecessary re-renders of functional components when props don’t change.
+ Prevents unnecessary re-renders of functional components when props don't change.
+ #### Child will NOT re-render if:
+ - Parent re-renders but props are same (primitive values)
+ #### Child WILL re-render if:
+ - Props changed
+ - Props are objects/functions unless memoized using useCallback & useMemo
  ```js
  import { useState } from "react";
 import Child from "./Child";
@@ -314,6 +340,8 @@ Task   Task      Task
 **Q14: keys in React list? what is List virtualization**  
 
 A list in React is a collection of data that we display by looping through it, usually using map(). While rendering lists, each item should have a unique key so React can identify which item has changed, been added, or removed. A unique key helps React avoid unnecessary re-renders because it tracks each element efficiently. Without a proper key, React may re-render the entire list even if only one item changed, which affects performance.
+#### Why is key important Problems using index as key?
+key helps React identify which list item changed, added, or removed.else use uuid or Date.now()
  ```js
  const users = [
   { id: 1, name: "Sam" },
@@ -1609,6 +1637,15 @@ The most common cause is accessing browser-specific APIs (like window or localSt
 we can resolve by inside a useEffect hook or by checking 
 ```js
 typeof window !== 'undefined'
+```
+**Q54:How to optimize fonts in Next.js?**
+Use next/font for automatic optimization
+```js
+import { Roboto } from "next/font/google";
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
 ```
 
 

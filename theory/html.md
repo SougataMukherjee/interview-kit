@@ -78,8 +78,8 @@ new element new attribute multimedia 2d 3d drawing support, drag and drop suppor
 
 **Q6: What is the difference between div and section?**  
 
- div is a generic container, no semantic meaning.
-section groups related content with semantic meaning.
+ div is a generic container, no semantic meaning.it has no meaning used for layout
+section groups related content with semantic meaning.represent a standalone section  of content and help in seo and accessibility
 
 **Q7: Field set**  
 
@@ -130,9 +130,10 @@ Examples: id, class, style, title, data-*.
   <script async> |---parsing---LOAD---EXECUTE---|
   <script defer> |---parsing---LOAD---|EXECUTE|`
 ```
-**Q13: What are forms in HTML?**  
+**Q13: What are forms in HTML? Form Validation Attributes**  
 
-Forms collect user input using form, input, textarea, select, button.
+Forms collect user input using form, input, textarea, select, button.  
+Form validation attribute are required,min/max,type="email/tel/password" multiple disable autocomplete
 Example:
 
 ```txt
