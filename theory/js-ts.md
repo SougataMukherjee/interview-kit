@@ -4,9 +4,11 @@ JAVASCRIPT NOTES
 
 **Q1: what is JavaScript? why name called JavaScript? Ways to Import JS in HTML**  
 
+JS was created by Brendan Eich at Netscape in 1995.  
+
 JavaScript is a lightweight, case sensitive scripting language.
 JS was created to add logic to web pages;  initial name was "LiveScript" then marketing—syntax inspired by Java, but not related.  
-JavaScript is called a scripting language because it is not compiled beforehand — it runs line by line directly by the browser or runtime  
+JavaScript is called a scripting language because it is not compiled beforehand — it runs line by line(single-threaded or synchronous) directly by the browser or runtime  
 3 ways to import js file
 ```js
 <script src="app.js"></script>          <!-- normal -->
@@ -96,8 +98,18 @@ const closure = outer();
 closure(); //1
 closure(); //2
 ```
-**Q6: JS Variables? Difference: var, let, const**  
+**Q6: What is an Expression? What is an Identifier? JS Variables? Difference: var, let, const**   
 
+An expression is any reference to a variable value or a set of variable values.  
+```js
+10 + 20
+x * 5 
+```
+An identifier is the name of a variable.  
+```js
+let name = "Sam"; // name is the identifier
+
+```
 JavaScript variables are containers for data.  
 
 var -> the scope of the variable define with the keyword "var". this is global scope.it is limited to the function within which it is defined ,calling function scope. 
@@ -136,6 +148,14 @@ function demo() {
   console.log(z); // ❌ error (const → block scope)
 }
 demo();
+```
+- Variable Naming Rules
+1. Cannot start with a number
+2. Must start with a letter, _ or $
+3. Don't use reserved keywords and space  
+```js
+let name, $price, _id;
+
 ```
 **Q7: What is Event Loop?**  
 
@@ -1562,7 +1582,24 @@ console.warn() show warning messages
 console.info() show informational message  
 console.table() display array or object in table
 console.time()  start a timer
-console.timeEnd() end timer and show time
+console.timeEnd() end timer and show time  
+
+**Q88. What is BigInt? example**  
+It is used to store large integer values.
+```js
+const y = BigInt(12345678910);
+```
+**Q89. what is implicit return?**  
+
+a function is returned value without using the return keyword,it is call implicit return
+```js
+let x=(username,password)=>username+password
+console.log(x("sam","1234"))
+let y=_=>console.log("sam",'1234')
+y()
+let z=(...rest)=>rest
+console.log(z('sam','muk')
+```
 
 TYPESCRIPT NOTES
 ================

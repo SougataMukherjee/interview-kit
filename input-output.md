@@ -1193,4 +1193,20 @@ let x=1
 console.log(x)
 ```
 ### Answer: 1
+### Question 87: what will be the output
+```js
+let a = "10", b = "20";
+console.log(Number(a) + Number(b));
+console.log(eval(a) + eval(b));
+```
+### Answer: 30 30
+
+### Question 88: what will be the output
+```js
+let v=new Boolean("") //Boolean(0) or Boolean(null) or Boolean()
+console.log(v,typeof v)
+let s=new Boolean(Infinity) // Boolean([]) or Boolean(true) or Boolean(1)
+console.log(s,typeof s)
+```
+### Answer: false object    true object
 
