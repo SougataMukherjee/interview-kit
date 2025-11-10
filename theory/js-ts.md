@@ -84,9 +84,23 @@ Example 3:
 ```
 **Q5: What is Closure?**  
 
-A closure is a function that retains access to its outer function's variables, even after the outer function has finished executing. It "remembers" the environment in which it was created, allowing it to access variables outside its immediate scope.
+A closure is combination of function or nested function and binding together with surrounding state or lexical scope  
+a closure is giving you to access to outer function scope from inner function.access outer function scope inside inner function is call closure, it is used to module design pattern,curring,memorize.  
+disadvantage of closure is memory leak and freeze the browser
 Example:
 ```js
+//exp1
+let glo="sougata"//global
+function outer(){
+  let out="sam" //local inner function parent scope
+  function inner(){
+    let inn="rik"//local
+    console.log(out,glo)//sam sougata because it access outer function scope inside inner
+  }
+  return inner()
+}
+outer()
+//exp2
 function outer() {
   let count = 0;
   return function inner() {
@@ -593,8 +607,12 @@ console.log(sessionStorage.getItem("sessionName")); // SamSession
 
 **Q26: Spread vs Rest**  
 
-Spread -> expands [...arr]
+Spread -> it is es6 features ,it operation with array and combine the content
 ```js
+//exp1
+let x=["java"],y=["js"]
+let combine=[...x,...y]
+//exp2
 const nums = [1, 2, 3];
 const newNums = [...nums, 4, 5]; // [1, 2, 3, 4, 5]
 ```
@@ -744,10 +762,23 @@ Webpack is a module bundler that combines JavaScript, CSS, images, and other ass
 
 **Q35: What are higher-order functions?**  
 
-A function that takes another function as input OR returns a function. (e.g., map, filter, reduce).
+A function that takes another function as an argument OR returns a function. (e.g., map, filter, reduce).
 Higher-order functions either take other functions as arguments or Return functions.  
 why use? Reusability,code modularity
 ```js
+//exp1
+function add(a,b){
+  return a+b
+}
+function multiply(a,b){
+  return a*b
+}
+function calc(n1,n2,op){//HOF
+  return op(n1,n2)
+}
+console.log(calc(10,10,add))
+console.log(calc(10,10,multiply))
+//exp2
  function areaCalculator(shape) {
   return function(arr) {
     if (shape === "circle") {
@@ -1067,8 +1098,22 @@ switch (day) {
 
 **Q59:map vs forEach**  
 
-map returns new array; forEach just loops.
-
+forEach() just loops and forEach does not have return type,it support return type but it return undefined and it is not support method chaining
+```js
+let a=["a","b","c"]
+let b=a.forEach((val)=>{
+  return val
+})
+console.log(b)//undefined
+``` 
+map() returns new array instance,if you want to create new instance or any modification use map,it is iterate over the array and return new array;
+```js
+let a=["a","b","c"]
+let b=a.map((val)=>{
+  return val
+})
+console.log(b)//["a","b","c"]
+``` 
 **Q60: instanceof**  
 
 Checks if object created from class.
@@ -1179,7 +1224,17 @@ isNaN('abc') → true
 
 Small data stored in browser; sent with every HTTP request.
 
-**Q69 Array Methods**  
+**Q69 Array and Array Methods**  
+Array are used to store multiple values with same or different types.size of the array are dynamic and type of the array are object.Arrays are mutable(changable).
+we can check weather statement array or not using Array.isArray()
+```js
+let x=['java','javascript']
+let y=[1,'js',function(){},true,[],{},false,null,undefined,this]
+if(Array.isArray(y)){
+  return true
+}
+return false
+```
 
 push() → adds element to end.
 ```js 
@@ -1197,9 +1252,14 @@ shift() → removes element from start.
 ```js 
         [1,2,3].shift() → [2,3]
 ```
-concat() → joins two arrays.
+concat() → joins two or more arrays and combine it in one array.
 ```js
+//exp 1
         [1].concat([2,3]) → [1,2,3]
+//exp 2
+        const x=["java"],y=["js"],z=["python"]
+        let combine=x.concat(y,z)
+        console.log(combine)
   ```
 slice() → returns part of array. 
 ```js
@@ -1317,7 +1377,12 @@ replace() → replaces part of string.
   ```
 split() → splits string into array.
 ```js
+///exp1
         "a,b,c".split(",") → ["a","b","c"]
+//exp2
+        const s="hello-sam"
+        const a=s.split("-")
+        console.log(a);//["hello","sam"]
 ```
 trim() → removes spaces from both ends.
 ```js
