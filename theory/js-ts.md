@@ -813,6 +813,33 @@ Example: Object.create(proto) creates a new object inheriting from proto.
 **Q34: Webpack**  
 
 Webpack is a module bundler that combines JavaScript, CSS, images, and other assets into an optimized build. It allows configuring different environments like development and production for separate builds. Webpack helps reduce bundle size using techniques like code splitting, tree shaking, and asset optimization. It supports various loaders for handling files and plugins for extending features such as minification, environment variables, caching, compression, and hot reloading. Overall, it streamlines the build process and improves performance for modern web apps.
+```txt
+          React Project Files
+       (Components, JS, CSS, Images)
+       __________________________________
+      |   js     js     js              |
+      |                                  |
+      |   img    img    img             |
+      |__________________________________|
+
+                    |
+                 (Babel)
+                    |
+                    v
+               +-----------+
+               |  Webpack  |
+               +-----------+
+                    |
+                 (Bundle Output)
+                    |
+                    v
+
+        ___________ Final Bundle ___________
+       |               |                   |
+       |     bundle.js |     images        |
+       |_______________|___________________|
+
+```
 
 **Q35: What are higher-order functions?**  
 
@@ -872,10 +899,10 @@ Synchronous Code
 
 **Q37: What are modules in JavaScript?**  
 
-Break code into reusable files using export and import.
+Break code into reusable files using export and import.in js two types of modules are there 1. common js module for node js 2. es6 module for modern application
 Types:
-Named export
-Default export
+Named export: you can not rename it
+Default export you can rename it
 Example 1:
 ```js
 export const x = 1; 
@@ -1260,6 +1287,11 @@ const child = document.querySelector(".item");
 console.log(child.parentElement); // UL or parent container
 
 ```
+.disabled
+```js
+<input type="checkbox" id="hide" />
+document.getElementById('hide').disabled=true
+```
 
 **Q64:clientX vs scrollX**  
 
@@ -1610,6 +1642,11 @@ const title = document.getElementById("mainTitle");
 ```js
 const items = document.getElementsByClassName("menu-item");
 
+```
+- getElementsByTagName() it return html collection as return value
+```js
+const li=document.getElementsByTagName("li")
+[...li].forEach(x=>console.log(x))
 ```
 - querySelector() Selects the first element matching a CSS selector.Supports complex selectors (.class, #id, div > p, [type="text"])
 ```js

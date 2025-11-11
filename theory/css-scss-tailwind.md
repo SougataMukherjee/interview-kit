@@ -123,6 +123,17 @@ Sticky sticks only inside its container after reaching a scroll position, while 
 **Q7: Flexbox Basics. Float property advantage over Flex**  
 
 flexbox useful for 1D layout (row or column).  
+```txt
++------------------+
+|       d1         |
++------------------+
+|       d2         |
++------------------+
+|       d3         |
++------------------+
+        FLEX
+
+```
 ```js
 .container {
   display: flex;
@@ -169,6 +180,17 @@ Float was used to wrap text around images (flex cannot do this)
 **Q8: Grid Basics.**  
 
 Grid useful for 2D layout (rows and columns)
+```txt
++-----+-----+-----+
+| d1  | d2  | d3  |
++-----+-----+-----+
+| d4  | d5  | d6  |
++-----+-----+-----+
+| d7  | d8  | d9  |
++-----+-----+-----+
+         GRID
+
+```
 ```js
 .container {
   display: grid;
@@ -302,7 +324,7 @@ Animation: runs automatically with @keyframes.
 
 ```
 **Q12: Pseudo classes and elements.**
-Pseudo-class: use to style state (e.g., :hover, :focus,:nth-child(2),:nth-child(odd)).  
+Pseudo-class: use to style state (e.g., :hover,:disabled, :focus,:nth-child(2),:nth-child(odd)).  
 
 Pseudo-element: used to style particular part of element (e.g., ::before, ::after)
 
