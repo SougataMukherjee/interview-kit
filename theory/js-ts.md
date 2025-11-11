@@ -1801,6 +1801,33 @@ y()
 let z=(...rest)=>rest
 console.log(z('sam','muk')
 ```
+**Q90. What is Method Chaining?**  
+Method chaining means calling multiple methods on the same object in a single line — each method returns the same object.
+```js
+let arr = [1, 2, 3, 4];
+let result = arr.map(x => x * 2).filter(x => x > 4).reduce((a, b) => a + b);
+console.log(result);
+```
+**Q91. How to Create and Use a Date Object**  
+We can create a Date using the Date constructor
+```js
+const date = new Date();
+const day = date.getDate();       
+const month = date.getMonth() + 1; 
+const year = date.getFullYear(); 
+console.log(`Today's date: ${day}-${month}-${year}`);
+```
+**Q92.what is DOMTokenList (classList)?**  
+element.classList returns a DOMTokenList, which has methods to manage CSS classes dynamically.
+```js
+let box = document.querySelector('.box');
+
+box.classList.add('red');       // adds class
+box.classList.remove('blue');   // removes class
+box.classList.toggle('active'); // add/remove toggle
+console.log(box.classList.contains('red')); // true or false
+```
+
 
 TYPESCRIPT NOTES
 ================
