@@ -306,38 +306,51 @@ b = JSON.parse(JSON.stringify(a))
 a.y ──► { z:2 }     b.y ──► { z:2 }   (separate copies)
 ```
 
-**Q12. What are Promises? Build Own Promise for Microtask**  
+**Q12. What are Promises? why promise faster than setTimeout? Build Own Promise for Microtask**  
 
-Used to handle async operations, It has 3 states: pending → resolved → rejected
+Promise is an object represent the eventual completion or failure of asynchronous operation and resulting value.promise has 3 states pending,rejected,fulfilled, it is introduce es6 onwards.we can make asynchronous task using promise.to execute promise we have prototype method promise.prototype.then() for successful compilation and promise.prototype.catch() for unsuccessful compilation 
 Example:
 ```js
-new Promise((res, rej)=>res(5)).then(console.log);
+let promise=new Promise((res,rej)=>{
+    let flag=true;
+    if(flag){
+        res(5)
+    }else{
+        rej("error")
+    }
+}).then(console.log).catch(console.log)
+
 ```
+Promise is faster than setInterval because Promises run in the microtask queue, which has higher priority than setInterval, which runs in the macrotask queue. Microtasks execute faster and earlier than macrotasks in JavaScript’s event loop  
+```js
+console.log("Start");//1
+setInterval(() => console.log("Interval"), 0);//4
+Promise.resolve().then(() => console.log("Promise"));//3
+console.log("End");//2
+
+```
+
 build own promise
 ```js
-function MyPromise(executor) {
-  let onResolve;
-  function resolve(value) {
-    // call then callback when resolved
-    if (onResolve) onResolve(value);
-  }
-
-  // save .then callback
-  this.then = function (callback) {
-    onResolve = callback;
-  };
-
-  executor(resolve);
+function girlfriend(){
+    return new Promise((propose,reject)=>{
+        setTimeout(()=>{
+            const iLoveYou=true
+            if(iLoveYou){
+                console.log('after buying a rose Propose')
+                propose()
+            }else{
+                console.log('she accept your proposal');
+                reject('sorry not fullfill')
+            }
+        },2000)
+    })
 }
-
-
-const p = new MyPromise(function (resolve) {
-  setTimeout(() => resolve("Done!"), 1000);
-});
-
-p.then((result) => {
-  console.log(result); // Done!
-});
+girlfriend().then(()=>{
+    console.log('sam propose his gf')
+}).catch(()=>{
+    console.log('next time good luck')
+})
 
 ```
 
@@ -377,7 +390,23 @@ Promise.race([P1, P2, P3])
    P2 --------✅
    P3 ------------✅
 ```
-
+```js
+const sam=new Promise((res,rej)=>{
+    setTimeout(()=>{
+        res('I am fast')
+    },1000)
+})
+const rik=new Promise((res,rej)=>{
+    setTimeout(()=>{
+        res('I am second')
+    },2000)
+})
+ Promise.race([sam,rik]).then(user=>{
+    console.log(user);// i am fast
+}).catch(err=>{
+    console.log(err);
+})
+```
 **Q14. How to fetch API using Promise?**  
 
 ```js
@@ -661,8 +690,10 @@ const result = sum(4, 5, 6, 7); // [9, 10, 11, 12]
 ```js
 JSON.parse(JSON.stringify(obj)); 
 ```
-NOTE:JSON.stringify() → Object → String
-     JSON.parse() → String → Object
+NOTE:JSON.stringify() → convert js object to string
+     JSON.parse() → convert a string to js object 
+
+NOTE: Javascript Object Notation(JSON) is a data format(key-value pair) storing and transforming data to one device to another
 
 **Q28: Optional Chaining**  
 
@@ -867,10 +898,30 @@ Examples:
 
 **Q39: What is destructuring?**  
 
-Extract values from arrays or objects easily:
+Extract/unpacking values from arrays or objects easily:
 ```js
+//exp 1
 const [a, b] = [1, 2];
 const {name, age} = person;
+//exp 2
+let x=["java","js","node"]
+let [ ,y ,z]=x
+console.log(y,z)//js node
+//exp 3
+let x, y
+[x=10,y=20]=[,200]
+console.log(x,y) //10 200
+
+//exp 4
+let user={
+    userId:'101',
+    userName:'sam',
+    pass:'123'
+}
+function details({userId,userName,pass}){
+    return userId + userName + pass
+}
+console.log(details(user))//101sam123
 ```
 
 **Q40: What is a generator function?**  
@@ -932,7 +983,9 @@ x = 5;//error
 data types are describe the type of data  
 
 - Primitive: single value (immutable)(String, Number, boolean, null, undefined, symbol, bigint).
-- Non-Primitive:(mutable) Object, Array, function,Date,Math.
+- Non-Primitive:(mutable) Object, Array, function,Date,Math.  
+
+Note: primitive are pass by value, object are pass by reference
 
 **Q46:Null vs Undefined**  
 
@@ -1149,9 +1202,10 @@ obj instanceof MyClass;
 
 Removes unused JS code during bundling.
 
-**Q62: what is DOM and its advantage**  
+**Q62: what is DOM and BOM and its advantage**  
 
-DOM: tree structure of HTML.  
+DOM(Document Object Model): tree structure of HTML.  
+BOM(Browser Object Model): 
 
 Advantage: JS can dynamically change HTML/CSS
 
