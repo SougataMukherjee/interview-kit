@@ -4,6 +4,8 @@
   <div id="box"></div>
 
   <script>
+  (function () {
+      'use strict';
     const box = document.getElementById("box");
 
     async function loadImages() {
@@ -24,6 +26,8 @@
         loadImages();
       }
     });
+
+  })()
   </script>
 </body>
 </html>

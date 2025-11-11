@@ -42,7 +42,20 @@ ECMAScript → standard/spec that JS follows.
 
 **Q4: What is Hoisting?**  
 
-Variables and functions declarations are moved to top of there scope before code execution.hoisting is not working on let and const its throwing reference error
+Variables and functions declarations are moved to top of there scope before code execution.hoisting is not working on let and const its throwing reference error  
+
+syntax  
+```js
+{
+  var x=10; //global scope
+}
+if(true){
+  var x=10; //global scope
+}
+function(){
+  var x=10; // local scope or function scope
+}
+```
 Example 1:
 ```js
 console.log(a); // undefined
@@ -535,9 +548,19 @@ Array.prototype.myMap = function(cb){
 ```
 **Q20: Call, Apply, Bind**  
 
-To manually control the value of this when borrowing a function from another object or ensuring a function always runs with a specific context.
+To manually control the value of this when borrowing a function from another object or ensuring a function always runs with a specific context.bind() binding this keyword and return newbound function
 
 ```js
+//exp1
+  let x={user:'sam',age:25}
+let y=function(){
+    console.log(`${this.user}'s age ${this.age}`)
+}
+y.call(x); //sam's age 25
+y.apply(x); //sam's age 25
+const newFn = y.bind(x);
+newFn(); //sam's age 25
+//exp2
 function greet(greeting, emoji) {
   console.log(`${greeting}, ${this.name}! ${emoji}`);
 }
@@ -1005,11 +1028,12 @@ x()
 console.log(this)//point global object
 
 //exp 2
-function User(name) {
+function User(name,age) {
   this.name = name;
+  this.age=age;
 }
-let u = new User('Sam');
-console.log(u.name); // Sam
+let u = new User('Sam',30);
+console.log(u.name,u.age); // Sam 30
 ```
 
 Prototype Inheritance is a feature in JavaScript where objects can inherit properties and methods from another object through the prototype chain.
@@ -1261,13 +1285,17 @@ concat() → joins two or more arrays and combine it in one array.
         let combine=x.concat(y,z)
         console.log(combine)
   ```
-slice() → returns part of array. 
+slice() → returns extract values from an array. slice is not modified the original array
 ```js
         [1,2,3,4].slice(1,3) → [2,3]
 ```
-splice() → adds/removes elements at position.
+splice() → adds/removes/change elements at particular position.
 ```js
-         [1,2,3].splice(1,1,9) → [1,9,3]
+//exp1 
+let x=[1,2,3,4].splice(1,2)
+console.log(x)
+//exp2 
+    [1,2,3].splice(1,1,9) → [1,9,3]
 ```
 indexOf() → finds first index of value.
 ```js 
@@ -1280,14 +1308,16 @@ includes() → checks if value exists.
 join() → joins array elements into string.
 ```js
          [1,2,3].join('-') → "1-2-3"
+         [11,11,95].join('/') → "11/11/95"
   ```
 reverse() → reverses array order. 
 ```js
         [1,2,3].reverse() → [3,2,1]
 ```
-sort() → sorts array elements. 
+sort() → sorts array elements. default ascending order
 ```js
         [3,1,2].sort() → [1,2,3]
+        ["mango","banana","apple"].sort() → [ 'apple', 'banana', 'mango' ]
   ```
 map() → returns new array by applying function.
 ```js
@@ -1297,9 +1327,15 @@ filter() → returns new array with matching elements.
 ```js
         [1,2,3].filter(x=>x>1) → [2,3]
 ```
-reduce() → combines all elements into single value.
+reduce() → combines all elements into single value. it iterate over the array items and returns a single output.reduce function takes 4 arguments accumulator(prev value),current value,currentIndex, array
 ```js
+//exp 1
        [1,2,3].reduce((a,b)=>a+b) → 6
+//exp 2
+      const x=["s","o","u"].reduce((prev,curr)=>{
+      return prev+curr
+    })
+console.log(x)
 
 ```
 forEach() → runs function for each element.
@@ -1318,11 +1354,11 @@ every() → checks if all elements pass test.
 ```js
       [2,4].every(x=>x%2===0) → true
 ```
-some() → checks if any element passes test.
+some() → checks if any element(at least one) passes test then return true else false.
 ```js
       [1,2].some(x=>x>1) → true
 ```
-flat() → flattens nested arrays.
+flat() → flattens nested arrays, default array depth is 1.
 ```js
       [1,[2,3]].flat() → [1,2,3]
 ```
@@ -1330,9 +1366,17 @@ fill() → fills array with given value.
 ```js
       [1,2,3].fill(0) → [0,0,0]
 ```
-from() → creates array from iterable.
+from() → creates new shallow copied array instance from array like object or iterable object.it convert string to array
 ```js
+//exp 1
       Array.from('abc') → ['a','b','c']
+//exp 2
+  function fun(...args){
+    return args
+  }
+let f=fun("mango","banana")
+let ff=Array.from(f)
+console.log(ff, typeof ff)//[ 'mango', 'banana' ] object
 
 ```
 
@@ -1351,11 +1395,12 @@ concat() → joins two strings.
 ```js
         "Hello".concat(" World") → "Hello World"
   ```
-includes() → checks if substring exists.
+includes() → checks if substring exists and return boolean value.
 ```js
         "Hello".includes("lo") → true
+        ["java","js"].includes("js") → true
 ```
-indexOf() → finds first index of substring.
+indexOf() → finds first index of substring if not found it return -1.
 ```js
         "Hello".indexOf("l") → 2
 ```
@@ -1444,7 +1489,7 @@ seal() → prevents adding or removing keys.
 ```js
         Object.seal({a:1}) can't add/delete keys
 ```
-create() → creates object with given prototype.
+create() → creates a new object using an existing object as the prototype of newly created object.
 ```js
         Object.create(Array.prototype) → []
   ```

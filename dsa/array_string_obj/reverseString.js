@@ -5,6 +5,8 @@ function reverseString(s) {
       res.push(s[i]);
     }
     return res.join("");
+    //return s.split("").reverse().join("")
+    //return [...s].reverse().join("")
   }
   let s="sample";
   console.log(reverseString(s))
