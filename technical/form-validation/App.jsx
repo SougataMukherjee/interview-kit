@@ -1,5 +1,5 @@
 import { useState } from "react";
-import validate from "./FormValidation";
+import validate from "./Formvalidation";
 import { Button, Alert } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -52,7 +52,7 @@ export default function App() {
         />
         {errors.password && <p style={{ color: "red" }}>{errors.password}</p>}
       </div>
-      <Button type="submit" className="mt-2 btn btn-success">
+      <Button type="submit" disable={Object.keys(validationErrors).length > 0} className="mt-2 btn btn-success">
         Submit
       </Button>
     </form>

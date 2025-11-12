@@ -55,9 +55,10 @@ How diffing algorithm works in Virtual DOM
                          | (Only changed nodes)|
                          +---------------------+
   ```
-**Q3: Functional vs Class Components**  
+**Q3: Components? Functional vs Class Components**  
+Components are reusable building blocks of react application,its like a function that return HTML element. Through render() a component render to the dom
 
-- Functional components are simpler to write and understand, use Hooks instead of lifecycle methods, avoid the complexity of this, make logic reuse easier through custom hooks, support better performance optimizations, work seamlessly with Concurrent Mode, enable streaming SSR for faster page load, and are the recommended modern approach in React.
+- Functional components/ State-less components are simpler to write and understand, use Hooks instead of lifecycle methods, avoid the complexity of this, make logic reuse easier through custom hooks, support better performance optimizations, work seamlessly with Concurrent Mode, enable streaming SSR for faster page load, and are the recommended modern approach in React.
 ```js
 import { useState } from "react";
 
@@ -75,7 +76,7 @@ function Counter() {
 export default Counter;
 
 ```
-- Class components rely on lifecycle methods, involve more boilerplate, make code harder to reuse, require managing the this keyword, don’t align well with modern React features like Concurrent Mode and streaming SSR, and are now considered older and less preferred for new development.
+- Class components/State-ful components rely on lifecycle methods, involve more boilerplate, make code harder to reuse, require managing the this keyword, don’t align well with modern React features like Concurrent Mode and streaming SSR, and are now considered older and less preferred for new development.
 ```js
 import React, { Component } from "react";
 
@@ -103,6 +104,7 @@ export default Counter;
 **Q4: What are Hooks in React?**  
 
  Functions that let you use React features without classes (e.g. useState, useEffect, useMemo, useRef, useCallback, useContext).
+ hooks are new feature introduce in react 16.8version.it allows you to use state and other react feature without writing a class.its only work in function based components.
 
 **Q5: Explain useState**  
 
@@ -135,6 +137,15 @@ useEffect(() => { const timer = setInterval(() => console.log("Running after 1 s
     clearInterval(timer); // cleanup
   }; },[]);
   ```
+❌Note: We cannot use useEffect inside loops or conditions
+```js
+if (someCondition) useEffect(() => {});
+
+```
+❌Note: We cannot use async directly in useEffect because Because useEffect expects a cleanup function, not a Promise.Instead, create an inner async function and call it.
+```js
+useEffect( async() => {},[])
+```
 
 useLayoutEffect runs synchronously after render but before the browser paints the UI. It blocks the paint until the code inside finishes. Use it only when you need to measure DOM size, position, scroll, or apply immediate UI updates to avoid flicker. Best suited for reading/writing DOM layout, animations, synchronizing UI, or correcting layout before the user sees it.
 
@@ -240,9 +251,10 @@ export default memo(Child);
 
 ```
 
-**Q8: What is Prop Drilling?**  
+**Q8: what is Props? What is Prop Drilling?**  
 
- Passing props deeply through multiple components so components become harder to read and maintain and many components depend on props they don’t use.
+  Props are special keywords in react which stands for communication between two components or data passing one components to another components .you can spread props like {...props}
+  Passing props deeply through multiple components so components become harder to read and maintain and many components depend on props they don’t use.
  Solved using Context API.
  ```txt
  [Parent Component]
@@ -256,10 +268,13 @@ export default memo(Child);
 
 **Q9: What is Context API?**  
 
-Provides global state without prop drilling and solution for props drilling.
+Provides global state without prop drilling and solution for props drilling.it is a way to pass data through the component tree without having to pass props down. createContext create a context object
 Example:
 ```js
 const UserContext = createContext();
+const UserContext = createContext(null);
+const UserContext = createContext({});
+const UserContext = createContext(0);
 ```
 
 **Q10: What is React.memo?**  
@@ -312,7 +327,9 @@ Uncontrolled - managed by DOM via refs.
 
 **Q12: What is useRef?**  
 
- Used to access DOM elements or persist mutable values without re-render.
+Ref means reference of react.you are referring through dom elements if directly used it was costly.do not overused ref its causing react performance.it is use for managing focus,text selection or media playback,triggering animation  
+
+useRef is Used to access DOM elements or persist mutable values without re-render.its a part of react hook, it can take maximum one parameter
 Example:
 ```js
 const inputRef = useRef();
@@ -383,13 +400,12 @@ export default function VirtualizedList() {
 
 **Q15: Lifecycle methods in class component**  
 
-Mounting → Component is created and added to the UI ,it runs once after initial render
-          best for api calls,setting timers  
+Mounting → when an instance of a Component is created and added to the UI/DOM ,it runs once after initial render. its best for api calls,setting timers  example constructor,getDeriveStateFromProps,render,componentDidMount()
 
 Updating → Component re-renders when state/props change, it runs after every update
-          Used to react to state/prop changes (e.g., data refresh)  
+          Used to react to state/prop changes (e.g., data refresh)  example getDeriveStateFromProps,shouldComponentUpdate,getSnapshotBeforeUpdate,componentDidUpdate
 
-Unmounting → Component is removed from the UI,Runs before component is destroyed its use for cleanup(clear timers, remove event listeners)
+Unmounting → Component is removed from the UI/DOM, runs before component is destroyed its use for cleanup(clear timers, remove event listeners)example componentDidCatch
 ```txt
              Mounting     →     Updating     →     Unmounting
  (componentDidMount)  (componentDidUpdate)  (componentWillUnmount)
@@ -422,7 +438,7 @@ function withAuth(WrappedComponent) {
 
 **Q17: What is React Fragment?**  
 
-<></> wrapper to avoid adding extra DOM nodes.
+<></> wrapper to avoid adding extra DOM nodes.it is alternate of any parent.
 
 ```js
 <> <Comp1/><Comp2/> </>
@@ -439,24 +455,54 @@ They catch UI rendering errors, but not event handler errors and errors in async
 **Q19. how to handle error in react?**  
 
 ```js
-class ErrorBoundary extends React.Component {
-  state = { hasError: false };
-  componentDidCatch() { this.setState({ hasError: true }); }
+// ErrorBoundary.jsx
+import React, { Component } from "react";
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    // Update state to show fallback UI
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, info) {
+    console.error("Error caught in ErrorBoundary:", error, info);
+  }
+
   render() {
-    return this.state.hasError ? <h3>Something went wrong</h3> : this.props.children;
+    if (this.state.hasError) {
+      return <h2>Something went wrong!</h2>;
+    }
+    return this.props.children;
   }
 }
+
+export default ErrorBoundary;
+
 ```
 and use like 
 ```js
-<ErrorBoundary><MyComponent/></ErrorBoundary>
+import ErrorBoundary from "./ErrorBoundary";
+import MyComponent from "./MyComponent";
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <MyComponent />
+    </ErrorBoundary>
+  );
+}
 ```
 
 
 **Q19: Difference between state and props**  
 
 - State - internal, mutable(can modify because it belongs to the component itself), use for dynamic data.
-- Props - external, immutable(because they are passed from parent to child and should not be changed by the child component), use for passing data to child components.
+- Props - external, immutable(because they are passed from parent to child and should not be changed by the child component means a parent can send any props value to child but child cannot modify received props), use for passing data to child components.
 ```txt
 Parent Component (holds props/state)
         |
@@ -613,7 +659,8 @@ ReactDOM → renders UI in browser
 
 **Q32: JSX**  
 
-JS + HTML
+jsx stand for javascript XML.it allow us to write HTML in react.
+JXS=JS + HTML
 ```js
 const el = <h1>Hello {name}</h1>;
 ```
@@ -644,6 +691,7 @@ State: mutable (internal data)
 **Q37: types of conditional rendering**  
 
 isLogged ? <Home/> : <Login/>
+(cond1 && cond2) ? st1 :cond2 ? st2 : st3
 status && <Loader/>
 msg || "No message"
 
@@ -892,6 +940,41 @@ useEffect(() => {
 const valueRef = useRef(null);
 
 ```
+**Q51. Interpolation (Template Literals)?**  
+template literal provide an easy way to interpolate variables and expressions into strings using ${}.it is secure because values are automatically escaped (encapsulated)
+```js
+const name = "Sam";
+console.log(`Hello, ${name}!`);
+
+fetch(`https://api.example.com/users/${userId}`);
+
+```
+**Q52.What is props.children?**  
+props.children allows a component to display whatever is written between its opening and closing tags.
+```js
+function Card({ children }) {
+  return <div className="card">{children}</div>;
+}
+
+<Card><p>Hello inside Card!</p></Card>
+
+```
+**Q53. What is useReducer?**  
+useReducer is an alternative to useState for complex state logic.
+It manages state transitions using a reducer function.
+```js
+function reducer(state, action) {
+  switch (action.type) {
+    case "INC": return { count: state.count + 1 };
+    case "DEC": return { count: state.count - 1 };
+    default: return state;
+  }
+}
+
+const [state, dispatch] = useReducer(reducer, { count: 0 });
+
+```
+
 NEXT.JS NOTES 
 =============
 
