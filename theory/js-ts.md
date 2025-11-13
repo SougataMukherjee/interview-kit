@@ -407,13 +407,30 @@ const rik=new Promise((res,rej)=>{
     console.log(err);
 })
 ```
-**Q14. How to fetch API using Promise?**  
+**Q14. How to fetch API using Promise? how to restricting fetch data**  
 
 ```js
 fetch("https://api.example.com/data")
   .then(res => res.json())
   .then(data => console.log(data))
   .catch(err => console.log(err));
+  ```
+
+  restricting by authentication token or role you can restrict fetch data to prevents unauthorized users from fetching data
+  ```js
+  
+  useEffect(() => {
+  const token = localStorage.getItem("authToken");
+  if (!token) return; 
+  if (user.role !== "admin") return;
+
+  fetch("/api/data", {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+    .then(res => res.json())
+    .then(data => console.log(data));
+}, []);
+
   ```
 
 **Q15. create a Promise and resolve on Button click**  
@@ -611,6 +628,12 @@ function add(a) {
 }
 const add5 = add(5);
 console.log(add5(3)); // 8
+
+or 
+
+const add = a => b => a + b;
+console.log(add(5)(3)); // 8
+
 ```
 **Q22: What is Prototype?**  
 

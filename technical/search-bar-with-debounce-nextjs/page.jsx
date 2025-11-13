@@ -1,40 +1,58 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function DebouncingExample() {
-  const [name, setName] = useState("");
+export default function DebounceProductSearch() {
+  const [query, setQuery] = useState("");
+  const [products, setProducts] = useState([]);
+  const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // 🟢 Fetch all products initially
   useEffect(() => {
-    if (name === "") {
-      setLoading(false);
-      return;
+    async function fetchProducts() {
+      const res = await fetch("https://dummyjson.com/products");
+      const data = await res.json();
+      setProducts(data.products);
+      setFiltered(data.products);
     }
+    fetchProducts();
+  }, []);
 
-    setLoading(true); 
+  // 🟡 Debounce the search input
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      if (query.trim() === "") {
+        setFiltered(products);
+      } else {
+        const result = products.filter((p) =>
+          p.title.toLowerCase().includes(query.toLowerCase())
+        );
+        setFiltered(result);
+      }
+      setLoading(false);
+    }, 600); // delay 600ms
 
-    const timerId = setTimeout(() => {
-      console.log("Debounced Value:", name);
-      setLoading(false); 
-    }, 1000);
-
-    return () => {
-      clearTimeout(timerId); 
-    };
-  }, [name]);
+    return () => clearTimeout(timer);
+  }, [query, products]);
 
   return (
-    <>
+    <div style={{ padding: "20px" }}>
+      <h2>🛒 Debounced Product Search</h2>
       <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Type something..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search product..."
+        style={{ padding: "6px", width: "250px" }}
       />
 
-      {loading ? <p>⏳ Loading...</p> : <p>✅ Done</p>}
+      {loading && <p>⏳ Searching...</p>}
 
-      <div>Hello {name}</div>
-    </>
+      <ul>
+        {filtered.map((p) => (
+          <li key={p.id}>{p.title}</li>
+        ))}
+      </ul>
+    </div>
   );
 }

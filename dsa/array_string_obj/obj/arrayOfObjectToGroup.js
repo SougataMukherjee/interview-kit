@@ -14,3 +14,8 @@ arr.forEach(item => {
 });
 
 console.log(output);
+// {
+//   A: [ { key: 'A', value: 10 } ],
+//   B: [ { key: 'B', value: 20 } ],
+//   C: [ { key: 'C', value: 30 } ]
+// }

@@ -101,10 +101,11 @@ class Counter extends Component {
 export default Counter;
 
 ```
-**Q4: What are Hooks in React?**  
+**Q4: What are Hooks in React? Can we use a Hook inside another Hook?**  
 
  Functions that let you use React features without classes (e.g. useState, useEffect, useMemo, useRef, useCallback, useContext).
- hooks are new feature introduce in react 16.8version.it allows you to use state and other react feature without writing a class.its only work in function based components.
+ hooks are new feature introduce in react 16.8version.it allows you to use state and other react feature without writing a class.its only work in function based components.  
+ yes we can use hook inside custom hook else no
 
 **Q5: Explain useState**  
 
