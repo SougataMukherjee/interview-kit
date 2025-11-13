@@ -1254,7 +1254,31 @@ Removes unused JS code during bundling.
 
 **Q62: what is DOM and BOM and its advantage**  
 
-DOM(Document Object Model): tree structure of HTML.  
+DOM(Document Object Model): when a web page loads the browser construct the DOM which is tree like structure of HTML.  
+```txt
+                🏛️ Document (root)
+                       │
+                       ▼
+                  <html> Element
+                       │
+          ┌────────────┴────────────┐
+          ▼                         ▼
+       <head>                    <body>
+          │                         │
+ ┌────────┴────────┐       ┌────────┴───────────┐
+ ▼                 ▼       ▼                    ▼
+<title>       <meta>   <header>              <div>
+                              │                 │
+                              ▼                 ▼
+                          <nav>             <ul>
+                              │                 │
+                              ▼                 ▼
+                          <a> link          <li> item
+                                                 │
+                                                 ▼
+                                             <span> text
+
+```
 BOM(Browser Object Model): 
 
 Advantage: JS can dynamically change HTML/CSS
@@ -1654,7 +1678,7 @@ console.log(p.greet()); // Hi Sam
 
  Cross-Origin Resource Sharing – allows API access from different domains.
 
-**Q77:Access DOM (4 ways)**  
+**Q77:Access DOM (5 ways)**  
 
 - getElementById() Selects a single element by its id.You need one specific element with a unique ID (fastest and most direct)
 ```js
@@ -1680,6 +1704,12 @@ const thirdItem = document.querySelector("ul li:nth-child(3)");
 - querySelectorAll() Selects all elements matching a CSS selector. Returns NodeList
 ```js
 const allLinks = document.querySelectorAll("nav a");
+
+```
+🎯 Note: if you want to target one elements use querySelector(), if you want to target multiple elements, always use querySelectorAll() and then loop using forEach
+```js
+const allBoxes = document.querySelectorAll('.box');
+allBoxes.forEach(el => el.style.color = 'red');
 
 ```
 **Q78:Event Emitter**  

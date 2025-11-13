@@ -224,8 +224,8 @@ Example:
 ```
 **Q26: What is the difference between HTMLCollection and NodeList?**  
 
-- HTMLCollection: live, updates automatically.
-- NodeList: static, doesn’t auto-update.
+- HTMLCollection: live, updates automatically.Returned by methods like document.getElementsByTagName() or getElementsByClassName()
+- NodeList: static, doesn’t auto-update.Returned by document.querySelectorAll() or childNodes also can use forEach directly for loop
 
 **Q27: What are ARIA roles?**  
 
