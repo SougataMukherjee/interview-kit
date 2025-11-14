@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Instagram Like Effect</title>
+
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: #f2f2f2;
+  }
+
+  #container {
+    position: relative;
+  }
+
+  img {
+    width: 300px;
+    height: 350px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 80px;
+    color: red;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.3s ease;
+    pointer-events: none;
+  }
+</style>
+
+</head>
+<body>
+
+<div id="container">
+  <img src="./a.jpg" />
+
+  <!-- heart icon -->
+  <i>❤️</i>
+</div>
+
+<script>
+(function () {
+    'use strict';
+  const con = document.querySelector("#container");
+  const love = document.querySelector("i");
+
+  con.addEventListener("dblclick", function () {
+    love.style.transform = "translate(-50%, -50%) scale(1)";
+
+    setTimeout(function () {
+      love.style.transform = "translate(-50%, -50%) scale(0)";
+    }, 800);
+  });
+})()
+</script>
+
+</body>
+</html>

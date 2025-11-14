@@ -43,6 +43,7 @@ ECMAScript → standard/spec that JS follows.
 **Q4: What is Hoisting?**  
 
 Variables and functions declarations are moved to top of there scope before code execution.hoisting is not working on let and const its throwing reference error  
+in parent function anywhere we can use var because var add itself to the window object.  
 
 syntax  
 ```js
@@ -95,6 +96,16 @@ Example 3:
 }
 
 ```
+Example 4:
+```js
+function abcd(){
+    for(var a=1;a<=10;a++){
+        
+    }
+    console.log(a);//11
+}
+abcd();
+```
 **Q5: What is Closure?**  
 
 A closure is combination of function or nested function and binding together with surrounding state or lexical scope  
@@ -139,7 +150,7 @@ let name = "Sam"; // name is the identifier
 ```
 JavaScript variables are containers for data.  
 
-var -> the scope of the variable define with the keyword "var". this is global scope.it is limited to the function within which it is defined ,calling function scope. 
+var -> the scope of the variable define with the keyword "var". this is global scope.it is store in browser window object.it is limited to the function within which it is defined ,calling function scope. 
 ```js
 function foo(){
   var x='sam'//local scope or function scope
@@ -157,7 +168,7 @@ switch(true){
 }
 ```
 
-let, const -> the scope of variable defined with the keyword 'let' or 'const' is limited to the block defined by curly brace called lexical variable scope.  
+let, const -> the scope of variable defined with the keyword 'let' or 'const' is limited to the block defined by curly brace called lexical variable scope. it is not store in browser window object  
 difference between let and const is const variable can only one time declare and assign a value because it's a constant and const cannot be update or redeclared 
 ```js
 {
@@ -1033,7 +1044,13 @@ x = 5;//error
 data types are describe the type of data  
 
 - Primitive: single value (immutable)(String, Number, boolean, null, undefined, symbol, bigint).
-- Non-Primitive:(mutable) Object, Array, function,Date,Math.  
+- Non-Primitive:(mutable) Object, Array, function,Date,Math.when we copy those its reference is copy but not having real copy  ((),{},[])
+```js
+let a =[1,2,3]
+let b=a
+a.pop()
+console.log(a,b)//[ 1, 2 ] [ 1, 2 ]
+```
 
 Note: primitive are pass by value, object are pass by reference
 
@@ -1279,7 +1296,7 @@ DOM(Document Object Model): when a web page loads the browser construct the DOM 
                                              <span> text
 
 ```
-BOM(Browser Object Model): 
+BOM(Browser Object Model): controls browser features
 
 Advantage: JS can dynamically change HTML/CSS
 
@@ -1880,7 +1897,11 @@ box.classList.remove('blue');   // removes class
 box.classList.toggle('active'); // add/remove toggle
 console.log(box.classList.contains('red')); // true or false
 ```
-
+**Q93.what is first class function?**  
+first class function you can store as a value
+```js
+let a=function(){}
+```
 
 TYPESCRIPT NOTES
 ================

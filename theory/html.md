@@ -79,7 +79,8 @@ new element new attribute multimedia 2d 3d drawing support, drag and drop suppor
 **Q6: What is the difference between div and section?**  
 
  div is a generic container, no semantic meaning.it has no meaning used for layout
-section groups related content with semantic meaning.represent a standalone section  of content and help in seo and accessibility
+section groups related content with semantic meaning.represent a standalone section  of content and help in seo and accessibility.
+A block-level container takes full width by default.
 
 **Q7: Field set**  
 

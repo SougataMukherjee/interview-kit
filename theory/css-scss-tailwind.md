@@ -2,9 +2,22 @@
 CSS NOTES
 ====================
 
-**Q1: what is CSS? Is CSS case-sensitive? Different ways to include CSS in a webpage?**  
+**Q1: what is CSS? CSS Boilerplate? Is CSS case-sensitive? Different ways to include CSS in a webpage?**  
 
 CSS, which stands for Cascading(styles apply in order of priority) Style Sheets, is a style sheet language used in web development to control the presentation and formatting of HTML documents
+```js
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width:100%;
+}
+
+```
 
 No (selectors & properties are not), but values like class names in HTML are.  
 
