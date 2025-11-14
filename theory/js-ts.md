@@ -1096,8 +1096,13 @@ function add(a,b){
 Function passed into another function to run after a task completes.
 ```js
 setTimeout(()=>console.log("Arrow function"),1000);
-setTimeout(function() {console.log("Anonymous function");}, 1000);
-function greet() { console.log("Name function");} setTimeout(greet, 500);
+setTimeout(function() {
+  console.log("Anonymous function");
+  }, 1000);
+function greet() { 
+  console.log("Name function");
+  }
+setTimeout(greet, 500);
 ```
 
 **Q50:Pyramid of Doom (Callback Hell)**  
@@ -1377,10 +1382,31 @@ viewport left click
 - click:Fired when the user presses and releases the mouse button on an element.
 - dblclick:Fired when the user double-clicks an element.
 - mousedown:Fired when the mouse button is pressed down on an element (before releasing).
+```js
+<div id="box">Hold mouse down</div>
+<script>
+box.addEventListener("mousedown", () => console.log("Mouse Down"));
+</script>
+
+```
 - mouseup:Fired when the mouse button is released over an element.
 - mousemove:Fired when the mouse pointer is moved over an element.
+```js
+<div id="box">Move mouse here</div>
+<script>
+box.addEventListener("mousemove", () => console.log("Moving"));
+</script>
+
+```
 - mouseenter:Fired when the mouse pointer enters the boundary of an element.Unlike mouseover, it does not bubble.
 - mouseleave:Fired when the mouse pointer leaves the boundary of an element.Unlike mouseout, it does not bubble.
+```js
+<div id="box">Hover out</div>
+<script>
+box.addEventListener("mouseleave", () => console.log("Mouse Leave"));
+</script>
+
+```
 
 **Q66:DOMContentLoaded**  
 DOMContentLoaded fires when the HTML is fully loaded and parsed, before images, CSS, and other assets finish loading, it helps to run js early
@@ -1721,6 +1747,9 @@ const thirdItem = document.querySelector("ul li:nth-child(3)");
 - querySelectorAll() Selects all elements matching a CSS selector. Returns NodeList
 ```js
 const allLinks = document.querySelectorAll("nav a");
+[...document.querySelectorAll("button")].forEach(btn => {
+  btn.style.background = "blue";
+});
 
 ```
 🎯 Note: if you want to target one elements use querySelector(), if you want to target multiple elements, always use querySelectorAll() and then loop using forEach
@@ -1745,7 +1774,19 @@ Cache DOM nodes, use documentFragment, batch updates
 
 **Q80: Bundling vs Chunking**  
 
-bundling Combine many files → 1 optimized file
+Binding combine many JS/CSS files into ONE optimized file
+```txt
+Before:
+  home.js
+  utils.js
+  cart.js
+  styles.css
+
+After Bundling:
+  bundle.js
+  bundle.css
+
+```
 chunking Break large bundle into smaller lazy-loaded chunks
 
 **81: ESM vs ES6**  
@@ -2004,7 +2045,8 @@ type Point = { x: number } & { y: number }; // Intersection
 
 **Q11: Utility Types:**  
 
-Partial<T>:Makes all properties of a type optional.
+Partial<T>:Makes all properties / fields of a type optional.  
+Example 1:
 ```js
 interface User {
   name: string;
@@ -2015,7 +2057,24 @@ const updateUser: Partial<User> = {
   name: "Alice" // age is optional now
 };
 ```
-Pick<T,K>:Selects a subset of properties from a type.
+Example 2:
+```js
+interface User {
+  name: string;
+  age: number;
+  email: string;
+}
+
+function updateUser(id: number, data: Partial<User>) {
+ 
+}
+
+updateUser(1, {
+  name: "Alice"   // age/email not required
+});
+
+```
+Pick<T,K>:Selects a subset of properties from a type.choose only required fields like When showing a contact list, you don't need user.age
 ```js
 interface User {
   name: string;
@@ -2028,7 +2087,7 @@ const userContact: Pick<User, "name" | "email"> = {
   email: "bob@example.com"
 };
 ```
-Omit<T,K>:Removes specified properties from a type.
+Omit<T,K>:Removes specified properties from a type.it remove unwanted fields,secure api response we can use
 ```js
 interface User {
   name: string;

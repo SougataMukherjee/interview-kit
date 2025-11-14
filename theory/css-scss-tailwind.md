@@ -81,7 +81,7 @@ IDs must be unique — use classes instead.
 
 Small icon in browser tab. size like 16*16,32*32,64*64...
 ```js
-<link rel="icon" href="favicon.ico">
+<link rel="icon" href="/favicon.ico">
 ```
 
 **Q6: Position properties?**  
@@ -241,6 +241,21 @@ Use media queries:
     flex-direction: column; 
     }
 }
+ or
+ @media (min-width: 768px) and (max-width: 1024px) {
+  .container { 
+    flex-direction: column; 
+    }
+  }
+ or
+ @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  //else orientation: landscape
+  .container { 
+    flex-direction: column; 
+    }
+  }
+
+
 ```
 in project 
 ```js
@@ -400,8 +415,14 @@ fr:Used in CSS Grid, means fractional unit of available space.Example: grid-temp
 
 Reusable custom properties:
 ```js
-:root { --main-color: blue; }
-h1 { color: var(--main-color); }
+:root {
+  --primary-color: #2563eb;   
+  --secondary-color: #f59e0b;
+}
+h1 { 
+  color: var(--primary-color);
+  background-color:var(--secondary-color); 
+}
 ```
 **Q18: @property**  
 

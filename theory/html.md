@@ -78,18 +78,20 @@ new element new attribute multimedia 2d 3d drawing support, drag and drop suppor
 
 **Q6: What is the difference between div and section?**  
 
- div is a generic container, no semantic meaning.it has no meaning used for layout
+ div is a generic(block-level) container takes full width by default, no semantic meaning.it has no meaning used for layout.  
+
 section groups related content with semantic meaning.represent a standalone section  of content and help in seo and accessibility.
-A block-level container takes full width by default.
 
 **Q7: Field set**  
 
-fieldset element is used to group  related control in a single box
+fieldset element is used to group  related control in a single box.It improves accessibility (screen readers) and form structure. in survey / form / payment section you can use 
 ```js
 <fieldset>
-	<lagend>contact</lagent>
-  <label>Email: <input type="text" name="name"/></label>
+  <legend>Payment Method</legend>
+  <input type="radio" name="pay"> UPI
+  <input type="radio" name="pay"> Card
 </fieldset>
+
 ```
 **Q8: What is the difference between inline, block, and inline-block elements?**
 - Inline: does not start on new line (e.g., span, a)
@@ -212,6 +214,9 @@ Example:
 
 **Q24: What are canvas and svg?**
 - canvas: used for drawing via JavaScript (pixel-based)
+```js
+<canvas id="c" width="100" height="100"></canvas>
+```
 - svg: scalable vector graphics (markup-based)
 
 **Q25: Explain template tag.**  
@@ -378,8 +383,14 @@ Example:
 Example:
 ```js
 <table>
-  <tr><th>Name</th><th>Age</th></tr>
-  <tr><td>Sam</td><td>25</td></tr>
+  <tr>
+    <th>Name</th>
+    <th>Age</th>
+  </tr>
+  <tr>
+    <td>Sam</td>
+    <td>25</td>
+  </tr>
 </table>
 ```
 **Q45: HTML Forms handle form state and validation**  

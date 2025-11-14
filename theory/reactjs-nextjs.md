@@ -287,7 +287,7 @@ const UserContext = createContext(0);
  - Props changed
  - Props are objects/functions unless memoized using useCallback & useMemo
  ```js
- import { useState } from "react";
+import { useState } from "react";
 import Child from "./Child";
 
 export default function Parent() {
@@ -305,8 +305,11 @@ export default function Parent() {
         placeholder="Type here..."
         onChange={(e) => setText(e.target.value)}
       />
-
+      // CASE 1
       <Child count={count} />
+      // CASE 2
+      // If you pass objects/functions → Child WILL re-render even with same values, Because objects/functions get new references each re-render. by preventing this wrap functions/objects in useCallback / useMemo like const memoObj = useMemo(() => ({ num: count }), [count]);
+      <Child data={{ num: count }}>
     </div>
   );
 }
@@ -333,8 +336,51 @@ Ref means reference of react.you are referring through dom elements if directly 
 useRef is Used to access DOM elements or persist mutable values without re-render.its a part of react hook, it can take maximum one parameter
 Example:
 ```js
-const inputRef = useRef();
-const countRef = useRef(0);
+//exp 1
+import { useRef } from "react";
+
+export default function FocusInput() {
+  const inputRef = useRef(null);
+
+  function handleFocus() {
+    inputRef.current.focus();
+  }
+
+  return (
+    <div>
+      <input ref={inputRef} placeholder="Click button to focus" />
+      <button onClick={handleFocus}>Focus Input</button>
+    </div>
+  );
+}
+//exp 2
+import { useRef, useState } from "react";
+
+export default function PasswordToggle() {
+  const inputRef = useRef(null);
+  const [show, setShow] = useState(false);
+
+  function togglePassword() {
+    setShow(!show);
+    inputRef.current.type = show ? "password" : "text";
+  }
+
+  return (
+    <div>
+      <input
+        ref={inputRef}
+        type="password"
+        placeholder="Enter password"
+      />
+
+      <button onClick={togglePassword}>
+        {show ? "Hide" : "Show"}
+      </button>
+    </div>
+  );
+}
+
+
 ```
 - When do you need to use refs?
 To directly access DOM elements or React elements.
@@ -590,6 +636,24 @@ Break big app into small independent frontends.
 **Q25.Types of API Calls**  
 
 GET (read), POST (create), PUT/PATCH (update), DELETE (remove).
+Note: Replaces the entire resource but patch Updates only the specific fields you send.
+```js
+{
+  "name": "Sam",
+  "age": 25,
+  "city": "Bangalore"
+}
+
+fetch("/api/user/1", {
+  method: "PUT",
+  body: JSON.stringify({
+    name: "Sam",
+    age: 26,
+    city: "Bangalore"
+  })
+});
+
+```
 
 **Q26.Type Checking with PropTypes**  
 
@@ -622,8 +686,19 @@ startTransition(() => setPage('home'));
 
 **Q28: Render Props**  
 
-Share logic between components using function prop
-<Data render={data => <List data={data}/>}/>
+Render Props is used when multiple components need the same logic, but want different UI. example A component checks authentication, but pages decide what to render
+```js
+<AuthProvider render={(user) => (
+  user ? <Dashboard/> : <Login/>
+)} />
+
+or 
+<FormState render={(form) => (
+  <SignupForm form={form} />
+)} />
+
+```
+
 
 **Q29: Axios**  
 
@@ -675,6 +750,13 @@ const el = <h1>Hello {name}</h1>;
  Yes.
  ```js
  React.createElement('h1', null, 'Hello');
+ or
+ const btn = React.createElement(
+  'button',
+  { onClick: () => alert("Clicked!") },
+  'Click Me'
+);
+
  ```
 
 **Q35:How JSX prevents Injection Attacks?**  
@@ -690,11 +772,12 @@ Props: read-only
 State: mutable (internal data)
 
 **Q37: types of conditional rendering**  
-
-isLogged ? <Home/> : <Login/>
+```js
+isLogged ? <Home/> : <Login/> 
 (cond1 && cond2) ? st1 :cond2 ? st2 : st3
 status && <Loader/>
 msg || "No message"
+```
 
 **Q38: Folder Structure**
 ```txt
@@ -753,7 +836,18 @@ export default function Parent() {
 
  Used to show fallback UI while loading async content (like lazy components).
  ```js
-<Suspense fallback={<p>Loading...</p>}> <MyComp /> </Suspense>
+import React, { Suspense, lazy } from "react";
+
+const MyComp = lazy(() => import("./HeavyComp")); 
+
+export default function App() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <MyComp />
+    </Suspense>
+  );
+}
+
 ```
 
 **Q41. How to prevent component from rendering?**  
@@ -979,7 +1073,7 @@ const [state, dispatch] = useReducer(reducer, { count: 0 });
 NEXT.JS NOTES 
 =============
 
-**Q1: What is Next.js? Drawbacks of React**  
+**Q1: What is Next.js? Drawbacks of React in Large-Scale Applications**  
 
  React is not feasible to create a fully-featured application for production.
  Next js is a React framework for routing, server-side rendering(optimize rendering), static site generation, and optimized performance and SEO friendly.  
@@ -987,6 +1081,7 @@ NEXT.JS NOTES
  1. Frequent re-render issues
  2. Requires extra libraries (routing, state mgmt)
  3. SEO and performance
+ 4. Without code-splitting and lazy loading bundle size get large and app became slow
 
 **Q2: CSR vs SSR vs SSG**  
 
@@ -1198,6 +1293,13 @@ Authentication / Protect routes
 Redirect users based on role or login
 Request → Middleware → (Allow / Redirect / Rewrite / Block) → Page/API Route
 in middleware.ts file write logic in next js
+```js
+import { authMiddleware } from "@clerk/nextjs";
+
+export default authMiddleware({
+  publicRoutes: ["/"], // home is public, rest protected
+});
+```
 
 **Q13: How to handle environment variables in Next.js?**  
 
@@ -1359,7 +1461,24 @@ CSS Modules, Styled JSX, Tailwind CSS, Global CSS, Styled-components
 Using next/dynamic for lazy loading components, it will not load on initial render, load when its need 
 ```js
 import dynamic from "next/dynamic";
-const Component = dynamic(() => import('../Components'), { ssr: false });
+
+const ClientBox = dynamic(() => import("./ClientBox"), { ssr: false });
+
+export default function Home() {
+  return (
+    <div>
+      <h1>Home Page</h1>
+      <ClientBox />
+    </div>
+  );
+}
+//app/ClientBox.jsx
+"use client";
+
+export default function ClientBox() {
+  return <p>This component loads only on the client.</p>;
+}
+
 ```
 **Q26: Environment variables in Next.js**  
 
