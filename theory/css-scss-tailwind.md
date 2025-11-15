@@ -268,6 +268,47 @@ Grid useful for 2D layout (rows and columns)
 }
 
 ```
+Note:in grid auto-fill fill the entire row and create empty columns ,auto-fill Empty tracks reserved and items do not stretch to fill empty space
+```txt
+| 1 | 2 | 3 |    |    |
+
+```
+```js
+<div class="grid autofill">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
+<style>
+.autofill {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
+</style>
+```
+auto-fit Fit content only so empty columns collapse so here empty column removed and Items stretch automatically
+```txt
+|        1        |        2        |        3        |
+
+```
+```js
+<div class="grid autofit">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
+<style>
+.autofit {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+</style>
+```
+
 **Q9: z-index and stacking context?**  
 
 z-index works only for positioned elements (relative, absolute, fixed).
@@ -281,6 +322,16 @@ Use media queries:
     flex-direction: column; 
     }
 }
+or
+@media (width >= 768px) {
+  .sidebar { display: block; }
+}
+or
+@media (768px < width < 1024px) {
+  .box { background: yellow; }
+}
+
+
  or
  @media (min-width: 768px) and (max-width: 1024px) {
   .container { 
@@ -396,9 +447,31 @@ Pseudo-class: use to style state (e.g., :hover,:disabled, :focus,:nth-child(2),:
 
 Pseudo-element: used to style particular part of element (e.g., ::before, ::after)
 
+```js
+<style>
+  .required::before {
+  content: " *";
+  color: red;
+  font-weight: bold;
+}
+
+  </style>
+  <label class="required">Name</label>
+<input type="text">
+```
+
 **Q13: Difference between margin and padding**  
 
-Margin: Space outside the element’s border.  
+Margin: Space outside the element’s border. margin-inline affects left-right(inline) direction and margin-block affects the top–bottom (block) direction
+```js
+.box {
+  margin-inline: 20px;
+  margin-block: 10px;
+}
+
+```
+
+
 
 Padding: Space inside the element’s border, around content.
 
@@ -530,9 +603,23 @@ button[type="submit"] {
 }
 
 ```
+a[class|="link"] →selects elements where the class attribute is exactly "link", or starts with "link-"
+```js
+<a class="link">Exact</a>
+<a class="link-primary">Dash Match</a>
+<a class="link-secondary">Dash Match</a>
+a[class|="link"] {
+  color: red;
+}
+
+```
 
 [attr^=val] → starts with  e.g:Select links that start with https (secure URLs).
 ```js
+<a href="https://google.com">Google Secure</a>
+<a href="http://example.com">Insecure</a>
+<a href="https://github.com">GitHub</a>
+
 a[href^="https"] {
   color: green;
 }
@@ -541,6 +628,10 @@ a[href^="https"] {
 
 [attr$=val] → ends with  e.g Style all image files ending with .png
 ```js
+<img src="logo.png"/>
+<img src="banner.jpg"/>
+<img src="icon.png"/>
+
 img[src$=".png"] {
   border: 2px solid blue;
 }
@@ -549,8 +640,13 @@ img[src$=".png"] {
 
 [attr*=val] → contains substring  ,e.g: Select input fields whose placeholder contains 'name'
 ```js
+<input type="text" placeholder="Enter your name">
+<input type="text" placeholder="username field">
+<input type="text" placeholder="email address">
+
 input[placeholder*="name"] {
   background: #fff3cd;
+  border: 1px solid orange;
 }
 
 ```
@@ -690,7 +786,7 @@ body {
 or
 
 body {
-  background: #f3f3f3 url("bg.jpg") center/cover no-repeat;
+  background: hsl(0 0% 0% /0.8) url("bg.jpg") center/cover no-repeat;
 }
 
 
@@ -728,6 +824,13 @@ p { text-decoration: none; }
 h2{ text-decoration: line-through;}
 
 ```
+create custom text decoration using
+```js
+text-decoration-thickness:12px;
+text-decoration-color:12px;
+text-decoration-style:wavy;
+text-decoration-offset:-10px;
+```
 **Q37: Automatic Dark & Light Mode Based on Location**  
 use auto detect system theme
 ```js
@@ -739,7 +842,98 @@ const hour = new Date().getHours();
 document.body.className = hour >= 18 || hour < 6 ? "dark" : "light";
 
 ```
+**Q38.How to create @layer in CSS & what is its use?**  
+@layer is used to control the order of CSS styles intentionally.It prevents style conflicts
+```js
+@layer reset, base, components, utilities;
 
+@layer reset {
+  * { margin: 0; padding: 0; }
+}
+
+@layer base {
+  body { font-family: sans-serif; }
+}
+
+@layer components {
+  .btn { padding: 10px 20px; }
+}
+
+@layer utilities {
+  .text-red { color: red; }
+}
+
+```
+**Q39.What are :has(), :not(), :is() selectors?**  
+:has() → :has() is a parent selector — it selects an element based on its children or descendants
+```js
+<div class="card">
+  <a href="#">Read more</a>
+</div>
+<style>
+.card:has(a:hover) {
+  background: lightyellow;
+  border: 2px solid orange;
+}
+</style>
+
+or
+<form class="form">
+  <input type="text" required>
+</form>
+<style>
+.form:has(input:invalid) {
+  border: 2px solid red;
+}
+
+</style>
+```
+:not() → exclude specific elements from selection
+```js
+<button class="primary">Submit</button>
+<button>Cancel</button>
+<button>Delete</button>
+<style>
+button:not(.primary) {
+  background: #eee;
+}
+
+</style>
+
+or
+<ul>
+  <li>Home</li>
+  <li>About</li>
+  <li>Contact</li>
+</ul>
+
+<style>
+li:not(:first-child) {
+  color: blue;
+}
+</style>
+
+```
+:is() → simplifies long or repeated selectors.
+It groups multiple selectors to avoid writing duplicate CSS.
+```js
+<div class="card">
+  <a href="#">Link</a>
+  <button>Buy</button>
+</div>
+<style>
+.card :is(a, button) {
+  cursor: pointer;
+}
+</style>
+```
+**Q40.What is the inset property?**  
+inset is a shorthand for top + right + bottom + left
+
+```js
+inset: 10px 20px;        /* top/bottom, left/right */
+inset: 10px 20px 30px 40px; /* top, right, bottom, left */
+```
 
 SCSS THEORY
 ==============================
