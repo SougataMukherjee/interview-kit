@@ -1370,7 +1370,7 @@ document.getElementById('hide').disabled=true
 ```txt
 pageX = scrollX + clientX
 ```
-![Diagram](./img/scroll.png)
+<img src="./img/scroll.png" alt="scroll-x" />
 
 
 
