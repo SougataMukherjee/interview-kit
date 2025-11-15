@@ -1370,11 +1370,8 @@ document.getElementById('hide').disabled=true
 ```txt
 pageX = scrollX + clientX
 ```
-```txt
-PAGE START ---- scrollX ----|---- clientX ---->
-^
-viewport left click
-```
+![Diagram](./img/scroll.png)
+
 
 
 **Q65:Mouse Events**  
@@ -1694,8 +1691,26 @@ let obj = { name: "Sam" };
 **Q73: Pure Function and Impure function**  
 
 Pure function → Same input → same output, no side effects. it takes at least one arguments
+```js
+function counterReducer(state, action) {
+  if (action.type === "INCREMENT") {
+    return state + 1; // always same output for same input
+  }
+  return state;
+}
+
+```
 
 Impure Function → Depends on external/state change.
+```js
+let count = 0;
+
+function increment() {
+  count++; // modifies external variable → impure
+  return count;
+}
+
+```
 
 **Q74: Cross-Browser Scripting**  
 
@@ -1899,7 +1914,12 @@ console.timeEnd() end timer and show time
 **Q88. What is BigInt? example**  
 It is used to store large integer values.
 ```js
-const y = BigInt(12345678910);
+//using n suffix
+let x = 12345678910n;
+console.log(x); // 12345678910n
+
+//using BigInt() constructor
+const y = BigInt(12345678910);//12345678910n
 ```
 **Q89. what is implicit return?**  
 

@@ -42,9 +42,22 @@ CSS3 Features & Advantages:
 
 **Q2: Difference between inline, block, and inline-block?**  
 
-- inline: width/height not applicable (span, a)
-- block: takes full width (div, p)
-- inline-block: behaves inline but allows width/height.
+- inline: width/height not applicable (span, a).perfect for small labels, icons, hyperlink
+- block: takes full width (div, p). perfect for Layouts, full width row, box container
+- inline-block: behaves inline but allows width/height.perfect for buttons, badges, small card
+```js
+<span class="tag">React</span>
+<span class="tag">JavaScript</span>
+
+<style>
+.tag {
+  display:inline-block;
+  padding:5px 10px;
+  background:#eee;
+}
+</style>
+
+```
 
 **Q3: What is the Box Model?**  
 
@@ -130,7 +143,34 @@ Small icon in browser tab. size like 16*16,32*32,64*64...
 ```
 - fixed (relative to viewport) Stays fixed relative to viewport (even when scrolling).
 - sticky (hybrid) Acts relative until scroll crosses threshold, then sticks  
+```js
+<body>
+<style>
+.navbar {
+  position: sticky;
+  top: 0;
+  background: #333;
+  color: white;
+  padding: 15px;
+  font-size: 20px;
+}
 
+.content {
+  padding: 20px;
+}
+</style>
+
+ <nav class="navbar">
+    Sticky Navigation Bar
+  </nav>
+
+  <div class="content">
+    <p>Scroll down to see the navbar stick to the top...</p>
+    <p>Lorem ipsum dolor sit amet...</p>
+    <p style="height: 1200px;"></p> <!-- Just for scrolling -->
+  </div>
+</body>
+```
 Sticky sticks only inside its container after reaching a scroll position, while fixed stays in the same place on the screen no matter how much you scroll.
 
 **Q7: Flexbox Basics. Float property advantage over Flex**  
@@ -452,7 +492,12 @@ min() → picks smallest (width: min(80%, 600px);)
 
 max() → picks largest (width: max(50%, 200px);)  
 
-clamp() → range limit (font-size: clamp(14px, 2vw, 20px);)
+clamp() → range limit It chooses a value that never goes below the minimum and never exceeds the maximum.Useful for responsive design.
+```js
+.title {
+  font-size: clamp(16px, 5vw, 32px);//clamp(min, preferred, max)
+}
+```
 
 **Q20::global**  
 
@@ -562,6 +607,17 @@ div ~ p → all following siblings
 - Why @import only at top?  
 
 Because CSS loads top-down — later rules may not apply if file is not loaded first.
+```js
+/* styles.scss */
+@use "variables";
+@use "mixins" as *;
+
+.button {
+  color: variables.$primaryColor;
+  @include mixins.center;
+}
+
+```
 - Graceful Degradation:
 Start for modern browsers → make sure old browsers still work.
  Example: Fancy animation → show static image on old browser.
@@ -631,6 +687,13 @@ body {
   background-size: cover;       /* or contain */
   background-position: center;
 }
+or
+
+body {
+  background: #f3f3f3 url("bg.jpg") center/cover no-repeat;
+}
+
+
 ```
 **Q34: 2D Transform Functions**
 ```txt
@@ -642,7 +705,10 @@ body {
 | `skew()`      | `transform: skew(20deg);`           |
 
 ```
-**Q35:Text Alignment**
+**Q35:Text Alignment**  
+
+text-align is a CSS property used to control the horizontal alignment of inline content inside a block element  
+
 ```js
 p { text-align: left; } //default
 
@@ -653,10 +719,13 @@ p { text-align: justify; }
 
 
 ```
-**Q36:Underline & Overline**
+**Q36:Underline & Overline**  
+text-decoration is a CSS property used to add or remove decoration lines on text.
 ```js
 p { text-decoration: underline; }
 h1 { text-decoration: overline; }
+p { text-decoration: none; }
+h2{ text-decoration: line-through;}
 
 ```
 **Q37: Automatic Dark & Light Mode Based on Location**  
@@ -699,12 +768,20 @@ nav {
 
 @mixin: Reusable block with parameters (like a function).
 ```js
+//_mixin.scss
 @mixin flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.container { @include flex-center; }
+
+//main.scss
+@use "mixins";
+
+.container {
+  @include mixins.flex-center;
+}
+
 ```
 **Q5: Extends**  
 
@@ -719,7 +796,15 @@ nav {
   background: blue;
 }
 ```
-**Q6: Partials and Import**  
+**Q6: What are placeholders (%) in SCSS?**  
+
+Define styles that can only be extended (not compiled by themselves).
+```js
+%btn { padding: 10px; }
+.submit { @extend %btn; }
+```  
+
+**Q7: Partials and Import**  
 A partial is an SCSS file whose name starts with an underscore (_).Example: _buttons.scss, _variables.scss. for organizing code and reusability we use
 ```js
 styles/
@@ -740,11 +825,11 @@ Create _variables.scss, then import:
 - Why easy to insert file with @import?
 Simplifies maintenance — one CSS file can include others
 
-**Q7: Operators**
+**Q8: Operators**
 ```js
 width: (100% / 3);
 ```
-**Q8: Functions**
+**Q9: Functions**
 A SCSS function is like a JavaScript function but for CSS.it take input perform calculation and return output
 ```js
 @function px-to-rem($px) {
@@ -759,7 +844,7 @@ A SCSS function is like a JavaScript function but for CSS.it take input perform 
   padding: space(2); // return 16 px
 }
 ```
-**Q9: Loops & Conditionals**
+**Q10: Loops & Conditionals**
 ```js
 @for $i from 1 through 5 {
   .m-#{$i} {
@@ -774,17 +859,9 @@ A SCSS function is like a JavaScript function but for CSS.it take input perform 
 
 ```
 
-**Q10: SCSS Compilation**  
+**Q11: SCSS Compilation**  
 
 Use `sass input.scss output.css` to compile.
-
-**Q11: What are placeholders (%) in SCSS?**  
-
-Define styles that can only be extended (not compiled by themselves).
-```js
-%btn { padding: 10px; }
-.submit { @extend %btn; }
-```
 
 **Q12:How do control directives like @if, @for, @each work?**  
 
@@ -823,7 +900,17 @@ disadvantage is Hard to read, especially for large components
 **Q4: Responsive Classes**
 ```js
 <p class="text-lg md:text-2xl lg:text-4xl">Responsive text</p>
-<div class="text-sm md:text-lg lg:text-xl"></div>
+<div class="text-sm md:text-lg lg:text-xl">text</div>
+<h1 class="text-[clamp(24px,5vw,48px)]">Heading</h1>
+<div class="grid gap-2 sm:gap-4 md:gap-8 lg:gap-12"> Responsive gap</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">Responsive Grid<div>
+<div class="rounded-md bg-[url('/small.jpg')] sm:bg-[url('/medium.jpg')] lg:bg-[url('/large.jpg')]">Background</div>
+<div class="aspect-[4/3] md:aspect-[16/9]">Image</div>
+<div class="@container">
+   <p class="@sm:text-xl @lg:text-4xl">Hello</p>
+</div>
+
+
 ```
 **Q5: Hover & State Variants**
 ```js

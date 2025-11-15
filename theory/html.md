@@ -45,6 +45,13 @@ because it has no content
 **Q3: does hyperlink only apply to text?**  
 
 text and image both
+```js
+<a href="https://example.com" style="display: inline-block;">
+  <img src="product.jpg" alt="Product" width="100">
+  <span>Buy this Product</span>
+</a>
+
+```
 
 **Q4: What is HTML and why is it important?**  
 
@@ -78,9 +85,21 @@ new element new attribute multimedia 2d 3d drawing support, drag and drop suppor
 
 **Q6: What is the difference between div and section?**  
 
- div is a generic(block-level) container takes full width by default, no semantic meaning.it has no meaning used for layout.  
+ div is a generic(block-level) container takes full width by default, no semantic meaning.it has no meaning used for layout. 
+ ```js
+<div  class="card">
+  ...
+</div>
+
+ ``` 
 
 section groups related content with semantic meaning.represent a standalone section  of content and help in seo and accessibility.
+```js
+<section aria-label="Testimonials" class="card">
+  ...
+</section>
+
+```
 
 **Q7: Field set**  
 
@@ -218,14 +237,26 @@ Example:
 <canvas id="c" width="100" height="100"></canvas>
 ```
 - svg: scalable vector graphics (markup-based)
+```js
+<svg width="100" height="100">
+  <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+</svg>
+
+<svg width="400" height="120">
+  <rect x="10" y="10" width="200" height="100" stroke="red" stroke-width="6" fill="blue" />
+</svg>
+```
 
 **Q25: Explain template tag.**  
 
- Defines reusable HTML content not rendered until cloned by JS.
+The template tag is used to store HTML content that is not rendered on the page until you manually insert it using JavaScript.it is hidden by default so it prevents hidden elements from being rendered.It is useful when you need to clone, repeat, or dynamically inject HTML.
 Example:
 ```js
-<template id="card">
-  <div class="card">Sample Card</div>
+<template id="card-template">
+  <div class="card">
+    <h3></h3>
+    <p></p>
+  </div>
 </template>
 ```
 **Q26: What is the difference between HTMLCollection and NodeList?**  
@@ -246,7 +277,7 @@ Example:
 
 **Q28: What is Shadow DOM?**  
 
- A scoped subtree inside a web component that encapsulates styles and markup.
+Shadow DOM is used to encapsulate (protect) a component's HTML, CSS, and behavior so it does not leak out and does not get affected by the external page
  Encapsulates HTML structure and CSS styles, preventing them from affecting the main DOM
 ```txt
  Main DOM
@@ -441,10 +472,15 @@ Used to display terms and descriptions (like glossary, FAQs)
 Ordered list ol → numbered list  
 Unordered list ul → bullet list
 ```js
-  <ol><li>One</li></ol>
-  <ul><li>Item</li></ul>
+  <ol>
+    <li>One</li>
+  </ol>
+  <ul>
+    <li>Item</li>
+  </ul>
 ```
-order list types Number(1 default),Uppercase and lowercase letters(A B),Uppercase and lowercase Roman(I i),circle,dise,square
+order list types Number(1 default),Uppercase and lowercase letters(A B),Uppercase and lowercase Roman(I i),circle,dise,square  
+
 **Q49: What is an Image Map?**  
 Clickable areas inside a single image, each linking to different pages.
 Use: dashboards, maps, diagrams.
