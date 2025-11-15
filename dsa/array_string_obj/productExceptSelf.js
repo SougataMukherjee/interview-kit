@@ -4,7 +4,9 @@ function productExceptSelf(arr) {
   for (let i = 0; i < n; i++) {
     let prod = 1;
     for (let j = 0; j < n; j++) {
-      if (i !== j) prod *= arr[j];
+      if (i !== j){
+        prod *= arr[j];
+      }
     }
     result[i] = prod;
   }

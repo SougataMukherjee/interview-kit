@@ -1,10 +1,5 @@
-function reverse(arr) {
-  let i = 0, j = arr.length - 1;
-  while (i < j) {
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-    i++; j--;
-  }
-  return arr;
+let arr=[1,3,5,4,8], newArr=[];
+for(let i=arr.length-1;i>=0;i--){
+    newArr.push(arr[i])
 }
-
-console.log(reverse([1, 2, 3, 4])); // [4,3,2,1]
+console.log(newArr)
