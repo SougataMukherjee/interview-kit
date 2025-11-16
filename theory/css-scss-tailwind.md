@@ -217,14 +217,33 @@ flexbox useful for 1D layout (row or column).
 }
 
 ```
-- flex grow shrink and flex basic
+- flex grow shrink and flex basic  
+flex-grow makes an item expand when there is extra space and flex-shrink makes an item shrink when there is not enough space.
 ```js
 .item {
   flex: 1 0 200px; /* grow | shrink | basis */
 }
 
 ```
-Float was used to wrap text around images (flex cannot do this)
+- display: flex is a block-level flex container.it takes full width (like div)
+Float was used to wrap text around images (flex cannot do this).when you want a section-level layout we use
+- display: inline-flex is a inline-level flex container behaves like inline elements (like span) it does not take full width. when you want an element must stay inline with text or other inline elements
+```js
+<span class="tag">
+  <img src="icon.png" width="16"> Profile
+</span>
+
+<style>
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: #eee;
+}
+</style>
+
+```
 ```js
 <img src="pic.jpg" style="float:left; width:100px;"> Text wraps around image.
 
@@ -468,12 +487,29 @@ Margin: Space outside the element’s border. margin-inline affects left-right(i
   margin-inline: 20px;
   margin-block: 10px;
 }
+and 
 
+avoid writing: 
+    margin-top: 20px; 
+    margin-bottom: 10px;
+Instead, we use: 
+    margin-block-start: 20px; 
+    margin-block-end: 10px;
 ```
 
 
 
 Padding: Space inside the element’s border, around content.
+
+```js
+avoid writing:
+    padding-left: 20px;
+    padding-right: 10px;
+Instead, we use:
+    padding-inline-start: 20px;
+    padding-inline-end: 10px;
+
+```
 
 **Q14: What are CSS combinators?**  
 
@@ -934,7 +970,72 @@ inset is a shorthand for top + right + bottom + left
 inset: 10px 20px;        /* top/bottom, left/right */
 inset: 10px 20px 30px 40px; /* top, right, bottom, left */
 ```
+**Q41.what is box-shadow, text-shadow, and drop-shadow?**  
+- box-shadow:Adds shadow around a box element (div, card, button, image container).
+It is applied to the element’s box (border + padding area).
+```js
+<div class="card">Card</div>
 
+<style>
+.card {
+  width: 120px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* x-offset, y-offset, blur, color */
+}
+</style>
+
+```
+- text-shadow:Adds a shadow behind text characters only (not the box).
+```js
+<h2 class="title">Shadow Text</h2>
+
+<style>
+.title {
+  font-size: 30px;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+}
+</style>
+
+```
+- drop-shadow():A filter-based shadow applied to the shape of an image, not its rectangular box.
+Useful for PNG/transparent images, icons, SVGs.
+```js
+<img src="girl.png" class="icon">
+
+<style>
+.icon {
+  filter: drop-shadow(0 5px 8px rgba(0,0,0,0.4));
+}
+</style>
+
+```
+**Q42.what is line-height?**  
+line-height controls the vertical spacing between lines of text.
+```txt
+line-height: 1 → tight text
+line-height: 1.5 → readable
+line-height: 2 → spacious
+```
+**Q43.What is clip-path?**  
+clip-path is a CSS property that cuts an element into a specific shape.
+Anything outside the shape becomes hidden
+```js
+img {
+  clip-path: circle(50%);
+  or
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+}
+
+```
+**Q44. What is text-wrap?**  
+text-wrap is a new CSS property that controls how text breaks inside an element.
+```js
+text-wrap: wrap;
+text-wrap: nowrap;
+text-wrap: balance;
+text-wrap: pretty;
+```
 SCSS THEORY
 ==============================
 

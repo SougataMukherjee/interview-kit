@@ -653,6 +653,13 @@ or
 const add = a => b => a + b;
 console.log(add(5)(3)); // 8
 
+or
+(function ask(question = "prompt", yes = alert, no = alert) {
+  if (confirm(question)) yes("You agreed.");
+  //if we click yes in confirm message then condition will execute true and yes will execute else no()
+  else no("You canceled the execution.");
+})();
+
 ```
 **Q22: What is Prototype?**  
 
@@ -1970,6 +1977,15 @@ console.log(box.classList.contains('red')); // true or false
 first class function you can store as a value
 ```js
 let a=function(){}
+```
+**Q94.how to check Performance**  
+```js
+console.time('loop');
+for (let i = 0; i < 10; i++) {
+  console.log(i);
+}
+console.timeEnd('loop');
+
 ```
 
 TYPESCRIPT NOTES

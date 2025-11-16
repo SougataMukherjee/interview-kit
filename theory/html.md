@@ -498,4 +498,49 @@ Deprecated in HTML5 (not recommended).
 <marquee>Scrolling Text</marquee>
 ```
 
+**Q51: what is datalist?**  
+datalist provides autocomplete suggestions for an input field.
+The user can either type freely or pick suggestions from the list
+```js
+ <input list="fruits">
 
+<datalist id="fruits">
+  <option value="Apple">
+  <option value="Banana">
+  <option value="Cherry">
+  <option value="Mango">
+  <option value="Orange">
+</datalist>
+```
+
+**Q52.what is code, dialog, details and summary, progress, meter tag?**  
+code tag: Used to display inline code snippets in a monospace font.
+```js
+<p>To print something in JS, use <code>console.log()</code>.</p>
+
+```
+dialog tag:creates a popup dialog / modal, which you can open using JavaScript.
+```js
+<dialog id="popup">
+  <p>This is a dialog box!</p>
+  <button onclick="popup.close()">Close</button>
+</dialog>
+
+<button onclick="popup.showModal()">Open Dialog</button>
+
+```
+details
+ and summary: Creates a collapsible section. summary is the title, details contains hidden content
+```js
+<details>
+  <summary>Click to see more</summary>
+  <p>This is hidden content!</p>
+</details>
+
+```
+meter tag:displays a measurement within a known range (ex: battery level, temperature).
+```js
+<label>Battery Level:</label>
+<meter value="0.7" min="0" max="1">70%</meter>
+
+```
