@@ -146,12 +146,8 @@ Examples: id, class, style, title, data-*.
                   Independent scripts, e.g., analytics
 - defer: loads in parallel but executes after HTML parsing. defer waits until HTML is fully parsed before executing
                   Scripts that rely on DOM elements
-```txt
-  HTML Parsing: |---parsing---|
-  <script>      |---BLOCK---EXECUTE---|
-  <script async> |---parsing---LOAD---EXECUTE---|
-  <script defer> |---parsing---LOAD---|EXECUTE|`
-```
+<img src="./img/script.png" alt="script"/> 
+
 **Q13: What are forms in HTML? Form Validation Attributes**  
 
 Forms collect user input using form, input, textarea, select, button.  
@@ -169,7 +165,7 @@ Example:
 - GET: sends data in URL, used for data retrieval.
 - POST: sends data in body, used for data creation or sensitive info.
 
-**Q15: What are data-* attributes?**  
+**Q15: What are data- attributes?**  
 
 Used to store custom data in HTML elements.Accessible via JavaScript using dataset.
 Example: 
@@ -316,7 +312,8 @@ Example:
 **Q33: What is cross-origin resource sharing (CORS)?**  
 
 A security feature that restricts how resources can be fetched from another domain.
-it improves Security and avoids browser blocking of cross-domain API requests
+it improves Security and avoids browser blocking of cross-domain API requests  
+
 **Q34: How do you optimize HTML for SEO?**  
 
 - Use semantic tags ( header, main, article, nav )
@@ -459,7 +456,8 @@ Validation:
   <source src="movie.mp4" type="video/mp4">
 </video>
 ```
-**Q47: What is a Description List?**
+**Q47: What is a Description List?**  
+
 Used to display terms and descriptions (like glossary, FAQs)
 ```js
 <dl>
