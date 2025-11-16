@@ -1,6 +1,22 @@
-for run dsa in terminal type node fileName.js
-for active recall
-10 min read == 2 min relax == 5 min recall
+## Plan
+### ⏰ 20 minutes — Theory Notes Revision (Rotate daily)
 
-for revision
-1day == 3 day == 7 day
+| Day | Subject |
+|-----|---------|
+| Mon | CSS |
+| Tue | HTML |
+| Wed | JavaScript + Typescript |
+| Thu | React |
+| Fri | Next.js |
+| Sat | SQL |
+| Sun | Revision (1D - 3D - 7D) |
+
+---
+
+### ⏰ 20 minutes — Technical Interview Questions  
+(Machine Round: 1–2 problems)
+
+---
+
+### ⏰ 20 minutes — DSA Coding Practice  
+(2–3 problems)
