@@ -34,6 +34,14 @@ Call Stack (executes code)
                ↓
       Back to Call Stack (runs again)
 ```
+Note:  
+**Global Execution Context (GEC)**  
+When JavaScript starts running a file, it creates the Global Execution Context.It has 2 phases
+1. Memory Phase (Creation / Hoisting Phase):JavaScript scans through the file before executing anything.Variables declared with var are stored as undefined.let and const are put into memory but not initialized.Function expressions & arrow functions behave like variables (undefined or uninitialized)  
+2. Code Phase (Execution Phase): JavaScript now runs the code line by line.
+there Values are assigned and Functions are executed
+<img src="./img/execution-context.png" alt="execution"/>
+
 
 **Q3: JavaScript vs ECMAScript**  
 
