@@ -1,4 +1,4 @@
-## Plan
+## 1 Hour Study Plan
 ### ⏰ 20 minutes — Theory Notes Revision (Rotate daily)
 
 | Day | Subject |
