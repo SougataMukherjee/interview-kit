@@ -458,7 +458,8 @@ Unmounting → Component is removed from the UI/DOM, runs before component is de
  (componentDidMount)  (componentDidUpdate)  (componentWillUnmount)
  ```
 
-- componentDidMount vs useEffect
+**componentDidMount vs useEffect**
+
 componentDidMount (class) = runs once after mount.
 componentDidMount() → Used only once in a class component; runs after the component is mounted.
 useEffect(()=>{},[]) (hook) = same behavior in functional components.
@@ -595,37 +596,54 @@ User → Clicks /dashboard
 Share logic by passing a function as a prop that returns JSX.  
 
 Why use: To share logic between components without repeating code.
+Render Props is used when multiple components need the same logic, but want different UI. example A component checks authentication, but pages decide what to render
 ```js
-function Data({ render }) {
-  const data = ['Apple', 'Banana', 'Cherry'];
-  return render(data);
+//AuthProvider.js
+function AuthProvider({ render }) {
+  const user = { name: "Sam" }; // pretend user is logged in
+  return render(user);
 }
 
-function List({ data }) {
+export default AuthProvider;
+//Dashboard.js
+export default function Dashboard() {
+  return <h2>Welcome to Dashboard</h2>;
+}
+//Login.js
+export default function Login() {
+  return <h2>Please Login</h2>;
+}
+//app.js
+import AuthProvider from "./AuthProvider";
+import Dashboard from "./Dashboard";
+import Login from "./Login";
+
+export default function App() {
   return (
-    <ul>
-      {data.map((item, i) => <li key={i}>{item}</li>)}
-    </ul>
+    <AuthProvider
+      render={(user) => (user ? <Dashboard /> : <Login />)}
+    />
   );
 }
 
-// Usage
-<Data render={(data) => <List data={data} />} />
+
 ```
 
-**Q23.React.createElement vs React.cloneElement**  
-
-createElement: Creates a new element.
+**Q23. What is useReducer?**  
+useReducer is an alternative to useState for complex state logic.
+It manages state transitions using a reducer function.
 ```js
-function Greeting({ name }) {
-  return React.createElement(
-    'h1',
-    { className: 'greeting' },
-    'Hello'
-  );
+function reducer(state, action) {
+  switch (action.type) {
+    case "INC": return { count: state.count + 1 };
+    case "DEC": return { count: state.count - 1 };
+    default: return state;
+  }
 }
+
+const [state, dispatch] = useReducer(reducer, { count: 0 });
+
 ```
-cloneElement: Copies an element and adds new props/children.
 
 **Q24. Event-driven Architecture**  
 
@@ -684,30 +702,27 @@ Comp.propTypes = {
 startTransition(() => setPage('home'));
 ```
 
-**Q28: Render Props**  
-
-Render Props is used when multiple components need the same logic, but want different UI. example A component checks authentication, but pages decide what to render
+**Q28.What is props.children?**  
+props.children allows a component to display whatever is written between its opening and closing tags.
 ```js
-<AuthProvider render={(user) => (
-  user ? <Dashboard/> : <Login/>
-)} />
+function Card({ children }) {
+  return <div className="card">{children}</div>;
+}
 
-or 
-<FormState render={(form) => (
-  <SignupForm form={form} />
-)} />
+<Card><p>Hello inside Card!</p></Card>
 
 ```
-
 
 **Q29: Axios**  
 
 Axios is a promise-based HTTP client used to make API calls from browser
 It helps send GET, POST, PUT, DELETE requests easily.
+```js
 axios.get('/users');
 axios.post('/users',{name:'Sam'});
 axios.put('/user/1',{name:'A'});
 axios.delete('/user/1');
+```
 ```txt
 Client (React / Next.js / Node)
         |
@@ -747,10 +762,18 @@ const el = <h1>Hello {name}</h1>;
 
 **Q34.Is it possible to use React without JSX?**  
 
- Yes.
+ Yes.createElement: Creates a new element.
+```js
+function Greeting({ name }) {
+  return React.createElement(
+    'h1',
+    { className: 'greeting' },
+    'Hello'
+  );
+}
+```
  ```js
- React.createElement('h1', null, 'Hello');
- or
+ 
  const btn = React.createElement(
   'button',
   { onClick: () => alert("Clicked!") },
@@ -758,6 +781,7 @@ const el = <h1>Hello {name}</h1>;
 );
 
  ```
+ Note: cloneElement: Copies an element and adds new props/children.
 
 **Q35:How JSX prevents Injection Attacks?**  
 
@@ -912,7 +936,7 @@ The Render Phase is when React evaluates components, compares the virtual DOM wi
 The Commit Phase is when React applies those changes to the actual DOM. This phase updates the UI in the browser, runs layout effects and useEffect, and finalizes the update. It is guaranteed to run once for each completed render and cannot be interrupted.
 
 **Q48. variation of inline style in jsx**  
-- 
+
 ```js
 <p style={{ color: "red", background: "yellow" }}>Hello</p>
 ```
@@ -1044,31 +1068,8 @@ console.log(`Hello, ${name}!`);
 fetch(`https://api.example.com/users/${userId}`);
 
 ```
-**Q52.What is props.children?**  
-props.children allows a component to display whatever is written between its opening and closing tags.
-```js
-function Card({ children }) {
-  return <div className="card">{children}</div>;
-}
 
-<Card><p>Hello inside Card!</p></Card>
 
-```
-**Q53. What is useReducer?**  
-useReducer is an alternative to useState for complex state logic.
-It manages state transitions using a reducer function.
-```js
-function reducer(state, action) {
-  switch (action.type) {
-    case "INC": return { count: state.count + 1 };
-    case "DEC": return { count: state.count - 1 };
-    default: return state;
-  }
-}
-
-const [state, dispatch] = useReducer(reducer, { count: 0 });
-
-```
 
 NEXT.JS NOTES 
 =============

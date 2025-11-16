@@ -140,12 +140,11 @@ initial-scale=1.0 → Sets the initial zoom level when the page loads.
 Examples: id, class, style, title, data-*.
 
 **Q12: Explain the difference between script async, and defer explain**
-- Normal <script>: blocks rendering until script loads. normal <script> stops HTML parsing
+- Normal <script>: blocks rendering until script loads. normal <script> stops HTML parsing.it executes IMMEDIATELY in the order they appear
                   Small scripts, must run before DOM
-- async: loads in parallel and executes immediately. async doesn’t block parsing but runs as soon as it loads.
+- async: loads in parallel and executes immediately. async doesn’t block parsing but runs as soon as it loads.it executes ASAP when downloaded (NO order guarantee)
                   Independent scripts, e.g., analytics
-- defer: loads in parallel but executes after HTML parsing. defer waits until HTML is fully parsed before executing
-                  Scripts that rely on DOM elements
+- defer: loads in parallel but executes after HTML parsing. defer waits until HTML is fully parsed before executing.it executes AFTER HTML is parsed, in the SAME ORDER they appear
 <img src="./img/script.png" alt="script"/> 
 
 **Q13: What are forms in HTML? Form Validation Attributes**  

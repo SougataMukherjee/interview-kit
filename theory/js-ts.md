@@ -17,6 +17,17 @@ JavaScript is called a scripting language because it is not compiled beforehand 
 <script src="app.js" type="module"></script> <!-- ES modules -->
 
 ```
+**when use async when defer?**  
+
+both load scripts asynchronously.
+- defer → loads JS in background, runs after HTML parsing, best for most scripts,Best for scripts that rely on the DOM.
+```js
+<script defer src="defer.js"></script>
+```
+- async → runs as soon as loaded, may block DOM. Good for analytics.
+```js
+<script async src="async.js"></script>
+```
 
 **Q2: what are JavaScript engine? how js works internally**  
 
@@ -206,6 +217,20 @@ let name, $price, _id;
 **Q7: What is Event Loop?**  
 
 The Event Loop in JavaScript manages how code is executed inside the browser. It runs all synchronous code first in the call stack, and when asynchronous tasks like setTimeout, promises, or API calls finish, their callbacks are moved to the task queues. The event loop continuously checks if the call stack is empty, and when it is, it pulls the next callback from the queue and pushes it to the stack for execution, ensuring JavaScript remains non-blocking and handles async operations smoothly.
+Microtasks: Promises.
+Macrotasks: setTimeout, DOM events.
+Microtasks run before next render cycle.
+```txt
+Synchronous Code
+      ↓
+  Microtasks (Promises)
+      ↓
+   Render/Update
+      ↓
+  Macrotasks (setTimeout, Events)
+      ↓
+      ⤵ Repeat
+```
 Example:
 ```js
 console.log("a");
@@ -228,24 +253,39 @@ console.log("d");
 
 **Q9: What is 'this' keyword?**  
 
-Refers to current context.Value of this depends on how function is called.In arrow functions, this is lexical (inherits from parent scope).
+Refers to current context.Value of this depends on how function is called.Arrow functions don’t define their own this; they inherit it from the parent scope.Constructor bind this to the new instance.
 ```js
+//this in global
+console.log(this);//window
+//this inside object
 const obj = {
   name: "Sam",
-  show() { console.log(this.name); } // Sam
+  show() { 
+    console.log(this.name); // Sam
+    } 
+};
+//this inside function
+function show() {
+  console.log(this);//window
+}
+show();
+//this inside arrow function
+const obj = {
+  name: "Sam",
+  show: () => console.log(this.name)//undefined
 };
 
+obj.show();
+//this inside constructor
+function Person(name) {
+  this.name = name;
+}
+
+const p = new Person("Sam");
+console.log(p);//Person { name: "Sam" }
+
 ```
-Global Code
-  this → window (browser)
-Object
-  obj.method()
-       |
-       └── this → obj
-Regular Function
-  this → depends on caller
-Arrow Function
-  this → parent scope (not its own)
+
 
 **Q10: Arrow function vs normal function vs IIFE vs Anonymous function**  
 
@@ -664,7 +704,27 @@ or
 **Q22: What is Prototype?**  
 
 JS uses prototypal inheritance. Every object has a hidden [[Prototype]].
-Objects inherit from __proto__ → links to [[Prototype]]
+Objects inherit from parent __proto__. as example every person (object) has a parent from whom they can inherit things — like qualities, habits, or skills.  
+```js
+const obj = { a: 10 };
+
+console.log(obj.__proto__);   // parent object (Object.prototype)
+
+``` 
+A property that exists on functions only. It becomes the parent template.
+```js
+function Person() {
+  this.name = "Sam";
+}
+
+Person.prototype.sayHello = function () {
+  console.log("Hello!");
+};
+
+const p = new Person();
+p.sayHello(); // Hello!
+
+```
 
 **Q23: Difference: undefined vs null**  
 
@@ -928,22 +988,14 @@ console.log(squareAreas); // [4, 16]
 
 ```
 
-**Q36: Explain the event loop and microtask queue.**  
+**Q36.how to check Performance**  
+```js
+console.time('loop');
+for (let i = 0; i < 10; i++) {
+  console.log(i);
+}
+console.timeEnd('loop');
 
-JS is single-threaded; event loop manages async execution.
-Microtasks: Promises.
-Macrotasks: setTimeout, DOM events.
-Microtasks run before next render cycle.
-```txt
-Synchronous Code
-      ↓
-  Microtasks (Promises)
-      ↓
-   Render/Update
-      ↓
-  Macrotasks (setTimeout, Events)
-      ↓
-      ⤵ Repeat
 ```
 
 **Q37: What are modules in JavaScript?**  
@@ -1028,23 +1080,11 @@ use script tag to include js in html
 <script scr="index.js"></script>
 src, type, async, defer, crossorigin
 
-**Q43: When to use defer / async**  
-
-both load scripts asynchronously.
-- defer → loads JS in background, runs after HTML parsing, best for most scripts,Best for scripts that rely on the DOM.
+**Q43.what is first class function?**  
+first class function you can store as a value
 ```js
-<script defer src="defer.js"></script>
+let a=function(){}
 ```
-- async → runs as soon as loaded, may block DOM. Good for analytics.
-```js
-<script async src="async.js"></script>
-```
-```txt
-HTML Parsing ──────► DOM Ready ──► Defer JS runs
-        \
-         \► Async JS runs whenever it finishes loading
-```
-
 
 **Q44:Use of "use strict"**  
 
@@ -1969,20 +2009,8 @@ box.classList.remove('blue');   // removes class
 box.classList.toggle('active'); // add/remove toggle
 console.log(box.classList.contains('red')); // true or false
 ```
-**Q93.what is first class function?**  
-first class function you can store as a value
-```js
-let a=function(){}
-```
-**Q94.how to check Performance**  
-```js
-console.time('loop');
-for (let i = 0; i < 10; i++) {
-  console.log(i);
-}
-console.timeEnd('loop');
 
-```
+
 
 TYPESCRIPT NOTES
 ================
