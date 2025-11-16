@@ -1827,50 +1827,46 @@ ESM: The module system using import/export.
 **82: Task Scheduler & LRU Cache**  
 
 A Task Scheduler executes tasks in a planned order, usually with delay or priority.
-Example use cases: running API calls sequentially, retry logic, scheduled jobs, animations, pausing long loops.
+Example use cases: running API calls sequentially, retry logic, scheduled jobs, animations, pausing long loops.  
+in LRU cache is a technique which stores a limited number of items and discards the least recently used item when the cache is full.Imagine you have a small bag that holds only 2 items so If the bag is full and you add a new item so you throw out the Least Recently Used (LRU) item
 
 ```js
-function LRUCache(limit) {
-  const cache = [];
 
-  return {
-    get(key) {
-      const index = cache.findIndex(item => item.key === key);
-      if (index === -1) return -1;
+function LRUCache(capacity) {
+  const cache = new Map(); // stores key-value in order
+  function get(key) {
+    // If key does not exist return -1
+    if (!cache.has(key)) return -1;
+    // Get value
+    const value = cache.get(key);
+    // Move key to the end (most recent)
+    cache.delete(key);
+    cache.set(key, value);
+    return value;
+  }
 
-      const item = cache.splice(index, 1)[0]; // remove item
-      cache.push(item); // add at end (most recent)
-      return item.value;
-    },
-
-    set(key, value) {
-      const index = cache.findIndex(item => item.key === key);
-
-      if (index !== -1) {
-        cache.splice(index, 1); // remove old copy
-      } else if (cache.length === limit) {
-        cache.shift(); // remove least used (first)
-      }
-
-      cache.push({ key, value }); // insert new at end
-    },
-
-    show() {
-      console.log(cache);
+  function put(key, value) {
+    // If key exists remove it so we can reorder it
+    if (cache.has(key)) {
+      cache.delete(key);
     }
-  };
+    // If cache full → remove least recently used (first key)
+    if (cache.size === capacity) {
+      const oldestKey = cache.keys().next().value;
+      cache.delete(oldestKey);
+    }
+    // Insert as most recent
+    cache.set(key, value);
+  }
+  return { get, put, cache };
 }
-
-// Usage
-const lru = LRUCache(3);
-lru.set("a", 1);
-lru.set("b", 2);
-lru.set("c", 3);
-lru.get("a");     // a becomes most recent
-lru.set("d", 4);  // removes "b" (least recent)
-lru.show();       // [ {c:3}, {a:1}, {d:4} ]
-
-
+const cache = LRUCache(2);
+cache.put(1, 10);  
+cache.put(2, 20);
+cache.put(3, 30); 
+console.log(cache.get(1));//-1
+console.log(cache.get(2));//20
+console.log(cache.get(3));//30
 ```
 **83. How to Test Code Using Jest in JS**  
 
