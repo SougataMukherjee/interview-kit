@@ -1,17 +1,17 @@
-function sort012(arr) {
-  let count0 = 0, count1 = 0, count2 = 0;
-
-  for (let num of arr) {
-    if (num === 0) count0++;
-    else if (num === 1) count1++;
-    else count2++;
+function sort012(arr){
+   let i = 0, mid = 0, j = arr.length - 1;
+  while (mid <= j) {
+    if (arr[mid] === 0) {
+      [arr[i], arr[mid]] = [arr[mid], arr[i]];
+      i++; 
+      mid++;
+    } else if (arr[mid] === 1) {
+      mid++;
+    } else {
+      [arr[mid], arr[j]] = [arr[j], arr[mid]];
+      j--;
+    }
   }
-
-  return [
-    ...Array(count0).fill(0),
-    ...Array(count1).fill(1),
-    ...Array(count2).fill(2)
-  ];
+  return arr;
 }
-
-console.log(sort012([2, 0, 1, 2, 1, 0]));// [0, 0, 1, 1, 2, 2]
+console.log(sort012([2, 0, 1, 2, 1, 0]))// [0, 0, 1, 1, 2, 2]
