@@ -55,8 +55,10 @@ How diffing algorithm works in Virtual DOM
                          | (Only changed nodes)|
                          +---------------------+
   ```
-**Q3: Components? Functional vs Class Components**  
-Components are reusable building blocks of react application,its like a function that return HTML element. Through render() a component render to the dom
+**Q3: Components? What triggers a re-render? Functional vs Class Components**  
+Components are reusable building blocks of react application,its like a function that return HTML element. Through render() a component render to the dom.  
+A React component re-renders whenever the data it depends on changes. If the component’s own state updates, it must redraw. If its parent gives it new props, React must check again. If context values change, every consumer reacts to the new value. Even if nothing changes but a parent re-renders, the child might re-render too unless optimized.  
+
 
 - Functional components/ State-less components are simpler to write and understand, use Hooks instead of lifecycle methods, avoid the complexity of this, make logic reuse easier through custom hooks, support better performance optimizations, work seamlessly with Concurrent Mode, enable streaming SSR for faster page load, and are the recommended modern approach in React.
 ```js
@@ -107,9 +109,10 @@ export default Counter;
  hooks are new feature introduce in react 16.8version.it allows you to use state and other react feature without writing a class.its only work in function based components.  
  yes we can use hook inside custom hook else no
 
-**Q5: Explain useState**  
+**Q5: Explain useState. How React preserves state across renders?**  
 
- Manages local state in functional components.
+Manages local state in functional components.  
+React behaves as if your component function is being called again and again, but the state remains safe because it is not stored inside the function at all. Behind the scenes, React attaches each component to a fiber node, and all states, refs, and effects live inside those nodes. Each time the UI updates, React reuses the same fiber, so the same state values are available even though the component function ran again.
 Example:
 ```js
 const [name, setName] = useState("");
@@ -386,7 +389,7 @@ export default function PasswordToggle() {
 To directly access DOM elements or React elements.
 Use case: focus input, play video, integrate 3rd-party lib.
 
-**Q13: Explain React Fiber**  
+**Q13: Explain React Fiber. How React schedules low-priority vs high-priority updates?**  
 
  React Fiber is the internal engine of React responsible for scheduling rendering tasks efficiently.
  It allows React to pause, resume, and prioritize updates, making UI rendering smoother.
@@ -401,6 +404,8 @@ Task   Task      Task
   \      |      /
    UI Update
 ```
+React behaves like a smart personal assistant who prioritizes tasks based on urgency. If the user is typing, those updates are high priority — they must feel instant. But if background data is loading or some non-critical UI animation needs to run, React assigns them a lower priority. Using the fiber architecture and time slicing, React breaks work into tiny chunks  
+
 **Q14: keys in React list? what is List virtualization**  
 
 A list in React is a collection of data that we display by looping through it, usually using map(). While rendering lists, each item should have a unique key so React can identify which item has changed, been added, or removed. A unique key helps React avoid unnecessary re-renders because it tracks each element efficiently. Without a proper key, React may re-render the entire list even if only one item changed, which affects performance.
@@ -1869,9 +1874,10 @@ export default function TransitionExample() {
   );
 }
 ```
-**Q51: Streaming & Performance**  
+**Q51: Streaming & Performance. How Next.js handles streaming & partial rendering?**  
 
-Streaming sends HTML/data to the browser in chunks, not waiting for full response → page renders faster, better perceived performance, especially with SSR
+Streaming sends HTML/data to the browser in chunks, not waiting for full response → page renders faster, better perceived performance, especially with SSR.  
+Next.js sends the page to the browser in small HTML chunks instead of waiting for the full page to finish rendering. It first streams the layout or shell so the user immediately sees something, and then slower components arrive piece by piece as they finish on the server.
 
 **Q52:Edge Function in Next.js**  
 

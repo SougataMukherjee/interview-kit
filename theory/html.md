@@ -37,20 +37,20 @@ Then it fetches and parses CSS and combines both into a Render Tree.Finally, it 
 9️⃣ Web Page Displayed on Screen
 
 ```
+**Q2. How browsers parse HTML and build the DOM tree internally?**  
 
-**Q2: why br called empty element?**  
+Browser reads HTML top to bottom, breaks it into tokens, converts tokens into nodes,and links these nodes like a family tree, where html becomes the root, and everything inside becomes its children and connects them into a tree structure called DOM.
 
-because it has no content
+**Q3.How are HTML documents tokenized by browsers?**  
 
-**Q3: does hyperlink only apply to text?**  
-
-text and image both
+Browser reads HTML like a scanner, character by character, and makes tokens
+example
 ```js
-<a href="https://example.com" style="display: inline-block;">
-  <img src="product.jpg" alt="Product" width="100">
-  <span>Buy this Product</span>
-</a>
-
+<h1 class="big">Hi</h1> becomes:
+                        StartTagToken("h1")
+                        AttributeToken("class", "big")
+                        TextToken("Hi")
+                        EndTagToken("h1")
 ```
 
 **Q4: What is HTML and why is it important?**  
@@ -539,5 +539,19 @@ meter tag:displays a measurement within a known range (ex: battery level, temper
 ```js
 <label>Battery Level:</label>
 <meter value="0.7" min="0" max="1">70%</meter>
+
+```
+**Q53: why br called empty element?**  
+
+because it has no content
+
+**Q54: does hyperlink only apply to text?**  
+
+text and image both
+```js
+<a href="https://example.com" style="display: inline-block;">
+  <img src="product.jpg" alt="Product" width="100">
+  <span>Buy this Product</span>
+</a>
 
 ```

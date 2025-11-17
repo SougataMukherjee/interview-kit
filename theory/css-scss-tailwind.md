@@ -1017,9 +1017,10 @@ line-height: 1 → tight text
 line-height: 1.5 → readable
 line-height: 2 → spacious
 ```
-**Q43.What is clip-path?**  
+**Q43.What is clip-path? How does clip-path work internally?**  
 clip-path is a CSS property that cuts an element into a specific shape.
-Anything outside the shape becomes hidden
+Anything outside the shape becomes hidden.  
+It tells the browser to show only a region of an element using a path.so browser clips pixel outside it.
 ```js
 img {
   clip-path: circle(50%);
@@ -1166,7 +1167,18 @@ Allow logic in SCSS:
 @for $i from 1 through 5 { ... }
 @each $color in red, blue { ... }
 ```
+**Q13: What is SCSS Maps?**  
+SCSS maps act like mini-dictionaries where you store values under keys, and later you can fetch any value by its key map-get().
+```js
+$theme: (
+  primary: #3498db,
+  danger:  #e74c3c
+);
 
+.button {
+  color: map-get($theme, primary);
+}
+```
 
 TAILWIND CSS THEORY
 ==============================

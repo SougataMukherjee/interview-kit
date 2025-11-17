@@ -2,7 +2,7 @@
 JAVASCRIPT NOTES
 ================
 
-**Q1: what is JavaScript? why name called JavaScript? Ways to Import JS in HTML**  
+**Q1: what is JavaScript? why name called JavaScript? Ways to Import JS in HTML?What are render-blocking resources, and how do you avoid them?**  
 
 JS was created by Brendan Eich at Netscape in 1995.  
 
@@ -27,6 +27,12 @@ both load scripts asynchronously.
 - async → runs as soon as loaded, may block DOM. Good for analytics.
 ```js
 <script async src="async.js"></script>
+```
+**What are render-blocking resources, and how do you avoid them?**  
+When the browser starts loading a webpage, it wants to show something to the user as quickly as possible — but some files force it to stop and wait. CSS files and normal script tags block rendering because the browser must fully load them before it can safely continue building the page.To avoid these pauses, we tell the browser to handle scripts differently using async or defer, and we load CSS only when needed. For example, script defer lets HTML parsing continues without waiting, and link rel="preload" helps important CSS load earlier so the page paints faster.
+```js
+<script src="app.js" defer></script>
+<link rel="preload" href="style.css" as="style">
 ```
 
 **Q2: what are JavaScript engine? how js works internally**  
@@ -125,7 +131,7 @@ function abcd(){
 }
 abcd();
 ```
-**Q5: What is Closure?**  
+**Q5: What is Closure? How do closures maintain memory?**  
 
 A closure is combination of function or nested function and binding together with surrounding state or lexical scope  
 a closure is giving you to access to outer function scope from inner function.access outer function scope inside inner function is call closure, it is used to module design pattern,curring,memorize.  
@@ -155,6 +161,8 @@ const closure = outer();
 closure(); //1
 closure(); //2
 ```
+Imagine you pack a lunchbox and give it to a friend, but even when you leave, they still have access to the items inside. Closures work exactly like that. When a function returns another function, the inner function remembers all the variables from its original environment, even after the outer function has finished running. JavaScript keeps those variables alive in memory because the inner function still needs them, creating a private preserved scope that continues to exist as long as the function using it exists.  
+
 **Q6: What is an Expression? What is an Identifier? JS Variables? Difference: var, let, const**   
 
 An expression is any reference to a variable value or a set of variable values.  
@@ -214,7 +222,7 @@ demo();
 let name, $price, _id;
 
 ```
-**Q7: What is Event Loop?**  
+**Q7: What is Event Loop? Explain event loop phases (macrotasks, microtasks)**  
 
 The Event Loop in JavaScript manages how code is executed inside the browser. It runs all synchronous code first in the call stack, and when asynchronous tasks like setTimeout, promises, or API calls finish, their callbacks are moved to the task queues. The event loop continuously checks if the call stack is empty, and when it is, it pulls the next callback from the queue and pushes it to the stack for execution, ensuring JavaScript remains non-blocking and handles async operations smoothly.
 Microtasks: Promises.
@@ -245,6 +253,7 @@ console.log("d");
 
 // Output: a d b c
 ```
+The event loop behaves like a very disciplined manager who follows strict priority rules. Microtasks are the VIP guests — they are never asked to wait. So when a Promise resolves, its .then() callback goes straight into the microtask queue, and the manager ensures all microtasks finish before handling the next big job. Macrotasks like setTimeout, setInterval, or DOM events wait in another queue. After finishing all microtasks, the event loop picks one macrotask, runs it, and then checks microtasks again. This cycle continues endlessly, making JavaScript feel asynchronous even though it runs on a single thread.
 
 **Q8:Sync vs Async**  
 
@@ -365,7 +374,7 @@ b = JSON.parse(JSON.stringify(a))
 a.y ──► { z:2 }     b.y ──► { z:2 }   (separate copies)
 ```
 
-**Q12. What are Promises? why promise faster than setTimeout? Build Own Promise for Microtask**  
+**Q12. What are Promises? why promise faster than setTimeout? Build Own Promise for Microtask? What happens internally when a Promise resolves?**  
 
 Promise is an object represent the eventual completion or failure of asynchronous operation and resulting value.promise has 3 states pending,rejected,fulfilled, it is introduce es6 onwards.we can make asynchronous task using promise.to execute promise we have prototype method promise.prototype.then() for successful compilation and promise.prototype.catch() for unsuccessful compilation 
 Example:
@@ -412,6 +421,7 @@ girlfriend().then(()=>{
 })
 
 ```
+When a Promise resolves, it quietly changes its internal state from 'pending' to 'fulfilled,' but nothing runs immediately. Instead, the callback connected using .then() is placed into the microtask queue. JavaScript finishes whatever code is currently running (because the call stack must be empty), and then the event loop picks the microtask and executes the .then() callback
 
 **Q13. Promise.all vs Promise.race**  
 
