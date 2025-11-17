@@ -40,17 +40,25 @@ Then it fetches and parses CSS and combines both into a Render Tree.Finally, it 
 **Q2. How browsers parse HTML and build the DOM tree internally?**  
 
 Browser reads HTML top to bottom, breaks it into tokens, converts tokens into nodes,and links these nodes like a family tree, where html becomes the root, and everything inside becomes its children and connects them into a tree structure called DOM.
+```txt
+html
+└── body
+    └── h1
+        ├── (attribute) class="heading"
+        └── "Hi"
+
+```
 
 **Q3.How are HTML documents tokenized by browsers?**  
 
 Browser reads HTML like a scanner, character by character, and makes tokens
 example
 ```js
-<h1 class="big">Hi</h1> becomes:
-                        StartTagToken("h1")
-                        AttributeToken("class", "big")
-                        TextToken("Hi")
-                        EndTagToken("h1")
+<h1 class="heading">Hi</h1> becomes:
+  StartTagToken("h1")
+  AttributeToken("class", "heading")
+  TextToken("Hi")
+  EndTagToken("h1")
 ```
 
 **Q4: What is HTML and why is it important?**  
