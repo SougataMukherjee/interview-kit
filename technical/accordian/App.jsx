@@ -52,3 +52,25 @@ export default function App() {
     </div>
   );
 }
+
+//NOTE: we can use details and summary tag for accordion like
+  // {imageUrls.map((img, index) => (
+  //         <details
+  //           key={index}
+  //           className="accordion-item"
+  //           // Disable odd items
+  //           open={false}
+  //           disabled={index % 2 !== 0}
+  //         >
+  //           <summary className="accordion-header">
+  //             Image {index + 1}
+  //             {index % 2 !== 0 && (
+  //               <span style={{ color: "red", marginLeft: 8 }}>(Disabled)</span>
+  //             )}
+  //           </summary>
+
+  //           <div className="accordion-content">
+  //             <img src={img.name} alt={`Image ${index}`} />
+  //           </div>
+  //         </details>
+  //       ))}

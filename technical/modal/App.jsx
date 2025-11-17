@@ -1,3 +1,5 @@
+import { useState } from "react";
+import Modal from "./Modal";
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -11,7 +13,7 @@ export default function App() {
         Open Modal
       </button>
       {isOpen && (
-        <Modal onClose={() => setIsOpen(false)}>
+        <Modal open={isOpen} onClose={() => setIsOpen(false)}>
           <h3>Hello! </h3>
           <p>This is a simple popup modal.</p>
         </Modal>

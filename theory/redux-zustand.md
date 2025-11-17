@@ -111,6 +111,35 @@ Official, modern way to write Redux — less boilerplate, includes createSlice, 
 createSlice → Combines actions + reducers in one place
 createAsyncThunk → Handles async logic (like fetching data) easily
 
+```js
+const mySlice = createSlice({
+  name: "sliceName",
+
+  initialState: {
+    data: [],
+    loading: false,
+    error: null,
+  },
+
+  reducers: {
+    foo: (state, action) => {
+      state.data = action.payload;
+    },
+  },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchData.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data = action.payload;
+      })
+  },
+});
+```
+
 **Q11.What is the purpose of useSelector and useDispatch?**  
 
 useSelector → Access Redux state in components  

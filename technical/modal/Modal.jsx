@@ -1,41 +1,46 @@
-import { useState } from "react";
-
-export function Modal({ onClose, children }) {
+export function Modal({ open, onClose, children }) {
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: "rgba(0,0,0,0.5)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <div
-        style={{
-          background: "white",
-          padding: "20px",
-          borderRadius: "8px",
-          minWidth: "300px",
-          textAlign: "center",
-        }}
-      >
-        {children}
-        <button
-          onClick={onClose}
-          style={{
-            marginTop: "10px",
-            padding: "6px 12px",
-            cursor: "pointer",
-          }}
-        >
-          Close
-        </button>
+    <dialog open={open} style={styles.dialog}>
+      <div style={styles.overlay}>
+        <div style={styles.box}>
+          {children}
+
+          <button onClick={onClose} style={styles.closeBtn}>
+            Close
+          </button>
+        </div>
       </div>
-    </div>
+    </dialog>
   );
 }
+
+const styles = {
+  dialog: {
+    padding: 0,
+    border: "none",
+    background: "transparent",
+  },
+
+  overlay: {
+    position: "fixed",
+    inset: 0,
+    background: "rgba(0,0,0,0.5)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  box: {
+    background: "white",
+    padding: "20px",
+    borderRadius: "8px",
+    minWidth: "300px",
+    textAlign: "center",
+  },
+
+  closeBtn: {
+    marginTop: "10px",
+    padding: "6px 12px",
+    cursor: "pointer",
+  },
+};
