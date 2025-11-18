@@ -427,6 +427,19 @@ Example:
     <td>25</td>
   </tr>
 </table>
+<style>
+table, th, td {
+  border: 1px solid red;
+}
+table{
+  width: 100%;
+  border-collapse: collapse;
+}
+th,td{
+  padding:10px;
+  text-align:center;
+}
+</style>
 ```
 **Q45: HTML Forms handle form state and validation**  
 

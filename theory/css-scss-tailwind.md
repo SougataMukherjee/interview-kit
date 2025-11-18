@@ -947,6 +947,11 @@ or
 li:not(:first-child) {
   color: blue;
 }
+ul{
+  list-style-type: circle;//disc square upper-roman lower-roman decimal
+  list-style-position: inside;//outside
+  list-style-image: url('img.gif');
+}
 </style>
 
 ```

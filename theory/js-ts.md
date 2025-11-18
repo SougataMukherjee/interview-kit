@@ -253,6 +253,7 @@ console.log("d");
 
 // Output: a d b c
 ```
+<img alt="event-loop" src="./img/event-loop.png"/>
 The event loop behaves like a very disciplined manager who follows strict priority rules. Microtasks are the VIP guests — they are never asked to wait. So when a Promise resolves, its .then() callback goes straight into the microtask queue, and the manager ensures all microtasks finish before handling the next big job. Macrotasks like setTimeout, setInterval, or DOM events wait in another queue. After finishing all microtasks, the event loop picks one macrotask, runs it, and then checks microtasks again. This cycle continues endlessly, making JavaScript feel asynchronous even though it runs on a single thread.
 
 **Q8:Sync vs Async**  

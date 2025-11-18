@@ -489,7 +489,7 @@ function withAuth(WrappedComponent) {
 }
  ```
 
-**Q17: What is React Fragment?**  
+**Q17: What is React Fragment? why fragment better than divs**  
 
 <></> wrapper to avoid adding extra DOM nodes.it is alternate of any parent.
 
@@ -499,6 +499,7 @@ or
 <React.Fragment><Comp1/><Comp2/></React.Fragment>
 
 ```
+fragments are bit faster and take less memory than div
 
 **Q18: Error boundaries and limitation**  
 
@@ -753,13 +754,14 @@ Framework: it controls flow (Angular)
 React → core logic
 ReactDOM → renders UI in browser
 
-**Q32: JSX**  
+**Q32: JSX? does react use HTML?**  
 
 jsx stand for javascript XML.it allow us to write HTML in react.
 JXS=JS + HTML
 ```js
 const el = <h1>Hello {name}</h1>;
 ```
+No react only use JSX
 
 **Q33:How do you print falsy values in JSX?**  
 
@@ -797,8 +799,8 @@ function Greeting({ name }) {
 
 **Q36: Props vs State**  
 
-Props: read-only
-State: mutable (internal data)
+Props: read-only and immutable
+State: asynchronous and mutable (internal data)
 
 **Q37: types of conditional rendering**  
 ```js
