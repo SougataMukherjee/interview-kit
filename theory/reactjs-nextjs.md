@@ -639,15 +639,40 @@ export default function App() {
 useReducer is an alternative to useState for complex state logic.
 It manages state transitions using a reducer function.
 ```js
+import React, { useReducer } from "react";
+
 function reducer(state, action) {
   switch (action.type) {
-    case "INC": return { count: state.count + 1 };
-    case "DEC": return { count: state.count - 1 };
-    default: return state;
+    case "INC":
+      return { count: state.count + 1 };
+    case "DEC":
+      return { count: state.count - 1 };
+    default:
+      return state;
   }
 }
 
-const [state, dispatch] = useReducer(reducer, { count: 0 });
+export default function App() {
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
+
+  return (
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <h1>Count: {state.count}</h1>
+
+      <button onClick={() => dispatch({ type: "INC" })}>
+        Increment
+      </button>
+
+      <button
+        onClick={() => dispatch({ type: "DEC" })}
+        style={{ marginLeft: "10px" }}
+      >
+        Decrement
+      </button>
+    </div>
+  );
+}
+
 
 ```
 
@@ -1074,6 +1099,13 @@ console.log(`Hello, ${name}!`);
 
 fetch(`https://api.example.com/users/${userId}`);
 
+```
+**Q52. What is a Pure Component?**  
+A component that re-renders only when props/state actually change.
+```js
+class MyComp extends React.PureComponent {}
+or
+memo(Component);
 ```
 
 

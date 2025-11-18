@@ -694,7 +694,7 @@ H<sub>2</sub>O → water
 x<sup>2</sup> → square
 ```
 
-**Q23:CSS Font Fallback**  
+**Q23:CSS Font Fallback. @font-face**  
 
 Multiple fonts listed in order of priority.
 If first fails, next is used.  
@@ -702,6 +702,18 @@ If first fails, next is used.
 Example:
 ```js
 font-family: "Roboto", "Arial", sans-serif;
+```
+font-face allows loading custom fonts into your app.
+```js
+@font-face {
+  font-family: "MyFont";
+  src: url("myfont.woff2");
+}
+
+body {
+  font-family: "MyFont";
+}
+
 ```
 
 **Q24:Border vs Outline**  
@@ -1041,6 +1053,31 @@ text-wrap: wrap;
 text-wrap: nowrap;
 text-wrap: balance;
 text-wrap: pretty;
+```
+**Q45.type of css colors**  
+- **Hex** Short, common, simple.
+```js
+color: #ff5733;
+
+```
+- **RGB** Good when doing JavaScript color animations
+```js
+color: rgb(255, 87, 51);
+```
+- **HSL(Best for responsive themes)** Easy to change lightness & saturation when screen, theme
+```js
+color: hsl(10, 80%, 60%);
+```
+**Q45.When to use width vs max-width in responsive design?**  
+fixed width always fixes exact width but in max-width shrinks on small screens and max-width best for responsiveness  
+**Q46.how to use multiple background**  
+```js
+div {
+  background:
+    url(bg-top.png) top left no-repeat,
+    url(bg-pattern.png) center repeat;
+}
+
 ```
 SCSS THEORY
 ==============================

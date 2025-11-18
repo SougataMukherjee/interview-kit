@@ -2020,7 +2020,18 @@ box.classList.remove('blue');   // removes class
 box.classList.toggle('active'); // add/remove toggle
 console.log(box.classList.contains('red')); // true or false
 ```
+**Q93. How to give object protection**  
+Object.freeze() — cannot modify or add values
+```js
+const obj = Object.freeze({ a: 1 });
+obj.a = 2;   // ignored
 
+```
+Object.seal() — can modify values but cannot add/remove keys
+```js
+const obj = Object.seal({ a: 1 });
+
+```
 
 
 TYPESCRIPT NOTES
