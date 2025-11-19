@@ -652,15 +652,52 @@ Server:                     A              Server:  A---------------------A
                      Only last sent            First sent           Next sent after delay
 ```
 
-**Q19: Polyfill Example (map)**
+**Q19: Polyfill Example (map-filter-flat)**
 ```js
-Array.prototype.myMap = function(cb){
-  let res=[];
-  for(let i=0;i<this.length;i++){
-    res.push(cb(this[i],i));
+//map polyfill
+Array.prototype.myMap = function(callback) {
+  let result = [];
+  for (let i = 0; i < this.length; i++) {
+    result.push(callback(this[i], i, this));////pushing currentValue, index, array
   }
-  return res;
-}
+  return result;
+};
+let arr = [1, 2, 3];
+let doubled = arr.myMap(num => num * 2);
+console.log(doubled);
+
+//filter ployfill
+Array.prototype.myFilter = function(callback) {
+  let result = [];
+  for (let i = 0; i < this.length; i++) {
+    if (callback(this[i], i, this)) {
+        //if(true) push elements to new array
+      result.push(this[i]);
+    }
+  }
+  return result;
+};
+const arr = [1, 2, 3, 4, 5];
+const even = arr.myFilter(num => num % 2 === 0);
+console.log(even);
+
+//flat()
+Array.prototype.myFlat = function (depth = 1) {
+  let result = [];
+
+  this.forEach(item => {
+    if (Array.isArray(item) && depth > 0) {
+      result = result.concat(item.myFlat(depth - 1));
+    } else {
+      result.push(item);
+    }
+  });
+
+  return result;
+};
+let arr = [1, [2, [3], 4]];
+console.log(arr.myFlat(2)); // [1, 2, 3, 4]
+
 ```
 **Q20: Call, Apply, Bind**  
 
