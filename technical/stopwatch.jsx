@@ -7,7 +7,7 @@ export default function App() {
 
   useEffect(() => {
     if (isRunning) {
-      const runner = customTimer(setTime)(); // start custom timer
+      const runner = useTimer(setTime)(); // start custom timer
       timerRef.current = setInterval(runner, 20); // small interval
     }
 
@@ -40,7 +40,7 @@ export default function App() {
 }
 
 // customTimer.js
-export function customTimer(setTime) {
+export function useTimer(setTime) {
   let prev = Date.now();
 
   return function tick() {
