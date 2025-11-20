@@ -1,18 +1,16 @@
-
-'use client'
-import { useRef, useState } from "react";
+"use client";
+import { useState, useRef } from "react";
 
 export default function Home() {
   const [text, setText] = useState("");
-  const lastCall = useRef(0);
+  const canRun = useTimer(2000); // throttle: 2 seconds
 
   function handleChange(e) {
-    const now = Date.now();
-    if (now - lastCall.current >= 2000) { // 2 seconds
-      console.log("Throttled Value:", e.target.value);
-      lastCall.current = now;
-    }
     setText(e.target.value);
+
+    if (canRun()) {
+      console.log("Throttled:", e.target.value);
+    }
   }
 
   return (
@@ -26,4 +24,20 @@ export default function Home() {
       <div>Hello {text}</div>
     </>
   );
+}
+
+export function useTimer(delay = 1000) {
+  const lastTime = useRef(0);
+
+  function canRun() {
+    const now = Date.now();
+
+    if (now - lastTime.current >= delay) {
+      lastTime.current = now;
+      return true;
+    }
+    return false;
+  }
+
+  return canRun;
 }
