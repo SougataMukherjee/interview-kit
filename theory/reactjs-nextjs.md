@@ -779,14 +779,15 @@ Framework: it controls flow (Angular)
 React → core logic
 ReactDOM → renders UI in browser
 
-**Q32: JSX? does react use HTML?**  
+**Q32: JSX? does react use HTML?why browser cant understand JSX?**  
 
 jsx stand for javascript XML.it allow us to write HTML in react.
 JXS=JS + HTML
 ```js
 const el = <h1>Hello {name}</h1>;
 ```
-No react only use JSX
+No react only use JSX.  
+Because JSX is not valid JavaScript — browsers can only understand regular JavaScript, so JSX must be compiled (transpiled) into JavaScript first.
 
 **Q33:How do you print falsy values in JSX?**  
 
