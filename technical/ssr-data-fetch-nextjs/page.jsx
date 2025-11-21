@@ -1,22 +1,22 @@
-export default async function Home() {
-  try {
-    const res = await fetch('https://jsonplaceholder.typicode.com/users', {
-      cache: 'no-store',
-    });
+import { use } from 'react';
 
-    if (!res.ok) throw new Error('Failed to fetch users');
+async function getUsers() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/users');
+  return res.json();
+}
 
-    const users = await res.json();
+export default function Page() {
+  const data = use(getUsers());
+  return (
+    <div>
+      <h1>Users List</h1>
 
-    return (
-      <div>
-        <h2>Server Side Rendered Users</h2>
-        {users.map((u) => (
-          <p key={u.id}>{u.name}</p>
-        ))}
-      </div>
-    );
-  } catch (error) {
-    return <p style={{ color: 'red' }}>Error: {error.message}</p>;
-  }
+      {data.map((user) => (
+        <div key={user.id}>
+          <h3>{user.id}-{user.name}</h3>
+          <h4>{user.email}</h4>
+        </div>
+      ))}
+    </div>
+  );
 }
