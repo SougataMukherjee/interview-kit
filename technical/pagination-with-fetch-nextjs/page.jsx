@@ -9,11 +9,10 @@ export default function Home() {
   const skip = page * limit;
 
   useEffect(() => {
-    async function fetchData() {
+    (async () => {
       const items = await getProducts(limit, skip);
       setProducts(items);
-    }
-    fetchData();
+    })();
   }, [page, limit]);
 
   return (
