@@ -330,7 +330,19 @@ export default Child;
 **Q11: Controlled vs Uncontrolled Components**  
 
 Controlled - state managed by React.
+```js
+const [name, setName] = useState("");
+<input value={name} onChange={e => setName(e.target.value)} />
+```
 Uncontrolled - managed by DOM via refs.
+```js
+const inputRef = useRef();
+function handleSubmit() {
+  alert(inputRef.current.value);
+}
+<input ref={inputRef} />
+<button onClick={handleSubmit}>Submit</button>
+```
 
 **Q12: What is useRef?**  
 
@@ -1108,8 +1120,109 @@ class MyComp extends React.PureComponent {}
 or
 memo(Component);
 ```
+**Q53. Explain React router**  
+Link use for navigation without reloading.
+Routes wrapper for route matching
+```js
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
+function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/">Home</Link> |
+        <Link to="/about">About</Link> |
+        <Link to="/blog">Blog</Link>
+      </nav>
 
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+
+        {/* Blog main route */}
+        <Route path="/blog" element={<Blog />}>
+          <Route path="post1" element={<Post1 />} />
+          <Route path="post2" element={<Post2 />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+```
+**Q54.what is useImperativeHandle?**  
+useImperativeHandle is a hook in React that allows you to customize the ref object that a parent component can access.Normally, refs give access to DOM nodes only.
+But sometimes parent needs to trigger child functions like: focus the child,reset form,start/stop animation
+```js
+//parent
+function Parent() {
+  const childRef = useRef();
+
+  return (
+    <>
+      <ChildInput ref={childRef} />
+      <button onClick={() => childRef.current.focusMe()}>Focus</button>
+      <button onClick={() => childRef.current.clearText()}>Clear</button>
+    </>
+  );
+}
+//child
+import { useRef, useImperativeHandle, forwardRef } from "react";
+
+const ChildInput = forwardRef((props, ref) => {
+  const inputRef = useRef();
+
+  useImperativeHandle(ref, () => ({
+    focusMe() {
+      inputRef.current.focus();
+    },
+    clearText() {
+      inputRef.current.value = "";
+    }
+  }));
+
+  return <input ref={inputRef} />;
+});
+
+export default ChildInput;
+
+```
+**Q55.AbortController in React?**  
+AbortController is used to cancel fetch requests in React To prevent memory leaks and To avoid updating state after component unmount.
+```js
+import { useEffect, useState } from "react";
+
+function UserList() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function fetchUsers() {
+      try {
+        const res = await fetch("https://api.example.com/users", {
+          signal: controller.signal,
+        });
+        const data = await res.json();
+        setUsers(data);
+      } catch (err) {
+        if (err.name === "AbortError") {
+          console.log("Request cancelled");
+        }
+      }
+    }
+
+    fetchUsers();
+
+    return () => controller.abort();
+  }, []);
+
+  return <div>{users.length} users</div>;
+}
+
+export default UserList;
+
+```
 
 NEXT.JS NOTES 
 =============

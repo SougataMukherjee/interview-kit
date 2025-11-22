@@ -160,6 +160,24 @@ function outer() {
 const closure = outer();
 closure(); //1
 closure(); //2
+
+//exp3
+const MyCache = () => {
+  let cache = {};
+  return (n) => {
+    if (n in cache) {
+      console.log('cache data');
+      return cache[n];
+    }
+    else {
+      cache[n] = n*2;
+      return cache[n];
+    }
+  }
+}
+const store=MyCache();
+console.log(store(5))//10
+console.log(store(5))//10 cache data
 ```
 Imagine you pack a lunchbox and give it to a friend, but even when you leave, they still have access to the items inside. Closures work exactly like that. When a function returns another function, the inner function remembers all the variables from its original environment, even after the outer function has finished running. JavaScript keeps those variables alive in memory because the inner function still needs them, creating a private preserved scope that continues to exist as long as the function using it exists.  
 
@@ -229,17 +247,26 @@ Microtasks: Promises.
 Macrotasks: setTimeout, DOM events.
 Microtasks run before next render cycle.
 ```txt
-Synchronous Code
-      ↓
-  Microtasks (Promises)
-      ↓
-   Render/Update
-      ↓
-  Macrotasks (setTimeout, Events)
-      ↓
-      ⤵ Repeat
+                ┌───────────────────────────────┐
+                │           CALL STACK           │
+                │  (Runs code line-by-line)      │
+                └─────────────▲─────────────────┘
+                              │
+                              │ (returns callback)
+                              │
+┌───────────────┐     ┌───────▼────────┐     ┌─────────────────────┐
+│   Web APIs     │----▶ Callback Queue  │----▶ Microtask Queue      │
+│ (setTimeout,   │     │ (setTimeout)   │     │ (Promises)           │
+│  fetch etc.)   │     └──────▲─────────┘     └─────────▲──────────┘
+└───────────────┘            │                         │
+                             └───────────┬─────────────┘
+                                         │
+                                         ▼
+                                   EVENT LOOP
+                             (Moves highest priority)
+
 ```
-Example:
+Example 1:
 ```js
 console.log("a");
 setTimeout(() => {
@@ -252,6 +279,17 @@ setTimeout(() => {
 console.log("d");
 
 // Output: a d b c
+```
+Example 2:
+```js
+console.log("A");
+
+setTimeout(() => console.log("B"), 0);
+
+Promise.resolve().then(() => console.log("C"));
+
+console.log("D");
+//A D C B
 ```
 <img alt="event-loop" src="./img/event-loop.png"/>
 The event loop behaves like a very disciplined manager who follows strict priority rules. Microtasks are the VIP guests — they are never asked to wait. So when a Promise resolves, its .then() callback goes straight into the microtask queue, and the manager ensures all microtasks finish before handling the next big job. Macrotasks like setTimeout, setInterval, or DOM events wait in another queue. After finishing all microtasks, the event loop picks one macrotask, runs it, and then checks microtasks again. This cycle continues endlessly, making JavaScript feel asynchronous even though it runs on a single thread.
@@ -1074,7 +1112,7 @@ Examples:
 
 **Q39: What is destructuring?**  
 
-Extract/unpacking values from arrays or objects easily:
+Extract/unpacking values from arrays or objects into separate cleaner and more readable code:
 ```js
 //exp 1
 const [a, b] = [1, 2];

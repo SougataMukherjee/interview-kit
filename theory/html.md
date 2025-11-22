@@ -468,13 +468,17 @@ Validation:
 
 ```
 
-**Q46:HTML Video and Controls**  
+**Q46:HTML Video and Controls and Audio tag**  
 
 → Used to embed videos with play/pause buttons.
 ```js
 <video width="300" controls>
   <source src="movie.mp4" type="video/mp4">
 </video>
+
+<audio controls>
+  <source src="song.mp3" type="audio/mpeg" />
+</audio>
 ```
 **Q47: What is a Description List?**  
 
@@ -562,9 +566,9 @@ meter tag:displays a measurement within a known range (ex: battery level, temper
 <meter value="0.7" min="0" max="1">70%</meter>
 
 ```
-**Q53: why br called empty element?**  
+**Q53: why br called empty/void element?**  
 
-because it has no content
+because it has no content like img, hr, input, meta, link.
 
 **Q54: does hyperlink only apply to text?**  
 
@@ -576,3 +580,6 @@ text and image both
 </a>
 
 ```
+**Note:** target attribute in a  
+1. target="_blank" open link in new tab
+2. target="_self" open link in same tab
