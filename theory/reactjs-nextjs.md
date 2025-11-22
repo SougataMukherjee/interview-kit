@@ -1,8 +1,15 @@
 
 REACT NOTES 
 ==============================
+**Q1. What is React ? who developed ? is react imperative or declarative programming language?**   
+React is a JavaScript library used for building fast and interactive user interfaces, especially single-page applications (SPAs). It uses a component-based architecture.  
 
-**Q1: What is Virtual DOM?How React Manages Virtual DOM?**  
+React was developed by Facebook created by Jordan Walke released by 2013.Latest React version is 19 
+
+React is declarative because you describe what the UI should look like, and React takes care of how to update the DOM.
+Instead of manually manipulating DOM steps (imperative style), you declare a component’s state and UI, and React automatically updates the view when the state changes.
+
+**Q1.1: What is Virtual DOM?How React Manages Virtual DOM?**  
 
 Virtual DOM is a lightweight JavaScript copy of the Real DOM.
 On the initial render, React builds the Virtual DOM and then creates the Real DOM from it.
@@ -826,7 +833,13 @@ function Greeting({ name }) {
 );
 
  ```
- Note: cloneElement: Copies an element and adds new props/children.
+ Note: cloneElement: Copies an element and adds new props/children.  
+
+ Note: Yes, you can use React.createElement inside JSX — but there’s almost no reason to
+ ```js
+ const element = <div>{React.createElement("span", null, "Hi")}</div>;
+
+ ```
 
 **Q35:How JSX prevents Injection Attacks?**  
 
