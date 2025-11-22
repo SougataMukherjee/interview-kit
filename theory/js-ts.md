@@ -131,6 +131,14 @@ function abcd(){
 }
 abcd();
 ```
+Example 5:
+```js
+if (typeof b === "undefined") {
+    console.log("you used var");  
+}
+
+var b = 10; //if you use let its will throw error
+```
 **Q5: What is Closure? How do closures maintain memory?**  
 
 A closure is combination of function or nested function and binding together with surrounding state or lexical scope  
@@ -879,6 +887,13 @@ function sum(...numbers) {
 }
 const result = sum(4, 5, 6, 7); // [9, 10, 11, 12]
 ```
+exp3
+```js
+function foo(x,y,z) {
+ console.log( x, y, z );
+}
+foo( ...[1,2,3] ); //[1,2,3]
+```
 
 
 **Q27: Deep Clone Object**  
@@ -1185,6 +1200,14 @@ x = 5;//error
 data types are describe the type of data  
 
 - Primitive: single value (immutable)(String, Number, boolean, null, undefined, symbol, bigint).
+```js
+Boolean(undefined) → false
+Boolean(null) → false
+Boolean('') → false
+Boolean(0) → false
+Boolean(-1) → true
+
+```
 - Non-Primitive:(mutable) Object, Array, function,Date,Math.when we copy those its reference is copy but not having real copy  ((),{},[])
 ```js
 let a =[1,2,3]
@@ -1208,7 +1231,7 @@ var x
 console.log(typeof x)//undefined
 ```
 
-**Q47: types of operator**  
+**Q47: types of operator give associativity**  
 
 Arithmetic:+,-,*,/,%,++,--  
 
@@ -1220,6 +1243,18 @@ Logical: &&,||,!
 
 Bitwise: 
 Ternary:variable=(condition)?value1:value2
+
+```txt
+| Category                  | Associativity |  
+| ------------------------- | ------------- | 
+| Arithmetic (+ - * / %)    | Left → Right  |  
+| ++ -- (prefix)            | Right → Left  |   
+| Assignment (= += *= etc.) | Right → Left  | 
+| Comparison (== >= etc.)   | Left → Right  |  
+| Logical (&&)              | Right → Left  |
+| Logical NOT (!)           | Right → Left  |  
+
+```
 
 **Q48:Parameter vs Argument**  
 
@@ -1556,7 +1591,20 @@ document.addEventListener("DOMContentLoaded", function () {
 **Q67: isNaN() and Number()**  
 
 Checks if value is not number
+```js
 isNaN('abc') → true
+isNaN(undefined) → true
+```
+Number convert anything to number
+```js
+Number(false) → 0
+Number(null) → 0
+Number('') → 0
+Number({}) → NaN
+Number(undefined) → NaN
+
+but console.log(false==null)//false
+``` 
 
 **Q68:Cookies**  
 
