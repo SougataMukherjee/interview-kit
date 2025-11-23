@@ -1757,16 +1757,25 @@ filter() → returns new array with matching elements.
 ```js
         [1,2,3].filter(x=>x>1) → [2,3]
 ```
-reduce() → combines all elements into single value. it iterate over the array items and returns a single output.reduce function takes 4 arguments accumulator(prev value),current value,currentIndex, array
+reduce() → combines all elements into single value. it iterate over the array items and returns a single output.reduce function takes 4 arguments accumulator(prev value),current value,currentIndex, array.it process items left to right
 ```js
 //exp 1
-       [1,2,3].reduce((a,b)=>a+b) → 6
+       [1,2,3].reduce((a,b)=>a+b,0) → 6
 //exp 2
       const x=["s","o","u"].reduce((prev,curr)=>{
       return prev+curr
     })
 console.log(x)
 
+```
+reduceRight() → when you want to process items from right → left (index last to 0)
+```js
+const arr = ["1", "2", "3", "4", "5"];
+
+total = arr.reduceRight((prev, cur)=> {
+    return prev + cur;
+});
+console.log(total); // 54321
 ```
 forEach() → runs function for each element.
 ```js
