@@ -1453,6 +1453,12 @@ Removes unused JS code during bundling.
 **Q62: what is DOM and BOM and its advantage**  
 
 DOM(Document Object Model): when a web page loads the browser construct the DOM which is tree like structure of HTML.  
+
+Document is the root object that represents the entire HTML page.  
+A node is any item in the DOM (element, text, comment, attribute).  
+Element is a specific type of node that represents HTML tags (div, p, h1, etc.)  
+A NodeList is a collection of nodes (like an array, but not exactly an array).  
+
 ```txt
                 🏛️ Document (root)
                        │
@@ -1484,10 +1490,12 @@ Advantage: JS can dynamically change HTML/CSS
 **Q63:Useful DOM Properties**  
 
 .innerHTML:Used when you need to insert HTML (e.g., cards list, table rows)
+.innerText:when you want to add text only,it ignore html tags
 ```js
 <div id="box"></div>
 <script>
-  document.getElementById("box").innerHTML = "<b>Hello</b>";
+  document.getElementById("box").innerHTML = "<b>Hello</b>"; //bold Hello
+  document.getElementById("box").innerText = "<b>Hello</b>"; //<b>Hello</b>
 </script>
 
 ```
@@ -1503,11 +1511,12 @@ box.style.background = "yellow";
 box.style.padding = "10px";
 
 ```
-.classList Button active state, dark mode toggle, adding animations
+.classList(Add/Remove/Toggle a single class safely.) Button active state, dark mode toggle, adding animations
 ```js
 box.classList.add("active");
 box.classList.remove("error");
 box.classList.toggle("dark-mode");
+div.classList.replace("active", "error");
 
 ```
 .value Getting user input from forms, search box
@@ -1522,14 +1531,30 @@ box.classList.toggle("dark-mode");
 
 .children:Count number of list items, remove last child
 ```js
-const items = document.getElementById("list").children;
-console.log(items.length); // number of li
+<ul id="list">
+  <li class="item red">Apple</li>
+  <li class="item red">Mango</li>
+  <li class="item red">Banana</li>
+</ul>
+
+const items = document.getElementById("list");
+// children list
+const children = items.children;
+// first and last elements
+const first = items.firstElementChild;
+const last = items.lastElementChild;
+// parent element of the UL
+const parent = items.parentElement;
+console.log(children.length, first, last, parent);
+
 
 ```
-.parentElement : Event delegation: find which parent wrapper was clicked
+.appendChild : Adds an element inside another element.
 ```js
-const child = document.querySelector(".item");
-console.log(child.parentElement); // UL or parent container
+const li = document.createElement("li");
+li.innerText = "Apple";
+document.querySelector("ul").appendChild(li);
+
 
 ```
 .disabled
@@ -1537,58 +1562,103 @@ console.log(child.parentElement); // UL or parent container
 <input type="checkbox" id="hide" />
 document.getElementById('hide').disabled=true
 ```
-
-**Q64:clientX vs scrollX**  
-
-- clientX → Mouse position relative to visible viewport (ignores scrolling)
-- scrollX → Total horizontal scroll offset of the page
-
-```txt
-pageX = scrollX + clientX
-```
-<img src="./img/scroll.png" alt="scroll-x" />
-
-
-
-**Q65:Mouse Events**  
-
-- click:Fired when the user presses and releases the mouse button on an element.
-- dblclick:Fired when the user double-clicks an element.
-- mousedown:Fired when the mouse button is pressed down on an element (before releasing).
+.remove() Removes the element from DOM.
 ```js
-<div id="box">Hold mouse down</div>
-<script>
-box.addEventListener("mousedown", () => console.log("Mouse Down"));
-</script>
-
+document.getElementById("box").remove();
 ```
-- mouseup:Fired when the mouse button is released over an element.
-- mousemove:Fired when the mouse pointer is moved over an element.
+.setAttribute,.removeAttribute,.hasAttribute
 ```js
-<div id="box">Move mouse here</div>
-<script>
-box.addEventListener("mousemove", () => console.log("Moving"));
-</script>
+div.setAttribute("id", "hero");
+div.removeAttribute("id");
+div.hasAttribute("id"); // true / false
 
 ```
-- mouseenter:Fired when the mouse pointer enters the boundary of an element.Unlike mouseover, it does not bubble.
-- mouseleave:Fired when the mouse pointer leaves the boundary of an element.Unlike mouseout, it does not bubble.
-```js
-<div id="box">Hover out</div>
-<script>
-box.addEventListener("mouseleave", () => console.log("Mouse Leave"));
-</script>
-
-```
-
-**Q66:DOMContentLoaded**  
+**Q64:DOMContentLoaded**  
 DOMContentLoaded fires when the HTML is fully loaded and parsed, before images, CSS, and other assets finish loading, it helps to run js early
 ```js
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM is ready!");
 });
 ```
-**Q67: isNaN() and Number()**  
+
+**Q65:Access DOM (5 ways)**  
+
+- getElementById() Selects a single element by its id.You need one specific element with a unique ID (fastest and most direct)
+```js
+const title = document.getElementById("mainTitle");
+
+```
+- getElementsByClassName() You need multiple elements that share the same class, Good for bulk styling or looping through repeated elements
+```js
+const items = document.getElementsByClassName("menu-item");
+console.log(items);
+[...items].forEach((elem)=>console.log(elem))
+```
+- getElementsByTagName() it return html collection as return value
+```js
+const li=document.getElementsByTagName("li")
+[...li].forEach(x=>console.log(x))
+```
+- querySelector() Selects the first element matching a CSS selector.Supports complex selectors (.class, #id, div > p, [type="text"])
+```js
+const cardTitle = document.querySelector(".card > h3");
+cardTitle.forEach((element)=>{
+  cardTitle.style.backgroundColor="yellow"
+})
+const thirdItem = document.querySelector("ul li:nth-child(3)");
+
+```
+- querySelectorAll() Selects all elements matching a CSS selector. Returns NodeList
+```js
+const allLinks = document.querySelectorAll("nav a");
+[...document.querySelectorAll("button")].forEach(btn => {
+  btn.style.background = "blue";
+});
+
+const items=document.querySelectorAll("ul#itemList li");
+items.forEach((item)=>{
+  item.style.display=item.innerText.toLowerCase().inCludes(input.toLowerCase())?"green":""
+})
+
+```
+🎯 Note: if you want to target one elements use querySelector(), if you want to target multiple elements, always use querySelectorAll() and then loop using forEach
+```js
+const allBoxes = document.querySelectorAll('.box');
+allBoxes.forEach(el => el.style.color = 'red');
+
+```
+**Q66: Optimize DOM Traversal**   
+ use documentFragment, DocumentFragments are lightweight DOM Node objects which are never part of the main DOM tree. 
+ ```js
+ <div id="box"></div>
+
+const box = document.getElementById("box");
+const fragment = document.createDocumentFragment();
+// Create 2 elements
+const p = document.createElement("p");
+p.textContent = "Hello";
+const btn = document.createElement("button");
+btn.textContent = "Click Me";
+// Add both to fragment instead of DOM
+fragment.appendChild(p);
+fragment.appendChild(btn);
+// Add to DOM in one single update
+box.appendChild(fragment);
+
+ ```
+
+**Q67.what is DOMTokenList (classList)?**  
+element.classList returns a DOMTokenList, which has methods to manage CSS classes dynamically.
+```js
+let box = document.querySelector('.box');
+
+box.classList.add('red');       // adds class
+box.classList.remove('blue');   // removes class
+box.classList.toggle('active'); // add/remove toggle
+console.log(box.classList.contains('red')); // true or false
+```
+
+**Q68: isNaN() and Number()**  
 
 Checks if value is not number
 ```js
@@ -1606,9 +1676,7 @@ Number(undefined) → NaN
 but console.log(false==null)//false
 ``` 
 
-**Q68:Cookies**  
 
-Small data stored in browser; sent with every HTTP request.
 
 **Q69 Array and Array Methods**  
 Array are used to store multiple values with same or different types.size of the array are dynamic and type of the array are object.Arrays are mutable(changable).
@@ -1925,41 +1993,34 @@ console.log(p.greet()); // Hi Sam
 
  Cross-Origin Resource Sharing – allows API access from different domains.
 
-**Q77:Access DOM (5 ways)**  
+**Q77:Mouse Events**  
 
-- getElementById() Selects a single element by its id.You need one specific element with a unique ID (fastest and most direct)
+- click:Fired when the user presses and releases the mouse button on an element.
+- dblclick:Fired when the user double-clicks an element.
+- mousedown:Fired when the mouse button is pressed down on an element (before releasing).
 ```js
-const title = document.getElementById("mainTitle");
-
-```
-- getElementsByClassName() You need multiple elements that share the same class, Good for bulk styling or looping through repeated elements
-```js
-const items = document.getElementsByClassName("menu-item");
-
-```
-- getElementsByTagName() it return html collection as return value
-```js
-const li=document.getElementsByTagName("li")
-[...li].forEach(x=>console.log(x))
-```
-- querySelector() Selects the first element matching a CSS selector.Supports complex selectors (.class, #id, div > p, [type="text"])
-```js
-const cardTitle = document.querySelector(".card > h3");
-const thirdItem = document.querySelector("ul li:nth-child(3)");
+<div id="box">Hold mouse down</div>
+<script>
+box.addEventListener("mousedown", () => console.log("Mouse Down"));
+</script>
 
 ```
-- querySelectorAll() Selects all elements matching a CSS selector. Returns NodeList
+- mouseup:Fired when the mouse button is released over an element.
+- mousemove:Fired when the mouse pointer is moved over an element.
 ```js
-const allLinks = document.querySelectorAll("nav a");
-[...document.querySelectorAll("button")].forEach(btn => {
-  btn.style.background = "blue";
-});
+<div id="box">Move mouse here</div>
+<script>
+box.addEventListener("mousemove", () => console.log("Moving"));
+</script>
 
 ```
-🎯 Note: if you want to target one elements use querySelector(), if you want to target multiple elements, always use querySelectorAll() and then loop using forEach
+- mouseenter:Fired when the mouse pointer enters the boundary of an element.Unlike mouseover, it does not bubble.
+- mouseleave:Fired when the mouse pointer leaves the boundary of an element.Unlike mouseout, it does not bubble.
 ```js
-const allBoxes = document.querySelectorAll('.box');
-allBoxes.forEach(el => el.style.color = 'red');
+<div id="box">Hover out</div>
+<script>
+box.addEventListener("mouseleave", () => console.log("Mouse Leave"));
+</script>
 
 ```
 **Q78:Event Emitter**  
@@ -1971,10 +2032,16 @@ const event = new EventEmitter();
 event.on('hi', ()=>console.log('Hello!'));
 event.emit('hi');
 ```
+**Q79:clientX vs scrollX**  
 
-**Q79: Optimize DOM Traversal**  
+- clientX → Mouse position relative to visible viewport (ignores scrolling)
+- scrollX → Total horizontal scroll offset of the page
 
-Cache DOM nodes, use documentFragment, batch updates
+```txt
+pageX = scrollX + clientX
+```
+<img src="./img/scroll.png" alt="scroll-x" />
+
 
 **Q80: Bundling vs Chunking**  
 
@@ -2133,16 +2200,9 @@ const month = date.getMonth() + 1;
 const year = date.getFullYear(); 
 console.log(`Today's date: ${day}-${month}-${year}`);
 ```
-**Q92.what is DOMTokenList (classList)?**  
-element.classList returns a DOMTokenList, which has methods to manage CSS classes dynamically.
-```js
-let box = document.querySelector('.box');
+**Q92:Cookies**  
 
-box.classList.add('red');       // adds class
-box.classList.remove('blue');   // removes class
-box.classList.toggle('active'); // add/remove toggle
-console.log(box.classList.contains('red')); // true or false
-```
+Small data stored in browser; sent with every HTTP request.
 **Q93. How to give object protection**  
 Object.freeze() — cannot modify or add values
 ```js

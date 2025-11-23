@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Quiz App</title>
+<style>
+  body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #1c1c2b;
+    font-family: Arial;
+    color: #fff;
+  }
+  .quiz-box {
+    background: #2a2a40;
+    padding: 20px;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+  }
+  #timer { font-size: 20px; margin-bottom: 10px; color: #ffcc00; }
+  #question { margin-bottom: 20px; font-size: 18px; }
+  .option-btn {
+    width: 100%;
+    padding: 12px;
+    margin: 6px 0;
+    background: #38385e;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+  }
+  .correct { background: #28a745 !important; }
+  .wrong { background: #dc3545 !important; }
+  #next-btn {
+    margin-top: 10px;
+    padding: 10px;
+    background: #4b6cb7;
+    border: none;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    display: none;
+  }
+</style>
+</head>
+
+<body>
+<div class="quiz-box">
+  <div id="timer"></div>
+  <div id="question">Loading...</div>
+  <div id="options"></div>
+  <button id="next-btn">Next</button>
+  <div id="result"></div>
+</div>
+
+<script>
+const quizData = [
+  {
+    question: "What does DOM stand for?",
+    options: ["Document Order Model", "Document Object Model", "Document Object Method", "None"],
+    correct: 1
+  },
+  {
+    question: "Which method selects by ID?",
+    options: ["getElements()", "getElementsById()", "getElementById()", "None"],
+    correct: 2
+  }
+];
+
+let questions = [...quizData].sort(() => Math.random() - 0.5);
+let current = 0, score = 0, timer, timeLeft = 15;
+
+const qEl = document.getElementById("question");
+const optEl = document.getElementById("options");
+const nextBtn = document.getElementById("next-btn");
+const timerEl = document.getElementById("timer");
+const resultEl = document.getElementById("result");
+
+function loadQuestion() {
+  clearInterval(timer);
+  timeLeft = 15;
+  timerEl.textContent = "Time: " + timeLeft;
+
+  timer = setInterval(() => {
+    timerEl.textContent = "Time: " + --timeLeft;
+    if (timeLeft === 0) {
+      clearInterval(timer);
+      selectAnswer(-1);
+    }
+  }, 1000);
+
+  const q = questions[current];
+  qEl.textContent = `Q${current + 1}. ${q.question}`;
+  optEl.innerHTML = "";
+  nextBtn.style.display = "none";
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(i);
+    optEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(index) {
+  clearInterval(timer);
+  const q = questions[current];
+  const buttons = document.querySelectorAll(".option-btn");
+
+  buttons.forEach(b => b.disabled = true);
+
+  if (index === q.correct) score++;
+  if (index >= 0) buttons[index].classList.add(index === q.correct ? "correct" : "wrong");
+
+  buttons[q.correct].classList.add("correct");
+  nextBtn.style.display = "block";
+}
+
+nextBtn.onclick = () => {
+  current++;
+  if (current < questions.length) {
+    loadQuestion();
+  } else {
+    resultEl.innerHTML = `<h2>Quiz Completed! Score: ${score}/${questions.length}</h2>`;
+    qEl.style.display = "none";
+    optEl.style.display = "none";
+    nextBtn.style.display = "none";
+    timerEl.style.display = "none";
+  }
+};
+
+loadQuestion();
+</script>
+</body>
+</html>
