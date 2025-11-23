@@ -1,14 +1,6 @@
-//Reverse words in a sentence
-function reverseWord(str){
-    let rev=""
-    let words = str.split("");
-    for (let i = words.length - 1; i >= 0; i--) {
-      if (words[i] === "") {
-        continue;
-      }
-    rev += words[i];
-  }
-return rev
+function reverseWords(str) {
+  return str.split(" ").reverse().join(" ");
 }
 
-console.log(reverseWord("hello world"));
+console.log(reverseWords("hello world")); // "world hello"
+//if you want output "dlrow olleh" then return str.split("").reverse().join("");

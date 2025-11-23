@@ -4,6 +4,6 @@ function decToBin(num) {
     bin = (num % 2) + bin;
     num = Math.floor(num / 2);
   }
-  return bin || "0";
+  return bin;
 }
 console.log(decToBin(10)); // 1010

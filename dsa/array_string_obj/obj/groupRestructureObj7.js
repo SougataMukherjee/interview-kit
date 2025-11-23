@@ -4,7 +4,7 @@ let arr = [
   { name: "C", salary: 300 }
 ];
 
-let sorted = arr.slice().sort((a, b) => b.salary - a.salary);
+let sorted = arr.sort((a, b) => b.salary - a.salary);
 let output = sorted[1];
 
 console.log(output); // { name:"C", salary:300 }
