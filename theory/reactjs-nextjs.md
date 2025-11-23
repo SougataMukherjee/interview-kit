@@ -812,9 +812,11 @@ Because JSX is not valid JavaScript — browsers can only understand regular Jav
 
  Wrap in {String(value)} or conditional render.{String(false)}  // prints "false"
 
-**Q34.Is it possible to use React without JSX?**  
+**Q34.what is Transformation? Is it possible to use React without JSX?**  
+Transforming means changing code structure without changing language version.
+Example: JSX → React.createElement() is a transformation.  
 
- Yes.createElement: Creates a new element.
+Yes.createElement: Creates a new element.
 ```js
 function Greeting({ name }) {
   return React.createElement(
