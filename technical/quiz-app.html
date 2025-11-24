@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Quiz App</title>
+<title>Simple Quiz App</title>
 <style>
   body {
     margin: 0;
@@ -22,8 +22,9 @@
     max-width: 400px;
     text-align: center;
   }
-  #timer { font-size: 20px; margin-bottom: 10px; color: #ffcc00; }
+
   #question { margin-bottom: 20px; font-size: 18px; }
+
   .option-btn {
     width: 100%;
     padding: 12px;
@@ -34,8 +35,10 @@
     color: white;
     cursor: pointer;
   }
+
   .correct { background: #28a745 !important; }
   .wrong { background: #dc3545 !important; }
+
   #next-btn {
     margin-top: 10px;
     padding: 10px;
@@ -51,7 +54,6 @@
 
 <body>
 <div class="quiz-box">
-  <div id="timer"></div>
   <div id="question">Loading...</div>
   <div id="options"></div>
   <button id="next-btn">Next</button>
@@ -62,39 +64,27 @@
 const quizData = [
   {
     question: "What does DOM stand for?",
-    options: ["Document Order Model", "Document Object Model", "Document Object Method", "None"],
+    options: ["Document Order Model", "Document Object Model", "Data Object Map", "None"],
     correct: 1
   },
   {
     question: "Which method selects by ID?",
-    options: ["getElements()", "getElementsById()", "getElementById()", "None"],
-    correct: 2
+    options: ["getElements()", "getElementById()", "queryId()", "None"],
+    correct: 1
   }
 ];
 
-let questions = [...quizData].sort(() => Math.random() - 0.5);
-let current = 0, score = 0, timer, timeLeft = 15;
+let current = 0, score = 0;
 
 const qEl = document.getElementById("question");
 const optEl = document.getElementById("options");
 const nextBtn = document.getElementById("next-btn");
-const timerEl = document.getElementById("timer");
 const resultEl = document.getElementById("result");
 
+
 function loadQuestion() {
-  clearInterval(timer);
-  timeLeft = 15;
-  timerEl.textContent = "Time: " + timeLeft;
+  const q = quizData[current];
 
-  timer = setInterval(() => {
-    timerEl.textContent = "Time: " + --timeLeft;
-    if (timeLeft === 0) {
-      clearInterval(timer);
-      selectAnswer(-1);
-    }
-  }, 1000);
-
-  const q = questions[current];
   qEl.textContent = `Q${current + 1}. ${q.question}`;
   optEl.innerHTML = "";
   nextBtn.style.display = "none";
@@ -109,29 +99,32 @@ function loadQuestion() {
 }
 
 function selectAnswer(index) {
-  clearInterval(timer);
-  const q = questions[current];
+  const q = quizData[current];
   const buttons = document.querySelectorAll(".option-btn");
 
   buttons.forEach(b => b.disabled = true);
 
-  if (index === q.correct) score++;
-  if (index >= 0) buttons[index].classList.add(index === q.correct ? "correct" : "wrong");
+  if (index === q.correct) {
+    score++;
+    buttons[index].classList.add("correct");
+  } else {
+    if (index >= 0) buttons[index].classList.add("wrong");
+    buttons[q.correct].classList.add("correct");
+  }
 
-  buttons[q.correct].classList.add("correct");
   nextBtn.style.display = "block";
 }
 
 nextBtn.onclick = () => {
   current++;
-  if (current < questions.length) {
+  if (current < quizData.length) {
     loadQuestion();
   } else {
-    resultEl.innerHTML = `<h2>Quiz Completed! Score: ${score}/${questions.length}</h2>`;
     qEl.style.display = "none";
     optEl.style.display = "none";
     nextBtn.style.display = "none";
-    timerEl.style.display = "none";
+
+    resultEl.innerHTML = `<h2>Quiz Completed! Score: ${score}/${quizData.length}</h2>`;
   }
 };
 

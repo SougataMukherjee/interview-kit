@@ -29,12 +29,6 @@ const data = {
         { name: "App.js" },
         { name: "index.js" }
       ]
-    },
-    {
-      name: "public",
-      folders: [
-        { name: "index.html" }
-      ]
     }
   ]
 };

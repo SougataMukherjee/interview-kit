@@ -444,6 +444,23 @@ Promise.resolve().then(() => console.log("Promise"));//3
 console.log("End");//2
 
 ```
+create a interval only two times run  
+```js
+function setInterVal() {
+  let count = 0;
+
+  const id = setInterval(() => {
+    console.log("lelay log");
+    count++;
+
+    if (count === 2) {
+      clearInterval(id);
+    }
+  }, 2000);
+}
+
+setInterVal();
+```
 
 build own promise
 ```js
