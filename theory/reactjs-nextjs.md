@@ -86,6 +86,10 @@ export default Counter;
 
 ```
 - Class components/State-ful components rely on lifecycle methods, involve more boilerplate, make code harder to reuse, require managing the this keyword, don’t align well with modern React features like Concurrent Mode and streaming SSR, and are now considered older and less preferred for new development.
+
+***Why in Class Component We Use this?***  
+
+Class methods do not automatically bind to the instance.this represents the current component instance.thats why we use this.state,this.props, this.method()
 ```js
 import React, { Component } from "react";
 
@@ -933,6 +937,11 @@ export default function App() {
 }
 
 ```
+***If a Website Takes Long Time to Load, How to Identify the Problem?***  
+1. open network tab to check api slow or not or too many request.
+2. open performance tab for execution time and memory leak.
+3. open lighthouse tab for checking unused js and css
+4. open react devtool components rerender too often or Heavy components,cache missing
 
 **Q41. How to prevent component from rendering?**  
 

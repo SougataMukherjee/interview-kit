@@ -8,33 +8,47 @@ web browser is a s/w application for retrieving presenting info on www e.g googl
 When a browser loads a webpage, it first downloads the HTML file and starts parsing it to build the DOM tree.
 Then it fetches and parses CSS and combines both into a Render Tree.Finally, it executes JavaScript
 ```txt
-1️⃣ User Enters URL (e.g., https://google.com)
-          ↓
-2️⃣ Browser Checks Cache 
-   - If found → loads faster without server
-          ↓
-3️⃣ DNS Lookup → Finds Server IP
-   - Converts domain → IP address (e.g., 142.250.182.78)
-          ↓
-4️⃣ Browser Sends HTTP/HTTPS Request to Server
-   - Includes: headers, cookies, auth, data
-          ↓
-5️⃣ Server Processes Request & Sends Response
-   - HTML (structure), CSS (styles), JS (logic), Images, Fonts
-          ↓
-6️⃣ Browser Rendering Engine Starts Processing
-     HTML → DOM (Document Object Model)
-     CSS → CSSOM (CSS Object Model)
-     DOM + CSSOM → Render Tree (visible nodes)
-          ↓
-7️⃣ Layout (Reflow) & Paint
-   - Layout: position & size of elements
-   - Paint: colors, text, borders, images
-          ↓
-8️⃣ JavaScript Execution
-   - JS downloads → parsed → executed by JS Engine (V8)
-          ↓
-9️⃣ Web Page Displayed on Screen
+
+            ┌──────────────────────────┐
+            │ 1. User enters URL       │
+            └───────────────┬──────────┘
+                            ↓
+            ┌──────────────────────────┐
+            │ 2. Browser checks cache  │
+            └───────────────┬──────────┘
+                            ↓
+            ┌──────────────────────────┐
+            │ 3. DNS Lookup            │
+            │    → Find Server IP      │
+            └───────────────┬──────────┘
+                            ↓
+            ┌──────────────────────────┐
+            │ 4. Browser sends request │
+            │    (HTTP / HTTPS)        │
+            └───────────────┬──────────┘
+                            ↓
+            ┌──────────────────────────┐
+            │ 5. Server responds       │
+            │    (HTML / CSS / JS)     │
+            └───────────────┬──────────┘
+                            ↓
+            ┌──────────────────────────┐
+            │ 6. Browser parse HTML    │
+            │    and CSS, Render Tree  |
+            └───────────────┬──────────┘
+                            ↓
+            ┌──────────────────────────┐
+            │ 7. Layout & Paint        │
+            └───────────────┬──────────┘
+                            ↓
+            ┌──────────────────────────┐
+            │ 8. JavaScript runs       │
+            └───────────────┬──────────┘
+                            ↓
+            ┌──────────────────────────┐
+            │ 9. web page displayed    │
+            └──────────────────────────┘
+
 
 ```
 **Q2. How browsers parse HTML and build the DOM tree internally?**  
@@ -148,11 +162,27 @@ initial-scale=1.0 → Sets the initial zoom level when the page loads.
 Examples: id, class, style, title, data-*.
 
 **Q12: Explain the difference between script async, and defer explain**
-- Normal <script>: blocks rendering until script loads. normal <script> stops HTML parsing.it executes IMMEDIATELY in the order they appear
-                  Small scripts, must run before DOM
-- async: loads in parallel and executes immediately. async doesn’t block parsing but runs as soon as it loads.it executes ASAP when downloaded (NO order guarantee)
-                  Independent scripts, e.g., analytics
-- defer: loads in parallel but executes after HTML parsing. defer waits until HTML is fully parsed before executing.it executes AFTER HTML is parsed, in the SAME ORDER they appear
+- Normal <script>: blocks rendering until script loads.Browser stops building DOM until the script downloads and runs. when your script must run before HTML is fully loaded
+```js
+<script>
+  console.log("Normal script → Runs immediately");
+</script>
+
+```
+- async: loads in parallel and executes immediately. async doesn’t block parsing but runs as soon as it loads.use for scripts that don't depend on DOM like analytics, ads, trackers
+```js
+<script async src="ad.js"></script>
+<script async src="analytics.js"></script>
+
+``` 
+- defer: loads in parallel(non-blocking) but executes after HTML parsing.use for Scripts that need DOM ready like Modern websites
+```js
+<script defer src="main.js"></script>
+```
+- type="module":it automatically behaves like defer, and supports import / export and also run in strict mode
+```js
+<script type="module" src="main.js"></script>
+```
 <img src="./img/script.png" alt="script"/> 
 
 **Q13: What are forms in HTML? Form Validation Attributes**  
@@ -265,7 +295,7 @@ Example:
 **Q26: What is the difference between HTMLCollection and NodeList?**  
 
 - HTMLCollection: live, updates automatically.Returned by methods like document.getElementsByTagName() or getElementsByClassName()
-- NodeList: static, doesn’t auto-update.Returned by document.querySelectorAll() or childNodes also can use forEach directly for loop
+- NodeList: static, doesn't auto-update.Returned by document.querySelectorAll() or childNodes also can use forEach directly for loop
 
 **Q27: What are ARIA roles?**  
 

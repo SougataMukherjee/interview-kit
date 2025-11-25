@@ -331,6 +331,30 @@ auto-fit Fit content only so empty columns collapse so here empty column removed
 **Q9: z-index and stacking context?**  
 
 z-index works only for positioned elements (relative, absolute, fixed).
+```js
+<div class="box box1"></div>
+<div class="box box2"></div>
+
+.box {
+  width: 150px;
+  height: 150px;
+  position: absolute; 
+}
+
+.box1 {
+  background: lightblue;
+  top: 20px;
+  left: 20px;
+  z-index: 1; 
+}
+
+.box2 {
+  background: tomato;
+  top: 60px;
+  left: 60px;
+  z-index: 2; 
+}
+```
 
 **Q10: Responsive Design.**  
 
@@ -549,9 +573,23 @@ Feature Queries / Fallbacks: Use @supports or CSS resets.If a CSS Property Is No
 
 px: Absolute pixel value.  
 
-em: Relative to parent font-size.Example: if parent font-size = 16px → 2em = 32px  
-
-rem: Relative to root (html) font-size.Example: if html font-size = 16px → 2rem = 32px  
+em: Relative to parent font-size.Example: if parent font-size = 16px → 2em = 32px.In padding ,font-size we use rem
+```js
+button {
+  font-size: 1em;        /* relative to parent */
+  padding: 0.5em 1em;    /* grows if font-size grows */
+}
+```
+rem: Relative to root (html) font-size.Example: if html font-size = 16px → 2rem = 32px. In margin, padding, gap, font-size we use rem
+```js
+.section {
+  margin: 2rem;
+  padding: 1rem;
+}
+h1{
+  font-size: 2rem;
+}
+```
 
 vw: Relative to 1% of viewport width (browser width) Example: 50vw = half of the  screen width  
 
@@ -562,7 +600,7 @@ fr:Used in CSS Grid, means fractional unit of available space.Example: grid-temp
 
 **Q17: What are CSS variables and how to use them?**  
 
-Reusable custom properties:
+- external css variables
 ```js
 :root {
   --primary-color: #2563eb;   
@@ -572,6 +610,17 @@ h1 {
   color: var(--primary-color);
   background-color:var(--secondary-color); 
 }
+```
+- inline variable also use
+```js
+<div class="box" style="--i: 1"></div>
+<div class="box" style="--i: 2"></div>
+<div class="box" style="--i: 3"></div>
+
+.box {
+  transform: rotate(calc(var(--i) * 20deg));
+}
+
 ```
 **Q18: @property**  
 
@@ -595,17 +644,31 @@ div:hover {
 ```
 **Q19:CSS Math Functions**  
 
-calc() → perform calculations (width: calc(100% - 50px);)  
+calc() → perform calculations 
+```js
+width: calc(100% - 2rem);
+min-height: calc(100vh - 80px);
+grid-template-columns: 200px calc(100% - 200px);
+``` 
 
-min() → picks smallest (width: min(80%, 600px);)  
+min() → picks smallest  
 
-max() → picks largest (width: max(50%, 200px);)  
+max() → picks largest  
+```js
+width: min(90vw, 50%);
+font-size: max(5vw, 32px);
+padding: min(5vw, 2rem);
 
+```
 clamp() → range limit It chooses a value that never goes below the minimum and never exceeds the maximum.Useful for responsive design.
 ```js
-.title {
-  font-size: clamp(16px, 5vw, 32px);//clamp(min, preferred, max)
-}
+
+  font-size: clamp(1rem, 5vw, 2rem);//clamp(min, preferred, max)
+  width: clamp(200px, 50vw, 600px);
+  padding: clamp(0.5rem, 2vw, 1.5rem);
+  gap: clamp(8px, 2vw, 32px);
+  border-radius: clamp(4px, 1vw, 20px);
+
 ```
 
 **Q20::global**  
@@ -1078,6 +1141,23 @@ div {
     url(bg-pattern.png) center repeat;
 }
 
+```
+**47.what is aspect-ratio,transform-style, perspective?**  
+**aspect-ratio**  
+Keeps element height proportional to width (responsive images/cards).
+```js
+  aspect-ratio: 3 / 2;
+```
+**transform-style**  
+CSS property determines how child elements of an element are rendered in 3D space
+```js
+  transform: rotateY(60deg);
+  transform-style: preserve-3d;
+```
+**perspective**
+Creates depth/3D view for parent container, we use in 3D card, rotate cube, carousel
+```js
+  perspective: 100px;
 ```
 SCSS THEORY
 ==============================

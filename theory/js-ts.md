@@ -17,7 +17,10 @@ JavaScript is called a scripting language because it is not compiled beforehand 
 <script src="app.js" type="module"></script> <!-- ES modules -->
 
 ```
-**when use async when defer?**  
+***How does JS (single-threaded) handle async operations?***  
+JS runs sync tasks on call stack and Async tasks handed by event loop in browser.JS is single-threaded, but browser is multi-threaded.  
+
+***when use async when defer?***  
 
 both load scripts asynchronously.
 - defer → loads JS in background, runs after HTML parsing, best for most scripts,Best for scripts that rely on the DOM.
@@ -141,8 +144,8 @@ var b = 10; //if you use let its will throw error
 ```
 **Q5: What is Closure? How do closures maintain memory?**  
 
-A closure is combination of function or nested function and binding together with surrounding state or lexical scope  
-a closure is giving you to access to outer function scope from inner function.access outer function scope inside inner function is call closure, it is used to module design pattern,curring,memorize.  
+A closure is a function that giving you to access to outer function scope from inner function.It's like your mother packing your bag in the morning and you going to pg — even though she is no longer there, you still have the tiffin, shirt, and water bottle she packed.
+it is used to module design pattern,curring,memorize.  
 disadvantage of closure is memory leak and freeze the browser
 Example:
 ```js
@@ -240,6 +243,14 @@ function demo() {
 }
 demo();
 ```
+```js
+for(let i=0;i<3;i++){
+    setTimeout(()=>console.log(i)) //0  1 2
+}
+for(var i=0;i<3;i++){
+    setTimeout(()=>console.log(i)) // 3 3 3
+}
+```
 - Variable Naming Rules
 1. Cannot start with a number
 2. Must start with a letter, _ or $
@@ -250,10 +261,16 @@ let name, $price, _id;
 ```
 **Q7: What is Event Loop? Explain event loop phases (macrotasks, microtasks)**  
 
-The Event Loop in JavaScript manages how code is executed inside the browser. It runs all synchronous code first in the call stack, and when asynchronous tasks like setTimeout, promises, or API calls finish, their callbacks are moved to the task queues. The event loop continuously checks if the call stack is empty, and when it is, it pulls the next callback from the queue and pushes it to the stack for execution, ensuring JavaScript remains non-blocking and handles async operations smoothly.
-Microtasks: Promises.
-Macrotasks: setTimeout, DOM events.
-Microtasks run before next render cycle.
+1. Call Stack
+JS executes code line by line. Synchronous code runs here.
+2. Web APIs (Browser APIs)
+When you call setTimeout, fetch, event listeners — browser handles them.
+3. Callback/Task Queue
+Once Web API finishes, it pushes the callback into a queue.
+4. Microtask Queue (Higher Priority)
+Promises .then(), queueMicrotask(), MutationObserver.
+5. Event Loop
+Keeps checking and If call stack is empty, push tasks from microtask queue, then callback queue.
 ```txt
                 ┌───────────────────────────────┐
                 │           CALL STACK           │
@@ -440,7 +457,7 @@ Promise is faster than setInterval because Promises run in the microtask queue, 
 ```js
 console.log("Start");//1
 setInterval(() => console.log("Interval"), 0);//4
-Promise.resolve().then(() => console.log("Promise"));//3
+Promise.resolve().then(() => console.log("Promise1")).then(() => console.log("Promise2"));//3 Promise1 Promise2
 console.log("End");//2
 
 ```
@@ -565,6 +582,9 @@ fetch("https://api.example.com/data")
 }, []);
 
   ```
+***Why We Use Authorization Header & Bearer Token?***  
+
+For secure APIs, server must know who is making the request.JWT is sent as "Authorization: Bearer token" and Every request is validated by token signature.  
 
 **Q15. create a Promise and resolve on Button click**  
 
@@ -788,7 +808,8 @@ greetAlice("Hey", "😎");           // Hey, Alice! 😎
 
 **Q21: What is Currying?**  
 
-Currying is the process of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument
+Currying is the process of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument.  
+Currying is like ordering a pizza step by step: first you choose the size, for example "Large," then you separately choose the crust or toppings such as "Cheese" and "Olives," and finally the last step returns the fully prepared pizza order after all selections are made.
 Example:
 ```js
 function add(a) {
@@ -865,13 +886,13 @@ ul.addEventListener('click',(e)=>{
 
 **Q25: LocalStorage vs SessionStorage with exp**  
 
-localStorage -> persists after reload and permanent until cleared.
+localStorage -> persists after reload and permanent until cleared.we can use in theme and token,and scope is shared
 ```js
 localStorage.setItem("name", "Sam");
 console.log(localStorage.getItem("name")); // Sam
 ```
 
-sessionStorage -> clears when tab closes
+sessionStorage -> clears when tab closes, we can use in Banking, forms,and scope is per tab
 ```js
 sessionStorage.setItem("sessionName", "SamSession");
 console.log(sessionStorage.getItem("sessionName")); // SamSession
@@ -924,7 +945,10 @@ NOTE: Javascript Object Notation(JSON) is a data format(key-value pair) storing 
 
 **Q28: Optional Chaining**  
 
-Access nested property safely: user?.address?.city
+Access nested property safely
+```js 
+user?.address?.city
+```
 
 **Q29: Difference Between == and ===**  
 
@@ -1070,9 +1094,8 @@ Webpack is a module bundler that combines JavaScript, CSS, images, and other ass
 
 **Q35: What are higher-order functions?**  
 
-A function that takes another function as an argument OR returns a function. (e.g., map, filter, reduce).
-Higher-order functions either take other functions as arguments or Return functions.  
-why use? Reusability,code modularity
+A function that takes another function as an argument OR returns a function. (e.g., map, filter, reduce). like Amazon's product system: when you pick a shirt, you’re giving Amazon your 'preference'. Amazon then uses that logic to show similar shirts or recommendations — that’s the HOF running your function. And sometimes Amazon even gives you new personalized suggestions, just like a HOF returning another function.  
+why use? Reusability,code modularity.
 ```js
 //exp1
 function add(a,b){
@@ -1500,9 +1523,17 @@ A NodeList is a collection of nodes (like an array, but not exactly an array).
                                              <span> text
 
 ```
-BOM(Browser Object Model): controls browser features
+BOM(Browser Object Model): controls browser features( window, navigator, location, history, screen )
 
-Advantage: JS can dynamically change HTML/CSS
+Advantage: JS can dynamically change HTML/CSS  
+***Where do we use BOM in React?***  
+use it inside useEffect for  
+
+1. Redirect using window.location
+2. Local/session storage
+3. Window size listener
+4. Scroll position
+
 
 **Q63:Useful DOM Properties**  
 
@@ -2228,7 +2259,15 @@ console.log(`Today's date: ${day}-${month}-${year}`);
 ```
 **Q92:Cookies**  
 
-Small data stored in browser; sent with every HTTP request.
+A cookie is a small piece of data stored in the browser by the server or by JavaScript.
+Size is usually 4KB.  
+for authentication, track user activity and maintaining session we use cookies
+```js
+useEffect(() => {
+document.cookie = "token=abc123; theme=dark; max-age=3600; secure; path=/; samesite=strict";//max-age=3600 expire in one hour,secure only over https, path=/ available for whole site and protect from theme=dark;
+console.log(document.cookie)
+},[])
+```
 **Q93. How to give object protection**  
 Object.freeze() — cannot modify or add values
 ```js
