@@ -1,7 +1,8 @@
 
 REACT NOTES 
 ==============================
-**Q1. What is React ? who developed ? is react imperative or declarative programming language?**   
+**Q1. What is React ? who developed ? is react imperative or declarative programming language?**  
+
 React is a JavaScript library used for building fast and interactive user interfaces, especially single-page applications (SPAs). It uses a component-based architecture.  
 
 React was developed by Facebook created by Jordan Walke released by 2013.Latest React version is 19 
@@ -432,7 +433,7 @@ React behaves like a smart personal assistant who prioritizes tasks based on urg
 **Q14: keys in React list? what is List virtualization**  
 
 A list in React is a collection of data that we display by looping through it, usually using map(). While rendering lists, each item should have a unique key so React can identify which item has changed, been added, or removed. A unique key helps React avoid unnecessary re-renders because it tracks each element efficiently. Without a proper key, React may re-render the entire list even if only one item changed, which affects performance.
-#### Why is key important Problems using index as key?
+***Why is key important Problems using index as key?***
 key helps React identify which list item changed, added, or removed.else use uuid or Date.now()
  ```js
  const users = [
@@ -475,12 +476,12 @@ export default function VirtualizedList() {
 
 **Q15: Lifecycle methods in class component**  
 
-Mounting → when an instance of a Component is created and added to the UI/DOM ,it runs once after initial render. its best for api calls,setting timers  example constructor,getDeriveStateFromProps,render,componentDidMount()
+***Mounting*** → when an instance of a Component is created and added to the UI/DOM ,it runs once after initial render. its best for api calls,setting timers  example constructor,getDeriveStateFromProps,render,componentDidMount()
 
-Updating → Component re-renders when state/props change, it runs after every update
+***Updating*** → Component re-renders when state/props change, it runs after every update
           Used to react to state/prop changes (e.g., data refresh)  example getDeriveStateFromProps,shouldComponentUpdate,getSnapshotBeforeUpdate,componentDidUpdate
 
-Unmounting → Component is removed from the UI/DOM, runs before component is destroyed its use for cleanup(clear timers, remove event listeners)example componentDidCatch
+***Unmounting*** → Component is removed from the UI/DOM, runs before component is destroyed its use for cleanup(clear timers, remove event listeners)example componentDidCatch
 ```txt
              Mounting     →     Updating     →     Unmounting
  (componentDidMount)  (componentDidUpdate)  (componentWillUnmount)

@@ -190,7 +190,7 @@ const store=MyCache();
 console.log(store(5))//10
 console.log(store(5))//10 cache data
 ```
-Imagine you pack a lunchbox and give it to a friend, but even when you leave, they still have access to the items inside. Closures work exactly like that. When a function returns another function, the inner function remembers all the variables from its original environment, even after the outer function has finished running. JavaScript keeps those variables alive in memory because the inner function still needs them, creating a private preserved scope that continues to exist as long as the function using it exists.  
+  
 
 **Q6: What is an Expression? What is an Identifier? JS Variables? Difference: var, let, const**   
 
