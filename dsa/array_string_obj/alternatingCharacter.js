@@ -6,4 +6,5 @@ function alternatingCharacter(str) {
   return count;
 }
 
-console.log(alternatingCharacter("AABAAB")); // 3
+console.log(alternatingCharacter("AABAAB")); // 2
+console.log(alternatingCharacter("ABABAB")); // 0

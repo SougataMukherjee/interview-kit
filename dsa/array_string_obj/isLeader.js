@@ -1,8 +1,8 @@
+//A leader in an array is an element that is greater than all the elements to its right, and the last element is always a leader.
 function isLeader(arr) {
   let out = []; // store leaders here
   let max = -Infinity;
   for (let i = arr.length - 1; i >= 0; i--) {
-      // check if current element is greater than everything seen so far
     if (arr[i] > max) { 
          // this element is a leader → store it
         out.push(arr[i]);
