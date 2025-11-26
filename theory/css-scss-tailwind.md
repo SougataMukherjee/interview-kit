@@ -756,7 +756,7 @@ Example:
 ```js
 font-family: "Roboto", "Arial", sans-serif;
 ```
-font-face allows loading custom fonts into your app.
+font-face allows loading custom fonts into your app.Optimize Web Font Load for Better Performance
 ```js
 @font-face {
   font-family: "MyFont";

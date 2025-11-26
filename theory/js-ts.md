@@ -1045,6 +1045,13 @@ Capturing: outer/parent → inner/child
   );
 </script>
 ```
+***stopPropagation()***stops event FROM BUBBLING to parent.It prevents the event from moving up to parent elements.
+```js
+<div onclick="alert('Parent clicked')">
+  <button onclick="event.stopPropagation()">Click Me</button>
+</div>
+```
+
 **Q32: What is Temporal Dead Zone (TDZ)?**  
 
 Zone where variable exists but can’t be accessed before initialization.
