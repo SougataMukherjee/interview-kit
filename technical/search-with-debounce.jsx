@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useDebounce } from "react-use";
 
 export default function App() {
-  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [countdown, setCountdown] = useState(0);
+  const [data, setData] = useState(null);
+  const [fetchTrigger, setFetchTrigger] = useState(0); // triggers debounce
 
   const fetchData = async () => {
     setLoading(true);
@@ -11,29 +12,30 @@ export default function App() {
     const json = await res.json();
     setData(json);
     setLoading(false);
-    setCountdown(10);
   };
+
+  // ⏳ Debounce fetch by 1 second
+  useDebounce(
+    () => {
+      if (fetchTrigger !== 0) fetchData();
+    },
+    1000,
+    [fetchTrigger]
+  );
 
   const handleClick = () => {
-    if (countdown > 0) return; // debounce active
-    fetchData();
+    setFetchTrigger((prev) => prev + 1); // this will be debounced
   };
-
- 
-  useEffect(() => {
-    
-    //When countdown reaches 0, effect stop running
-    if (countdown === 0) return;
-    //decreases the countdown value by 1 every second until it reaches 0
-    const id = setTimeout(() => setCountdown(countdown - 1), 1000);
-    return () => clearTimeout(id);
-  }, [countdown]);
 
   return (
     <div>
-      <button onClick={handleClick}>Fetch Users</button>
-      {countdown > 0 && <div>Wait {countdown}s to click again</div>}
-      {loading ? <p>Loading...</p> : <pre>{JSON.stringify(data, null, 2)}</pre>}
+      <button onClick={handleClick}>Fetch Users (Debounced)</button>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <pre>{JSON.stringify(data, null, 2)}</pre>
+      )}
     </div>
   );
 }

@@ -1248,6 +1248,20 @@ function UserList() {
 export default UserList;
 
 ```
+**Q56. Urgent vs Non-urgent state update**  
+Urgent must update immediately because the user expects instant feedback(e.g., typing, clicking a button, opening a modal)React uses useState for urgent updates.  
+
+Non-urgent can wait—they are slow, heavy, or not visible instantly(e.g., filtering 10,000 items, expensive calculations).React uses useTransition to mark them as low priority.
+```js
+const [searchTerm, setSearchTerm] = useState("");
+const [isPending, startTransition] = useTransition();
+//urgent update
+setSearchTerm(e.target.value)
+//non -urgent update
+startTransition(() => {
+  setSearchTerm(e.target.value)
+});
+```
 
 NEXT.JS NOTES 
 =============
@@ -1884,8 +1898,9 @@ Example: <Link prefetch={true}> loads data in background.
 
 **Q38:Server-Side Rendering (SSR) vs Client-Side Rendering (CSR)**  
 
-SSR: HTML generated on server for each request. Good for SEO and fast first page load.
+SSR: HTML generated on server for each request. Good for SEO and fast first page load.Server send fully render page to client.(NEXTJS)
 CSR: Page loads blank and React renders on client. Good for dynamic apps but slower first load.
+SSG: React generate static HTML files at build time(ASTRO)
 
 **Q39: When do we use use server and its use case?**  
 

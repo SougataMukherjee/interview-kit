@@ -360,21 +360,11 @@ z-index works only for positioned elements (relative, absolute, fixed).
 
 Use media queries:
 ```js
-@media (max-width: 768px) {
+@media (min-width: 768px) {
   .container { 
     flex-direction: column; 
     }
 }
-or
-@media (width >= 768px) {
-  .sidebar { display: block; }
-}
-or
-@media (768px < width < 1024px) {
-  .box { background: yellow; }
-}
-
-
  or
  @media (min-width: 768px) and (max-width: 1024px) {
   .container { 
