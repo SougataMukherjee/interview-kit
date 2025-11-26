@@ -1898,11 +1898,14 @@ lastIndexOf() → finds last index of substring.
 slice() → extracts part of string.
 ```js
         "Hello".slice(1,4) → "ell"
+        "Hello".slice(-2) → "lo"
 ```
 substring() → extracts part by index.
 ```js
         "Hello".substring(1,4) → "ell"
+        "Hello".substring(-2) → "Hello"
   ```
+Note: substring does't support negative index, but slice support. and slice recommended for modern js 
 replace() → replaces part of string.
 ```js
         "Hello".replace("H","J") → "Jello"
