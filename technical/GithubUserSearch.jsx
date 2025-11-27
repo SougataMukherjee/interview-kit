@@ -1,10 +1,8 @@
 import { useState, useTransition } from "react";
 import { faker } from "@faker-js/faker";
 
-const THRESHOLD = 10000;
-
 // Generate users
-export const users = Array.from({ length: THRESHOLD }, () => ({
+export const users = Array.from({ length: 4000 }, () => ({
   name: faker.person.fullName(),
   avatar: faker.image.avatar(),
 }));

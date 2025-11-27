@@ -1045,7 +1045,7 @@ Capturing: outer/parent → inner/child
   );
 </script>
 ```
-***stopPropagation()***stops event FROM BUBBLING to parent.It prevents the event from moving up to parent elements.
+***stopPropagation()*** stops event FROM BUBBLING to parent.It prevents the event from moving up to parent elements.
 ```js
 <div onclick="alert('Parent clicked')">
   <button onclick="event.stopPropagation()">Click Me</button>
@@ -1301,6 +1301,19 @@ Ternary:variable=(condition)?value1:value2
 | Logical (&&)              | Right → Left  |
 | Logical NOT (!)           | Right → Left  |  
 
+```
+***post and pre increment**  
+Post increment return the old value, then increase the variable.
+```js
+let num = 10;
+const increaseNumber = () => num++;
+console.log(increaseNumber());//10
+```
+Pre increment increase the variable first, then return the new value.
+```js
+let num = 10;
+const increaseNumber = () => ++num;
+console.log(increaseNumber());//11
 ```
 
 **Q48:Parameter vs Argument**  
@@ -1717,8 +1730,9 @@ console.log(box.classList.contains('red')); // true or false
 
 Checks if value is not number
 ```js
-isNaN('abc') → true
+isNaN('true') → true
 isNaN(undefined) → true
+isNaN(true) → false
 ```
 Number convert anything to number
 ```js
@@ -1730,7 +1744,16 @@ Number(undefined) → NaN
 
 but console.log(false==null)//false
 ``` 
-
+***Type Coercion**  
+Type Coercion means JavaScript automatically converts one data type to another during an operation
+1. Implicit Coercion (Automatic):
+JS automatically converts types without you asking.
+```js
+console.log("9"+5)//95  
+console.log(9+"5")//95 
+```
+2. Explicit Coercion (Manual):
+You convert it yourself using functions like Number(), String(), Boolean()
 
 
 **Q69 Array and Array Methods**  
@@ -2324,10 +2347,41 @@ interface User {
   age: number;
 }
 ```
-**Q5: Type Alias:**  
+**Q5: Type Alias and Type Inference**  
+Type Alias = giving a custom name to a type.
+It is used to simplify complex types and reuse them.
+```js
+//simple alias
+type UserName = string;
+let name: UserName = "Sam";
 
-type Status = "loading" | "success" | "error";
+//alias of object
+type User = {
+  id: number;
+  name: string;
+};
+const u1: User = { id: 1, name: "John" };
 
+//alias of union
+type Status = "success" | "error" | "loading";
+let state: Status = "success";
+
+```
+Type Inference:TypeScript automatically guesses the type
+even when you don’t explicitly give the type.
+```js
+let count = 10; 
+//ts infer
+count: number
+
+function add(a: number, b: number) {
+  return a + b; 
+}
+//ts infer
+add returns number
+
+
+```
 **Q6: Optional and Readonly Properties:**  
 ```js
 interface User { 

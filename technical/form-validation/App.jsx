@@ -53,3 +53,58 @@ export default function App() {
     </form>
   );
 }
+
+
+// OR using REACT 19 action and useActionState
+// import { useActionState } from "react";
+// import validate from "./Formvalidation";
+
+// async function formAction(prevState, formData) {
+//   const values = {
+//     email: formData.get("email"),
+//     password: formData.get("password"),
+//   };
+
+//   const errors = validate(values);
+//   if (Object.keys(errors).length > 0) {
+//     return { errors };
+//   }
+
+//   // Mimic API call delay
+//   await new Promise((res) => setTimeout(res, 1000));
+
+//   return { success: true, errors: {} };
+// }
+
+// export default function App() {
+//   const [state, formActionDispatch, isPending] = useActionState(formAction, {
+//     errors: {},
+//     success: false,
+//   });
+
+//   return (
+//     <form action={formActionDispatch}>
+//       <div>
+//         <label>Email</label>
+//         <input type="email" name="email" />
+//         {state.errors.email && (
+//           <p style={{ color: "red" }}>{state.errors.email}</p>
+//         )}
+//       </div>
+
+//       <div>
+//         <label>Password</label>
+//         <input type="password" name="password" />
+//         {state.errors.password && (
+//           <p style={{ color: "red" }}>{state.errors.password}</p>
+//         )}
+//       </div>
+
+//       <button type="submit" disabled={isPending} style={{ marginTop: 10 }}>
+//         {isPending ? "Submitting..." : "Submit"}
+//       </button>
+
+//       {state.success && <p style={{ color: "green" }}>Form submitted!</p>}
+//     </form>
+//   );
+// }
