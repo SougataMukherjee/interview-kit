@@ -1744,7 +1744,7 @@ Number(undefined) → NaN
 
 but console.log(false==null)//false
 ``` 
-***Type Coercion**  
+***Type Coercion***  
 Type Coercion means JavaScript automatically converts one data type to another during an operation
 1. Implicit Coercion (Automatic):
 JS automatically converts types without you asking.
