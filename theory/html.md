@@ -97,7 +97,7 @@ new element new attribute multimedia 2d 3d drawing support, drag and drop suppor
 |            <header>           |
 +-------------------------------+
 |  <nav>      |     <aside>     |
-|             |                 |
+|  <article>  |                 |
 | <section>   |   (sidebar)     |
 | (content)   |                 |
 +-------------------------------+

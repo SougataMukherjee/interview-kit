@@ -9,7 +9,7 @@ JS was created by Brendan Eich at Netscape in 1995.
 JavaScript is a lightweight, case sensitive scripting language.
 JS was created to add logic to web pages;  initial name was "LiveScript" then marketing—syntax inspired by Java, but not related.  
 JavaScript is called a scripting language because it is not compiled beforehand — it runs line by line(single-threaded or synchronous) directly by the browser or runtime  
-3 ways to import js file
+4 ways to import js file
 ```js
 <script src="app.js"></script>          <!-- normal -->
 <script src="app.js" defer></script>    <!-- runs after HTML parsed -->
@@ -76,71 +76,31 @@ in parent function anywhere we can use var because var add itself to the window 
 syntax  
 ```js
 {
-  var x=10; //global scope
-}
-if(true){
-  var x=10; //global scope
-}
-function(){
-  var x=10; // local scope or function scope
-}
-```
-Example 1:
-```js
-console.log(a); // undefined
-var a = 5;
-
-function foo(){
-  console.log(a);//undefined
-  var a =5;
-}
-foo()
-```
-Example 2:
-```js
-foo(); // Works
-function foo() {
-  console.log("Hello");
-}
-but
-function foo() {
-  console.log(a); // undefined
-  var a = 10;
-}
-foo();
-
-
-```
-Example 3:
-```js
-{
-  console.log(a); // undefined
+  console.log(a); // undefined → var is hoisted
   var a = 5;
 }
 
 {
-  console.log(b); // ReferenceError
+  console.log(b); // ReferenceError → let in TDZ
   let b = 10;
 }
 
 ```
-Example 4:
 ```js
-function abcd(){
-    for(var a=1;a<=10;a++){
-        
-    }
-    console.log(a);//11
+foo(); // Works → function is fully hoisted
+function foo() {
+  console.log(a); // undefined → var hoisted inside function
+  var a = 10;
 }
-abcd();
 ```
-Example 5:
 ```js
-if (typeof b === "undefined") {
-    console.log("you used var");  
+function test() {
+  for (var i = 1; i <= 3; i++) {}
+
+  console.log(i); // 4 → var is NOT block scoped
 }
 
-var b = 10; //if you use let its will throw error
+test();
 ```
 **Q5: What is Closure? How do closures maintain memory?**  
 
@@ -150,16 +110,16 @@ disadvantage of closure is memory leak and freeze the browser
 Example:
 ```js
 //exp1
-let glo="sougata"//global
 function outer(){
-  let out="sam" //local inner function parent scope
+  let out="sam" // parent scope
   function inner(){
-    let inn="rik"//local
-    console.log(out,glo)//sam sougata because it access outer function scope inside inner
+    let inn="rik"
+    console.log(out)//sam 
   }
   return inner()
 }
 outer()
+
 //exp2
 function outer() {
   let count = 0;
@@ -172,23 +132,6 @@ const closure = outer();
 closure(); //1
 closure(); //2
 
-//exp3
-const MyCache = () => {
-  let cache = {};
-  return (n) => {
-    if (n in cache) {
-      console.log('cache data');
-      return cache[n];
-    }
-    else {
-      cache[n] = n*2;
-      return cache[n];
-    }
-  }
-}
-const store=MyCache();
-console.log(store(5))//10
-console.log(store(5))//10 cache data
 ```
   
 
@@ -261,6 +204,7 @@ let name, $price, _id;
 ```
 **Q7: What is Event Loop? Explain event loop phases (macrotasks, microtasks)**  
 
+The Event Loop is the mechanism in JavaScript that allows it to handle asynchronous operations (like setTimeout, promises, APIs) even though JavaScript is single-threaded
 1. Call Stack
 JS executes code line by line. Synchronous code runs here.
 2. Web APIs (Browser APIs)
@@ -317,45 +261,43 @@ console.log("D");
 //A D C B
 ```
 <img alt="event-loop" src="./img/event-loop.png"/>
-The event loop behaves like a very disciplined manager who follows strict priority rules. Microtasks are the VIP guests — they are never asked to wait. So when a Promise resolves, its .then() callback goes straight into the microtask queue, and the manager ensures all microtasks finish before handling the next big job. Macrotasks like setTimeout, setInterval, or DOM events wait in another queue. After finishing all microtasks, the event loop picks one macrotask, runs it, and then checks microtasks again. This cycle continues endlessly, making JavaScript feel asynchronous even though it runs on a single thread.
+
 
 **Q8:Sync vs Async**  
 
 - Sync → one by one
-- Async → doesn’t block next
+- Async → doesn't block next
 
 **Q9: What is 'this' keyword?**  
 
-Refers to current context.Value of this depends on how function is called.Arrow functions don’t define their own this; they inherit it from the parent scope.Constructor bind this to the new instance.
+Refers to current context.Value of this depends on how function is called.Arrow functions don't define their own this; they inherit it from the parent scope.Constructor bind this to the new instance.
 ```js
-//this in global
-console.log(this);//window
-//this inside object
-const obj = {
-  name: "Sam",
-  show() { 
-    console.log(this.name); // Sam
-    } 
-};
-//this inside function
-function show() {
-  console.log(this);//window
-}
-show();
-//this inside arrow function
-const obj = {
-  name: "Sam",
-  show: () => console.log(this.name)//undefined
-};
+//global scope
+console.log(this); // window (or globalThis)
 
+//inside object method
+const obj = {
+  name: "Sam",
+  show() { console.log(this.name); } // Sam
+};
 obj.show();
-//this inside constructor
-function Person(name) {
-  this.name = name;
-}
 
+//inside regular function
+function fn() { console.log(this); } 
+fn(); // window
+
+//inside arrow function
+const obj2 = {
+  name: "Sam",
+  show: () => console.log(this.name) // undefined (arrow has no this)
+};
+obj2.show();
+
+//inside constructor
+function Person(name) { this.name = name; }
 const p = new Person("Sam");
-console.log(p);//Person { name: "Sam" }
+console.log(p.name); // Sam
+
 
 ```
 
@@ -401,6 +343,13 @@ solution
   console.log($)
 })()
 ```
+```js
+(function ask(question = "prompt", yes = alert, no = alert) {
+  if (confirm(question)) yes("You agreed.");
+  //if we click yes in confirm message then condition will execute true and yes will execute else no()
+  else no("You canceled the execution.");
+})();
+```
 Anonymous Function 
 it is a function without having a name
 ```js
@@ -415,11 +364,11 @@ or
 
 **Q11: Shallow vs Deep Copy**  
 
-Shallow: Copies only the top-level values.
+Shallow Copy: Copies only the top-level values.
 If the object contains another object, only the reference is copied, not the actual nested data.
 So changing nested values affects both copies.  
 
-Deep: Creates a completely independent copy of all levels of the object.
+Deep Copy: Creates a completely independent copy of all levels of the object.
 Changing nested values does not affect the original.
 Example:
 Original Object
@@ -644,7 +593,8 @@ fetch(url).catch(err => console.error(err));
 
 **Q17. Async/Await? why its better than Promise**  
 
-Async/Await is a simplified way to work with Promises. It makes asynchronous code look and behave like synchronous code, which is easier to read and write.  
+async/await is a cleaner way to work with Promises in JavaScript.
+It allows you to write asynchronous code that looks synchronous, making it easier to read and debug.  
 
 What problem it solves:
 Avoids callback hell and complex .then() chaining in Promises Used to handle errors gracefully so app doesn't crash.
@@ -741,7 +691,7 @@ Server:                     A              Server:  A---------------------A
 Array.prototype.myMap = function(callback) {
   let result = [];
   for (let i = 0; i < this.length; i++) {
-    result.push(callback(this[i], i, this));////pushing currentValue, index, array
+    result.push(callback(this[i], i, this));//pushing currentValue, index, array
   }
   return result;
 };
@@ -784,26 +734,23 @@ console.log(arr.myFlat(2)); // [1, 2, 3, 4]
 ```
 **Q20: Call, Apply, Bind**  
 
-To manually control the value of this when borrowing a function from another object or ensuring a function always runs with a specific context.bind() binding this keyword and return newbound function
+call() invokes a function immediately with a specific this value and individual arguments.  
+apply() is the same as call().  
+bind() returns a new function with a permanently bound this value.
 
 ```js
-//exp1
-  let x={user:'sam',age:25}
-let y=function(){
-    console.log(`${this.user}'s age ${this.age}`)
+const person = { name: "Sam", age: 25 };
+
+function intro(greeting, emoji) {
+  console.log(`${greeting}, I'm ${this.name} and I'm ${this.age} ${emoji}`);
 }
-y.call(x); //sam's age 25
-y.apply(x); //sam's age 25
-const newFn = y.bind(x);
-newFn(); //sam's age 25
-//exp2
-function greet(greeting, emoji) {
-  console.log(`${greeting}, ${this.name}! ${emoji}`);
-}
-greet.call(person, "Hi", "😊");     // Hi, Alice! 😊
-greet.apply(person, ["Hello", "👋"]); // Hello, Alice! 👋
-const greetAlice = greet.bind(person);
-greetAlice("Hey", "😎");           // Hey, Alice! 😎
+
+intro.call(person, "Hi", "😊"); //Hi, I'm Sam and I'm 25 😊
+
+intro.apply(person, ["Hello", "👋"]); //Hello, I'm Sam and I'm 25 👋
+
+const introSam = intro.bind(person);
+introSam("Hey", "😎");//Hey, I'm Sam and I'm 25 😎
 ```
 
 **Q21: What is Currying?**  
@@ -825,18 +772,11 @@ or
 const add = a => b => a + b;
 console.log(add(5)(3)); // 8
 
-or
-(function ask(question = "prompt", yes = alert, no = alert) {
-  if (confirm(question)) yes("You agreed.");
-  //if we click yes in confirm message then condition will execute true and yes will execute else no()
-  else no("You canceled the execution.");
-})();
 
 ```
 **Q22: What is Prototype?**  
 
-JS uses prototypal inheritance. Every object has a hidden [[Prototype]].
-Objects inherit from parent __proto__. as example every person (object) has a parent from whom they can inherit things — like qualities, habits, or skills.  
+prototype is an object automatically attached to functions (specifically constructor functions).__proto__ is a reference inside every object that points to the prototype it inherits from.Every JS object inherits from a prototype object.
 ```js
 const obj = { a: 10 };
 
@@ -930,7 +870,7 @@ exp3
 function foo(x,y,z) {
  console.log( x, y, z );
 }
-foo( ...[1,2,3] ); //[1,2,3]
+foo(...[1,2,3]); //[1,2,3]
 ```
 
 
@@ -948,6 +888,11 @@ NOTE: Javascript Object Notation(JSON) is a data format(key-value pair) storing 
 Access nested property safely
 ```js 
 user?.address?.city
+user?.getName?.()
+users?.[0]?.name
+fn?.("props")
+document.querySelector(".box")?.textContent
+
 ```
 
 **Q29: Difference Between == and ===**  
@@ -1063,14 +1008,10 @@ var a='sam'
 **Q33: Garbage Collection**  
 
 JS automatically removes unused memory (unreferenced objects).
-Explain the concept of prototype and prototypal inheritance.
-Every JS object inherits from a prototype object.
-Shared methods are defined on the prototype to save memory.
-Example: Object.create(proto) creates a new object inheriting from proto.
 
 **Q34: Webpack**  
 
-Webpack is a module bundler that combines JavaScript, CSS, images, and other assets into an optimized build. It allows configuring different environments like development and production for separate builds. Webpack helps reduce bundle size using techniques like code splitting, tree shaking, and asset optimization. It supports various loaders for handling files and plugins for extending features such as minification, environment variables, caching, compression, and hot reloading. Overall, it streamlines the build process and improves performance for modern web apps.
+Webpack is a module bundler that combines JavaScript, CSS, images, and other assets into an optimized build.(usually a single bundle.js)
 ```txt
           React Project Files
        (Components, JS, CSS, Images)
@@ -1116,23 +1057,6 @@ function calc(n1,n2,op){//HOF
 }
 console.log(calc(10,10,add))
 console.log(calc(10,10,multiply))
-//exp2
- function areaCalculator(shape) {
-  return function(arr) {
-    if (shape === "circle") {
-      return arr.map(r => Math.PI * r * r);
-    }
-    if (shape === "square") {
-      return arr.map(a => a * a);
-    }
-  };
-}
-
-const circleAreas = areaCalculator("circle")([2, 3]);
-const squareAreas = areaCalculator("square")([2, 4]);
-
-console.log(circleAreas); // [12.56, 28.26]
-console.log(squareAreas); // [4, 16]
 
 ```
 
@@ -1149,9 +1073,9 @@ console.timeEnd('loop');
 **Q37: What are modules in JavaScript?**  
 
 Break code into reusable files using export and import.in js two types of modules are there 1. common js module for node js 2. es6 module for modern application
-Types:
-Named export: you can not rename it
-Default export you can rename it
+Types:  
+1. Named export: you can not rename it
+2. Default export you can rename it
 Example 1:
 ```js
 export const x = 1; 
@@ -1322,10 +1246,10 @@ Parameter = variable in function definition.
 
 Argument = actual value passed.
 ```js
-function add(a,b){
+function add(a,b){//parameter
 
  } 
- add(2,3);
+ add(2,3);//argument
 ```
 **Q49:Callback Function**  
 
@@ -1381,20 +1305,15 @@ let u=new User("Sam");
 
 To create multiple objects with the same structure and properties without manually writing each object.
 ```js
-//exp 1
-const x=function(name,sol){
-  console.log(this)//point global object
-}
-x()
-console.log(this)//point global object
 
-//exp 2
 function User(name,age) {
   this.name = name;
   this.age=age;
 }
 let u = new User('Sam',30);
 console.log(u.name,u.age); // Sam 30
+const u2 = new User("Alex", 25);
+console.log(u2.name, u2.age); // Alex 25
 ```
 
 Prototype Inheritance is a feature in JavaScript where objects can inherit properties and methods from another object through the prototype chain.
@@ -1489,7 +1408,7 @@ let a=["a","b","c"]
 let b=a.forEach((val)=>{
   return val
 })
-console.log(b)//undefined
+console.log(b);//undefined
 ``` 
 map() returns new array instance,if you want to create new instance or any modification use map,it is iterate over the array and return new array;
 ```js
@@ -1497,7 +1416,7 @@ let a=["a","b","c"]
 let b=a.map((val)=>{
   return val
 })
-console.log(b)//["a","b","c"]
+console.log(b);//["a","b","c"]
 ``` 
 **Q60: instanceof**  
 
@@ -1897,7 +1816,6 @@ console.log(ff, typeof ff)//[ 'mango', 'banana' ] object
 
 ```
 
-
 **Q70:String Methods**  
 
 charAt() → returns character at index.
@@ -2135,20 +2053,8 @@ pageX = scrollX + clientX
 
 **Q80: Bundling vs Chunking**  
 
-Binding combine many JS/CSS files into ONE optimized file
-```txt
-Before:
-  home.js
-  utils.js
-  cart.js
-  styles.css
-
-After Bundling:
-  bundle.js
-  bundle.css
-
-```
-chunking Break large bundle into smaller lazy-loaded chunks
+Bundling is the process of combining many JavaScript, CSS, and asset files into one or a few optimized files.
+Chunking is the process of splitting your large bundled code into smaller pieces (chunks) that can be loaded on demand
 
 **81: ESM vs ES6**  
 
@@ -2392,7 +2298,7 @@ interface User {
 
 **Q7: Generics:**  
 
-Generics help create reusable and flexible functions or classes that work with multiple data types without losing type safety. Instead of using any (which removes type checking) or writing separate functions for each type, generics allow one function to adapt to different types while still ensuring correct type inference. This avoids duplication, prevents runtime errors, and keeps code strongly typed and maintainable.
+Generics allow you to create reusable, flexible functions and types that work with any data type while still preserving type safety. This avoids duplication, prevents runtime errors, and keeps code strongly typed and maintainable.
 
 ```js
 function identity<T>(arg: T): T {

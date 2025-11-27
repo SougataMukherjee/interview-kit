@@ -1195,13 +1195,17 @@ nav {
 
 @extend: Inherits all styles of another selector.
 ```js
-%btn {
+%btn-base {
   padding: 10px;
   border-radius: 5px;
 }
 .btn-primary {
-  @extend %btn;
-  background: blue;
+  @extend %btn-base;
+  background: green;
+}
+.btn-danger {
+  @extend %btn-base;
+  background: red;
 }
 ```
 **Q6: What are placeholders (%) in SCSS?**  
@@ -1271,13 +1275,26 @@ A SCSS function is like a JavaScript function but for CSS.it take input perform 
 
 Use `sass input.scss output.css` to compile.
 
-**Q12:How do control directives like @if, @for, @each work?**  
+**Q12:How do control directives like @if, @else work?**  
 
 Allow logic in SCSS:
 ```js
-@if $theme == dark { ... }
-@for $i from 1 through 5 { ... }
-@each $color in red, blue { ... }
+$theme: "dark";
+
+.button {
+  padding: 10px 20px;
+
+  @if $theme == "light" {
+    background: #fff;
+    color: #000;
+  } @else if $theme == "dark" {
+    background: #000;
+    color: #fff;
+  } @else {
+    background: gray;
+  }
+}
+
 ```
 **Q13: What is SCSS Maps?**  
 SCSS maps act like mini-dictionaries where you store values under keys, and later you can fetch any value by its key map-get().
