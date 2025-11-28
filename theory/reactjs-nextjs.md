@@ -1459,7 +1459,10 @@ export default function GET() {
 **Q11: What is Image Optimization in Next.js?**  
 
  <Image /> automatically optimizes image size and format for performance.
- it Resizes large images to the size needed by the device,Lazy-loads images,Built-in blur placeholder for better UX
+ it Resizes large images to the size needed by the device,Lazy-loads images,Built-in blur placeholder for better UX.  
+ Automatically compresses images to reduce file size without losing quality.  
+ Converts images to modern WebP format for faster loading.  
+ Serves optimized images via Next.js built-in global CDN for low latency.
 
  ```js
  import Image from "next/image";
