@@ -7,3 +7,18 @@ for(let i=0;i<a.length;i++){
         }
     }
 }
+
+// way 2
+// let unique = [];
+// let duplicates = [];
+
+// a.forEach(item => {
+//   if (unique.indexOf(item) === -1) {
+//     unique.push(item);
+//   } else {
+//     duplicates.push(item);
+//   }
+// });
+
+// console.log("Unique:", unique);
+// console.log("Duplicates:", duplicates);

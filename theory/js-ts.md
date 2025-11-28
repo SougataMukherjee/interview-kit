@@ -131,6 +131,7 @@ function outer() {
 const closure = outer();
 closure(); //1
 closure(); //2
+console.dir(closure);// Shows closure with "count" in console
 
 ```
   
@@ -378,6 +379,9 @@ a → { x:1, y:{ z:2 } }
 Shallow Copy:
 ```js
 b = { ...a }
+//or
+b = Array.from(a)
+
 a.y ───────► { z:2 } ◄────── b.y    (same reference)
 ```
 
@@ -1250,6 +1254,15 @@ function add(a,b){//parameter
 
  } 
  add(2,3);//argument
+```
+```js
+function check(){
+  throw new Error("Param required")
+}
+function show(name=check()){
+  console.log(name)
+}
+show()
 ```
 **Q49:Callback Function**  
 
