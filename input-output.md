@@ -1210,3 +1210,32 @@ console.log(s,typeof s)
 ```
 ### Answer: false object    true object
 
+### Question 89: what will be the output
+```js
+for(let i=0;i<5;i++)
+ button.onclick=function(){
+ console.log(i);
+}
+```
+### Answer:1 time 5 ,rest of prev override
+
+### Question 90: what will be the output
+```js
+import { useState ,useEffect} from "react";
+export default function App() {
+  const [count,setCount]=useState(10);
+  let num=10;
+  useEffect(()=>{
+    setCount(count+1)
+    num=num+1
+  },[])
+
+  return (  
+    <div >
+      Counter {count} and num {num} 
+    </div>
+  );
+}
+```
+### Answer Counter 11 and num 10
+

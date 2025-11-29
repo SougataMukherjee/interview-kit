@@ -1274,8 +1274,9 @@ NEXT.JS NOTES
  drawback of react:
  1. Frequent re-render issues
  2. Requires extra libraries (routing, state mgmt)
- 3. SEO and performance
+ 3. SEO and performance like code splitting, image handle ,caching
  4. Without code-splitting and lazy loading bundle size get large and app became slow
+ 5. Not having full stack capability and future proof
 
 **Q2: CSR vs SSR vs SSG**  
 

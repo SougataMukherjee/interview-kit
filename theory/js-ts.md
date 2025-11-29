@@ -149,7 +149,7 @@ let name = "Sam"; // name is the identifier
 
 ```
 JavaScript variables are containers for data.  
-
+<img src="./img/scope.png" alt="scope" />
 var -> the scope of the variable define with the keyword "var". this is global scope.it is store in browser window object.it is limited to the function within which it is defined ,calling function scope. 
 ```js
 function foo(){
@@ -1174,7 +1174,7 @@ x = 5;//error
 
 data types are describe the type of data  
 
-- Primitive: single value (immutable)(String, Number, boolean, null, undefined, symbol, bigint).
+- Primitive: data types that store single values (immutable)(String, Number, boolean, null, undefined, symbol, bigint).
 ```js
 Boolean(undefined) → false
 Boolean(null) → false
@@ -1183,7 +1183,7 @@ Boolean(0) → false
 Boolean(-1) → true
 
 ```
-- Non-Primitive:(mutable) Object, Array, function,Date,Math.when we copy those its reference is copy but not having real copy  ((),{},[])
+- Non-Primitive:data structures that store multiple values (mutable) Object, Array, function,Date,Math.when we copy those its reference is copy but not having real copy  ((),{},[])
 ```js
 let a =[1,2,3]
 let b=a
@@ -1199,11 +1199,17 @@ Note: primitive are pass by value, object are pass by reference
 ```js
 var x=null
 console.log(typeof x)//object
+let person = { name: "Alice", age: null };
+console.log(person.age); // null
 ```
 - undefined → declared but not assigned.undefined is global property of global objet
 ```js
 var x
 console.log(typeof x)//undefined
+function test() {}
+console.log(test()); // undefined
+let obj = {};
+console.log(obj.property); // undefined
 ```
 
 **Q47: types of operator give associativity**  
@@ -1347,8 +1353,12 @@ u2.sayHello(); // Hello, John
 
 **Q54: Strings are Immutable**  
 
-Once created, can’t be changed—new copy made on edit.
-
+A string is a sequence of characters.once created, can't be changed—new copy made on edit.
+<img src="./img/string.png" alt="string" />
+```js
+const s = "A string primitive";
+const s2 = new String("A String object");
+```
 **Q55:new Array() vs []**  
 
 new Array(3) creates empty slots, [] creates actual array.
@@ -1374,8 +1384,12 @@ fetch(), setTimeout(), setInterval(), localStorage, sessionStorage,
 document, navigator, geolocation, history, console, alert()
 
 **Q58: for of vs for in  and if-else vs switch**
-1. for of does not work with object but for in works with Object and array
-2. for of ignore extra properties which does not have index but for in does not ignore  
+| Loop Type    | Best For             | Works On                                  | What It Returns                          | When To Use                         |
+| ------------ | -------------------- | ----------------------------------------- | ---------------------------------------- | ----------------------------------- |
+| **for**      | General-purpose loop | Arrays, Strings                           | Index-based iteration                    | When you need index or full control |
+| **for...of** | Iterating values     | Arrays, Strings, Maps, Sets               | Values of iterable objects               | When you only need values           |
+| **for...in** | Iterating properties | Objects (also Arrays but not recommended) | Keys (object properties / array indexes) | When looping object properties      |
+ 
 
 1. if-else for range or complex conditions
 ```js
@@ -1690,8 +1704,9 @@ You convert it yourself using functions like Number(), String(), Boolean()
 
 
 **Q69 Array and Array Methods**  
-Array are used to store multiple values with same or different types.size of the array are dynamic and type of the array are object.Arrays are mutable(changable).
+An array is a linear data structure used to store multiple elements. It is a collection of elements of the same data type stored at contiguous memory locations.size of the array are dynamic and type of the array are object.Arrays are mutable(changable).
 we can check weather statement array or not using Array.isArray()
+<img src="./img/array.png" alt="array" />
 ```js
 let x=['java','javascript']
 let y=[1,'js',function(){},true,[],{},false,null,undefined,this]
@@ -1956,14 +1971,18 @@ toString() → returns string form of object.
 Pass by Value → Copy of value passed (primitive).when you do not want original data to change.
 ```js
    let a = 10;
-    function change(x) { x = 20; }
+    function change(x) {
+       x = 20; 
+    }
     change(a);
     console.log(a); // 10
 ```
 Pass by Reference → Reference (address) passed (object/array).when you want to modify the original object/array from a function.
 ```js
 let obj = { name: "Sam" };
-    function change(o) { o.name = "John"; }
+    function change(o) { 
+      o.name = "John"; 
+    }
     change(obj);
     console.log(obj.name); // John 
 ```
@@ -2233,6 +2252,30 @@ Object.seal() — can modify values but cannot add/remove keys
 const obj = Object.seal({ a: 1 });
 
 ```
+**Q94.Math.ceil(),Math.floor() and Math.abs() Infinity**  
+Rounds a number UP to the nearest integer.
+```js
+console.log(Math.ceil(0.6)); // 1
+console.log(Math.ceil(1.2)); // 2
+```
+Rounds a number DOWN to the nearest integer.
+```js
+console.log(Math.floor(0.6)); // 0
+console.log(Math.floor(1.2)); // 1
+```
+Returns the absolute value of a number.and convert Negative to Positive number
+```js
+console.log(Math.abs(1.2)); // 1.2
+console.log(Math.abs(-1.2)); // 1.2
+console.log(Math.abs(-10)); // 10
+console.log(Math.abs(null)); // 0
+```
+Number.POSITIVE_INFINITY: Represents the largest positive value (Infinity)
+Number.NEGATIVE_INFINITY: Represents the smallest negative value (-Infinity)
+```js
+console.log(Number.POSITIVE_INFINITY); // Infinity
+console.log(Number.NEGATIVE_INFINITY); // -Infinity
+```
 
 
 TYPESCRIPT NOTES
@@ -2260,7 +2303,15 @@ Superset of JS adding static typing + compiler checks.
 
 string, number, boolean, any, void, unknown, null, undefined
 
-**Q4: Interface Example:**  
+**Q4: Interface** 
+| Feature            | Class                                          | Interface                                                  |
+| ------------------ | ---------------------------------------------- | ---------------------------------------------------------- |
+| **Definition**     | A blueprint for creating objects               | A contract defining the shape (method/property signatures) |
+| **Implementation** | Can contain both implementation + declarations | Only declarations (no implementation)                      |
+| **Instantiation**  | Can be instantiated using `new`                | Cannot be instantiated                                     |
+| **Inheritance**    | Supports `extends`                             | Supports multiple `implements`                             |
+| **Usage**          | Used to create actual objects                  | Used to define structure/type consistency                  |
+
 ```js
 interface User {
   name: string;

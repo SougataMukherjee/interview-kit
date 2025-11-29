@@ -464,6 +464,7 @@ table, th, td {
 table{
   width: 100%;
   border-collapse: collapse;
+  table-layout:fixed;//auto
 }
 th,td{
   padding:10px;

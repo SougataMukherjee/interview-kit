@@ -1137,6 +1137,7 @@ div {
 Keeps element height proportional to width (responsive images/cards).
 ```js
   aspect-ratio: 3 / 2;
+  object-fit:contain //cover
 ```
 **transform-style**  
 CSS property determines how child elements of an element are rendered in 3D space

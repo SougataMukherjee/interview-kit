@@ -1,40 +1,40 @@
-//Implement a stack using arrays
-class Stack {
-  constructor() {
-    this.items = [];
-  }
+let stack = [];
+let top = -1;
+const N = 10; // Maximum size of the stack
 
-  // push an element to the top
-  push(element) {
-    this.items.push(element);
-  }
-
-  // remove top element
-  pop() {
-    if (this.isEmpty()) return "Stack is empty";
-    return this.items.pop();
-  }
-
-  // view top element
-  peek() {
-    if (this.isEmpty()) return "Stack is empty";
-    return this.items[this.items.length - 1];
-  }
-
-  // check if empty
-  isEmpty() {
-    return this.items.length === 0;
-  }
-
-  // size
-  size() {
-    return this.items.length;
-  }
+function push(x) {
+if (top === N - 1) {
+console.log('Stack Overflow');
+} else {
+stack[++top] = x;
+}
 }
 
-let stack = new Stack();
-stack.push(10);
-stack.push(20);
-console.log(stack.peek()); // 20
-stack.pop();
-console.log(stack.peek()); // 10
+function pop() {
+if (top === -1) {
+console.log('Stack Underflow');
+return null;
+} else {
+return stack[top--];
+}
+}
+
+function peek() {
+if (top === -1) {
+console.log('Stack is empty');
+return null;
+} else {
+return stack[top];
+}
+}
+
+function isEmpty() {
+return top === -1;
+}
+
+// Example usage
+push(10);
+push(20);
+console.log(peek()); // 20
+console.log(pop()); // 20
+console.log(isEmpty()); // false
