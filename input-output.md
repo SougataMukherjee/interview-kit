@@ -1239,3 +1239,24 @@ export default function App() {
 ```
 ### Answer Counter 11 and num 10
 
+### Question 91: what will be the output
+```js
+function showMessage(marks){
+    const message=marks||"Absent";
+    console.log(message)
+}
+showMessage(10);
+showMessage(0)
+```
+### Answer: 10 and Absent because 0 represent false
+
+### Question 92: what will be the output
+```js
+function sum(a=5,b=7){
+    console.log(a+b)
+}
+sum(null,10)
+sum(undefined,10)
+```
+### Answer: 10 and 15
+
