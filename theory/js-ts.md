@@ -286,6 +286,14 @@ obj.show();
 //inside regular function
 function fn() { console.log(this); } 
 fn(); // window
+const obj={
+    a:1,
+    b:2,
+    sum(){
+        return this.a+this.b
+    }
+}
+console.log(obj.sum())//3
 
 //inside arrow function
 const obj2 = {
@@ -1166,8 +1174,18 @@ let a=function(){}
 
 Makes JS more secure: prevents undeclared variables, silent errors.
 ```js
+//exp 1
 "use strict"; 
 x = 5;//error
+
+//exp 2
+function sum(n1,n2){
+    'use strict'
+    n1=20;
+    n2=20
+    return arguments[0]+arguments[1]
+}
+console.log(sum(10,10))// 20 but without 'use strict' it 40
 ``` 
 
 **Q45:Data Types in JS (Primitive vs Non-Primitive)**  

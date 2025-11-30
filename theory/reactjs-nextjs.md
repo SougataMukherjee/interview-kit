@@ -151,7 +151,7 @@ useEffect runs after the component renders on the screen. It is used for side ef
 Example:
 ```js
 useEffect(() => { console.log('runs after render only once'); }, []);
-useEffect(() => { console.log('Run on State/Prop Change'); }, [count]);
+useEffect(() => { console.log('Run on State/Prop Change'); }, [count]);//only state value change it will run ,if you assign any variable it will not change
 useEffect(() => { console.log('Run on Every Render'); });
 useEffect(() => { async function fetchData(){console.log('run async data')}fetchData() }, []);
 useEffect(() => { const timer = setInterval(() => console.log("Running after 1 sec"), 1000);return () => {
@@ -166,6 +166,14 @@ if (someCondition) useEffect(() => {});
 ❌Note: We cannot use async directly in useEffect because Because useEffect expects a cleanup function, not a Promise.Instead, create an inner async function and call it.
 ```js
 useEffect( async() => {},[])
+```
+❌Note: We cannot use normal variable change in useEffect,below changes of the value of variable useEffect will not run
+```js
+let score=10
+useEffect(() => {
+  console.log(score)
+},[score]);
+
 ```
 
 useLayoutEffect runs synchronously after render but before the browser paints the UI. It blocks the paint until the code inside finishes. Use it only when you need to measure DOM size, position, scroll, or apply immediate UI updates to avoid flicker. Best suited for reading/writing DOM layout, animations, synchronizing UI, or correcting layout before the user sees it.
