@@ -1336,16 +1336,39 @@ disadvantage is Hard to read, especially for large components
 
 **Q4: Responsive Classes**
 ```js
-<p class="text-lg md:text-2xl lg:text-4xl">Responsive text</p>
-<div class="text-sm md:text-lg lg:text-xl">text</div>
-<h1 class="text-[clamp(24px,5vw,48px)]">Heading</h1>
-<div class="grid gap-2 sm:gap-4 md:gap-8 lg:gap-12"> Responsive gap</div>
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">Responsive Grid<div>
-<div class="rounded-md bg-[url('/small.jpg')] sm:bg-[url('/medium.jpg')] lg:bg-[url('/large.jpg')]">Background</div>
-<div class="aspect-[4/3] md:aspect-[16/9]">Image</div>
-<div class="@container">
-   <p class="@sm:text-xl @lg:text-4xl">Hello</p>
-</div>
+export const classes = {
+  textResponsive: "text-lg md:text-2xl lg:text-4xl",
+  textSmallToLarge: "text-sm md:text-lg lg:text-xl",
+  headingClamp: "text-[clamp(24px,5vw,48px)]",
+
+  gapResponsive: "grid gap-2 sm:gap-4 md:gap-8 lg:gap-12",
+
+  gridResponsive:
+    "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
+
+  bgResponsive:
+    "rounded-md bg-[url('/small.jpg')] sm:bg-[url('/medium.jpg')] lg:bg-[url('/large.jpg')]",
+
+  aspectResponsive: "aspect-[4/3] md:aspect-[16/9]",
+
+  containerWrapper: "@container",
+  containerText: "@sm:text-xl @lg:text-4xl",
+};
+
+<div className="p-6 space-y-6">
+
+      <p className={classes.textResponsive}>Responsive text</p>
+      <div className={classes.textSmallToLarge}>text</div>
+      <h1 className={classes.headingClamp}>Heading</h1>
+      <div className={classes.gapResponsive}>Responsive gap</div>
+      <div className={classes.gridResponsive}>Responsive Grid</div>
+      <div className={classes.bgResponsive}>Background</div>
+      <div className={classes.aspectResponsive}>Image</div>
+      <div className={classes.containerWrapper}>
+        <p className={classes.containerText}>Hello</p>
+      </div>
+
+    </div>
 
 
 ```

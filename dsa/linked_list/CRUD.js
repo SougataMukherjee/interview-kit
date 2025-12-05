@@ -1,8 +1,8 @@
 // Node class for single linked list
 class Node {
     constructor(data) {
-        this.data = data;
-        this.next = null;
+        this.data = data; //int data type
+        this.next = null; //Node data type
     }
 }
 

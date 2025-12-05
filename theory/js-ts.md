@@ -132,6 +132,8 @@ const closure = outer();
 closure(); //1
 closure(); //2
 console.dir(closure);// Shows closure with "count" in console
+const closure2 = outer();
+closure2(); //1
 
 ```
   
@@ -404,6 +406,7 @@ a.y ──► { z:2 }     b.y ──► { z:2 }   (separate copies)
 Promise is an object represent the eventual completion or failure of asynchronous operation and resulting value.promise has 3 states pending,rejected,fulfilled, it is introduce es6 onwards.we can make asynchronous task using promise.to execute promise we have prototype method promise.prototype.then() for successful compilation and promise.prototype.catch() for unsuccessful compilation 
 Example:
 ```js
+//exp 1 
 let promise=new Promise((res,rej)=>{
     let flag=true;
     if(flag){
@@ -412,6 +415,18 @@ let promise=new Promise((res,rej)=>{
         rej("error")
     }
 }).then(console.log).catch(console.log)
+
+//exp 2
+function getData() {
+    return new Promise((res, rej) => {
+        res("✅ Initial Data")
+    })
+}
+getData().then(()=>{
+    return "🥭"
+}).then().then().catch().then((data)=>{
+    console.log(data);//🥭
+})
 
 ```
 Promise is faster than setInterval because Promises run in the microtask queue, which has higher priority than setInterval, which runs in the macrotask queue. Microtasks execute faster and earlier than macrotasks in JavaScript’s event loop  
@@ -607,33 +622,18 @@ fetch(url).catch(err => console.error(err));
 
 async/await is a cleaner way to work with Promises in JavaScript.
 It allows you to write asynchronous code that looks synchronous, making it easier to read and debug.  
-
+```js
+async function getSmile(){
+    return '😋'
+}
+const smile1= getSmile();
+const smile2= await getSmile();
+console.log(smile1,smile2); //Promise { '😋' } 😋
+```
 What problem it solves:
 Avoids callback hell and complex .then() chaining in Promises Used to handle errors gracefully so app doesn't crash.
 Makes async code more readable single try..catch, cleaner, and easier to handle errors using try…catch
-Example:
-```js
-import { useEffect, useState } from "react";
-function App() {
-  const [data, setData] = useState(null);
-  async function getData() {
-    const res = await fetch("https://jsonplaceholder.typicode.com/users");
-    const result = await res.json();
-    setData(result);
-  }
-  useEffect(() => {
-    getData();
-  }, []);
 
-  return (
-    <div>
-      <h3>Users Data</h3>
-      {data && data.map(u => <p key={u.id}>{u.name}</p>)}
-    </div>
-  );
-}
-export default App;
-```
 
 **Q18: What is Debounce & Throttle?**  
 
@@ -1336,6 +1336,8 @@ function User(n){
   this.name=n;
   }
 let u=new User("Sam");
+let v=User("jake");
+console.log(u?.name,v?.name);//Sam undefined
 ```
 
 **Q53: why Constructor Function? what is Prototype Inheritance?**  
@@ -1351,6 +1353,8 @@ let u = new User('Sam',30);
 console.log(u.name,u.age); // Sam 30
 const u2 = new User("Alex", 25);
 console.log(u2.name, u2.age); // Alex 25
+const u3 = User("Jose", 30);
+console.log(u3?.name, u3?.age); //undefined undefined
 ```
 
 Prototype Inheritance is a feature in JavaScript where objects can inherit properties and methods from another object through the prototype chain.

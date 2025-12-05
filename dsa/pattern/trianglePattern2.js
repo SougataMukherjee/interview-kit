@@ -10,3 +10,4 @@ for(let i=1;i<=5;i++){
     }
     console.log(row)
 }
+// use row += String.fromCharCode(j+64)+" "; for print A A B A B C

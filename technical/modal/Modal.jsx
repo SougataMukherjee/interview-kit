@@ -1,6 +1,13 @@
-export function Modal({ open, onClose, children }) {
+import { forwardRef, useImperativeHandle, useRef } from "react";
+
+export const Modal = forwardRef(function Modal({ open, onClose, children },ref) {
+  const dialogRef = useRef(null);
+  useImperativeHandle(ref, () => ({
+    open: () => dialogRef.current?.showModal(),
+    close: () => dialogRef.current?.close(),
+  }));
   return (
-    <dialog open={open} style={styles.dialog}>
+    <dialog ref={dialogRef} open={open} style={styles.dialog}>
       <div style={styles.overlay}>
         <div style={styles.box}>
           {children}
@@ -12,7 +19,7 @@ export function Modal({ open, onClose, children }) {
       </div>
     </dialog>
   );
-}
+});
 
 const styles = {
   dialog: {

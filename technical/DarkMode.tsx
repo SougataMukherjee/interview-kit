@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
 
+enum Theme {
+  LIGHT = "light",
+  DARK = "dark",
+}
+
 export default function App() {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState<Theme>(Theme.LIGHT);
+
   useEffect(() => {
-    const saved = localStorage.getItem("theme") || "light";
+    const saved = (localStorage.getItem("theme") as Theme) || Theme.LIGHT;
     setTheme(saved);
   }, []);
 
   function toggleTheme() {
-    const next = theme === "dark" ? "light" : "dark";
+    const next = theme === Theme.DARK ? Theme.LIGHT : Theme.DARK;
     setTheme(next);
     localStorage.setItem("theme", next);
   }
@@ -16,8 +22,8 @@ export default function App() {
   return (
     <div
       style={{
-        backgroundColor: theme === "dark" ? "#1e1e1e" : "#ffffff",
-        color: theme === "dark" ? "#ffffff" : "#000000",
+        backgroundColor: theme === Theme.DARK ? "#1e1e1e" : "#ffffff",
+        color: theme === Theme.DARK ? "#ffffff" : "#000000",
         minHeight: "100vh",
         padding: "20px",
         transition: "0.3s",
@@ -38,7 +44,7 @@ export default function App() {
       </button>
 
       <h1>Dark Mode Toggle Example</h1>
-      <p>This example uses conditional rendering and localStorage.</p>
+      <p>This example uses enum + localStorage for theme persistence.</p>
     </div>
   );
 }
