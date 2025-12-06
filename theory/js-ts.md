@@ -60,6 +60,10 @@ When JavaScript starts running a file, it creates the Global Execution Context.I
 1. Memory Phase (Creation / Hoisting Phase):JavaScript scans through the file before executing anything.Variables declared with var are stored as undefined.let and const are put into memory but not initialized.Function expressions & arrow functions behave like variables (undefined or uninitialized)  
 2. Code Phase (Execution Phase): JavaScript now runs the code line by line.
 there Values are assigned and Functions are executed
+***Priority Rules in Memory Phase***
+1. Function declarations are hoisted with full function value
+2. Variable declarations are hoisted but initialized as undefined
+3. If a variable and function share the same name then function wins
 <img src="./img/execution-context.png" alt="execution"/>
 
 
@@ -109,16 +113,15 @@ it is used to module design pattern,curring,memorize.
 disadvantage of closure is memory leak and freeze the browser
 Example:
 ```js
-//exp1
-function outer(){
-  let out="sam" // parent scope
-  function inner(){
-    let inn="rik"
-    console.log(out)//sam 
-  }
-  return inner()
+function x(b) {
+    var a = 5;
+    function y() {
+        console.log(a,b);//5 10
+    }
+    return y
 }
-outer()
+let clo = x(10);
+clo();
 
 //exp2
 function outer() {
@@ -138,7 +141,7 @@ closure2(); //1
 ```
   
 
-**Q6: What is an Expression? What is an Identifier? JS Variables? Difference: var, let, const**   
+**Q6: What is an Expression? What is an Identifier? JS Variables? Difference: var, let, const. what is Variable Shadowing**   
 
 An expression is any reference to a variable value or a set of variable values.  
 ```js
@@ -203,6 +206,18 @@ for(var i=0;i<3;i++){
 3. Don't use reserved keywords and space  
 ```js
 let name, $price, _id;
+
+```
+Variable shadowing happens when a variable inside a local scope has the same name as a variable in an outer scope, and the inner one temporarily hides (shadows) the outer variable within that block/function
+```js
+var a = 10;
+
+{
+  var a = 100; // shadows outer 'a'
+  console.log(a); // 100
+}
+
+console.log(a); // 100 (because var is function-scoped)
 
 ```
 **Q7: What is Event Loop? Explain event loop phases (macrotasks, microtasks)**  
@@ -276,7 +291,13 @@ console.log("D");
 Refers to current context.Value of this depends on how function is called.Arrow functions don't define their own this; they inherit it from the parent scope.Constructor bind this to the new instance.
 ```js
 //global scope
-console.log(this); // window (or globalThis)
+var a=10;
+function b(){
+    var x=10;
+}
+console.log(window.a); //10
+console.log(a); //10
+console.log(this.a); //10
 
 //inside object method
 const obj = {
@@ -1300,6 +1321,10 @@ function greet() {
   console.log("Name function");
   }
 setTimeout(greet, 500);
+document.getElementById("btnClick").addEventListener("click", () => {
+  console.log("Button clicked");
+});
+
 ```
 
 **Q50:Pyramid of Doom (Callback Hell)**  
