@@ -4,4 +4,12 @@ function removeFalsey(arr) {
   return arr.filter((val) => val);
 }
 
-console.log(removeFalsey(arr));
+
+console.log(removeFalsey(arr));//[ 23, 'gfg', true, 12, 'hi', [] ]
+
+const truthyValues = arr.filter(Boolean);
+console.log(truthyValues); // [ 23, 'gfg', true, 12, 'hi', [] ]
+
+// Checking finite numbers:
+const finiteValues = arr.filter(Number.isFinite);
+console.log(finiteValues); // [ 23, 0, 12 ]

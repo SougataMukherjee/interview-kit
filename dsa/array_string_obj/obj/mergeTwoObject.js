@@ -3,6 +3,9 @@ const obj2 = { b: 3, c: 4 };
 const mergedObject = { ...obj1, ...obj2 };
 console.log(mergedObject);//{ a: 1, b: 3, c: 4 }
 
+//way 2
+//let merged = Object.assign({}, obj1, obj2);
+
 //if you want to group obj
 function groupObj(...obj){
     return obj

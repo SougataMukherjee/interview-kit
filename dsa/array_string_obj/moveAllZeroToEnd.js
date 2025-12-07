@@ -1,16 +1,16 @@
-let arr = [1, 2, 0, 2, 1, 0],
-  j = 0,
-  temp;
-for (let i = 0; i < arr.length; i++) {
-  if (arr[i] != 0) {
-    if (i !== j) {
-      temp = arr[i];
-      arr[i] = arr[j];
-      arr[j] = temp;
-    }
-    j++;
+function moveZeros(arr) {
+  let arr1 = [];
+  let arr2 = [];
+
+  for (let num of arr) {
+    if (num === 0) arr1.push(num);
+    else arr2.push(num);
   }
+
+  return [...arr2, ...arr1];
 }
-console.log(arr);
+
+console.log(moveZeros([1, 0, 3, 0, 5])); 
+// [1, 3, 5, 0, 0]
 
 //console.log(arr.sort((a,b)=>(a===0)-(b===0)));

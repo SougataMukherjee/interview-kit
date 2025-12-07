@@ -157,6 +157,10 @@ JavaScript variables are containers for data.
 <img src="./img/scope.png" alt="scope" />
 var -> the scope of the variable define with the keyword "var". this is global scope.it is store in browser window object.it is limited to the function within which it is defined ,calling function scope. 
 ```js
+var x = 10;
+var x = 20;
+console.log(x); // 20
+
 function foo(){
   var x='sam'//local scope or function scope
 }
@@ -338,7 +342,9 @@ console.log(p.name); // Sam
 
 Normal Function 
 ```js
-function add(a, b) { return a + b; }
+function add(a, b) { // declaration + definition
+  return a + b;  // definition (body)
+}
 ```
 Arrow Function  
 - ES6 onwards introduce.arrow function does not support function declaration,it support only function expression.  
@@ -1734,6 +1740,8 @@ Number(null) → 0
 Number('') → 0
 Number({}) → NaN
 Number(undefined) → NaN
+console.log("sam" - 123); // NaN
+
 
 but console.log(false==null)//false
 and console.log(false==[])//because 0==0
@@ -2037,6 +2045,10 @@ let obj = { name: "Sam" };
 
 Pure function → Same input → same output, no side effects. it takes at least one arguments
 ```js
+function add(a, b) {
+  return a + b;
+}
+
 function counterReducer(state, action) {
   if (action.type === "INCREMENT") {
     return state + 1; // always same output for same input

@@ -8,7 +8,11 @@ for(let i=0;i<a.length;i++){
     }
 }
 
-// way 2
+//way 2
+// let duplicates = a.filter((item, index) => a.indexOf(item) !== index);
+// console.log(duplicates);
+
+// way 3
 // let unique = [];
 // let duplicates = [];
 
@@ -22,3 +26,4 @@ for(let i=0;i<a.length;i++){
 
 // console.log("Unique:", unique);
 // console.log("Duplicates:", duplicates);
+

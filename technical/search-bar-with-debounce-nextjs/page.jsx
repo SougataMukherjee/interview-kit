@@ -1,6 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
 
+// ✅ Reusable custom debounce hook
+function useDebounce(value, delay = 500) {
+  const [debounced, setDebounced] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+
+  return debounced;
+}
+
 export default function DebounceProductSearch() {
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState([]);
@@ -18,23 +30,26 @@ export default function DebounceProductSearch() {
     fetchProducts();
   }, []);
 
-  // 🟡 Debounce the search input
+  
+  const debouncedQuery = useDebounce(query, 500);
+
+  // 🔵 Search when debouncedQuery updates
   useEffect(() => {
     setLoading(true);
-    const timer = setTimeout(() => {
-      if (query.trim() === "") {
-        setFiltered(products);
-      } else {
-        const result = products.filter((p) =>
-          p.title.toLowerCase().includes(query.toLowerCase())
-        );
-        setFiltered(result);
-      }
-      setLoading(false);
-    }, 600); // delay 600ms
 
-    return () => clearTimeout(timer);
-  }, [query, products]);
+    if (debouncedQuery.trim() === "") {
+      setFiltered(products);
+      setLoading(false);
+      return;
+    }
+
+    const result = products.filter((p) =>
+      p.title.toLowerCase().includes(debouncedQuery.toLowerCase())
+    );
+
+    setFiltered(result);
+    setLoading(false);
+  }, [debouncedQuery, products]);
 
   return (
     <div style={{ padding: "20px" }}>
