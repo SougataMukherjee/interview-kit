@@ -543,7 +543,10 @@ Promise.race([P1, P2, P3])
    P2 --------✅
    P3 ------------✅
 ```
+
 ```js
+//exp 1
+
 const sam=new Promise((res,rej)=>{
     setTimeout(()=>{
         res('I am fast')
@@ -554,11 +557,17 @@ const rik=new Promise((res,rej)=>{
         res('I am second')
     },2000)
 })
- Promise.race([sam,rik]).then(user=>{
+Promise.race([sam,rik]).then(user=>{
     console.log(user);// i am fast
 }).catch(err=>{
     console.log(err);
 })
+
+//exp 2
+const p1=new Promise(res=>setTimeout(()=>res("p1 done"),1000))
+const p2=new Promise(res=>setTimeout(()=>res("p2 done"),500))
+Promise.all([p1,p2]).then(res=>console.log("All",res));// 2nd All [ 'p1 done', 'p2 done' ]
+Promise.race([p1,p2]).then(res=>console.log("Race",res));// 1st Race p2 done
 ```
 **Q14. How to fetch API using Promise? how to restricting fetch data**  
 
@@ -1151,6 +1160,7 @@ let x, y
 [x=10,y=20]=[,200]
 console.log(x,y) //10 200
 
+
 //exp 4
 let user={
     userId:'101',
@@ -1161,6 +1171,23 @@ function details({userId,userName,pass}){
     return userId + userName + pass
 }
 console.log(details(user))//101sam123
+
+//exp 5
+const user={
+    name:"Sam",
+    age:30,
+    address:{
+        location:{
+            state:'bengal',
+            landmarks:[
+                {title:'Burnpur'},
+                {title:'Asansol'}
+            ]
+        }
+    }
+}
+const {name,age,address:{location:{state,landmarks: [ , { title: a } ]}}}=user;
+console.log(name,a);// Sam Asansol
 ```
 
 **Q40: What is a generator function?**  

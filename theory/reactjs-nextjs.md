@@ -144,6 +144,15 @@ setCount(count + 1); // ✅ correct
 count = count + 1;   // ❌ wrong
 
 ```
+❌ Without previous state we cant increment twice because React batches updates using the same stale value of count.
+```js
+setCount(count + 1);
+setCount(count + 1);
+//if you want to update twice
+setCount(prev=> prev + 1);
+setCount(prev=> prev + 1);
+```
+❌ State must be treated as immutable,if you want to store mutable variable use ref(like timer id, scroll position)
 
 **Q6: Explain useEffect and useLayoutEffect**  
 
