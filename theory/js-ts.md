@@ -346,7 +346,7 @@ function add(a, b) { // declaration + definition
   return a + b;  // definition (body)
 }
 ```
-Arrow Function  
+Arrow Function / Lambda Expression
 - ES6 onwards introduce.arrow function does not support function declaration,it support only function expression.  
 - arrow function does not have own this binding and not suitable for call apply bind
  ```js 
@@ -569,8 +569,9 @@ const p2=new Promise(res=>setTimeout(()=>res("p2 done"),500))
 Promise.all([p1,p2]).then(res=>console.log("All",res));// 2nd All [ 'p1 done', 'p2 done' ]
 Promise.race([p1,p2]).then(res=>console.log("Race",res));// 1st Race p2 done
 ```
-**Q14. How to fetch API using Promise? how to restricting fetch data**  
+**Q14. How AJAX is used in JS ? How to fetch API using Promise? how to restricting fetch data**  
 
+AJAX = Asynchronous JavaScript and XML
 ```js
 fetch("https://api.example.com/data")
   .then(res => res.json())
@@ -2258,7 +2259,7 @@ for (let i = 0; i < arr.length; i++) {
 WebSocket is a communication protocol that creates a persistent, two-way (full-duplex) connection between client and server.
 - Chat apps, multiplayer games, live score updates, stock prices app we can use
 
-**86. What is RegExp? (Regular Expression)**
+**86. What is RegExp? (Regular Expression).How to create dynamic Regex in JavaScript?**
 RegExp (Regular Expression) is a pattern used to match, search, or replace text in strings
 ```js
 const email = "test@mail.com";
@@ -2266,6 +2267,13 @@ const pattern = /^[\\w.-]+@[\\w.-]+\\.\\w+$/;
 
 console.log(pattern.test(email)); // true
 
+```
+Use the RegExp() constructor create dynamic regex
+```js
+const word = "hello";
+const reg = new RegExp(word, "i");
+
+console.log(reg.test("Hello World"));
 ```
 **87.types of console methods**  
 
@@ -2362,6 +2370,20 @@ Number.NEGATIVE_INFINITY: Represents the smallest negative value (-Infinity)
 console.log(Number.POSITIVE_INFINITY); // Infinity
 console.log(Number.NEGATIVE_INFINITY); // -Infinity
 ```
+**Q95.How to Improve Lighthouse Web Performance** 
+ 
+1. Use Modern Formats
+Prefer WebP and AVIF over PNG/JPG.
+They provide high compression and better quality at a smaller size.
+2. Lazy Load Images
+Only load images when they enter the viewport.
+3. Reduce JavaScript Bundle Size
+By Tree-Shaking Removes unused code from final bundle.
+Code Splitting Load only required JS chunks for the current page.
+4. Use a CDN (Content Delivery Network)
+A CDN stores assets on global edge servers, reducing the distance between the user and the server for faster delivery and better caching.
+5. Avoid Layout Shift (Improve CLS)
+CLS (Cumulative Layout Shift) measures how much the UI jumps during load.
 
 
 TYPESCRIPT NOTES

@@ -1,8 +1,8 @@
 //it should n*n matrix and traverse in right->bottom->left->top
 function spiralOrder(matrix) {
     let top = 0, 
-        bottom = matrix.length - 1, 
-        left = 0, 
+        left = 0,
+        bottom = matrix.length - 1,  
         right = matrix[0].length - 1, 
         res = [];
     while (top <= bottom && left <= right) {

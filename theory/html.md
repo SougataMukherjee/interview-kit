@@ -566,7 +566,13 @@ The user can either type freely or pick suggestions from the list
 </datalist>
 ```
 
-**Q52.what is code, dialog, details and summary, progress, meter tag?**  
+**Q52.what is base, code, dialog, details and summary, progress, meter tag?**  
+base tag: specifies the base URL and target for all relative URLs in a document.
+```js
+<head>
+  <base href="https://example.com/">
+</head>
+```
 code tag: Used to display inline code snippets in a monospace font.
 ```js
 <p>To print something in JS, use <code>console.log()</code>.</p>
