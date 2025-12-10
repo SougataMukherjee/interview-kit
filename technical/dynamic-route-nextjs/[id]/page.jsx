@@ -1,35 +1,10 @@
 import { notFound } from 'next/navigation';
+import { getData } from "@/getData";
 
-const cards = [
-  {
-    id: 1,
-    title: 'Sunset View',
-    img: '/images/sunset.jpg',
-    desc: 'Beautiful orange sunset.',
-  },
-  {
-    id: 2,
-    title: 'Mountain Peak',
-    img: '/images/mountain.jpg',
-    desc: 'Snow-covered mountain peak.',
-  },
-  {
-    id: 3,
-    title: 'City Lights',
-    img: '/images/city.jpg',
-    desc: 'Night skyline full of lights.',
-  },
-  {
-    id: 4,
-    title: 'Beach Waves',
-    img: '/images/beach.jpg',
-    desc: 'Relaxing ocean waves.',
-  },
-];
 //using params we can take data from parent no need to use usePathname because its use 'use client'
 export default function CardDetail({ params }) {
   const { id } = params;
-  const card = cards.find((c) => c.id.toString() === id);
+  const card = getData().find((c) => c.id.toString() === id);
 
   if (!card) return notFound();
 

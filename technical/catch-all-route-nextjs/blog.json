@@ -1,0 +1,22 @@
+{
+  "blogs": [
+    {
+      "id": 1,
+      "title": "Next.js Tips",
+      "path": "2025/next-js-tips",
+      "content": "Next.js tips content..."
+    },
+    {
+      "id": 2,
+      "title": "React Tricks",
+      "path": "2025/react-tricks",
+      "content": "React tricks content..."
+    },
+    {
+      "id": 3,
+      "title": "Frontend Guide",
+      "path": "2025/frontend-guide",
+      "content": "Frontend guide content..."
+    }
+  ]
+}
