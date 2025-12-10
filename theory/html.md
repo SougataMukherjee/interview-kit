@@ -422,13 +422,17 @@ Example:
 ```
 → Common ones: id, class, href, src, title, style
 
-**Q42:Blockquote for Quotations**  
+**Q42:Blockquote for Quotations and cite tag**  
 
 → Used for long quoted text.
 ```js
 <blockquote cite="https://example.com">
   This text is quoted from another source.
 </blockquote>
+```
+cite tag represents the title of a work (book, article, song, film, etc.) or the name of a creative work.
+```js
+<p>My favorite book is <cite>The Hobbit</cite>.</p>
 ```
 
 **Q43: img vs picture Elements**  
@@ -566,7 +570,7 @@ The user can either type freely or pick suggestions from the list
 </datalist>
 ```
 
-**Q52.what is base, code, dialog, details and summary, progress, meter tag?**  
+**Q52.what is base, code, pre, dialog, details and summary, progress, meter, address tag?**  
 base tag: specifies the base URL and target for all relative URLs in a document.
 ```js
 <head>
@@ -576,6 +580,15 @@ base tag: specifies the base URL and target for all relative URLs in a document.
 code tag: Used to display inline code snippets in a monospace font.
 ```js
 <p>To print something in JS, use <code>console.log()</code>.</p>
+
+```
+pre tag: preserve whitespace and line breaks — shows text in a monospace font exactly as typed.
+```js
+<pre>
+function greet() {
+  console.log("Hello");
+}
+</pre>
 
 ```
 dialog tag:creates a popup dialog / modal, which you can open using JavaScript.
@@ -603,6 +616,14 @@ meter tag:displays a measurement within a known range (ex: battery level, temper
 <meter value="0.7" min="0" max="1">70%</meter>
 
 ```
+address tag:contact information for the nearest article/section/author — usually rendered in italics by browsers.
+```js
+<address>
+  John Doe<br>
+  <a href="mailto:john@example.com">john@example.com</a>
+</address>
+
+```
 **Q53: why br called empty/void element?**  
 
 because it has no content like img, hr, input, meta, link.
@@ -617,9 +638,13 @@ text and image both
 </a>
 
 ```
-**Note:** target attribute in a  
+**Note:** 
+- target attribute in a  
 1. target="_blank" open link in new tab
 2. target="_self" open link in same tab
+- download attribute in a
+download this resource instead of navigating.
+1. download="report.pdf"
 
 **Q55.What are Core Web Vitals?**  
 Core Web Vitals are Google’s way of checking if your website feels fast and smooth for real users.
