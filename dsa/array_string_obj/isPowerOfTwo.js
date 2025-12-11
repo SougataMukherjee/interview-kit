@@ -1,5 +1,7 @@
 function isPowerOfTwo(n) {
-  if (n <= 0) return false;
-  while (n % 2 === 0) n /= 2;
-  return n === 1;
+  if((n&n-1)===0){
+      return true
+  }
+  return false
 }
+console.log(isPowerOfTwo(4))//true

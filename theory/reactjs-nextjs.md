@@ -1870,7 +1870,7 @@ export default function Dashboard() {
 **Q34: What are Web Vitals & Why Used in Analytics?**  
 
 Web Vitals are key performance metrics used to measure user experience on the web.
-They help track: speed, interactivity, layout stability.
+They help track: loading, interactivity, layout stability.
 
 **Q35: What is JSON-LD?**  
 

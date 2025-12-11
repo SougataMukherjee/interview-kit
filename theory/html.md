@@ -646,93 +646,54 @@ text and image both
 download this resource instead of navigating.
 1. download="report.pdf"
 
-**Q55.What are Core Web Vitals?**  
-Core Web Vitals are Google’s way of checking if your website feels fast and smooth for real users.
-They test three things:
+**Q55.What are Core Web Vitals? List of Core Web Vitals**  
+Web Vitals are key performance metrics used to measure user experience on the web.
+They help track: loading, interactivity, layout stability.
 
-Loading → How fast can they see the main content?
-Interactivity → How quickly does your site react when they click?
-Visual Stability → Does the layout jump around?
+Google uses three main performance metrics to measure real-world user experience:
+1. LCP (Largest Contentful Paint)
+How long the main content (hero image, banner, large text) takes to load.
+Good LCP: ≤ 2.5s
+Slow LCP means your page feels slow to users.
 
-**Q56.List of Core Web Vitals**
+- How Next.js improves LCP
+Automatic image resizing and compression (WebP/AVIF).
+Built-in CDN optimization for faster delivery.
+Lazy loading for non-critical images.
+Reducing render-blocking CSS/JS using file-based routing and code splitting.
 
-LCP – Largest Contentful Paint
-FID – First Input Delay
-CLS – Cumulative Layout Shift
-INP – Interaction to Next Paint (new, replaces FID)
+2. FID (First Input Delay)
+The delay between the user’s first interaction (button click, input typing) and the browser’s response.
+Good FID: ≤ 100ms
+High FID usually means too much JavaScript blocking the main thread.
 
-**Q57.LCP (Largest Contentful Paint)**
+3. CLS (Cumulative Layout Shift)
+Visual stability—how much elements unexpectedly shift while the page loads.
+Goal: Keep CLS as close to 0 as possible
 
-Imagine a user enters your restaurant — the first thing they notice is the main dish arriving.
-LCP measures how fast the largest visible element (banner, hero image, big heading) loads.
-💚 How to Improve LCP
+How Next.js prevents CLS
+Image requires width + height → reserves space → prevents shifting.
+Using priority on above-the-fold images for faster load.
+Automatic font optimization via next/font.
+How to Measure Web Vitals
+You can measure these using:
+Lighthouse (Chrome)
+Chrome DevTools → Performance tab
+Google Search Console → Core Web Vitals report
 
-Use WebP / AVIF images
-Compress images
-Preload important hero image
-Use a CDN
-Reduce render-blocking CSS/JS
-Use SSR or Static Rendering
+**Q56.Service Worker**
 
-**Q58.CLS (Cumulative Layout Shift)**
+A Service Worker is a JavaScript script running in the background, separate from the web page, acting as a programmable proxy between the browser, network, and web app to enable advanced features like offline access, push notifications, and background sync
 
-This is about shakiness.
-If your website jumps around while loading (ads pushing content, images suddenly resizing), users get a bad experience.
+**Q57.Video Performance Optimization**
 
-🎯 Goal: Keep CLS near 0
-
-✔ Reduce CLS
-Always set width + height for images
-Reserve space for ads/widgets
-Avoid content shifting after load
-
-**Q59.TTFB (Time To First Byte)**
-
-This checks how fast your server sends the first byte.
-Imagine ordering food — TTFB is the time the waiter takes to respond with a menu.
-✔ Improve TTFB
-Use a CDN
-Cache responses
-Optimize backend queries
-Reduce server bottlenecks
-
-**Q60.Tools to Measure Core Web Vitals**
-
-Lighthouse
-Google PageSpeed Insights
-Chrome DevTools (Performance tab)
-Web Vitals JS library
-Google Search Console → Core Web Vitals Report
-
-**Q61.Why Web Vitals Fail in Real Projects**
-
-Very large, unoptimized images
-Too much JavaScript
-No caching
-Too many custom fonts
-Third-party scripts
-Slow backend APIs
-
-**Q62.Service Worker**
-
-Imagine hiring a smart assistant who works in background:
-Can serve cached food when kitchen (internet) is offline
-Speeds up repeat customers
-Can deliver notifications
-Works even when restaurant (browser tab) is closed
-That’s a Service Worker.
-
-**Q63.Video Performance Optimization**
-
-Videos are like heavy dishes — great but hard to serve fast.
-✔ Improve Video Performance
 Use WebM, AV1, MP4
 Lazy load videos
 Use a poster image for loading
 Avoid autoplay
 Use HLS / DASH for streaming
 
-**Q64.Critical Rendering Path (CRP)**  
+**Q58.Critical Rendering Path (CRP)**  
 ```txt
                 ┌────────────────────────┐
                 │        HTML File        │
@@ -771,7 +732,7 @@ Use HLS / DASH for streaming
                          Display
 
 ```
-**Q65.Render Blocking vs Parser Blocking**
+**Q59.Render Blocking vs Parser Blocking**
 - for render blocking
 Browser cannot show UI until loaded
 Examples:

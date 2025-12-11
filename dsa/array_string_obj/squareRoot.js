@@ -2,7 +2,9 @@
 function squareRoot(num) {
   let ans = 1;
   for (let i = 1; i <= num; i++) {
-    if (i * i <= num) ans = i;
+    if (i * i <= num){
+      ans = i;
+    }
     else break;
   }
   return ans;

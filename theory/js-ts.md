@@ -2370,21 +2370,39 @@ Number.NEGATIVE_INFINITY: Represents the smallest negative value (-Infinity)
 console.log(Number.POSITIVE_INFINITY); // Infinity
 console.log(Number.NEGATIVE_INFINITY); // -Infinity
 ```
-**Q95.How to Improve Lighthouse Web Performance** 
- 
-1. Use Modern Formats
-Prefer WebP and AVIF over PNG/JPG.
-They provide high compression and better quality at a smaller size.
-2. Lazy Load Images
-Only load images when they enter the viewport.
-3. Reduce JavaScript Bundle Size
-By Tree-Shaking Removes unused code from final bundle.
-Code Splitting Load only required JS chunks for the current page.
-4. Use a CDN (Content Delivery Network)
-A CDN stores assets on global edge servers, reducing the distance between the user and the server for faster delivery and better caching.
-5. Avoid Layout Shift (Improve CLS)
-CLS (Cumulative Layout Shift) measures how much the UI jumps during load.
 
+
+**Q95.what is Symbol and WeakMap?**  
+
+Symbol is a unique and primitive value used mainly as an object key to avoid property name conflicts.its used to create hidden object properties or private data.
+
+Example:
+```js
+const id = Symbol("id");
+const user = {
+  name: "Sam",
+  [id]: 101  // hidden, unique key
+};
+
+console.log(user); 
+console.log(user[id]);  // 101
+console.log(Object.keys(user))//['name']
+```
+
+WeakMap is a special map where keys must be objects and they are weakly referenced, means if the object key is garbage-collected,WeakMap automatically removes that entry.its used to store private data for objects.
+Example:
+```js
+const wm = new WeakMap();
+
+let obj = { name: "Sam" };
+
+wm.set(obj, "private data");
+
+console.log(wm.get(obj)); // "private data"
+
+obj = null; // object is removed from memory
+// WeakMap automatically clears the entry
+```
 
 TYPESCRIPT NOTES
 ================

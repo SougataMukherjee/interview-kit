@@ -9,4 +9,4 @@ function sortExceptMinusOne(arr) {
   return arr.map(x => x === -1 ? -1 : nums[index++]);
 }
 
-console.log(sortExceptMinusOne([-1, 0, 3, -1, -2, -1]));//v
+console.log(sortExceptMinusOne([-1, 0, 3, -1, -2, -1]));
