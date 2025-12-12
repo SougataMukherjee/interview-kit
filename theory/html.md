@@ -476,7 +476,7 @@ th,td{
 }
 </style>
 ```
-**Q45: HTML Forms handle form state and validation**  
+**Q45: HTML Forms handle form state and validation.difference between onInput and onChange**  
 
 → action defines where data goes.  
 
@@ -501,6 +501,22 @@ Validation:
   input:valid { border: 2px solid green; }
 </style>
 
+```
+
+onInput Fires immediately whenever the content of an input element changes (every keypress, paste, cut
+
+onChange fires when the element loses focus (blur) AND its value has changed since it gained focus.
+
+```js
+  const handleChange = (e) => {
+    setState(e.target.value); 
+  };
+  if(currentValue.length > 10){
+      setValidationMessage('❌ Too long! (Max 10)');
+    } else {
+      setValidationMessage('✅ Input is valid.');
+    }
+return <input value={state} onChange={handleChange} onInput={handleInputValidation}/>;
 ```
 
 **Q46:HTML Video and Controls and Audio tag**  

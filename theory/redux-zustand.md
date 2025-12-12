@@ -94,9 +94,13 @@ Redux → Centralized store, better for complex state logic
 
 Context API → Simpler, but causes more re-renders for large apps
 
-**Q7.What are middleware functions in Redux?**  
+**Q7.What are middleware functions in Redux?Why do we need middleware in Redux?**  
 
-Middleware sits between dispatch and reducer, used for logging, async calls, or modifying actions.
+Redux middleware sits between dispatching an action and the reducer.
+It lets you run code like logging,error handling middleware,async delay.  
+Because reducers must be pure and cannot run side-effects.
+Middleware allows us to run async logic, call APIs
+
 
 **Q8.What is Redux Thunk?**  
 
