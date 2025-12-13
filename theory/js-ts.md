@@ -1197,6 +1197,7 @@ A generator function can pause and resume execution using yield.
 Defined with function* syntax.
 Useful for lazy evaluation or async flows.
 ```js
+//exp 1
 function* gen() {
   yield 1;
   yield 2;
@@ -1206,6 +1207,34 @@ const g = gen();
 console.log(g.next().value); // 1
 console.log(g.next().value); // 2
 console.log(g.next().value); // 3
+
+//exp 2
+import { useState, useEffect } from "react";
+
+export default function App() {
+  const [data, setData] = useState([]);
+
+  function* fetchData() {
+    yield fetch("https://jsonplaceholder.typicode.com/posts")
+      .then(res => res.json());
+  }
+
+  useEffect(() => {
+    const gen = fetchData();
+    gen.next().value.then(setData);
+  }, []);
+
+  if (data.length === 0) return <p>Loading...</p>;
+
+  return (
+    <>
+      {data.map(d => (
+        <p key={d.id}>{d.title}</p>
+      ))}
+    </>
+  );
+}
+
 ```
 
 **Q41: Explain the concept of immutability.**  
@@ -1347,14 +1376,19 @@ show()
 
 Function passed into another function to run after a task completes.
 ```js
+//exp 1
 setTimeout(()=>console.log("Arrow function"),1000);
-setTimeout(function() {
-  console.log("Anonymous function");
-  }, 1000);
+//exp 2
+function greet(name, cb) {
+  cb(`Hello ${name}`);// Hello Sam
+}
+greet("Sam", console.log);
+//exp 3
 function greet() { 
   console.log("Name function");
   }
 setTimeout(greet, 500);
+//exp 4
 document.getElementById("btnClick").addEventListener("click", () => {
   console.log("Button clicked");
 });
