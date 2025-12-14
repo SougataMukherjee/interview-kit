@@ -21,3 +21,4 @@ function nextGreater(arr) {
   return res;
 }
 console.log(nextGreater([1, 3, 2, 4]))//[ 3, 4, 4, -1 ]
+//for next smaller elements only change if (arr[j] < arr[i])

@@ -4,6 +4,7 @@ function longestCommonPrefix(str) {
   let str2=str[str.length-1];
   let index=0;
   while(index<str1.length){
+    // Checking are both strings the same at this position else do not match and stop
       if(str1.charAt(index)===str2.charAt(index)){
           index++;
       }else{

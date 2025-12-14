@@ -1,5 +1,6 @@
 function findPeakElement(nums) {
   for (let i = 0; i < nums.length - 1; i++) {
+    // Check current element > next element
     if (nums[i] > nums[i + 1]) {
       return i;   // this is a peak
     }
