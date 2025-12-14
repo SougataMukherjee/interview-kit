@@ -7,8 +7,7 @@ export default function App() {
 
   useEffect(() => {
     if (isRunning) {
-      const runner = useTimer(setTime)(); // start custom timer
-      timerRef.current = setInterval(runner, 20); // small interval
+      timerRef.current = setInterval(useTimer(setTime)(), 20); 
     }
 
     return () => clearInterval(timerRef.current);
@@ -40,17 +39,15 @@ export default function App() {
 }
 
 // customTimer.js
+//This closure is used for throttling logic; it compares the current time with prev and updates prev
 export function useTimer(setTime) {
   let prev = Date.now();
-
   return function tick() {
     const now = Date.now();
-
-    // run every 1 second
     if (now - prev >= 1000) {
       setTime((t) => t + 1);
       prev = now;
     }
-    return tick; // return itself so setInterval can call it
+    return tick;
   };
 }

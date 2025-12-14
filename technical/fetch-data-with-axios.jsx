@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-function UserList() {
+function App() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get("/api/users")
+    axios.get("https://jsonplaceholder.typicode.com/users")
       .then(res => setUsers(res.data))
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
@@ -23,4 +23,4 @@ function UserList() {
   );
 }
 
-export default UserList;
+export default App;

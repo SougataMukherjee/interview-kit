@@ -1,70 +1,49 @@
 "use client";
 import { useEffect, useState } from "react";
 
-// ✅ Reusable custom debounce hook
 function useDebounce(value, delay = 500) {
-  const [debounced, setDebounced] = useState(value);
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebounced(value), delay);
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
     return () => clearTimeout(timer);
   }, [value, delay]);
 
-  return debounced;
+  return debouncedValue;
 }
 
-export default function DebounceProductSearch() {
-  const [query, setQuery] = useState("");
-  const [products, setProducts] = useState([]);
-  const [filtered, setFiltered] = useState([]);
-  const [loading, setLoading] = useState(false);
 
-  // 🟢 Fetch all products initially
+export default function DebounceSearch() {
+  const [q, setQ] = useState("");
+  const [list, setList] = useState([]);
+
+  const dq = useDebounce(q);
+
+  // fetch once
   useEffect(() => {
-    async function fetchProducts() {
-      const res = await fetch("https://dummyjson.com/products");
-      const data = await res.json();
-      setProducts(data.products);
-      setFiltered(data.products);
-    }
-    fetchProducts();
+    fetch("https://dummyjson.com/products")
+      .then(r => r.json())
+      .then(d => setList(d.products));
   }, []);
 
-  
-  const debouncedQuery = useDebounce(query, 500);
-
-  // 🔵 Search when debouncedQuery updates
-  useEffect(() => {
-    setLoading(true);
-
-    if (debouncedQuery.trim() === "") {
-      setFiltered(products);
-      setLoading(false);
-      return;
-    }
-
-    const result = products.filter((p) =>
-      p.title.toLowerCase().includes(debouncedQuery.toLowerCase())
-    );
-
-    setFiltered(result);
-    setLoading(false);
-  }, [debouncedQuery, products]);
+  const filtered = list.filter(p =>
+    p.title.toLowerCase().includes(dq.toLowerCase())
+  );
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>🛒 Debounced Product Search</h2>
+    <div style={{ padding: 20 }}>
+      <h3>Debounced Search</h3>
       <input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search product..."
-        style={{ padding: "6px", width: "250px" }}
+        value={q}
+        onChange={e => setQ(e.target.value)}
+        placeholder="Search..."
       />
 
-      {loading && <p>⏳ Searching...</p>}
-
       <ul>
-        {filtered.map((p) => (
+        {filtered.map(p => (
           <li key={p.id}>{p.title}</li>
         ))}
       </ul>
