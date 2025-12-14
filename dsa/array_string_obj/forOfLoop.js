@@ -61,3 +61,26 @@ const onlyAge = users7.map((usr) => {
 });
 
 console.log(onlyAge); // [13, 50]
+
+//v8)
+const categories = [
+  {
+    name: "Fruits",
+    items: ["Apple", "Banana"]
+  },
+  {
+    name: "Vegetables",
+    items: ["Carrot", "Potato"]
+  }
+];
+
+
+{categories.map((cat) => (
+  <div key={cat.name}>
+    <h3>{cat.name}</h3>
+
+    {cat.items.map((item) => (
+      <li key={item}>{item}</li>
+    ))}
+  </div>
+))}
