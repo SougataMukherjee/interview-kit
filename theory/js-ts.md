@@ -409,6 +409,26 @@ or
   console.log('javascript')
 })()
 ```
+🧪 FAQ:
+```js
+//exp 1
+function a(){return 'a'}
+function b(){return 'b'}
+function c(){return 'c'}
+
+console.log((a(),b(),c()))// c
+console.log((c(),a(),b()))// b
+//exp 2
+function hello(){
+    console.log('hello') //hello
+}
+new hello
+//exp 3
+function test(a,a){
+    console.log(a) //undefined
+}
+test(3)
+```
 
 **Q11: Shallow vs Deep Copy**  
 
@@ -937,7 +957,8 @@ foo(...[1,2,3]); //[1,2,3]
 ```js
 JSON.parse(JSON.stringify(obj)); 
 ```
-🎯 NOTE:JSON.stringify() → convert js object to string
+🎯 NOTE:JSON.stringify() → convert js object to string 
+        but JSON.stringify('JS')!=='JS'
      JSON.parse() → convert a string to js object 
 
 🎯 NOTE: Javascript Object Notation(JSON) is a data format(key-value pair) storing and transforming data to one device to another
@@ -1847,6 +1868,11 @@ if(Array.isArray(y)){
   return true
 }
 return false
+
+
+let r=[1,2,3,4][1,1,1]
+console.log(r)//2 because comma operator take last value [1,2,3,4][index] so index=1 value return
+
 ```
 
 push() → adds element to end.
@@ -1951,6 +1977,9 @@ findIndex() → returns index of first match.
 every() → checks if all elements pass test.
 ```js
       [2,4].every(x=>x%2===0) → true
+      let a =[].every(()=>true)
+      let b=[].every(()=>false)
+      console.log(a,b)//true true
 ```
 some() → checks if any element(at least one) passes test then return true else false.
 ```js
@@ -2217,8 +2246,42 @@ event.emit('hi');
 
 ```txt
 pageX = scrollX + clientX
+
+Browser Window (Viewport)
+┌───────────────────────────────┐
+│                               │
+│   clientX, clientY             │
+│   (Mouse position              │
+│    inside viewport)            │
+│        ● (Mouse)               │
+│        │                       │
+│        │                       │
+│        │                       │
+│        │                       │
+│        ▼                       │
+└───────────────────────────────┘
+↑
+│  scrollY (vertical scroll)
+│
+│   Page Content (Scrolled)
+│
+│────────────────────────────────
+│                               
+│
+│
+
+for X axis:
+←──────────── scrollX ───────────→
+
+Page Start ────────────────────────────────
+             ┌───────────────────────────┐
+             │        Viewport            │
+             │  clientX measured from     │
+             │  LEFT of viewport          │
+             └───────────────────────────┘
+
 ```
-<img src="./img/scroll.png" alt="scroll-x" />
+
 
 
 **Q80: Bundling vs Chunking**  

@@ -11,3 +11,17 @@ const remove = arr1.filter(
   (value, index) => arr1.indexOf(value) === index
 );
 console.log(remove)//[ 'mango', 'banana' ]
+
+const data=[
+    {id:1,name:'A'},
+    {id:2,name:'B'},
+    {id:1,name:'Duplicate A'},
+    {id:3,name:'C'},
+    {id:2,name:'Duplicate B'},
+    ]
+const unique1 = data.filter(
+  (item, index, arr) =>
+    index === arr.findIndex(obj => obj.id === item.id)
+);
+
+console.log(unique1);//[ { id: 1, name: 'A' }, { id: 2, name: 'B' }, { id: 3, name: 'C' } ]

@@ -6,6 +6,16 @@ const users=[
 ]
 const group=Object.groupBy(users,(user)=>user.dept)
 console.log(group);
+//another way
+const grouped = users.reduce((acc, user) => {
+  if (!acc[user.dept]) {
+    acc[user.dept] = [];
+  }
+  acc[user.dept].push(user);
+  return acc;
+}, {});
+console.log(grouped)
+
 // {
 //   IT: [
 //     { name: 'Alice', age: 21, dept: 'IT' },

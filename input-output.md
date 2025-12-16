@@ -56,11 +56,13 @@ let x = [];
 let y = [];
 let z = x + y;
 console.log(typeof z, z);
+console.log([]=="")
+console.log([]==[])
 ```
 
 ### Answer:
 
-**Output:** `string  '' because when you use the + operator on arrays, JavaScript converts them to strings and then concatenates them.`
+**Output:** `string  '' because when you use the + operator on arrays, JavaScript converts them to strings and then concatenates them.  true  false`
 
 ### Question 6: What will be the output?
 
