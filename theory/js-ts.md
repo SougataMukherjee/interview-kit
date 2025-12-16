@@ -17,6 +17,16 @@ JavaScript is called a scripting language because it is not compiled beforehand 
 <script src="app.js" type="module"></script> <!-- ES modules -->
 
 ```
+🎯 Note: we can use both defer and type="module" but defer is unnecessary when using type="module" because by default, module scripts behave like defer.
+***What is crossorigin in the <script> tag?***
+crossorigin controls how browsers handle CORS (Cross-Origin Resource Sharing) when loading external scripts from another domain.mainly use for security and cdn usages
+```js
+<script 
+  src="https://cdn.example.com/app.js"
+  crossorigin="anonymous">
+</script>
+
+```
 ***How does JS (single-threaded) handle async operations?***  
 JS runs sync tasks on call stack and Async tasks handed by event loop in browser.JS is single-threaded, but browser is multi-threaded.  
 
@@ -54,7 +64,7 @@ Call Stack (executes code)
                ↓
       Back to Call Stack (runs again)
 ```
-Note:  
+🎯 Note:  
 **Global Execution Context (GEC)**  
 When JavaScript starts running a file, it creates the Global Execution Context.It has 2 phases
 1. Memory Phase (Creation / Hoisting Phase):JavaScript scans through the file before executing anything.Variables declared with var are stored as undefined.let and const are put into memory but not initialized.Function expressions & arrow functions behave like variables (undefined or uninitialized)  
@@ -927,10 +937,10 @@ foo(...[1,2,3]); //[1,2,3]
 ```js
 JSON.parse(JSON.stringify(obj)); 
 ```
-NOTE:JSON.stringify() → convert js object to string
+🎯 NOTE:JSON.stringify() → convert js object to string
      JSON.parse() → convert a string to js object 
 
-NOTE: Javascript Object Notation(JSON) is a data format(key-value pair) storing and transforming data to one device to another
+🎯 NOTE: Javascript Object Notation(JSON) is a data format(key-value pair) storing and transforming data to one device to another
 
 **Q28: Optional Chaining**  
 
@@ -1293,7 +1303,7 @@ a.pop()
 console.log(a,b)//[ 1, 2 ] [ 1, 2 ]
 ```
 
-Note: primitive are pass by value, object are pass by reference
+🎯 Note: primitive are pass by value, object are pass by reference
 
 **Q46:Null vs Undefined**  
 
@@ -1374,7 +1384,7 @@ show()
 ```
 **Q49:Callback Function**  
 
-Function passed into another function to run after a task completes.
+Function passed into another function as a parameter to run after a task completes.
 ```js
 //exp 1
 setTimeout(()=>console.log("Arrow function"),1000);
@@ -1571,7 +1581,7 @@ obj instanceof MyClass;
 
 Removes unused JS code during bundling.
 
-**Q62: what is DOM and BOM and its advantage**  
+**Q62: what is DOM and BOM and its advantage and disadvantage**  
 
 DOM(Document Object Model): when a web page loads the browser construct the DOM which is tree like structure of HTML.  
 
@@ -1606,7 +1616,13 @@ A NodeList is a collection of nodes (like an array, but not exactly an array).
 ```
 BOM(Browser Object Model): controls browser features( window, navigator, location, history, screen )
 
-Advantage: JS can dynamically change HTML/CSS  
+- Advantage: 
+JS can dynamically change HTML/CSS 
+making it easy to traverse and modify element 
+- disadvantage:
+Direct dom manipulation is slow and impact on performance issue
+complex for large application and difficult to track
+
 ***Where do we use BOM in React?***  
 use it inside useEffect for  
 
@@ -1999,7 +2015,7 @@ substring() → extracts part by index.
         "Hello".substring(1,4) → "ell"
         "Hello".substring(-2) → "Hello"
   ```
-Note: substring does't support negative index, but slice support. and slice recommended for modern js 
+🎯 Note: substring does't support negative index, but slice support. and slice recommended for modern js 
 replace() → replaces part of string.
 ```js
         "Hello".replace("H","J") → "Jello"
@@ -2427,13 +2443,9 @@ WeakMap is a special map where keys must be objects and they are weakly referenc
 Example:
 ```js
 const wm = new WeakMap();
-
 let obj = { name: "Sam" };
-
 wm.set(obj, "private data");
-
 console.log(wm.get(obj)); // "private data"
-
 obj = null; // object is removed from memory
 // WeakMap automatically clears the entry
 ```

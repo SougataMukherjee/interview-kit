@@ -1,3 +1,4 @@
+import styled from "styled-components";
 export default function App() {
   // return a random 6-digit hex color
   function randomColor() {
@@ -11,38 +12,36 @@ export default function App() {
   }
 
   return (
-    <div style={styles.container}>
+       <Container>
       {Array.from({ length: 30 }).map((_, i) => {
         const color = randomColor();
         return (
-          <div
-            key={i}
-            style={{ ...styles.box, backgroundColor: `#${color}` }}
-          >
+          <Box key={i} bgColor={`#${color}`}>
             #{color}
-          </div>
+          </Box>
         );
       })}
-    </div>
+    </Container>
   );
 }
 
-const styles = {
-  container: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-  },
-  box: {
-    width: "16rem",
-    height: "10rem",
-    margin: "0.4rem",
-    color: "white",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "2rem",
-    border: "2px solid",
-    borderRadius: "0.6rem",
-  },
-};
+const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+
+const Box = styled.div`
+  width: 16rem;
+  height: 10rem;
+  margin: 0.4rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  border: 2px solid;
+  border-radius: 0.6rem;
+  background-color: ${(props) => props.bgColor};
+`;
+

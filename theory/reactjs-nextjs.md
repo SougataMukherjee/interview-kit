@@ -130,6 +130,12 @@ export default Counter;
 
 Manages local state in functional components.  
 React behaves as if your component function is being called again and again, but the state remains safe because it is not stored inside the function at all. Behind the scenes, React attaches each component to a fiber node, and all states, refs, and effects live inside those nodes. Each time the UI updates, React reuses the same fiber, so the same state values are available even though the component function ran again.
+Syntax:
+```js
+const array=useState(initialState!)
+array[0]=current state
+array[1]=function to modify the state
+```
 Example:
 ```js
 const [name, setName] = useState("");
@@ -148,9 +154,12 @@ count = count + 1;   // ❌ wrong
 ```js
 setCount(count + 1);
 setCount(count + 1);
+setCheck(!check);
 //if you want to update twice
 setCount(prev=> prev + 1);
 setCount(prev=> prev + 1);
+setCheck(prev => !prev);
+
 ```
 ❌ State must be treated as immutable,if you want to store mutable variable use ref(like timer id, scroll position)
 
@@ -505,8 +514,45 @@ export default function VirtualizedList() {
 
 ***Unmounting*** → Component is removed from the UI/DOM, runs before component is destroyed its use for cleanup(clear timers, remove event listeners)example componentDidCatch
 ```txt
-             Mounting     →     Updating     →     Unmounting
- (componentDidMount)  (componentDidUpdate)  (componentWillUnmount)
+        ┌──────────────┐
+        │ constructor  │
+        └──────┬───────┘
+               ↓
+┌─────────────────────────────┐
+│ getDerivedStateFromProps()  │
+└───────────┬────────────────┘
+            ↓
+        ┌────────┐
+        │ render │
+        └────┬───┘
+             ↓
+   ┌───────────────────┐
+   │ componentDidMount │
+   └───────────────────┘
+             ↓
+         Component Ready
+
+ ```
+ for update phase
+ ```js
+  Props / State Change
+          ↓
+┌─────────────────────────────┐
+│ getDerivedStateFromProps()  │
+└───────────┬────────────────┘
+            ↓
+┌─────────────────────────────┐
+│ shouldComponentUpdate()     │
+└───────────┬────────────────┘
+        true ↓        false → STOP
+        ┌────────┐
+        │ render │
+        └────┬───┘
+             ↓
+   ┌───────────────────┐
+   │ componentDidUpdate│
+   └───────────────────┘
+
  ```
 
 **componentDidMount vs useEffect**

@@ -1260,3 +1260,15 @@ sum(undefined,10)
 ```
 ### Answer: 10 and 15
 
+### Q93.what will be the output
+```js
+let x={a:1};
+let y={a:1};
+console.log(x===y)
+console.log(Object.keys(x)===Object.keys(y))
+console.log(x.a===y.a)
+console.log(typeof x===typeof y)
+console.log(JSON.stringify(x)===JSON.stringify(y))
+```
+### Answer: false false true true true
+

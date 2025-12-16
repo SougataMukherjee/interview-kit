@@ -5,7 +5,7 @@
 // Row3: 1   3   6  10   ← Answer
 
 function paths(m, n) {
-  const grid = Array(m).fill(0).map(() => Array(n).fill(1));
+  const grid = Array(m).fill(0).map(() => Array(n).fill(1)); // like const grid = [[1, 1, 1, 1],[1, 1, 1, 1],[1, 1, 1, 1]] for 3*4 grid
 
   for (let r = 1; r < m; r++) {
     for (let c = 1; c < n; c++) {
