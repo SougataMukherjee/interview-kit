@@ -1,16 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const STORAGE_KEY = "todos_app";
 
 export default function App() {
   const [text, setText] = useState("");
   const [todos, setTodos] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
 
+  useEffect(() => {
+    const storedTodos = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (storedTodos) {
+      setTodos(storedTodos);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+  }, [todos]);
+
   const addOrUpdate = () => {
     if (!text.trim()) return;
 
     if (editIndex !== null) {
-      todos[editIndex] = text;
-      setTodos([...todos]);
+      const updatedTodos = [...todos];
+      updatedTodos[editIndex] = text;
+      setTodos(updatedTodos);
       setEditIndex(null);
     } else {
       setTodos([...todos, text]);
@@ -30,8 +44,13 @@ export default function App() {
 
   return (
     <div>
-      <input value={text} onChange={(e) => setText(e.target.value)} />
-      <button onClick={addOrUpdate}>{editIndex !== null ? "Update" : "Add"}</button>
+      <input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <button onClick={addOrUpdate}>
+        {editIndex !== null ? "Update" : "Add"}
+      </button>
 
       <ul>
         {todos.map((todo, i) => (
@@ -42,6 +61,6 @@ export default function App() {
           </li>
         ))}
       </ul>
-    </div>
+     </div>
   );
 }
