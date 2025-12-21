@@ -10,3 +10,14 @@ while(n>0){
     n=Math.floor(n/10)
 }
 console.log(ev,od)
+
+//sum of odd (1+3+5+7+...N) and even (2+4+6+8+...N)
+function sumOddEven(n) {
+  let even = 0, odd = 0;
+
+  for (let i = 1; i <= n; i++) {
+    if (i % 2 === 0) even += i;
+    else odd += i;
+  }
+  return { even, odd };
+}
