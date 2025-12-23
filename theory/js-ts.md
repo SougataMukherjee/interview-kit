@@ -116,7 +116,7 @@ function test() {
 
 test();
 ```
-**Q5: What is Closure? How do closures maintain memory?**  
+**Q5: What is Closure? How do closures maintain memory?Disadvantages of Closures**  
 
 A closure is a function that giving you to access to outer function scope from inner function.It's like your mother packing your bag in the morning and you going to pg — even though she is no longer there, you still have the tiffin, shirt, and water bottle she packed.
 it is used to module design pattern,curring,memorize.  
@@ -149,7 +149,19 @@ const closure2 = outer();
 closure2(); //1
 
 ```
-  
+***Advantages***
+1. Data privacy
+2. State preservation
+***Disadvantages***
+1. It take more memory consumption and performance overhead.
+2. It might create Memory leak
+```js
+function heavy() {
+  let bigData = new Array(1000000);
+  return () => bigData.length;
+}
+
+```
 
 **Q6: What is an Expression? What is an Identifier? JS Variables? Difference: var, let, const. what is Variable Shadowing**   
 
@@ -1285,7 +1297,7 @@ first class function you can store as a value
 let a=function(){}
 ```
 
-**Q44:Use of "use strict"**  
+**Q44:Use of "use strict"?What Problems "use strict" Solves?use strict vs TypeScript**  
 
 Makes JS more secure: prevents undeclared variables, silent errors.
 ```js
@@ -1301,7 +1313,16 @@ function sum(n1,n2){
     return arguments[0]+arguments[1]
 }
 console.log(sum(10,10))// 20 but without 'use strict' it 40
-``` 
+```
+***Advantages:*** 
+1. Prevents accidental global variables
+2. Catches silent errors
+3. Makes JS more secure
+
+***use strict vs typescript***
+1. use strict error detect in runtime,but typescript error detect in compile time.
+2. use strict not use for type safety but typescript use for type safety
+
 
 **Q45:Data Types in JS (Primitive vs Non-Primitive)**  
 

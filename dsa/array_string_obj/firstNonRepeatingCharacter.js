@@ -1,9 +1,11 @@
 //First non-repeating character
-const str = "aabbcde";
-for (const ch of str) {
-	if (str.indexOf(ch) === str.lastIndexOf(ch)){
-	    console.log(ch); 
-	    break;
-	}
+
+function firstUniqueChar(s="aabbcde") {
+  for (let ch of s) {
+    if (s.indexOf(ch) === s.lastIndexOf(ch)) {
+      return ch;
+    }
+  }
+  return -1;
 }
 // "c"

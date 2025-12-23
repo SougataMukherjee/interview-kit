@@ -989,7 +989,7 @@ export default function Parent() {
 }
 ```
 
-**Q40. What is Suspense component?**  
+**Q40. What is Suspense component? how lazy loading work internally**  
 
  Used to show fallback UI while loading async content (like lazy components).
  ```js
@@ -1004,6 +1004,34 @@ export default function App() {
     </Suspense>
   );
 }
+
+```
+***how lazy load work?***
+- Browser loads main bundle
+- Lazy component code is split during build
+- When component is needed:
+- Browser requests chunk
+- JS engine parses it
+- React renders component
+```txt
+User Requests Page
+        |
+        v
+Main JS Bundle Loaded
+        |
+        v
+Component Needed?
+        |
+       Yes
+        |
+        v
+Request Lazy Chunk (Network)
+        |
+        v
+Chunk Loaded & Parsed
+        |
+        v
+Component Rendered
 
 ```
 ***If a Website Takes Long Time to Load, How to Identify the Problem?***  
@@ -1947,7 +1975,7 @@ export default function Home() {
 
 ```
 
-**Q36:What is Routing Metadata?**  
+**Q36:What is Routing Metadata? What is Dynamic Metadata?**  
 
 Metadata controls page title, description, icons.
 ```js
@@ -1964,6 +1992,19 @@ export default function About() {
 }
 
 ```
+Dynamic metadata means metadata changes at runtime based on:
+Route
+User
+Content fetched from API
+Product / blog / profile page
+in react use react-helmet
+```js
+return {
+    title: product.name,
+    description: product.description
+  };
+```
+
 
 **Q37: What is Prefetching?**  
 
