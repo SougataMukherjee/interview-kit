@@ -22,3 +22,4 @@ function nextGreater(arr) {
 }
 console.log(nextGreater([1, 3, 2, 4]))//[ 3, 4, 4, -1 ]
 //for next smaller elements only change if (arr[j] < arr[i])
+// base on above concept we can solve 1. Daily Temperature 2. Largest Rectangle
