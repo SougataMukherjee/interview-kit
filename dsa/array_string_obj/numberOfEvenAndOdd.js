@@ -21,3 +21,4 @@ function sumOddEven(n) {
   }
   return { even, odd };
 }
+//for string we check  new Set(name).size % 2 === 0

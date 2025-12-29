@@ -11,3 +11,16 @@ orders.forEach(o => {
 });
 
 console.log(output);  // { A: 210, B: 200 }
+
+// let orders = {
+//    "A": 120,
+//    "B": 200,
+//    "C": 90 
+// };
+// let total = 0;
+
+// for (let key in orders) {
+//   total += orders[key];
+// }
+
+// console.log(total); // 410
