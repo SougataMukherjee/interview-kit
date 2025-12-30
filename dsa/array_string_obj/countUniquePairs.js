@@ -1,13 +1,13 @@
-function countUniquePairs(arr, n){
-    let s = new Set();
-    for (let i = 0; i < n; i++)
-    {
-        s.add(arr[i]);
+function countUniquePairs(arr) {
+  const unique = [...new Set(arr)];
+  let count = 0;
+
+  for (let i = 0; i < unique.length; i++) {
+    for (let j = i + 1; j < unique.length; j++) {
+      count++; // each (i, j) is one unique pair
     }
-    let count = Math.pow(s.size, 2);
-    
-    return count;
+  }
+  return count;
 }
-let arr = [ 1, 2, 2, 4, 2, 5, 3, 5 ];
-let n = arr.length;
-console.log(countUniquePairs(arr, n))
+
+console.log(countUniquePairs([1,2,2,4,2,5,3,5])); // 10

@@ -55,56 +55,55 @@ export default function App() {
 }
 
 
-// OR using REACT 19 action and useActionState
-// import { useActionState } from "react";
-// import validate from "./Formvalidation";
+// using formik validation
+// import React from "react";
+// import { Formik, Form, Field, ErrorMessage } from "formik";
+// import * as Yup from "yup";
 
-// async function formAction(prevState, formData) {
-//   const values = {
-//     email: formData.get("email"),
-//     password: formData.get("password"),
-//   };
-
-//   const errors = validate(values);
-//   if (Object.keys(errors).length > 0) {
-//     return { errors };
-//   }
-
-//   // Mimic API call delay
-//   await new Promise((res) => setTimeout(res, 1000));
-
-//   return { success: true, errors: {} };
-// }
+// // Validation schema using Yup
+// const validationSchema = Yup.object({
+//   email: Yup.string().email("Invalid email address").required("Required"),
+//   password: Yup.string()
+//     .min(6, "Password must be at least 6 characters")
+//     .required("Required"),
+// });
 
 // export default function App() {
-//   const [state, formActionDispatch, isPending] = useActionState(formAction, {
-//     errors: {},
-//     success: false,
-//   });
-
 //   return (
-//     <form action={formActionDispatch}>
-//       <div>
-//         <label>Email</label>
-//         <input type="email" name="email" />
-//         {state.errors.email && (
-//           <p style={{ color: "red" }}>{state.errors.email}</p>
-//         )}
-//       </div>
+//     <Formik
+//       initialValues={{ email: "", password: "" }}
+//       validationSchema={validationSchema}
+//       onSubmit={(values, { setSubmitting, resetForm }) => {
+//         setTimeout(() => {
+//           alert("Form submitted successfully!\n" + JSON.stringify(values, null, 2));
+//           setSubmitting(false);
+//           resetForm();
+//         }, 500);
+//       }}
+//     >
+//       {({ isSubmitting }) => (
+//         <Form>
+//           <div>
+//             <label>Email</label>
+//             <Field type="email" name="email" />
+//             <ErrorMessage name="email" component="p" style={{ color: "red" }} />
+//           </div>
 
-//       <div>
-//         <label>Password</label>
-//         <input type="password" name="password" />
-//         {state.errors.password && (
-//           <p style={{ color: "red" }}>{state.errors.password}</p>
-//         )}
-//       </div>
+//           <div>
+//             <label>Password</label>
+//             <Field type="password" name="password" />
+//             <ErrorMessage
+//               name="password"
+//               component="p"
+//               style={{ color: "red" }}
+//             />
+//           </div>
 
-//       <button type="submit" disabled={isPending} style={{ marginTop: 10 }}>
-//         {isPending ? "Submitting..." : "Submit"}
-//       </button>
-
-//       {state.success && <p style={{ color: "green" }}>Form submitted!</p>}
-//     </form>
+//           <button type="submit" disabled={isSubmitting} style={{ marginTop: 10 }}>
+//             {isSubmitting ? "Submitting..." : "Submit"}
+//           </button>
+//         </Form>
+//       )}
+//     </Formik>
 //   );
 // }

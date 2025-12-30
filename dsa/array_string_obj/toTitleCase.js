@@ -5,4 +5,4 @@ function toTitleCase(str) {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
-console.log(toTitleCase('hello world'))
+console.log(toTitleCase('hello world'));// Hello World
