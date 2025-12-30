@@ -15,7 +15,7 @@ let a = [
 ];
 for (let i = 0; i < 3; i++) {
   for (let j = 0; j < 3; j++) {
-     a[i][j] = a1[i][j]+a2[i][j];
+     a[i][j] = a1[i][j] + a2[i][j];
   }
 }
 console.log(a);

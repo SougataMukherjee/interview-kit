@@ -12,4 +12,4 @@ let climbingStairs = (n) => {
 console.log(climbingStairs(2)); //steps[1+1,2]=2 way
 console.log(climbingStairs(3)); //steps[1+1+1,1+2,2+1]=3 way
 
-//find the minimum number of steps to reach x if each step can be 1 to 5 units so return Math.ceil(x / 5);
+//minimum steps to reach x using steps of size 1-5 units so return Math.ceil(x / 5);
