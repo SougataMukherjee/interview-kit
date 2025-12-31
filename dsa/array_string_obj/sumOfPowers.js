@@ -12,6 +12,7 @@ function powerSum(x, n) {
 function powerSum(x, n) {
   let sum = 0;
   for (let i = 1; i <= n; i++) {
+    // if i is odd → + , if even → -
     sum += (i % 2 === 1 ? 1 : -1) * Math.pow(x, i);
   }
   return sum;
