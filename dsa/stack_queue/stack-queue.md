@@ -73,6 +73,15 @@ A stack is an ordered list that follows the LIFO (Last In, First Out) principle.
 ![Stack and Queue](../img/stack-queue.png) <br>
 
 ### key operation:
+Top(push) → ┌───────────┐ ->pop
+            │   30 🍪   │  ← top element (last inserted)
+            ├───────────┤
+            │   20 🍫   │
+            ├───────────┤
+            │   10 🍩   │
+            ├───────────┤
+            │    5 🍎   │  ← bottom element (first inserted) check isEmpty()
+            └───────────┘
 
 #### push():
 

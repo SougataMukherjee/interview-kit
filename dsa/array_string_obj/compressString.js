@@ -1,3 +1,9 @@
+//logic:
+// for (let i = 0; i < str.length; i++) {
+//   let ch = str.charAt(i);
+//   console.log(ch);
+// }
+// output: prints each letter one by one H E L L O
 function compress(s) {
   let out = "";
   let count = 1;

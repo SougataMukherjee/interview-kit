@@ -1,3 +1,4 @@
+// Subarray: a subarray is contiguous part of an array
 function getSubarray(arr) {
   let res = [];
 

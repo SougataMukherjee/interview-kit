@@ -1,6 +1,23 @@
+===================
+Linked list
+===================
+
+
+The last node’s next is NULL.
+
+Traversal is linear — from head to NULL.
+
+Only the head address is known; from that, you can reach every node.
+
+
 # Linked List
 
 A linked list is a linear data structure where each element (called a node) contains two main parts:
+each element (node) contains:
+
+Data (value)
+Address/Pointer (next node reference)
+
 
 `Data`: The value or information stored in the node.<br>
 `Next` (in Singly Linked List) or Next and Prev (in Doubly Linked List): Pointers to the next node in the sequence (and previous node for doubly linked list).<br>
