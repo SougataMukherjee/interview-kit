@@ -10,7 +10,7 @@ function maxArea(height) {
     // Width is distance between pointers
     let h = Math.min(height[left], height[right]);
     max = Math.max(max, h * width);
-
+    //if left < right skip the left not able to handle max water else skip the right
     if (height[left] < height[right]) {
       left++;
     } else {

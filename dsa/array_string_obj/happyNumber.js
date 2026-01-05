@@ -8,15 +8,24 @@ function isHappy(n) {
   let seen = new Set();
 
   while (n !== 1) {
+    //if ans are store previously so prevent from infinite loop
     if (seen.has(n)) return false;
     seen.add(n);
 
-    n = n.toString()
-         .split('')
-         .reduce((sum, d) => sum + d * d, 0);
+    let sum = 0;
+
+    // Extract digits and square them
+    while (n > 0) {
+      let r = n % 10;        // get last digit
+      sum += r * r;         // square and add
+      n = Math.floor(n / 10); // remove last digit
+    }
+
+    n = sum; // move to next number
   }
 
   return true;
 }
 
-isHappy(19); // true
+console.log(isHappy(19)); // true
+console.log(isHappy(4)); // false

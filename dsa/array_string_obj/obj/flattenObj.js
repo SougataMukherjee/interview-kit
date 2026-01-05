@@ -1,9 +1,10 @@
 function flatten(obj, parent = "", out = {}) {
   for (let key in obj) {
     let newkey = parent ? parent + "." + key : key;
-    typeof obj[key] === "object" && obj[key] !== null
-      ? flatten(obj[key], newkey, out)
-      : out[newkey] = obj[key];
+    let val = obj[key];
+    typeof val === "object" && val !== null
+      ? flatten(val, newkey, out)
+      : out[newkey] = val;
   }
   return out;
 }
