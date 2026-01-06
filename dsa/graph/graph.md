@@ -48,24 +48,21 @@ const graph = [
    ![Cyclic graph](../img/cg-graph.png) <br>
    A graph that contains at least one cycle.
    a->b->c->d->a<br>
-   0 → 1 → 2
-   ↑       ↓
-   └───────┘
+
 5. `acyclic Graph`:
-   A graph with no cycles.
+   A graph with no cycles.<br>
    a → b → c → d.<br>
    0 → 1 → 2 → 3<br>
 6. `connected Graph`
    every vertex/node is reachable from any other vertex.<br>
-    0 ---- 1
-    |      |
-    |      |
-    2 ---- 3<br>
+
 7. `disconnected Graph`
    some vertices are not reachable from others<br>
-    0 —— 1       3 —— 4
-        |
-        2<br>
+   ```js
+        0 —— 1       3 —— 4
+            |
+            2<br>
+   ```
 8. `Indegree` incoming edges
 9. `Outdegree` outgoing edges
 10. `Path` A path is a sequence of vertices connected by edges.<br>
@@ -90,7 +87,7 @@ Space Complexity: O(V + E),V=total list of vertex and E=number of edges(1,2,3)
 2 → [1, 3]<br>
 3 → [1, 2,4]<br>
 4 → [3]<br>
-adjacency-list
+
 ![adjacency-list](../img/adjacency-list.png)
 
 ### adjacency matrix(n\*n):<br>
@@ -182,10 +179,10 @@ function dfs(node) {
 
 ### spanning tree
 
-in a spaning tree in a graph all the vertices are same as given graph but number of vertices is 1 edge less
-spaning tree can not have a cycle and does not disconnected
+in a spanning tree in a graph all the vertices are same as given graph but number of vertices is 1 edge less
+spanning tree can not have a cycle and does not disconnected
 adding one edge to the spanning tree will create a loop
-every connected and undirected graph has atleast one spaning tree
+every connected and undirected graph has at least one spanning tree
 
 
 
@@ -220,66 +217,70 @@ function detectCycle(node, parent) {
 
 Used for: Ordering tasks with dependencies (e.g., course scheduling).
 graph should be directed and acyclic graph,if its there then we have atleast one topological ordering
-find in-degree of the graph and start with node having 0 in-degree,remove edges and update in-degree,update untill node are processed
+find in-degree of the graph and start with node having 0 in-degree,remove edges and update in-degree,update until node are processed
 
-```
-class Solution {
-   topo(adj, u, visited, s) {
-      // marking the current vertex as visited.
-      visited[u] = true;
+```js
+function topoDFS(node) {
+  visited[node] = true;
 
-      // traversing over the adjacent vertices.
-      for (let i = 0; i < adj[u].length; i++) {
-            let v = adj[u][i];
+  for (let neighbour of graph[node]) {
+    if (!visited[neighbour]) {
+      topoDFS(neighbour);
+    }
+  }
 
-            // if any vertex is not visited, we call the function recursively.
-            if (!visited[v]) this.topo(adj, v, visited, s);
-      }
-      // pushing the current vertex into the stack.
-      s.push(u);
-   }
-
-   // Function to return list containing vertices in Topological order.
-   topologicalSort(adj) {
-      let V = adj.length;
-      // using boolean array to mark visited nodes and currently
-      // marking all the nodes as false.
-      let visited = new Array(V + 1);
-      visited.fill(false);
-
-      let s = new Array();
-
-      // traversing over all the vertices.
-      for (let i = 0; i < V; i++) {
-            // if the current vertex is not visited, we call the topo function.
-            if (!visited[i]) this.topo(adj, i, visited, s);
-      }
-
-      let res = new Array();
-      let i = -1;
-      while (s.length != 0) {
-            // pushing elements of stack in list and popping them from stack.
-            res.push(s[s.length - 1]);
-            s.pop();
-      }
-      // returning the list.
-      return res;
-   }
+  stack.push(node); // add after exploring all neighbours
 }
 
 ```
 
 ### Find the shortest path (Dijkstra's Algorithm)
 
-Used for: Finding the shortest path in a graph with non-negative weights.
-Set all distances to infinity, except the start node (0)
-Use a priority queue to pick the smallest distance node.
-Update the distances of its neighbors.
-Repeat until all nodes are processed.
+> Find the shortest distance from a source node to all other nodes in weighted graph
 
-Find the shortest path (Bellman Ford algo):
-dijkstra algo can not work having negative weight so Bellman ford algo works
-Used for: Graphs with negative weights.
-Initialize all distances to infinity.
-Relax all edges V-1 times
-If any distance updates in the V-th iteration, a negative cycle exists.
+```js
+      (4)
+   0 ------ 1
+   |        |
+ (1)      (2)
+   |        |
+   2 ------ 3
+       (3)
+0 → 0 = 0
+0 → 2 = 1
+0 → 3 = 4
+0 → 1 = 6
+
+function dijkstra(src) {
+  let dist = Array(n).fill(Infinity);
+  let visited = Array(n).fill(false);
+
+  dist[src] = 0;
+
+  for (let i = 0; i < n; i++) {
+    let u = getMinNode(dist, visited);
+    visited[u] = true;
+
+    for (let [v, weight] of graph[u]) {
+      if (!visited[v] && dist[u] + weight < dist[v]) {
+        dist[v] = dist[u] + weight;
+      }
+    }
+  }
+
+  return dist;
+}
+
+function getMinNode(dist, visited) {
+  let min = Infinity, index = -1;
+
+  for (let i = 0; i < dist.length; i++) {
+    if (!visited[i] && dist[i] < min) {
+      min = dist[i];
+      index = i;
+    }
+  }
+  return index;
+}
+
+```
