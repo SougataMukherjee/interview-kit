@@ -1,6 +1,23 @@
 # Graph
 
 A graph is a non-linear data structure consisting of vertices (nodes) and edges (connections). It is commonly used to represent networks like social connections, maps, and web pages.<br>
+```js
+A graph is a collection of:
+Vertices (Nodes)
+Edges (Connections)
+Graph = (V, E)
+  0 ---- 1
+  |      |
+  |      |
+  2 ---- 3
+
+const graph = [
+  [1, 2],    // 0 → 1, 2
+  [0, 3],    // 1 → 0, 3
+  [0, 3],    // 2 → 0, 3
+  [1, 2]     // 3 → 1, 2
+];
+```
 
 ![graph](../img/graph.png) <br>
 
@@ -31,13 +48,29 @@ A graph is a non-linear data structure consisting of vertices (nodes) and edges 
    ![Cyclic graph](../img/cg-graph.png) <br>
    A graph that contains at least one cycle.
    a->b->c->d->a<br>
+   0 → 1 → 2
+   ↑       ↓
+   └───────┘
 5. `acyclic Graph`:
    A graph with no cycles.
    a → b → c → d.<br>
+   0 → 1 → 2 → 3<br>
 6. `connected Graph`
-   every vertex is reachable from any other vertex.<br>
+   every vertex/node is reachable from any other vertex.<br>
+    0 ---- 1
+    |      |
+    |      |
+    2 ---- 3<br>
 7. `disconnected Graph`
-   some vertices are not reachable from others
+   some vertices are not reachable from others<br>
+    0 —— 1       3 —— 4
+        |
+        2<br>
+8. `Indegree` incoming edges
+9. `Outdegree` outgoing edges
+10. `Path` A path is a sequence of vertices connected by edges.<br>
+0 → 1 → 3 → 4<br>
+Path length = number of edges
 
 ### graph properties
 
@@ -45,35 +78,6 @@ A graph is a non-linear data structure consisting of vertices (nodes) and edges 
     - indegree:Number of edges coming into a vertex (only for directed graphs)
     - outdegree:Number of edges going out from a vertex (only for directed graphs)
 
-### Graph and its representations
-
-    ```
-    function addEdge(adj, i, j) {
-        adj[i][j] = 1;
-        adj[j][i] = 1; //undirected
-    }
-
-    function displayMatrix(adj) {
-        for (let i = 0; i < adj.length; i++) {
-            let row = `${i}: `;
-            for (let j = 0; j < adj[i].length; j++) {
-                row += `${adj[i][j]} `;
-            }
-            console.log(row);
-        }
-    }
-
-    const V = 4;//number of vertices
-    const adj = Array.from({ length: V }, () => Array(V).fill(0));// Initialize the adjacency matrix (4x4, filled with 0)
-
-    // Add edges between vertices
-    addEdge(adj, 0, 1);
-    addEdge(adj, 0, 2);
-    addEdge(adj, 1, 2);
-    addEdge(adj, 2, 3);
-
-    displayMatrix(adj);
-    ```
 
 ### Graph Representation<br>
 
@@ -107,83 +111,74 @@ Space Complexity: O(n²).
 ### graph traversal
 
 1. **Breadth-First Search (BFS)**
-   Uses: Finds the shortest path in an unweighted graph.
-   Implementation: Uses a queue (FIFO).
+   travel to immediate neighbors first, uses a queue (FIFO).
    Steps:
-   Start from a node and mark it as visited.
-   Visit all its neighbors before going deeper.
-   Continue until all nodes are visited.
+   1. Start from a node and mark it as visited.
+   2. Visit all its neighbors before going deeper.
+   3. Continue until all nodes are visited.
+   
+```js
 
-   ```
-   bfsOfGraph(adj) {
-        const V = adj.length;               // Number of vertices
-        let visited = new Array(V).fill(false); //boolean array to avoid infinite loop
-        let res = [];                       // Result array to store BFS traversal
-        let q = [];                         // Queue for BFS
+        0
+       / \
+      1   2
+     /     \
+    3       4
 
-        let s = 0; // Start BFS from vertex 0
-        visited[s] = true; //mark visited as true
-        q.push(s);
+BFS from 0:
+0 → 1 → 2 → 3 → 4
 
-        while (q.length > 0) {
-            let t = q.shift(); // remove front element from the queue
-            res.push(t);       // Add it to the result array
+ function bfs(start) {
+    let queue = [];
+    let visited = [];
 
-            // Traverse all adjacent vertices of dequeued vertex
-            for (let neighbor of adj[t]) {
-                if (!visited[neighbor]) { // If not visited, mark visited and enqueue
-                    visited[neighbor] = true;
-                    q.push(neighbor);
-                }
-            }
+    queue.push(start);
+    visited[start] = true;
+
+    while (queue.length > 0) {
+        let node = queue.shift(); // remove front
+        console.log(node);
+        // Traverse all adjacent vertices
+        for (let neighbour of graph[node]) {
+        // If not visited, mark visited
+        if (!visited[neighbour]) {
+            visited[neighbour] = true;
+            queue.push(neighbour);
         }
-
-        return res; // Return the BFS traversal result
-    }
-   ```
+        }
+     }
+  }
+```
 
 2. **Depth-First Search (DFS)**
-   Uses: Detects cycles, finds connected components.
-   Implementation: Uses a stack (LIFO) or recursion.
+   keep going to 1st universal neighbour,its a recursive traversal and uses a stack (LIFO) or recursion.
    Steps:
-   Start from a node and mark it as visited.
-   Visit the first unvisited neighbor recursively.
-   Backtrack if no unvisited neighbor is found.
+   1. Start from a node and mark it as visited.
+   2. Visit the first unvisited neighbor recursively.
+   3. Backtrack if no unvisited neighbor is found.
 
-   ```
-   function dfs(node, callback) {
-    if (!node) return; // Base case: If the node is null, return
-    callback(node); // Process the current node
-    node.children.forEach(child => dfs(child, callback)); // Recursively visit children
-   }
-   ```
+```js
+        0
+       / \
+      1   2
+     /     \
+    3       4
 
-   ```
+DFS from 0:
+0 → 1 → 3 → back → 2 → 4
 
-   function dfs(graph, start, visited = {}) {
-   //start is current node,we are use visited node for keep track that graph is not becoming cycle
-   //Create a visited object to track visited nodes.If the node is already visited, return
-   if (visited[start]) return;
-   //else mark it as visited and print it.
-   visited[start] = true;
-   console.log(start);
-   //Recursively visit neighbors,until all neighbor visited backtrack
-   for (let neighbor of graph[start]) {
-   dfs(graph, neighbor, visited); //visiting neighbor
-   }
-   }
 
-   const graph = {
-   '0': ['1', '2'],
-   '1': ['0', '3', '4'],
-   '2': ['0'],
-   '3': ['1'],
-   '4': ['2', '3']
-   };
+function dfs(node) {
+  visited[node] = true;
+  console.log(node);
 
-   dfs(graph, '0');
-
-   ```
+  for (let neighbour of graph[node]) {
+    if (!visited[neighbour]) {
+      dfs(neighbour); // go deeper
+    }
+  }
+}
+```
 
 ### spanning tree
 
@@ -192,85 +187,34 @@ spaning tree can not have a cycle and does not disconnected
 adding one edge to the spanning tree will create a loop
 every connected and undirected graph has atleast one spaning tree
 
-### minimum spanning tree
-
-A Minimum Spanning Tree (MST) is a spanning tree where the sum of edge weights is minimized.<br>
-
-```
-  spanningTree(V, adj) {
-        // Array to store the minimum weight to include each vertex in the MST
-        const key = new Array(V).fill(Infinity);
-
-        // Array to keep track of vertices included in the MST
-        const inMST = new Array(V).fill(false);
-
-        // Initialize the first vertex's key to 0 so that it is picked first
-        key[0] = 0;
-
-        // Variable to store the total weight of the MST
-        let totalWeight = 0;
-
-        // Iterate V times to include all vertices in the MST
-        for (let count = 0; count < V; count++) {
-            // Pick the minimum key vertex from the set of vertices not yet included in
-            // MST
-            let u = this.minKey(V, key, inMST);
-
-            // Include the picked vertex in the MST
-            inMST[u] = true;
-
-            // Add its key value to the total weight
-            totalWeight += key[u];
-
-            // Update the key values of adjacent vertices of the picked vertex
-            for (let edge of adj[u]) {
-                const [v, weight] = edge;
-
-                // If v is not in MST and weight of (u,v) is smaller than current key of
-                // v
-                if (!inMST[v] && weight < key[v]) {
-                    key[v] = weight;
-                }
-            }
-        }
-
-        return totalWeight;
-    }
 
 
-    minKey(V, key, inMST) {
-        let min = Infinity;
-        let minIndex = -1;
-
-        for (let v = 0; v < V; v++) {
-            if (!inMST[v] && key[v] < min) {
-                min = key[v];
-                minIndex = v;
-            }
-        }
-
-        return minIndex;
-    }
-
-```
-
-1. Prim's Algorithm (Greedy Approach)
-   Start from any node.
-   Pick the smallest weighted edge that connects to an unvisited node.
-   Repeat until all nodes are connected.
-2. Kruskal's Algorithm (Greedy + Sorting)
-   Sort all edges by weight.
-   Pick the smallest edge that doesn’t create a cycle.
-   Repeat until all nodes are connected.
-
-detect cycle in directed graph
+### detect cycle in  graph
 Approach: Use DFS with a visited array.
-start every node indicate as -1 it mean unvisited
-0 means visited and in a stack
-1 means visited and pop out from stack,completely processed
+```js
 
-detect cycle in undirected graph
-Approach: Use DFS with parent tracking.
+   0
+  / \
+ 1---2
+0 → 1 → 2 → 0 (cycle)
+
+function detectCycle(node, parent) {
+  visited[node] = true;
+
+  for (let neighbour of graph[node]) {
+    if (!visited[neighbour]) {
+      if (detectCycle(neighbour, node)) return true;
+    }
+    // visited but not parent → cycle
+    else if (neighbour !== parent) {
+      return true;
+    }
+  }
+  return false;
+}
+
+```
+
 
 ### Topological sort
 
