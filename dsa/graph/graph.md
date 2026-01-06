@@ -61,7 +61,7 @@ const graph = [
    ```js
         0 —— 1       3 —— 4
             |
-            2<br>
+            2
    ```
 8. `Indegree` incoming edges
 9. `Outdegree` outgoing edges
