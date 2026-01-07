@@ -1,13 +1,4 @@
-===================
-Linked list
-===================
 
-
-The last node’s next is NULL.
-
-Traversal is linear — from head to NULL.
-
-Only the head address is known; from that, you can reach every node.
 
 
 # Linked List

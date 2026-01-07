@@ -73,6 +73,7 @@ A stack is an ordered list that follows the LIFO (Last In, First Out) principle.
 ![Stack and Queue](../img/stack-queue.png) <br>
 
 ### key operation:
+```js
 Top(push) → ┌───────────┐ ->pop
             │   30 🍪   │  ← top element (last inserted)
             ├───────────┤
@@ -82,7 +83,7 @@ Top(push) → ┌───────────┐ ->pop
             ├───────────┤
             │    5 🍎   │  ← bottom element (first inserted) check isEmpty()
             └───────────┘
-
+```
 #### push():
 
 adds an element to the top of the stack
@@ -160,32 +161,32 @@ const N = 10; // Maximum size of the stack
 
 function push(x) {
 if (top === N - 1) {
-console.log('Stack Overflow');
+  console.log('Stack Overflow');
 } else {
-stack[++top] = x;
+  stack[++top] = x;
 }
 }
 
 function pop() {
 if (top === -1) {
-console.log('Stack Underflow');
-return null;
+  console.log('Stack Underflow');
+  return null;
 } else {
-return stack[top--];
+  return stack[top--];
 }
 }
 
 function peek() {
 if (top === -1) {
-console.log('Stack is empty');
-return null;
+  console.log('Stack is empty');
+  return null;
 } else {
-return stack[top];
+  return stack[top];
 }
 }
 
 function isEmpty() {
-return top === -1;
+  return top === -1;
 }
 
 // Example usage
@@ -248,35 +249,35 @@ let front = -1, rear = -1; // f,r [][][]
 
 function enqueue(x) {
 if (rear === N - 1) {
-console.log('Queue Overflow');
+  console.log('Queue Overflow');
 } else if (front === -1 && rear === -1) {
-front = rear = 0; // [f,r][][]
-queue[rear] = x;
+  front = rear = 0; // [f,r][][]
+  queue[rear] = x;
 } else {
 //increase the rear and add the value
-queue[++rear] = x; // [f][][r]
+  queue[++rear] = x; // [f][][r]
 }
 }
 
 function dequeue() {
 if (front === -1 && rear === -1) {
-console.log('Queue Underflow');
-return null;
+  console.log('Queue Underflow');
+  return null;
 } else if (front === rear) {
-let item = queue[front];
-front = rear = -1;
-return item;
+  let item = queue[front];
+  front = rear = -1;
+  return item;
 } else {
 //return value and increase front
-return queue[front++];
+  return queue[front++];
 }
 }
 
 function displayQueue() {
 if (front === -1 && rear === -1) {
-console.log('Queue is empty');
+  console.log('Queue is empty');
 } else {
-console.log(queue.slice(front, rear + 1));
+  console.log(queue.slice(front, rear + 1));
 }
 }
 
