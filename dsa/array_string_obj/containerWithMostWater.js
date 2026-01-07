@@ -1,3 +1,11 @@
+// |         |        |
+// |         |    |   |
+// |     |   |    |   |
+// | |   |   | |  |   |
+// ---------------------
+// L               R
+
+
 function maxArea(height) {
   // Left and Right pointer starting at beginning and End
   let left = 0;

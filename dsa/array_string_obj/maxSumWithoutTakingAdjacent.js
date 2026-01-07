@@ -2,6 +2,9 @@ function rob(nums){
   let prev=0, curr=0;
   // you cannot rob two adjacent houses
   // here curr is skip current house and prev+n Rob current house
+  //rob = prev + money
+  //skip = curr
+
   for(let n of nums){
     let next = Math.max(curr, prev+n);
     prev = curr;
