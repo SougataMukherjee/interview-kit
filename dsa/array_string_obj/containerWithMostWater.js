@@ -1,10 +1,17 @@
-// |         |        |
-// |         |    |   |
-// |     |   |    |   |
-// | |   |   | |  |   |
+// |                   |
+// |         |-----|---|
+// |     |   |-----|---|
+// | |   |   |--|--|---|
 // ---------------------
-// L               R
+// L                   R
 
+// | left | right | min height | width | area    |
+// | ---- | ----- | ---------- | ----- | ------- |
+// | 0(1) | 5(4)  | 1          | 5     | 5       |
+// | 1(2) | 5(4)  | 2          | 4     | 8       |
+// | 2(3) | 5(4)  | 3          | 3     | 9✅     |
+// | 3(1) | 5(4)  | 1          | 2     | 2       |
+// | 4(3) | 5(4)  | 3          | 1     | 3       |
 
 function maxArea(height) {
   // Left and Right pointer starting at beginning and End
@@ -28,3 +35,4 @@ function maxArea(height) {
 
   return max;
 }
+console.log(maxArea([1, 2, 3, 1, 3, 4]))//9

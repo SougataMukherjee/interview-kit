@@ -1,3 +1,24 @@
+/*
+
+Initial State:
+
+        |           |           |
+       ===          |           |
+      =====         |           |
+     =======        |           |
+    ---------    ---------    ---------
+        A           B           C
+
+Goal State:
+
+        |           |           |
+        |           |          ===
+        |           |         =====
+        |           |        =======
+    ---------    ---------    ---------
+        A           B           C
+*/
+
 function hanoi(n, from, to, aux) {
   if (n === 0) return;
   hanoi(n - 1, from, aux, to);
