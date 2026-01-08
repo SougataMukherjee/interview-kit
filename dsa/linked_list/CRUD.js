@@ -15,9 +15,10 @@ function insertAtHead(head, x) {
 
 // Insert at the tail of the list
 function insertAtTail(head, x) {
+    //create a new node
     let newNode = new Node(x);
     if (head === null) return newNode; // If list is empty, return new node as head
-
+    // else add temp to last node
     let temp = head;
     while (temp.next !== null) {
         temp = temp.next;
@@ -133,6 +134,6 @@ printList(head); // 2 -> 99 -> 3 -> 4
 
 head = deleteAtTail(head);
 printList(head); // 2 -> 99 -> 3
-
+ 
 head = deleteAtIndex(head, 2);
 printList(head); // 2 -> 3
