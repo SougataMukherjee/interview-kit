@@ -1,3 +1,9 @@
+//slow,first       slow,first
+//  ↓                 ↓
+// (1) → (2) → (3) → (4) → (5)
+//                ↑           |
+//                |___________|
+
 function hasCycle(head) {
   let slow = head, fast = head;
   while (fast && fast.next) {

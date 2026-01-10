@@ -1,15 +1,26 @@
+// left        right
+//  ↓           ↓
+// (1) → (2) → (1) → null
+
+// left              right
+//  ↓                 ↓
+// (1) → (2) → (2) → (1) → null
+
 function isPalindrome(head) {
-  let slow = head;
-  let stack = [];
-// Traverse the list and push all elements onto the stack
-  while (slow !== null) {
-    stack.push(slow.data);
-    slow = slow.next;
+  if(head===null||head.next===null){
+    return false
   }
-// Traverse the list again and compare with the stack
-  while (head !== null) {
-    if (head.data !== stack.pop()) return false;
-    head = head.next;
+  let arr=[];//by traverse element for store all element
+  let curr=head;
+  while(curr){
+    arr.push(curr.val)
+    curr=curr.next
   }
-  return true;
+  let l=0,r=arr.length-1;
+  while(l<r){
+    if(arr[l]!==arr[r])return false;
+    l++;
+    r--;
+  }
+  return true
 }
