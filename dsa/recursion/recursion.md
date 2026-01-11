@@ -1,22 +1,16 @@
-function msg(){
-    console.log('hello')
-    msg1()
-}
-function msg1(){
-    console.log('hello')
-    msg2()
-}
-function msg2(){
-    console.log('hello')
-}
-msg()
+## 🔹 What is Recursion?
+Recursion is a programming technique where a **function calls itself** to solve a problem by breaking it into **smaller subproblems**.
+> A recursive solution must always have:
+1. **Base Case** → stops recursion
+2. **Recursive Case** → function calls itself
 
-### we can write with simplify way
+## 🔹 Basic Structure of Recursion
 
-function msg(n) {
-  if (n === 0) return;
-  console.log("hello");
-  msg(n - 1); // recursive call
+```js
+function recursiveFunction(input) {
+  // Base Case
+  if (condition) return result;
+
+  // Recursive Case
+  return recursiveFunction(smallerInput);
 }
-
-msg(3);
