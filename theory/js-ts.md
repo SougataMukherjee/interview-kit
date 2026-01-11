@@ -702,12 +702,24 @@ fetch(url).catch(err => console.error(err));
 async/await is a cleaner way to work with Promises in JavaScript.
 It allows you to write asynchronous code that looks synchronous, making it easier to read and debug.  
 ```js
+//exp 1
 async function getSmile(){
     return '😋'
 }
 const smile1= getSmile();
 const smile2= await getSmile();
 console.log(smile1,smile2); //Promise { '😋' } 😋
+
+//exp 2
+async function run(){
+    try{
+        return 1
+    }
+    finally{
+        return 2
+    }
+}
+run().then(console.log) //2
 ```
 What problem it solves:
 Avoids callback hell and complex .then() chaining in Promises Used to handle errors gracefully so app doesn't crash.

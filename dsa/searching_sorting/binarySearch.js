@@ -1,7 +1,7 @@
 let a = [5, 4, 7, 9, 2];
 a.sort((x, y) => x - y); 
-let item = 4;
 
+let item = 4;
 let l = 0;
 let r = a.length - 1;
 let found = false;
