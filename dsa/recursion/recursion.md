@@ -11,7 +11,7 @@ function msg2(){
 }
 msg()
 
-//we can write with simplify way
+### we can write with simplify way
 
 function msg(n) {
   if (n === 0) return;

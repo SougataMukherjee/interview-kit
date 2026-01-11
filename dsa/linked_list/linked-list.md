@@ -1,6 +1,4 @@
 
-
-
 # Linked List
 
 A linked list is a linear data structure where each element (called a node) contains two main parts:
@@ -92,72 +90,7 @@ class Node {
         this.prev = null;
     }
 }
-function insertAtHead(head, x) {
-    let newNode = new Node(x);
-    if (head !== null) {
-        newNode.next = head;
-        head.prev = newNode;
-    }
-    head = newNode;
-    return head;
-}
-function insertAtTail(head, x) {
-    let newNode = new Node(x);
-    if (head === null) {
-        // If the list is empty, the new node becomes the head
-        return newNode;
-    }
-    let temp = head;
-    while (temp.next !== null) {
-        temp = temp.next;
-    }
-    temp.next = newNode;
-    newNode.prev = temp;
-    return head;
-}
-function insertAtIndex(head, idx, x) {
-    if (idx < 1) {
-        console.error("Invalid index");
-        return head;
-    }
-    let newNode = new Node(x);
-    if (idx === 1) {
-        return insertAtHead(head, x);
-    }
-    let temp = head;
-    for (let i = 1; i < idx - 1; i++) {
-        if (temp === null) {
-            console.error("Index out of bounds");
-            return head;
-        }
-        temp = temp.next;
-    }
-    if (temp === null) {
-        console.error("Index out of bounds");
-        return head;
-    }
-    let nextNode = temp.next;
-    temp.next = newNode;
-    newNode.prev = temp;
-    newNode.next = nextNode;
-    if (nextNode !== null) {
-        nextNode.prev = newNode;
-    }
-    return head;
-}
-function deleteAtHead(head) {
-    if (head === null) {
-        console.error("List is empty, nothing to delete.");
-        return null;
-    }
-    let temp = head;
-    head = head.next; // Move head to the next node
-    if (head !== null) {
-        head.prev = null; // Update the new head's previous pointer
-    }
-    temp.next = null; // Detach the deleted node completely
-    return head;
-}
+
 ```
 
 # Circular Linked list

@@ -152,50 +152,7 @@ D / ^ F E D Operand D is added to the postfix.
 - - F E D ^ C B - _ Pop _ (higher precedence); push +.
     A + F E D ^ C B - \* A Operand A is added to the postfix.
 
-### Array Implementation of Stack:
 
-```
-let stack = [];
-let top = -1;
-const N = 10; // Maximum size of the stack
-
-function push(x) {
-if (top === N - 1) {
-  console.log('Stack Overflow');
-} else {
-  stack[++top] = x;
-}
-}
-
-function pop() {
-if (top === -1) {
-  console.log('Stack Underflow');
-  return null;
-} else {
-  return stack[top--];
-}
-}
-
-function peek() {
-if (top === -1) {
-  console.log('Stack is empty');
-  return null;
-} else {
-  return stack[top];
-}
-}
-
-function isEmpty() {
-  return top === -1;
-}
-
-// Example usage
-push(10);
-push(20);
-console.log(peek()); // 20
-console.log(pop()); // 20
-console.log(isEmpty()); // false
-```
 
 ## Stack vs Queue
 
@@ -240,54 +197,6 @@ isEmpty
 4. isEmpty(): Checks if the queue is empty.
 5. size(): Returns the number of elements in the queue.
 
-### Array Implementation of Queue:
-
-```
-const N = 5;
-let queue = new Array(N);
-let front = -1, rear = -1; // f,r [][][]
-
-function enqueue(x) {
-if (rear === N - 1) {
-  console.log('Queue Overflow');
-} else if (front === -1 && rear === -1) {
-  front = rear = 0; // [f,r][][]
-  queue[rear] = x;
-} else {
-//increase the rear and add the value
-  queue[++rear] = x; // [f][][r]
-}
-}
-
-function dequeue() {
-if (front === -1 && rear === -1) {
-  console.log('Queue Underflow');
-  return null;
-} else if (front === rear) {
-  let item = queue[front];
-  front = rear = -1;
-  return item;
-} else {
-//return value and increase front
-  return queue[front++];
-}
-}
-
-function displayQueue() {
-if (front === -1 && rear === -1) {
-  console.log('Queue is empty');
-} else {
-  console.log(queue.slice(front, rear + 1));
-}
-}
-
-// Example usage
-enqueue(10);
-enqueue(20);
-enqueue(30);
-console.log(dequeue()); // 10
-displayQueue(); // [20, 30]
-```
 
 # Priority Queue
 
