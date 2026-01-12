@@ -10,3 +10,5 @@ function countWays(coins, n, sum) {
 }
 
 console.log(countWays([1,2,3], 3, 4)); // 4
+console.log(countWays([1,2,5], 3, 5)); // 4 (5,2+2+1,2+1+1+1,1+1+1+1+1)
+console.log(countWays([10], 1, 10)); // 1 (10)

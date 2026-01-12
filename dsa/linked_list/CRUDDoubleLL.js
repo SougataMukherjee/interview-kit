@@ -1,3 +1,7 @@
+// [prev | data | next] <--> [prev | data | next] <--> [prev | data | next] ---> null
+//         ^
+//       head                     ^
+//                                pos = 1
 class Node {
   constructor(data) {
     this.data = data;

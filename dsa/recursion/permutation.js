@@ -1,8 +1,8 @@
-    //        ""
+    //        ""(n choices)
     //     /   |   \
-    //    A    B    C
+    //    A    B    C (n-1 choices)
     //   / \  / \  / \
-    //  AB AC BA BC CA CB
+    //  AB AC BA BC CA CB(n-2 choices)
     //  |   |  |   |  |   |
     // ABC ACB BAC BCA CAB CBA
     

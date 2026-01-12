@@ -1,3 +1,8 @@
+//rules: 
+//1. can not start with ")"
+//2. can not end with  "("
+//3. same number of  "(" and ")"
+
 function minRemoveToMakeValid(s) {
   let stack = [];//hold indices of opening parentheses
   let arr = s.split('');// Convert the string to an array for efficient modification
@@ -16,4 +21,6 @@ function minRemoveToMakeValid(s) {
   for (let i of stack) arr[i] = '';
   return arr.join('');
 }
+console.log(minRemoveToMakeValid('))(('));//''
+console.log(minRemoveToMakeValid('a)b(c)d'));//'ab(c)d'
 

@@ -1,3 +1,8 @@
+        // ------swap-------
+        // |                |
+        // [1,  2,  3,  4,  5]
+        //  ^               ^
+        //  i   i+1    j-1  j
 function reverse(arr, i = 0, j = arr.length - 1) {
   if (i >= j) return arr;               // base case
   let temp = arr[i];                    // swap
