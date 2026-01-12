@@ -3,15 +3,14 @@
 //     2     3
 //    / \   /
 //   4   5 6
-function mirror(node) {
-  if (!node) return;
 
-  // Swap left and right subtrees using a temporary variable
-  let temp = node.left;
-  node.left = node.right;
-  node.right = temp;
+export function isMirror(a, b) {
+  if (!a && !b) return true;
+  if (!a || !b) return false;
 
-  // Recursively mirror left and right subtrees
-  mirror(node.left);
-  mirror(node.right);
+  return (
+    a.val === b.val &&
+    isMirror(a.left, b.right) &&
+    isMirror(a.right, b.left)
+  );
 }
