@@ -1,26 +1,26 @@
 function isStrong(pwd) {
-  if (pwd.length < 8) return false;
+  if (pwd.length < 4) return false;
 
   let hasUpper = false;
+  let hasLower = false;
   let hasDigit = false;
   let hasSpecial = false;
 
   for (let ch of pwd) {
-    switch (true) {
-      case ch >= "A" && ch <= "Z":
+      if( ch >= "A" && ch <= "Z"){
         hasUpper = true;
-        break;
-
-      case ch >= "0" && ch <= "9":
-        hasDigit = true;
-        break;
-
-      default:
+      }else if(ch >= "a" && ch <= "z"){
+        hasLower = true;
+      }else if(ch >= "0" && ch <= "9"){
+        hasDigit = true;  
+      }else{
         hasSpecial = true;
-    }
+      }
+
   }
 
-  return hasUpper && hasDigit && hasSpecial;
+  return hasUpper && hasLower && hasDigit && hasSpecial;
 }
 
 console.log(isStrong("Pass@123")); // true
+console.log(isStrong("password!1"));// false

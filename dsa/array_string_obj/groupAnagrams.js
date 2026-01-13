@@ -1,3 +1,5 @@
+//logic : "eat": ["eat","tea"], "tan":["tan","nat"]
+
 function groupAnagrams(strings){
     const obj={};
     for(let str of strings){

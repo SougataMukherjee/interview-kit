@@ -8,6 +8,57 @@
 
 //                                               [------15-------18------]
 
+/*
+Initial Intervals:
+[[1,3], [2,6], [8,10], [15,18]]
+
+Step 1: Sort by start (already sorted)
+
+Result = []
+prev = [1,3]
+
+-----------------------------------
+Compare prev = [1,3] with curr = [2,6]
+
+Check overlap:
+prev[1] >= curr[0]
+3 >= 2  ✅ YES
+
+Merge:
+prev[1] = max(3,6) = 6
+prev becomes → [1,6]
+
+-----------------------------------
+Compare prev = [1,6] with curr = [8,10]
+
+Check overlap:
+6 >= 8 ❌ NO
+
+Push prev to result:
+Result = [[1,6]]
+
+Update prev:
+prev = [8,10]
+
+-----------------------------------
+Compare prev = [8,10] with curr = [15,18]
+
+Check overlap:
+10 >= 15 ❌ NO
+
+Push prev to result:
+Result = [[1,6], [8,10]]
+
+Update prev:
+prev = [15,18]
+
+-----------------------------------
+End of loop → push last prev
+
+Final Result:
+[[1,6], [8,10], [15,18]]
+*/
+
 function mergeIntervals(intervals) {
   intervals.sort((a, b) => a[0] - b[0]);
   const res = [];
