@@ -1,16 +1,11 @@
 function minValue(root) {
-  if (root === null) {
-    return -1;
-  }
+  if (root === null) return Infinity;
 
-  let curr = root;
+  let a = root.val;
+  let b = minValue(root.left);
+  let c = minValue(root.right);
 
-  // leftmost node is minimum, so move till
-  // left is not null
-  while (curr.left !== null) {
-    curr = curr.left;
-  }
-
-  // returning the data at the leftmost node
-  return curr.data;
+  return Math.min(a, b, c);
 }
+
+//for max value base case -Infinity and recursive case Math.max(a,b,c)

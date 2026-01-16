@@ -5,6 +5,7 @@
     //  AB AC BA BC CA CB(n-2 choices)
     //  |   |  |   |  |   |
     // ABC ACB BAC BCA CAB CBA
+//_ _ _=3 choice*2 choice* 1 choice =3! 6
     
 function permute(str, prefix = '') {
   if (!str.length) return console.log(prefix);

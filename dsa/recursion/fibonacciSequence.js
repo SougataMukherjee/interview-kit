@@ -14,6 +14,8 @@
 //       │    └── fib(0) = 0
 //       └── fib(1) = 1
 
+//fibonacci sequence is 1 1 2 3 5 8 13 21 34 55 ...
+
 function fib(n) {
   if (n <= 1) return n;              // base case
   return fib(n - 1) + fib(n - 2);    // recursive case

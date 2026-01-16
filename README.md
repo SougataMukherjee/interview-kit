@@ -1,4 +1,10 @@
 
+## APPROACH TO SOLVE PROBLEM
+1. identify patterns,check constraints
+2. Approach and logic
+3. pseudocode
+4. dry run
+
 ## QUICK DSA TOPIC IDENTIFICATION CHECKLIST
 | **Problem Clue / Keyword**        | **Likely DSA Topic / Pattern**  |
 | --------------------------------- | ------------------------------- |

@@ -19,6 +19,9 @@ Goal State:
         A           B           C
 */
 
+//Tower of Hanoi minimum moves steps = 2ⁿ − 1 = 2^3 -1 =7
+//A->C  A->B  C->B  A->C  B->A  B->C  A->C
+
 function hanoi(n, from, to, aux) {
   if (n === 0) return;
   hanoi(n - 1, from, aux, to);

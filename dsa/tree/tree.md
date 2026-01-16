@@ -72,6 +72,7 @@ Nodes visible when the tree is viewed from the top.<br>
 ### Binary Tree:<br>
 
  A binary tree is a tree where each node has at most two children, referred to as the left child and the right child.
+ Every node to the left of a node is smaller and every node to the right has a greater value in a binary search tree
 ![Dynamic Programming](../img/tree-type.png) <br>
 
 #### Types:<br>
@@ -201,62 +202,3 @@ The root node is the smallest element, and every parent is smaller than its chil
 The root node is the largest element, and every parent is larger than its children.<br>
 
 ![min max Heap tree](../img/heap.png) <br>
-***Insert Operation in Max Heap***
-Add the element at the last free space in the heap (i.e., at the end of the array).
-Heapify Up: Compare the inserted element with its parent. If the element is larger than its parent, swap them.
-Repeat the process until the element is in the correct position to maintain the max-heap property (i.e., every parent node is greater than its children).
-T.C in best-case O(1) and in normal O(logn)
-![max-heap](../img/max_heap.png) <br>
-
-```
-function maxHeapify(arr, i, n) {
-    let l = 2 * i + 1; // left child
-    let r = 2 * i + 2; // right child
-    let largest = i; // assume the current index is the largest
-
-    // If left child is greater than the current largest
-    if (l < n && arr[l] > arr[largest]) {
-        largest = l;
-    }
-
-    // If right child is greater than the current largest
-    if (r < n && arr[r] > arr[largest]) {
-        largest = r;
-    }
-
-    // If largest is not the current element, swap and heapify the affected subtree
-    if (largest !== i) {
-        // Swap elements
-        [arr[i], arr[largest]] = [arr[largest], arr[i]];
-
-        // Recursively heapify the affected subtree
-        maxHeapify(arr, largest, n);
-    }
-}
-
-```
-
-### heap sort
-
-create a max heap then delete all the elements from heap
-
-```
-function heapSort(arr) {
-    let heapSize = arr.length;
-
-    // Build the max heap
-    buildMaxHeap(arr);
-
-    // Perform the sorting
-    for (let i = arr.length - 1; i >= 1; i--) {
-        // Swap the first element (max) with the current element
-        [arr[0], arr[i]] = [arr[i], arr[0]];
-
-        // Reduce the heap size
-        heapSize--;
-
-        // Re-heapify the reduced heap
-        maxHeapify(arr, 0, heapSize);
-    }
-}
-```
