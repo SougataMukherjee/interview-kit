@@ -10,7 +10,34 @@ class Node {
   }
 }
 
+function insertAtLast(head, data) {
+  let toAdd = new Node(data);
 
+  // if list is empty
+  if (head === null) {
+    return toAdd;
+  }
+
+  let curr = head;
+
+  // go till last node
+  while (curr.next !== null) {
+    curr = curr.next;
+  }
+
+  curr.next = toAdd;
+  return head;
+}
+
+function insertAtHead(head, data) {
+  let toAdd = new Node(data);
+
+  // NEW: point new node to current head
+  toAdd.next = head;
+
+  // NEW: return new node as head
+  return toAdd;
+}
 function insert(head, data, pos) {
   let toAdd = new Node(data);
 
