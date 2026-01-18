@@ -18,7 +18,7 @@ function findMergePoint(headA, headB) {
   let p2 = headB;
 
   while (p1 !== p2) {
-    p1 = p1 ? p1.next : headB;
+    p1 = p1 ? p1.next : headB; 
     p2 = p2 ? p2.next : headA;
   }
 
