@@ -16,6 +16,7 @@ function canAttendMeeting(intervals) {
     let prev = intervals[i - 1];// previous meeting
     let cur = intervals[i];// current meeting
     //check for overlap and if overlap detect
+    console.log(prev,cur)//[ 0, 30 ] [ 5, 10 ] and [ 5, 8 ] [ 9, 15 ]
     if (prev[1] > cur[0]) return false;
   }
 

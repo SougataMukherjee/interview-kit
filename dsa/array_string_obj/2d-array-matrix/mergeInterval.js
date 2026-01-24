@@ -60,7 +60,7 @@ Final Result:
 */
 
 function mergeIntervals(intervals) {
-  intervals.sort((a, b) => a[0] - b[0]);
+  intervals.sort((a, b) => a[0] - b[0]);//[ [ 1, 3 ], [ 2, 6 ], [ 8, 10 ], [ 15, 18 ] ]
   const res = [];
   //loop through each interval one by one
   for (let cur of intervals) {
