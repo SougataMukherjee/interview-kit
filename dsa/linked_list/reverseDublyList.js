@@ -1,6 +1,14 @@
-// 1<->2<->3<->4<->Null
-// 4<->3<->2<->1<->Null
+// null <- [1] <-> [2] <-> [3] <-> [4] -> null
+//          ↑
+//         curr
 
+// 4<->3<->2<->1<->Null
+/*
+For each node:
+1. Swap prev and next
+2. Move to next node (which is old prev)
+3. Track last node to return new head
+*/
 function reverse(llist) {
     // Write your code here
     
