@@ -38,6 +38,20 @@ function insertAtHead(head, data) {
   // NEW: return new node as head
   return toAdd;
 }
+
+/*
+Diagram:
+
+Before:
+head
+ ↓
+[1] → [2] → [3] → [4] → null
+ ↑     ↑
+ prev=0 prev=pos-1
+
+After:
+[1] → [2] → [99] → [3] → [4] → null
+*/
 function insert(head, data, pos) {
   let toAdd = new Node(data);
 
@@ -63,7 +77,19 @@ function insert(head, data, pos) {
   return head;
 }
 
+/*
+Diagram:
 
+Before:
+head
+ ↓
+[2] → [99] → [3] → [4] → null
+ ↑         ↑
+ prev    prev=pos-1
+
+After:
+[2] → [99] → [4] → null
+*/
 function deleteNode(head, pos) {
   if (head === null) return null;
 
@@ -90,6 +116,15 @@ function deleteNode(head, pos) {
   prev.next = prev.next.next;
   return head;
 }
+/*
+Traverse:
+
+head
+ ↓
+[temp] → [2] → [3] → [4] → null
+           ↑
+         temp moves step by step
+*/
 function printList(head) {
   let temp = head;
   let result = [];
