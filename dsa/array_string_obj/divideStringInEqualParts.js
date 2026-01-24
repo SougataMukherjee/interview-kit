@@ -1,11 +1,13 @@
-// input: str='aaabbbccc',equalPart=3 output:abc
-let str = "aaabbbccc",
-  equalPart = 3;
-if (str.length % equalPart === 0) {
-  let part = str.length / equalPart;
-  for (let i = 0; i < str.length; i++) {
-    if (i % part === 0) {
-      console.log(str.charAt(i));
-    }
+function divideIntoKParts(s, k) {
+  let n = s.length;
+  if (n % k !== 0) return "Not possible";
+  let size = n / k;
+  let res = [];
+
+  for (let i = 0; i < n; i += size) {
+    res.push(s.slice(i, i + size));
   }
+
+  return res;
 }
+console.log(divideIntoKParts('aaabbbccc',3));//[ 'aaa', 'bbb', 'ccc' ]
