@@ -1,3 +1,11 @@
+/* Dry Run:
+    str = ["flight", "flow", "flower"]
+    str1 = "flight", str2 = "flower"
+    index=0: 'f' === 'f' -> index=1
+    index=1: 'l' === 'l' -> index=2
+    index=2: 'i' !== 'o' -> break
+    Result = str1.substring(0,2) = "fl"
+  */
 function longestCommonPrefix(str) {
   str.sort();
   let str1=str[0];

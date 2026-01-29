@@ -15,3 +15,6 @@ for (let i = 0; i < a.length; i++) {
   s += "\n";
 }
 console.log(s);
+//100
+//320
+//719

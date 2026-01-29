@@ -1,3 +1,5 @@
+// logic: If A[i][j] = element at row i, column j Then its transpose T is:T[j][i] = A[i][j]
+
 function transpose(mat,n){
     for(let i=0;i<n;i++){
         for(let j=0;j<=i;j++){
