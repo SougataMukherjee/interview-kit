@@ -1,4 +1,4 @@
-✅Databases
+# ✅ Databases
 Databases are the backbone of any system
 ## DBMS vs RDBMS
 ### DBMS (Database Management System)
@@ -12,6 +12,7 @@ Databases are the backbone of any system
 - Uses SQL
 - Examples: MySQL, PostgreSQL, Oracle
 ## SQL vs NoSQL
+<img src="./img/sql-nosql.png" alt="sql-nosql" />
 | Feature      | SQL                   | NoSQL                  |
 | ------------ | --------------------- | ---------------------- |
 | Schema       | Fixed                 | Flexible               |
