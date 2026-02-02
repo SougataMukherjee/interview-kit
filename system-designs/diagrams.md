@@ -26,31 +26,33 @@ Classes
 Attributes
 Methods
 Relationships
+<img src="./img/uml-class.png" alt="uml-class" />
 
 ## CLASS RELATIONSHIPS
-Association:Basic relationship where one class uses or knows another.
+`Association`:Basic relationship where one class uses or knows another.
 User ------ Order
-Aggregation:One class contains another, but both can exist independently.
+`Aggregation`:One class contains another, but both can exist independently.
 Team ◇----- Player
-Composition:Child class cannot exist without parent.
+`Composition`:Child class cannot exist without parent.
 Order ◆----- OrderItem
-Inheritance (IS‑A):One class inherits properties from another.
+`Inheritance` (IS‑A):One class inherits properties from another.
 AdminUser
     ▲
     |
    User
-Dependency :Class depends on another temporarily (method call).
+`Dependency` :Class depends on another temporarily (method call).
 OrderService ---> PaymentService
+<img src="./img/class-relation.png" alt="class" />
 
-## SEQUENCE DIAGRAM:Shows interaction over time between objects.
+## SEQUENCE DIAGRAM:
+Shows interaction over time between objects.
 
-## COMPONENT DIAGRAM:Shows high‑level system components and their dependencies.
-## USE CASE DIAGRAM:Shows user actions and system capabilities.
-User
-  |
-  |--> Login
-  |--> Browse Product
-  |--> Place Order
+## COMPONENT DIAGRAM:
+Shows high‑level system components and their dependencies.
+## USE CASE DIAGRAM:
+Shows user actions and system capabilities.
+<img src="./img/use-case.png" alt="class" />
+
 ## List of Building Blocks
 ### 1️⃣ Client:
 Client is the request initiator that interacts with the system.it sends request and receive response
@@ -63,11 +65,13 @@ Distributes incoming traffic across multiple servers.used to prevent overload
 ### 5️⃣ Cache:
 Cache stores frequently accessed data for faster retrieval.Types Browser cache,CDN cache,In‑memory cache (Redis)
 <img src="./img/cache2.png" alt="cache" />
+
 ### 6️⃣ Database:
 Stores persistent system data.
 ### 7️⃣ Message Queue:
 Message queue enables asynchronous communication between components.it improve readability
 <img src="./img/message-q.png" alt="messageq" />
+
 ### 8️⃣ Event Bus / Stream:
 Used for event‑driven communication across multiple consumers.
 pic need
@@ -89,9 +93,59 @@ Tracks system health and behavior. Metrics are Latency,Errors,Throughput
 Limits number of requests per user or IP.
 
 ## how to instruct load balancer?
+A load balancer distributes incoming traffic across multiple backend servers based on defined rules.
+Configure routing rules (path-based, host-based)
 
+Choose load balancing algorithm
+
+Round Robin
+
+Least Connections
+
+IP Hash
+
+Set health checks
+
+Configure timeouts & retries
 ## worker and services
+Workers are background processes that handle asynchronous or heavy tasks outside the main request flow.
+### Service
 
+Handles client requests (API layer)
+
+Usually synchronous
+
+### Worker
+
+Consumes tasks from a queue
+
+Executes long-running jobs
+
+Writes results to DB or triggers events
 ## how queue system work
+A queue acts as a buffer between producers and consumers.
+<img src="./img/queue.png" alt="queue" />
+Flow
+
+Producer sends a message
+
+Queue stores the message
+
+Consumer pulls the message
+
+Message is processed
+
+Acknowledgment sent
 
 ## video processing and streaming
+Video systems handle large files and real-time delivery efficiently
+Processing
+
+Upload video
+
+Store in object storage
+
+Transcode into multiple resolutions
+
+Generate thumbnails
+<img src="./img/video.png" alt="video" />
