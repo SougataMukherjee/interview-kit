@@ -14,13 +14,8 @@ Database access
 Each service owns its data
 Independently deployable
 Communicate via APIs/events
-Client
-  |
-API Gateway
-  |
--------------------------
-| User | Order | Payment |
--------------------------
+<img src="./img/monolyth-microservice.png" alt="micro-mono" />
+
 4️⃣ MVC (Model–View–Controller):Separates application into three layers:
 
 Model → Data
