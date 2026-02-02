@@ -50,10 +50,7 @@ Relationships using joins
 Strong consistency
 Supports transactions
 ## Table: 
-Users
-+----+--------+-----------+
-| id | name   | email     |
-+----+--------+-----------+
+<img src="./img/table.png" alt="table" />
 
 ## NoSQL :
 NoSQL databases store data in a flexible, schema‑less format and are designed for horizontal scalability.
@@ -61,19 +58,22 @@ it has Schema‑less or flexible schema
 High scalability
 Eventual consistency
 No joins (usually)
+```js
 User Document
 {
   "id": 1,
   "name": "Alex",
   "posts": [ ... ]
 }
+```
 
 ## ACID
-Atomicity → All or nothing
-Consistency → Data remains valid
-Isolation → Transactions don’t interfere
-Durability → Data persists after commit
-Strong consistency
+`Atomicity` → All or nothing
+`Consistency` → Data remains valid
+`Isolation` → Transactions don’t interfere
+`Durability` → Data persists after commit
+<img src="./img/ACID.png" alt="acid" />
+
 ## Joins
 ## Schema:
 Schema defines the structure of data—tables, fields, and data types.
@@ -83,12 +83,14 @@ Data must match schema before writing
 Schema‑on‑read (NoSQL)
 Schema enforced at read time
 
+<img src="./img/schema.png" alt="schema" />
+
 ## Index:
 An index is a data structure that improves read performance by avoiding full scans.
 
 Consistency Models
-1)Strong Consistency:All reads return the most recent write immediately.
-2)Eventual Consistency:System guarantees data will become consistent over time.
+1. Strong Consistency:All reads return the most recent write immediately.
+2. Eventual Consistency:System guarantees data will become consistent over time.
 
 ## CAP Theorem:
 In a distributed system, you can guarantee only two of the following three at the same time:
@@ -133,27 +135,20 @@ Benefits
 A distributed message queue runs across multiple servers for scalability and fault tolerance.
 
 Messages replicated across nodes
-
 High availability
-
 Supports massive throughput
-
-Examples
-
+`Examples`
 Kafka
-
 AWS SQS
+<img src="./img/distributed-message-queue.png" alt="distributemessageq" />
+
 ## Kafka
 Apache Kafka is a distributed, high-throughput event streaming platform.
-
 Messages stored in topics
-
 Topics split into partitions
-
 Consumers read messages sequentially
-
 Retains messages for a configurable time
-
+<img src="./img/hashing.png" alt="kafka" />
 Best for
 
 Event streaming
@@ -167,7 +162,7 @@ Hashing converts data into a fixed-size value using a hash function.
 Used for fast lookup
 
 Used for data distribution
-
+<img src="./img/hashing.png" alt="hash" />
 Hash Key
 
 A specific field used for hashing (e.g. userId)
