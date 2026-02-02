@@ -10,6 +10,7 @@ Client → Server
 UI
 Business logic
 Database access
+
 3️⃣ Microservices Architecture:Application is broken into small, independent services
 Each service owns its data
 Independently deployable
@@ -31,5 +32,6 @@ Consumers react asynchronously
 Routes requests
 Handles auth
 Rate limiting
-Client → API Gateway → Services
+<img src="./img/api-gateway.png" alt="api-gateway" />
+
 7️⃣Cache‑Aside Pattern:Application checks cache before querying database.
