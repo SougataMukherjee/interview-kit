@@ -98,18 +98,100 @@ Availability: Every request receives a response, without guarantee that it conta
 Partition Tolerance:The system continues to operate despite arbitrary partitioning due to network failures
 <img src="./img/cap.png" alt="cap" />
 
-## database partition sharding
+## database partition/ sharding
+Database sharding is the process of splitting a large database into smaller pieces (shards) and storing them across multiple machines.
+
+Each shard contains a subset of data
+Improves scalability and performance
+Reduces load on a single database
+<img src="./img/shard.png" alt="shard" />
 
 ## event sourcing
+Event sourcing stores changes as a sequence of events instead of storing only the latest state.
 
-## messaging queue (basic concept)
+State is rebuilt by replaying events
+
+Events are immutable
+
+Useful for auditing and history tracking
+
+## messaging queue
+A message queue enables asynchronous communication between services.
+It serves as a buffer and distributed asynchronous request.
+Producer sends message
+Queue stores message
+Consumer processes message later
+<img src="./img/message-queues.png" alt="messageq" />
+Benefits
+
+- Decouples services
+- Improves reliability
+- Handles traffic spikes
+
 
 ## distributed message queue
+A distributed message queue runs across multiple servers for scalability and fault tolerance.
 
+Messages replicated across nodes
+
+High availability
+
+Supports massive throughput
+
+Examples
+
+Kafka
+
+AWS SQS
 ## Kafka
+Apache Kafka is a distributed, high-throughput event streaming platform.
 
-## hashing, hashkey
+Messages stored in topics
 
+Topics split into partitions
+
+Consumers read messages sequentially
+
+Retains messages for a configurable time
+
+Best for
+
+Event streaming
+
+Log processing
+
+Real-time analytics
+## hashing & hash key
+Hashing converts data into a fixed-size value using a hash function.
+
+Used for fast lookup
+
+Used for data distribution
+
+Hash Key
+
+A specific field used for hashing (e.g. userId)
+
+Determines where data is stored
 ## hash server
+A hash server is a node selected based on hashing logic.
 
+Incoming request is hashed
+
+Hash value maps to a specific server
+
+Common in load balancing & caching
 ## consistent hashing
+Consistent hashing minimizes data movement when servers are added or removed.
+
+Servers placed on a hash ring
+
+Keys map to nearest server clockwise
+
+Only a small portion of data moves
+
+Used in
+
+Distributed caches
+
+Load balancers
