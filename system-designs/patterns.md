@@ -38,6 +38,7 @@ Consumers react asynchronously
 Routes requests
 Handles auth
 Rate limiting
+
 <img src="./img/api-gateway.png" alt="api-gateway" />
 
 ### 7️⃣Cache‑Aside Pattern:
