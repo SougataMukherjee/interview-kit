@@ -41,17 +41,15 @@ Client → Server B ❌ (session missing)
 Caching stores frequently accessed data closer to the user to reduce latency and load.
 Where Caching Happens?
 Cache stored in the user’s browser.
-Browser Cache
-   |
-Page Loads Faster
+<img src="./img/cache.png" alt="cache" />
 
 ## CDN cache
 Content cached at edge locations near users. like image video
-User → CDN Edge → Resource
-Backend cache (Redis)
+<img src="./img/cdn-cache.png" alt="cdn-cache" />
+## Backend cache (Redis)
 In‑memory cache between backend and database.
 
-Database cache
+## Database cache
 DB internally caches recent queries.
 
 News feed
