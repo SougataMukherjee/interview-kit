@@ -148,7 +148,7 @@ Messages stored in topics
 Topics split into partitions
 Consumers read messages sequentially
 Retains messages for a configurable time
-<img src="./img/hashing.png" alt="kafka" />
+<img src="./img/kafka.png" alt="kafka" />
 Best for
 
 Event streaming
