@@ -62,11 +62,12 @@ API is a contract between client and server.
 Distributes incoming traffic across multiple servers.used to prevent overload
 ### 5️⃣ Cache:
 Cache stores frequently accessed data for faster retrieval.Types Browser cache,CDN cache,In‑memory cache (Redis)
+<img src="./img/cache2.png" alt="cache" />
 ### 6️⃣ Database:
 Stores persistent system data.
 ### 7️⃣ Message Queue:
 Message queue enables asynchronous communication between components.it improve readability
-
+<img src="./img/message-q.png" alt="messageq" />
 ### 8️⃣ Event Bus / Stream:
 Used for event‑driven communication across multiple consumers.
 pic need
@@ -74,6 +75,7 @@ pic need
 A content delivery network (CDN) is a globally distributed network of proxy servers, serving content from locations closer to the user. Generally, static files such as HTML/CSS/JS, photos, and videos are served from CDN, although some CDNs such as Amazon's CloudFront support dynamic content. The site's DNS resolution will tell clients which server to contact.
 push vs pull CDN
 <img src="./img/cdn.png" alt="cdn" />
+<img src="./img/cdn2.png" alt="cdn2" />
 
 ### 🔟 Authentication Service:
 Handles user identity verification.like JWT , OAuth ,session
@@ -86,3 +88,10 @@ Tracks system health and behavior. Metrics are Latency,Errors,Throughput
 ### 1️⃣4️⃣ Rate Limiter:
 Limits number of requests per user or IP.
 
+## how to instruct load balancer?
+
+## worker and services
+
+## how queue system work
+
+## video processing and streaming

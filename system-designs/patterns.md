@@ -43,3 +43,21 @@ Rate limiting
 
 ### 7️⃣Cache‑Aside Pattern:
 Application checks cache before querying database.
+
+## singleton
+
+## factory
+
+## abstract factory
+
+## builder
+
+## prototype
+
+## iterator
+
+## repository
+
+## adapter
+
+## event sourcing

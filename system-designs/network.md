@@ -47,6 +47,7 @@ query {
 }
 
 websocket:
+pooling:
 tcp:
 
 
@@ -63,3 +64,18 @@ Authoritative DNS
   ↓
 IP Address
    exp- if user type google.com → DNS return 142.250.195.78
+
+
+   load balancer distributive algo
+
+ ### ip address
+
+### proxy server
+
+### latency
+
+### dns resolver
+
+### tcp udp
+
+### bucket (token bucket / leaky bucket – rate limiting)

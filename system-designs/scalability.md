@@ -55,8 +55,27 @@ DB internally caches recent queries.
 News feed
 Product listings
 Search
+## Webserver cache
+## Application cache
 ## performance :
 using latency and throughput
+
+
+## state management at scale
+
+## performance metrics (LCP, CLS)
+
+## error boundary and logging
+
+## AWS Lambda
+
+## CSR vs SSR vs SSG
+
+## how browser renders page
+
+## cookie vs localStorage vs sessionStorage
+
+## CI/CD
 
 
 
