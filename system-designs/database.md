@@ -13,6 +13,7 @@ Databases are the backbone of any system
 - Examples: MySQL, PostgreSQL, Oracle
 ## SQL vs NoSQL
 <img src="./img/sql-nosql.png" alt="sql-nosql" />
+
 | Feature      | SQL                   | NoSQL                  |
 | ------------ | --------------------- | ---------------------- |
 | Schema       | Fixed                 | Flexible               |
