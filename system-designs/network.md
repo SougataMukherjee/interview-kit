@@ -1,6 +1,4 @@
-
-
-✅Network basics
+# ✅Network basics
 HTTP:HTTP is a stateless application‑layer protocol used for communication between a client (browser/app) and a server.
 
 Stateless protocol: means Each request is independent server does not remember previous requests

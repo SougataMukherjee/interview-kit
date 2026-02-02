@@ -1,5 +1,4 @@
-
-✅Scalability
+# ✅Scalability
 
 Vertical Scaling:Vertical scaling means increasing the power of a single machine.Add more CPU,Add more RAM,Add faster disk
 Before:
