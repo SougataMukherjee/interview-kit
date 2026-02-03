@@ -45,19 +45,39 @@ Rate limiting
 Application checks cache before querying database.
 
 ## singleton
+Ensures only one instance of a class exists globally.
+### Why / When used:
+Shared resources
+Avoid multiple connections or configs
 
 ## factory
+Creates objects without exposing creation logic.
+
+### Why / When used:
+Decide object type at runtime
+Follow Open/Closed principle
 
 ## abstract factory
+Factory of factories — creates related objects together
+### Why / When used:
+
+Multiple families of objects
+Platform or environment-based creation
 
 ## builder
+Constructs complex objects step by step.
 
 ## prototype
+Creates new objects by cloning existing ones.
 
 ## iterator
+Provides a way to traverse a collection without exposing its structure.
 
 ## repository
+Abstracts data access logic from business logic.
 
 ## adapter
+Makes incompatible interfaces work together.
 
 ## event sourcing
+Stores state as a sequence of events instead of current values.
