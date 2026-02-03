@@ -1,6 +1,6 @@
 ### Twitter/Facebook High level architecture
-#### Cache Strategy
 
+`Cache Strategy`
 Cache-aside
 Read API:
 Check cache
@@ -19,8 +19,7 @@ Feed updates
 Notifications
 Analytics
 
-#### Media Strategy
-
+`Media Strategy`
 Upload → Object Storage (S3)
 Serve via CDN
 DB stores only media URL
