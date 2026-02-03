@@ -98,11 +98,24 @@ Configure routing rules (path-based, host-based)
 
 Choose load balancing algorithm
 
-Round Robin
+1. Round Robin:
+Requests are distributed sequentially across servers in a circular order.
+`Why / When to use:`
+Simple
+Servers have similar capacity
 
-Least Connections
+2. Least Connections:
+Routes request to the server with fewest active connections.
+`Why / When to use:`
+Requests take unequal time
+Long-lived connections
 
-IP Hash
+3. IP Hash:
+Client IP is hashed to decide which server handles the request.
+`Why / When to use`:
+
+Need session persistence (sticky sessions)
+Avoid centralized session storage
 
 Set health checks
 
@@ -149,3 +162,35 @@ Transcode into multiple resolutions
 
 Generate thumbnails
 <img src="./img/video.png" alt="video" />
+
+## Object Storage
+Stores data as objects (file + metadata)
+`Why / When used:`
+
+Massive scale
+Cheap storage
+`Examples`:
+Amazon S3, Google Cloud Storage
+
+## File Storage
+Hierarchical file system.
+`Why / When used:`
+Shared file access
+Legacy apps
+`Examples`:
+NFS, NAS, EFS
+
+## Message / Event Storage
+Append-only logs of events.
+`Why / When used`:
+Asynchronous systems
+Event-driven architecture
+`Examples`:
+Kafka, Pulsar
+
+## Blob Storage
+Stores large binary data use for PDF and Video upload.
+`Why / When used:`
+Media & files
+`Examples:`
+S3 blobs, Azure Blob Storage

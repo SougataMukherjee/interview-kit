@@ -10,7 +10,7 @@ After:
 
 ## Horizontal Scaling:
 Horizontal scaling means adding more machines instead of increasing power of one.Infinite scalability
-Fault tolerant
+Fault tolerant(Fault tolerance is the ability of a system to continue working even when one or more components fail)
 Requires coordination
 Needs a load balancer
 <img src="./img/scaling.png" alt="scaling" />

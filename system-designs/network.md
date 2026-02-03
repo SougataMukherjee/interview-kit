@@ -46,13 +46,14 @@ Used when you need real-time communication.(WhatsApp,Slack)
 
 ### pooling:
 Client repeatedly asks the server so Connection is created and closed every time.
-
-### Long Polling 
-
-Client sends request → server waits until data is available → responds → client sends next request.
+#### Short Polling 
+This method involves calling an API at regular intervals to fetch new data. Imagine checking for fresh notifications every few seconds.
+#### Long Polling 
+Unlike Short Polling's frequent API calls, Long Polling involves the client sending a request that persists until the server has new data to share.
 
 Better than polling, still HTTP-based.
 
+<img src="./img/polling.png" alt="polling" />
 
 ### DNS:
 DNS converts human‑readable domain names into IP addresses.

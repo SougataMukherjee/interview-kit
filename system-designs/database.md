@@ -107,6 +107,7 @@ Each shard contains a subset of data
 Improves scalability and performance
 Reduces load on a single database
 <img src="./img/shard.png" alt="shard" />
+<img src="./img/sharding2.png" alt="shard2" />
 
 ## event sourcing
 Event sourcing stores changes as a sequence of events instead of storing only the latest state.
