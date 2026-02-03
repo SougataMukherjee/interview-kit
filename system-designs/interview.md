@@ -27,6 +27,8 @@ DB stores only media URL
 
 
 ## WhatsApp/Slack  High level architecture
+<img src="./img/whatsapp.png" alt="whatsapp" />
+
 ## Netflix/Youtube High level architecture
 ## Swiggy/Zomato High level architecture
 ## Zoom High level architecture
