@@ -27,7 +27,7 @@ A typical software project contains several components:
 2. **Backend** - Server-side logic
 3. **Database** - Data storage
 
-In order to deploy our application on a machine, we need to set up all the software required to run our application.
+In order to deploy our application on a machine, we need to set up all the required software to run our application.
 
 ---
 
@@ -69,9 +69,12 @@ A **container** is an isolated environment for running an application.
 Think of containers like shipping containers on a ship - each container is isolated and contains everything needed for transport.
 
 ### Container vs Virtualization
-**Virtualization** uses virtual machines (VMs), which can have performance issues as each VM runs a full operating system.
-
-**Containers** are more lightweight as they share the host OS kernel while maintaining isolation.
+| Feature | Virtual Machine | Container |
+|------|------|------|
+| OS | Separate OS | Shared OS |
+| Size | Heavy | Lightweight |
+| Startup | Slow | Fast |
+| Performance | Lower | Higher |
 
 <img src="./img/vir.png" alt="dockervir" />
 ---
