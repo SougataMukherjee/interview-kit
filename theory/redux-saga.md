@@ -169,58 +169,6 @@ Used inside createSlice to handle actions from other slices or async thunks.
 A library for creating memoized selectors, improving performance by avoiding unnecessary re-renders
 
 
-Zustand NOTES 
+SAGA NOTES 
 =============
 
-**Q1.What is Zustand and how is it different from Redux?**  
-
-Zustand is a lightweight state-management library for React.
-Unlike Redux, it requires less boilerplate, no reducers or actions, and works with hooks for simpler global state handling.
-
-**Q2.What is a store in Zustand?**  
-
-A store is a centralized object that holds your app’s state and actions — similar to Redux store but simpler
-
-**Q3.How do you create and use a Zustand store?**
-```js
-import { create } from 'zustand';
-const useStore = create(set => ({
-  count: 0,
-  inc: () => set(state => ({ count: state.count + 1 }))
-}));
-const count = useStore(state => state.count);
-```
-
-**Q4.How does Zustand handle re-renders efficiently?**  
-
-Zustand re-renders only the components that use the changed state slice, not all subscribers — improving performance.
-
-**Q5.Difference between global and local state in Zustand?**  
-
-Global state: Shared across multiple components via the store.
-Local state: Used within a single component (via useState).
-
-**Q6.How to persist Zustand state?**  
-
-Use the persist middleware:
-```js
-import { persist } from 'zustand/middleware';
-const useStore = create(persist(set => ({ count: 0 }), { name: 'app-storage' }));
-```
-
-
-**Q7.What is the use of subscribe and getState?**  
-
-- subscribe() → Listen for store changes manually (outside React).
-- getState() → Access current store state directly.
-
-**Q8.How to integrate middleware in Zustand?**  
-
-Zustand supports middlewares like persist, devtools, and immer by wrapping the store:
-create(devtools(persist(...)));
-
-**Q9.Difference between shallow and deep comparison in Zustand?**  
-
-- Shallow comparison: Checks only top-level changes (faster).
-- Deep comparison: Checks nested objects deeply (slower).
-- Zustand uses shallow compare to avoid unnecessary re-renders
