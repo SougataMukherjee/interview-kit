@@ -3,17 +3,18 @@
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Installation](#installation)
-3. [Basic Styling](#basic-styling)
-4. [Props-Based Styling](#props-based-styling)
-5. [Extending Styles](#extending-styles)
-6. [Pseudo-Classes and Nested Selectors](#pseudo-classes-and-nested-selectors)
-7. [Component Selectors](#component-selectors)
-8. [As Polymorphic Prop](#as-polymorphic-prop)
-9. [Styling Custom Components](#styling-custom-components)
-10. [Attrs Method](#attrs-method)
-11. [Animations](#animations)
-12. [Media Queries](#media-queries)
-13. [Best Practices](#best-practices)
+3. [File Naming Convention](#file-naming-convention)
+4. [Basic Styling](#basic-styling)
+5. [Props-Based Styling](#props-based-styling)
+6. [Extending Styles](#extending-styles)
+7. [Pseudo-Classes and Nested Selectors](#pseudo-classes-and-nested-selectors)
+8. [Component Selectors](#component-selectors)
+9. [As Polymorphic Prop](#as-polymorphic-prop)
+10. [Styling Custom Components](#styling-custom-components)
+11. [Attrs Method](#attrs-method)
+12. [Animations](#animations)
+13. [Media Queries](#media-queries)
+14. [Best Practices](#best-practices)
 
 ---
 
@@ -46,6 +47,16 @@ npm install --save-dev @types/styled-components
 ### Import Statement
 ```typescript
 import styled from 'styled-components';
+```
+---
+## File Naming Convention
+
+`Purpose:` Separate styled components from business logic while maintaining co-location.
+```js
+ Folder/
+      ├── ComponentName.tsx
+      ├── ComponentName.styles.ts
+      └── index.ts
 ```
 
 ---
@@ -792,7 +803,7 @@ export default PolymorphicExample;
 
 ---
 
-### Example 11: Custom Component with As Prop
+### Example 11.1: Custom Component with As Prop
 
 **CustomRendering.tsx**
 ```typescript
@@ -840,7 +851,142 @@ const CustomRenderingExample: React.FC = () => {
 
 export default CustomRenderingExample;
 ```
+### Example 11.2: Custom Component with As Prop
+**Button.styles.ts**
+```typescript
+import styled, { css } from 'styled-components';
+export interface ButtonProps {
+  $variant?: 'primary' | 'secondary' | 'outline';
+  $size?: 'small' | 'medium' | 'large';
+  $fullWidth?: boolean;
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+}
 
+export const StyledButton = styled.button<ButtonProps>`
+  /* Base styles */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  /* Size variants */
+  ${(props) => {
+    switch (props.$size) {
+      case 'small':
+        return css`
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+        `;
+      case 'large':
+        return css`
+          padding: 1rem 2rem;
+          font-size: 1.125rem;
+        `;
+      default:
+        return css`
+          padding: 0.75rem 1.5rem;
+          font-size: 1rem;
+        `;
+    }
+  }}
+  
+  /* Variant styles */
+  ${(props) => {
+    switch (props.$variant) {
+      case 'primary':
+        return css`
+          background: #667eea;
+          color: white;
+          
+          &:hover:not(:disabled) {
+            background: #5568d3;
+          }
+        `;
+      case 'secondary':
+        return css`
+          background: #48bb78;
+          color: white;
+          
+          &:hover:not(:disabled) {
+            background: #38a169;
+          }
+        `;
+      case 'outline':
+        return css`
+          background: transparent;
+          color: #667eea;
+          border: 2px solid #667eea;
+          
+          &:hover:not(:disabled) {
+            background: #667eea;
+            color: white;
+          }
+        `;
+      default:
+        return css`
+          background: #e2e8f0;
+          color: #2d3748;
+          
+          &:hover:not(:disabled) {
+            background: #cbd5e0;
+          }
+        `;
+    }
+  }}
+  
+  /* Full width */
+  width: ${(props) => (props.$fullWidth ? '100%' : 'auto')};
+  
+  /* Disabled state */
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+export const ButtonIcon = styled.span`
+  display: inline-flex;
+  margin-right: 0.5rem;
+`;
+
+export const ButtonText = styled.span`
+  display: inline-flex;
+`;
+```
+
+**Button.tsx**
+```typescript
+import React from 'react';
+import { StyledButton, ButtonIcon, ButtonText } from './Button.styles';
+import { ButtonProps } from './Button.types';
+
+const Button: React.FC<ButtonProps> = ({ 
+  children, 
+  $variant = 'primary',
+  $size = 'medium',
+  $fullWidth = false,
+  ...rest 
+}) => {
+  return (
+    <StyledButton 
+      $variant={$variant} 
+      $size={$size}
+      $fullWidth={$fullWidth}
+      {...rest}
+    >
+      {children}
+    </StyledButton>
+  );
+};
+
+export default Button;
+```
 ---
 
 ## Styling Custom Components
@@ -976,7 +1122,8 @@ const Button = styled.button`
   cursor: pointer;
   transition: all 0.3s ease;
 
-  &:hover {
+  &:hover,
+  &:focus {
     transform: scale(1.1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
@@ -1524,26 +1671,68 @@ export default ResponsiveGridExample;
 const Box = styled.div<{ $isActive: boolean }>`
   background: ${props => props.$isActive ? 'blue' : 'gray'};
 `;
-
+<Box $isActive={true} />
 // ❌ Bad - prop will be passed to DOM
 const Box = styled.div<{ isActive: boolean }>`
   background: ${props => props.isActive ? 'blue' : 'gray'};
 `;
+<Box isActive={true} />
 ```
 
 ### 2. Avoid Inline Styles
 ```typescript
-// ✅ Good
+// ✅ GOOD - Define outside component
 const Button = styled.button`
   padding: 1rem;
   background: blue;
 `;
 
-// ❌ Bad
-<button style={{ padding: '1rem', background: 'blue' }}>Click</button>
+const MyComponent = () => {
+  return <Button>Click</Button>;
+};
+
+// ❌ BAD - Component recreated on every render
+const MyComponent = () => {
+  const Button = styled.button`
+    padding: 1rem;
+    background: blue;
+  `;
+  
+  return <Button>Click</Button>;
+};
+```
+### 3.1: Not Forwarding className to Custom Components
+
+```typescript
+// ❌ BAD - className not forwarded
+const CustomLink = ({ href, children }) => (
+  <a href={href}>{children}</a>
+);
+
+const StyledLink = styled(CustomLink)`
+  color: blue; // Won't work!
+`;
+```
+```typescript
+// ✅ GOOD - className forwarded
+interface CustomLinkProps {
+  className?: string;
+  href: string;
+  children: React.ReactNode;
+}
+
+const CustomLink: React.FC<CustomLinkProps> = ({ className, href, children }) => (
+  <a className={className} href={href}>
+    {children}
+  </a>
+);
+
+const StyledLink = styled(CustomLink)`
+  color: blue; // Works!
+`;
 ```
 
-### 3. Use Theme for Consistency
+### 3.2. Use Theme for Consistency
 ```typescript
 // ✅ Good - centralized theme
 const theme = {
@@ -1629,8 +1818,81 @@ const Button = styled.button<any>`
   background: blue;
 `;
 ```
+### 8. Avoid Incorrect attrs Usage
+```typescript
+// ❌ BAD - attrs with wrong syntax
+const Input = styled.input.attrs({
+  type: 'text',
+  placeholder: props => props.placeholder, // Won't work correctly
+})`
+  padding: 1rem;
+`;
+```
+```typescript
+// ✅ GOOD - Correct attrs usage
+interface InputProps {
+  $placeholder?: string;
+}
 
-### 8. Avoid Deep Nesting
+const Input = styled.input.attrs<InputProps>(props => ({
+  type: 'text',
+  placeholder: props.$placeholder || 'Enter text...',
+}))<InputProps>`
+  padding: 1rem;
+  border: 2px solid #ddd;
+`;
+```
+### 9. Avoid Using Wrong Selector Syntax
+```typescript
+// ❌ BAD - Invalid nested component selector
+const Text = styled.span`
+  color: blue;
+`;
+
+const Container = styled.div`
+  Text { // Won't work!
+    color: red;
+  }
+`;
+```
+```typescript
+// ✅ GOOD - Correct component selector
+const Text = styled.span`
+  color: blue;
+`;
+
+const Container = styled.div`
+  ${Text} { // Correct!
+    color: red;
+  }
+`;
+```
+### 10. Not Handling Responsive Design
+```typescript
+// ❌ BAD - Fixed sizes, no responsiveness
+const Container = styled.div`
+  width: 1200px;
+  padding: 50px;
+`;
+```
+```typescript
+// ✅ GOOD - Responsive with media queries
+const Container = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  padding: 1rem;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 3rem;
+  }
+`;
+```
+### 11. Avoid Deep Nesting
 ```typescript
 // ✅ Good - flat structure
 const Nav = styled.nav`...`;
