@@ -1665,7 +1665,39 @@ export default ResponsiveGridExample;
 
 ## Best Practices
 
-### 1. Use Transient Props ($prefix)
+### 1. TypeScript Types Problem:
+```typescript
+// ❌ BAD - Using 'any'
+const Button = styled.button<any>`
+  background: ${props => props.variant === 'primary' ? 'blue' : 'gray'};
+`;
+
+// ❌ BAD - Missing props interface
+const Box = styled.div`
+  background: ${props => props.color}; // No type safety
+`;
+```
+```typescript
+// ✅ GOOD - Proper interface
+interface ButtonProps {
+  $variant?: 'primary' | 'secondary';
+}
+
+const Button = styled.button<ButtonProps>`
+  background: ${props => props.$variant === 'primary' ? 'blue' : 'gray'};
+`;
+
+// ✅ GOOD - Type-safe props
+interface BoxProps {
+  $color: string;
+}
+
+const Box = styled.div<BoxProps>`
+  background: ${props => props.$color};
+`;
+```
+
+### 2. Use Transient Props ($prefix)
 ```typescript
 // ✅ Good - using $ prefix for style-only props
 const Box = styled.div<{ $isActive: boolean }>`
@@ -1679,7 +1711,7 @@ const Box = styled.div<{ isActive: boolean }>`
 <Box isActive={true} />
 ```
 
-### 2. Avoid Inline Styles
+### 3. Avoid Inline Styles
 ```typescript
 // ✅ GOOD - Define outside component
 const Button = styled.button`
@@ -1701,7 +1733,7 @@ const MyComponent = () => {
   return <Button>Click</Button>;
 };
 ```
-### 3.1: Not Forwarding className to Custom Components
+### 4: Not Forwarding className to Custom Components
 
 ```typescript
 // ❌ BAD - className not forwarded
@@ -1732,7 +1764,7 @@ const StyledLink = styled(CustomLink)`
 `;
 ```
 
-### 3.2. Use Theme for Consistency
+### 5. Use Theme for Consistency
 ```typescript
 // ✅ Good - centralized theme
 const theme = {
@@ -1752,7 +1784,7 @@ const Button = styled.button`
 `;
 ```
 
-### 4. Component Organization
+### 6. Component Organization
 ```typescript
 // ✅ Good - co-locate styles with component
 // Button.tsx
@@ -1769,7 +1801,7 @@ export const StyledButton = styled.button`...`;
 import { StyledButton } from './styles';
 ```
 
-### 5. Naming Conventions
+### 7. Naming Conventions
 ```typescript
 // ✅ Good - clear, descriptive names
 const CardContainer = styled.div`...`;
@@ -1782,7 +1814,7 @@ const Text = styled.h2`...`;
 const Btn = styled.button`...`;
 ```
 
-### 6. Performance Optimization
+### 8. Performance Optimization
 ```typescript
 // ✅ Good - define outside component
 const Button = styled.button`
@@ -1800,7 +1832,7 @@ const MyComponent = () => {
 };
 ```
 
-### 7. TypeScript Props Interface
+### 9. TypeScript Props Interface
 ```typescript
 // ✅ Good - clear interface
 interface ButtonProps {
@@ -1818,7 +1850,7 @@ const Button = styled.button<any>`
   background: blue;
 `;
 ```
-### 8. Avoid Incorrect attrs Usage
+### 10. Avoid Incorrect attrs Usage
 ```typescript
 // ❌ BAD - attrs with wrong syntax
 const Input = styled.input.attrs({
@@ -1842,7 +1874,7 @@ const Input = styled.input.attrs<InputProps>(props => ({
   border: 2px solid #ddd;
 `;
 ```
-### 9. Avoid Using Wrong Selector Syntax
+### 11. Avoid Using Wrong Selector Syntax
 ```typescript
 // ❌ BAD - Invalid nested component selector
 const Text = styled.span`
@@ -1867,7 +1899,7 @@ const Container = styled.div`
   }
 `;
 ```
-### 10. Not Handling Responsive Design
+### 12. Not Handling Responsive Design
 ```typescript
 // ❌ BAD - Fixed sizes, no responsiveness
 const Container = styled.div`
@@ -1892,7 +1924,7 @@ const Container = styled.div`
   }
 `;
 ```
-### 11. Avoid Deep Nesting
+### 13. Avoid Deep Nesting
 ```typescript
 // ✅ Good - flat structure
 const Nav = styled.nav`...`;
