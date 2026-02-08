@@ -51,7 +51,7 @@
 
 ### What is Redux-Saga?
 
-**Redux-Saga** is a middleware library that handles side effects (API calls, async operations) in Redux applications using **generator functions**.
+**Redux-Saga** is a middleware library that handles side effects (API calls, async operations, Debouncing, Caching) in Redux applications using **generator functions**.
 <img src="./img/saga.png" alt="saga" />
 
 ### Why Use Redux-Saga?
@@ -78,6 +78,8 @@ User Action → Saga Middleware → Generator Function → API Call → Action D
 
 **Description:** Generator functions are special functions that can pause execution and resume later, allowing multiple return values.
 
+<img src="./img/generator.png" alt="generator" />
+
 ### Basic Generator Example
 
 **generator-example.ts**
@@ -101,6 +103,56 @@ console.log(obj.next()); // { value: 'hello', done: false }
 console.log(obj.next()); // { value: 'world', done: false }
 console.log(obj.next()); // { value: 'how are you?', done: false }
 console.log(obj.next()); // { value: undefined, done: true }
+```
+---
+### Basic Generator  Example 2
+
+```typescript
+function* twoWayCommunication(): Generator<string, void, string> {
+  const firstName = yield 'What is your first name?';
+  console.log(`First name: ${firstName}`);
+  
+  const lastName = yield 'What is your last name?';
+  console.log(`Last name: ${lastName}`);
+  
+  console.log(`Full name: ${firstName} ${lastName}`);
+}
+
+// Usage
+const gen = twoWayCommunication();
+
+console.log(gen.next().value);        // "What is your first name?"
+console.log(gen.next('John').value);  // Logs "First name: John"
+                                       // Returns "What is your last name?"
+gen.next('Doe');                       // Logs "Last name: Doe"
+                                       // Logs "Full name: John Doe"
+```
+---
+
+### Basic Generator Example 3:
+
+```typescript
+function* numberGenerator(): Generator<number> {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+
+function* letterGenerator(): Generator<string> {
+  yield 'A';
+  yield 'B';
+  yield 'C';
+}
+
+function* combinedGenerator(): Generator<number | string> {
+  yield* numberGenerator(); // Delegate to numbers
+  yield* letterGenerator(); // Delegate to letters
+  yield* [10, 20, 30];      // Delegate to array
+}
+
+// Usage
+const gen = combinedGenerator();
+console.log([...gen]); // [1, 2, 3, 'A', 'B', 'C', 10, 20, 30]
 ```
 
 ---
@@ -243,7 +295,12 @@ src/
 
 ### 1. Actions
 
-**Description:** Actions are plain JavaScript objects that describe what happened. They must have a `type` property and can carry data as payload.
+**Description:** Actions are plain JavaScript objects that sends data from React to Redux. They must have a `type` property and can carry data as payload.
+
+**Rules:**
+- Must be a plain object
+- Must contain a type field
+- Can carry data via payload
 
 **features/products/types/product.types.ts**
 ```typescript
@@ -353,6 +410,12 @@ export const deleteProductSuccess = (id: number) => ({
 ### 2. Reducers
 
 **Description:** Reducers are pure functions that take the current state and an action, then return a new state. They must not mutate state.
+
+**Rules**
+
+- Must be a pure function
+- Must not mutate state
+- Must always return a value
 
 **features/products/reducers/productReducer.ts**
 ```typescript
