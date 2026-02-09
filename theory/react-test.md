@@ -1173,6 +1173,9 @@ describe('SafeComponent', () => {
 
 ## Mock Functions
 
+A mock function replaces a real function during testing.
+Internally: Jest tracks calls, arguments, return values, and lets you define fake implementations.
+
 ### Example 28: jest.fn() - Basic Mock
 
 **Description:** Create mock functions to test callbacks and function calls.
@@ -1635,6 +1638,33 @@ describe('FetchDataComponent', () => {
   });
 });
 ```
+### Example 39: Loading JSON inside describe
+***data.json***
+```typescript
+{
+  "name": "Sample",
+  "age": 25,
+  "skills": ["React", "Redux"]
+}
+
+```
+***user.spec.tsx***
+```typescript
+const testData = require("./data.json");
+
+describe("JSON test data usage", () => {
+  it("reads values from JSON file", () => {
+    expect(testData.name).toBe("Sample");
+    expect(testData.age).toBe(25);
+  });
+
+  it("reads array values from JSON", () => {
+    expect(testData.skills).toContain("React");
+  });
+});
+
+```
+
 
 ---
 
@@ -2136,6 +2166,16 @@ screen.getByRole('button', { name: /submit/i });
 
 // Avoid:
 screen.getByText('Welcome User');
+```
+### 9. Check between Equal and StrictEqual
+```typescript
+test("toEqual vs toStrictEqual", () => {
+  expect({ a: 1 }).toEqual({ a: 1 });          // ✅
+  expect({ a: undefined }).toEqual({});        // ✅
+  expect({ a: 1 }).toStrictEqual({ a: 1 });    // ✅ passes
+  expect({ a: undefined }).toStrictEqual({});  // ❌
+});
+
 ```
 
 ---
