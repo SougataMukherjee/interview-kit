@@ -73,7 +73,9 @@ Example:
 google.com → 142.250.195.14
 
 ### proxy server
-An intermediate server that sits between client and server.used in Load balancing,caching,security
+A proxy server sits between the client and the internet and forwards client requests to other servers. 
+A reverse proxy sits in front of servers, not clients. Clients never know the real backend servers. 
+used in Load balancing,caching,security,Rate limit.
 Types:
 1. Forward proxy → client side
 2. Reverse proxy → server side (very common)
@@ -81,13 +83,19 @@ Types:
 Example:
 Nginx acting as a reverse proxy.
 
+### Nginx
+Nginx is a high‑performance web server, reverse proxy, and load balancer.
+
+
 ### latency
-Time taken for a request to travel from client to server and back.measured in milliseconds,used in CDN,caching
+Latency is the time taken to complete one request.measured in milliseconds,used in CDN,caching
 Example:
 
 India → India server: ~30 ms
 India → US server: ~250 ms
-
+### throughput
+Throughput is the number of requests processed per unit time.
+Measured in requests/sec (RPS)
 
 ### TCP UDP
 `TCP (Transmission Control Protocol)`

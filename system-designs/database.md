@@ -109,6 +109,13 @@ Reduces load on a single database
 <img src="./img/shard.png" alt="shard" />
 <img src="./img/sharding2.png" alt="shard2" />
 
+## Database Monitoring
+Database monitoring tracks health, performance, and usage of a database in real time.
+#### Example Tools:
+MySQL: Slow Query Log
+PostgreSQL: pg_stat_statements
+MongoDB: Atlas Monitoring
+
 ## event sourcing
 Event sourcing stores changes as a sequence of events instead of storing only the latest state.
 
@@ -149,6 +156,7 @@ Messages stored in topics
 Topics split into partitions
 Consumers read messages sequentially
 Retains messages for a configurable time
+<img src="./img/kafka2.png" alt="kafka2" />
 <img src="./img/kafka.png" alt="kafka" />
 Best for
 
