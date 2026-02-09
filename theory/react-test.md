@@ -1639,30 +1639,107 @@ describe('FetchDataComponent', () => {
 });
 ```
 ### Example 39: Loading JSON inside describe
-***data.json***
+***user.json***
 ```typescript
 {
-  "name": "Sample",
-  "age": 25,
-  "skills": ["React", "Redux"]
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "role": "admin",
+      "active": true
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane@example.com",
+      "role": "user",
+      "active": true
+    },
+    {
+      "id": 3,
+      "name": "Bob Johnson",
+      "email": "bob@example.com",
+      "role": "user",
+      "active": false
+    }
+  ],
+  "apiEndpoint": "/api/users",
+  "defaultRole": "user"
 }
 
 ```
-***user.spec.tsx***
+***product.json***
 ```typescript
-const testData = require("./data.json");
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Laptop",
+      "price": 999.99,
+      "category": "Electronics",
+      "inStock": true
+    },
+    {
+      "id": 2,
+      "name": "Mouse",
+      "price": 29.99,
+      "category": "Electronics",
+      "inStock": true
+    },
+    {
+      "id": 3,
+      "name": "Keyboard",
+      "price": 79.99,
+      "category": "Electronics",
+      "inStock": false
+    }
+  ]
+}
+```
+***userList.spec.tsx***
+```typescript
+import { render, screen } from '@testing-library/react';
+import UserList from './UserList';
 
-describe("JSON test data usage", () => {
-  it("reads values from JSON file", () => {
-    expect(testData.name).toBe("Sample");
-    expect(testData.age).toBe(25);
+// Load test data from JSON file
+const testData = require('./data/users.json');
+
+describe('UserList Component with JSON Data', () => {
+  it('reads user data from JSON file', () => {
+    render(<UserList users={testData.users} />);
+    
+    // Access values from JSON
+    expect(screen.getByText(testData.users[0].name)).toBeInTheDocument();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
 
-  it("reads array values from JSON", () => {
-    expect(testData.skills).toContain("React");
+  it('displays all users from JSON', () => {
+    render(<UserList users={testData.users} />);
+    
+    testData.users.forEach((user: any) => {
+      expect(screen.getByText(user.name)).toBeInTheDocument();
+      expect(screen.getByText(user.email)).toBeInTheDocument();
+    });
+  });
+
+  it('filters active users from JSON data', () => {
+    const activeUsers = testData.users.filter((u: any) => u.active);
+    render(<UserList users={activeUsers} />);
+    
+    expect(screen.getAllByRole('listitem')).toHaveLength(2);
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+    expect(screen.queryByText('Bob Johnson')).not.toBeInTheDocument();
+  });
+
+  it('uses default configuration from JSON', () => {
+    render(<UserList users={testData.users} defaultRole={testData.defaultRole} />);
+    
+    expect(testData.defaultRole).toBe('user');
   });
 });
-
 ```
 
 
