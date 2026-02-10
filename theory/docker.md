@@ -467,22 +467,15 @@ docker ps -a
 
 **Step 1: Create Application**
 
-**app.js:**
-```javascript
-const readline = require('readline');
+**app.py:**
+```python
+num1 = input("Enter first number: ")
+num2 = input("Enter second number: ")
+sum_result = float(num1) + float(num2)
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+# Print the result
+print(f"Sum: {sum_result}")
 
-rl.question('Enter first number: ', (num1) => {
-  rl.question('Enter second number: ', (num2) => {
-    const sum = parseFloat(num1) + parseFloat(num2);
-    console.log(`Sum: ${sum}`);
-    rl.close();
-  });
-});
 ```
 
 **Dockerfile:**
@@ -490,7 +483,7 @@ rl.question('Enter first number: ', (num1) => {
 FROM node:alpine
 WORKDIR /app
 COPY . /app
-CMD ["node", "app.js"]
+CMD ["node", "app.py"]
 ```
 
 **Step 2: Build Docker Image**
