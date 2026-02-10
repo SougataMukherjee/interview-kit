@@ -9,10 +9,13 @@
 6. [Docker Registry](#docker-registry)
 7. [Dockerfile Instructions](#dockerfile-instructions)
 8. [Practical Examples](#practical-examples)
-9. [Docker Commands Reference](#docker-commands-reference)
-10. [Docker Networking](#docker-networking)
-11. [Docker Volumes](#docker-volumes)
-12. [Best Practices](#best-practices)
+9. [Docker EXPOSE](#docker-expose)
+10. [Port Publishing](#port-publishing)
+11. [EXPOSE vs Publishing](#expose-vs-publishing)
+12. [ENV Keyword](#env-keyword)
+14. [Docker Volumes (Mounting)](#docker-volumes-mounting)
+15. [Bind Mounts](#bind-mounts)
+16. [Working with MySQL Container](#working-with-mysql-container)
 
 ---
 
@@ -603,400 +606,726 @@ docker build -t web-app:1.0 .
 # Run container
 docker run -d -p 3000:3000 --name my-web-app web-app:1.0
 ```
+---
+
+## Docker EXPOSE
+
+### What is Docker EXPOSE?
+
+**EXPOSE** is a Dockerfile instruction that informs Docker that the container listens on the specified network port at runtime. However, it does NOT actually publish the port or map it to the host machine.
+
+### Key Points
+- Makes ports available for **inter-container communication**
+- Acts as **documentation** for which ports the container uses
+- Does NOT map client port to container port (use `-p` flag for that)
+- Mainly used for communication between developers and Docker tools
+
+### Syntax
+```dockerfile
+EXPOSE <port>
+```
+
+```bash
+docker run --expose=<port> <imageName>
+```
 
 ---
 
-## Docker Commands Reference
+### Example: Flask Application with EXPOSE
 
-### Image Commands
+**Project Structure:**
+```
+flask-app/
+├── app.py
+├── requirements.txt
+└── Dockerfile
+```
+
+#### Step 1: Create Flask Application
+
+**app.py**
+```python
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello World"
+
+@app.route('/about')
+def about():
+    return "About Page"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
+```
+
+#### Step 2: Create Requirements File
+
+**requirements.txt**
+```
+flask
+```
+
+#### Step 3: Create Dockerfile
+
+**Dockerfile**
+```dockerfile
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app.py .
+
+# Document that container listens on port 5000
+EXPOSE 5000
+
+CMD ["python", "app.py"]
+```
+
+#### Step 4: Build Docker Image
 
 ```bash
-# Build an image
-docker build -t <image-name>:<tag> <path>
-docker build -t myapp:1.0 .
+docker build -t flask-app .
+```
 
-# List images
+#### Step 5: Run the Container
+
+```bash
+docker run --name flask-container -p 8090:5000 flask-app
+```
+
+**Explanation:**
+- `EXPOSE 5000` - Documents that container uses port 5000
+- `-p 8090:5000` - Maps host port 8090 to container port 5000
+- Access application at: `http://localhost:8090`
+
+---
+
+## Port Publishing
+
+### What is Port Publishing?
+
+**Port Publishing** is the mechanism to map a port number from the host machine to a port inside the container, making the containerized service accessible from outside.
+
+### Syntax
+
+```bash
+docker run -p <host_port>:<container_port> <image_name>
+```
+
+### Examples
+
+```bash
+# Map host port 8080 to container port 5000
+docker run -p 8080:5000 flask-app
+
+# Map host port 3000 to container port 3000
+docker run -p 3000:3000 node-app
+
+# Bind to specific host IP
+docker run -p 127.0.0.1:8080:5000 flask-app
+
+# Let Docker assign random host port
+docker run -p 5000 flask-app
+```
+
+### Verify Port Mapping
+
+```bash
+# Check running containers and their ports
+docker ps
+
+# Output shows:
+# PORTS
+# 0.0.0.0:8090->5000/tcp
+```
+
+---
+
+## EXPOSE vs Publishing
+
+### Comparison
+
+| Scenario | EXPOSE | -p Flag | Result |
+|----------|--------|---------|--------|
+| **Neither EXPOSE nor -p** | ❌ No | ❌ No | Service only accessible inside container itself |
+| **Only EXPOSE** | ✅ Yes | ❌ No | Service accessible from other containers on same host (inter-container communication) |
+| **Only -p flag** | ❌ No | ✅ Yes | Service accessible from outside world |
+| **Both EXPOSE and -p** | ✅ Yes | ✅ Yes | Service accessible from outside world + documented |
+
+---
+
+### Scenario 1: Neither EXPOSE nor -p
+
+**Dockerfile**
+```dockerfile
+FROM python:3.10-slim
+WORKDIR /app
+COPY app.py .
+CMD ["python", "app.py"]
+```
+
+**Result:**
+- ❌ Service is NOT accessible from outside the container
+- ❌ Service is NOT accessible from other containers
+- ✅ Service only accessible inside the container itself
+
+---
+
+### Scenario 2: Only EXPOSE (No -p flag)
+
+**Dockerfile**
+```dockerfile
+FROM python:3.10-slim
+WORKDIR /app
+COPY app.py .
+EXPOSE 5000
+CMD ["python", "app.py"]
+```
+
+**Run:**
+```bash
+docker run --name flask-container flask-app
+```
+
+**Result:**
+- ❌ Service is NOT accessible from outside world (host machine)
+- ✅ Service IS accessible from other Docker containers on the same host machine
+- ✅ Good for **inter-container communication**
+
+**Example: Two Containers Communicating**
+```bash
+# Run Flask app (only EXPOSE, no -p)
+docker run --name flask-container --network my-network flask-app
+
+# Run another container on same network
+docker run --name client-container --network my-network alpine sh -c "wget -O- flask-container:5000"
+```
+
+---
+
+### Scenario 3: Both EXPOSE and -p
+
+**Dockerfile**
+```dockerfile
+FROM python:3.10-slim
+WORKDIR /app
+COPY app.py .
+EXPOSE 5000
+CMD ["python", "app.py"]
+```
+
+**Run:**
+```bash
+docker run --name flask-container -p 8090:5000 flask-app
+```
+
+**Result:**
+- ✅ Service IS accessible from outside world at `http://localhost:8090`
+- ✅ Service IS accessible from other containers
+- ✅ Port 5000 is documented in Dockerfile
+- ✅ **Best Practice** - always use both
+
+---
+
+## ENV Keyword
+
+### What is ENV?
+
+**ENV** is used to set environment variables inside a Docker container. These variables are available during both **build time** and **runtime**.
+
+### Syntax
+
+```dockerfile
+ENV <variable_name> <variable_value>
+```
+
+---
+
+### Method 1: One ENV per Variable
+
+**Dockerfile**
+```dockerfile
+FROM python:3.10-slim
+
+ENV var1 var1Value
+ENV var2 var2Value
+ENV personName "Sam"
+ENV fatherName "Sudar"
+
+RUN echo "Person: $personName, Father: $fatherName"
+```
+
+---
+
+### Method 2: Multiple Variables in One ENV
+
+**Dockerfile**
+```dockerfile
+FROM python:3.10-slim
+
+ENV var1=var1Value var2=var2Value var3=var3Value
+
+RUN echo "Var1: $var1, Var2: $var2"
+```
+
+---
+
+### Example: Setting Environment Variables
+
+**Dockerfile**
+```dockerfile
+FROM tomcat:latest
+
+# Update package list
+RUN apt-get update
+
+# Set environment variables for static info
+ENV path1="c:/data/bin" path2="d:/user"
+
+# Use environment variables in ENTRYPOINT
+ENTRYPOINT echo "path1 name: $path1, path2 name: $path2"
+
+# Use environment variables in CMD
+CMD echo "$path1 $path2"
+```
+
+#### Step 1: Build Image
+
+```bash
+docker build -t env-img .
+```
+
+#### Step 2: Verify Image
+
+```bash
 docker images
-docker image ls
+```
 
-# Remove image
-docker rmi <image-name/id>
-docker image rm <image-name/id>
+#### Step 3: Run Container
 
-# Pull image from registry
-docker pull <image-name>:<tag>
+```bash
+docker run -d --name=env-container env-img:latest
+```
 
-# Push image to registry
-docker push <image-name>:<tag>
+#### Step 4: Check Logs
 
-# Tag an image
-docker tag <source-image> <target-image>
+```bash
+docker logs env-container -f
+```
 
-# Inspect image
-docker inspect <image-name/id>
-
-# View image history
-docker history <image-name>
-
-# Remove unused images
-docker image prune
-docker image prune -a  # Remove all unused images
+**Output:**
+```
+path1 name: c:/data/bin, path2 name: d:/user
+c:/data/bin d:/user
 ```
 
 ---
 
-### Container Commands
+### Override ENV at Runtime
+
+You can override environment variables when running the container:
 
 ```bash
-# Run a container
-docker run <image-name>
-docker run -d <image-name>  # Detached mode
-docker run -it <image-name>  # Interactive mode
-docker run -p 8080:80 <image-name>  # Port mapping
-docker run --name <container-name> <image-name>  # Custom name
-
-# List containers
-docker ps  # Running containers
-docker ps -a  # All containers
-
-# Stop container
-docker stop <container-name/id>
-
-# Start stopped container
-docker start <container-name/id>
-
-# Restart container
-docker restart <container-name/id>
-
-# Remove container
-docker rm <container-name/id>
-docker rm -f <container-name/id>  # Force remove running container
-
-# View container logs
-docker logs <container-name/id>
-docker logs -f <container-name/id>  # Follow logs
-
-# Execute command in running container
-docker exec -it <container-name> <command>
-docker exec -it my-container bash
-docker exec -it my-container sh
-
-# View container details
-docker inspect <container-name/id>
-
-# View container resource usage
-docker stats
-docker stats <container-name/id>
-
-# Remove all stopped containers
-docker container prune
-
-# Copy files to/from container
-docker cp <container>:<path> <local-path>  # From container
-docker cp <local-path> <container>:<path>  # To container
+docker run -d --name=env-container -e path1="/new/path" env-img:latest
 ```
 
 ---
 
-### System Commands
+## ARG Keyword
 
-```bash
-# View Docker version
-docker -v
-docker --version
+### What is ARG?
 
-# View Docker system information
-docker info
+**ARG** is used to define **build-time variables**. These variables are:
+- ✅ Available **only during image build**
+- ❌ **NOT available** when the container is running
+- Can be overridden during build using `--build-arg`
 
-# View disk usage
-docker system df
+### Syntax
 
-# Clean up unused resources
-docker system prune
-docker system prune -a  # Remove all unused data
-
-# Remove all stopped containers, unused networks, dangling images
-docker system prune -f
+```dockerfile
+ARG <variable_name>=<default_value>
 ```
 
 ---
 
-### Network Commands
+### ARG vs ENV
+
+| Feature | ARG | ENV |
+|---------|-----|-----|
+| **Available During Build** | ✅ Yes | ✅ Yes |
+| **Available at Runtime** | ❌ No | ✅ Yes |
+| **Override at Build** | ✅ `--build-arg` | ❌ No |
+| **Override at Runtime** | ❌ No | ✅ `-e` flag |
+| **Use Case** | Build configuration | Runtime configuration |
+
+---
+
+### Example: Using ARG and ENV
+
+**Dockerfile**
+```dockerfile
+# Define build-time variable
+ARG APP_VERSION=1.0
+
+# Use ARG in FROM instruction
+FROM python:$APP_VERSION-slim
+
+# Set runtime environment variable
+ENV ENV_VERSION=production
+
+# ARG is available during build
+RUN echo "Build version: $APP_VERSION"
+
+# ENV is available at runtime
+CMD ["sh", "-c", "echo 'Env version: $ENV_VERSION'"]
+```
+
+#### Step 1: Build Image with Default ARG
 
 ```bash
-# List networks
-docker network ls
-
-# Create network
-docker network create <network-name>
-
-# Inspect network
-docker network inspect <network-name>
-
-# Connect container to network
-docker network connect <network-name> <container-name>
-
-# Disconnect container from network
-docker network disconnect <network-name> <container-name>
-
-# Remove network
-docker network rm <network-name>
-
-# Remove unused networks
-docker network prune
+docker build -t arg-img .
 ```
+
+#### Step 2: Build Image with Custom ARG
+
+```bash
+docker build --build-arg APP_VERSION=3.9 -t arg-img:3.9 .
+```
+
+#### Step 3: Verify Images
+
+```bash
+docker images
+```
+
+#### Step 4: Run Container
+
+```bash
+docker run --name=env-con arg-img:latest
+```
+
+**Output:**
+```
+Env version: production
+```
+
+#### Step 5: Check if ARG is Available at Runtime
+
+```bash
+docker exec -it env-con /bin/bash
+echo $APP_VERSION  # Will be empty - ARG not available at runtime
+echo $ENV_VERSION  # Will output: production
+```
+
+#### Step 6: Check Logs
+
+```bash
+docker logs env-con -f
+```
+
+---
+
+## Docker Volumes (Mounting)
+
+### What is a Docker Volume?
+
+A **Docker Volume** is a persistent storage mechanism used by Docker containers to store data **outside the container filesystem**.
+
+### Why Use Volumes?
+
+**Problem:** When a container is deleted, all data inside it is lost.
+
+**Solution:** Volumes solve this problem by storing data independently of the container lifecycle.
+
+### Use Cases
+- ✅ Persist data after container stops or is removed
+- ✅ Share data between multiple containers
+- ✅ Back up and restore data
+- ✅ Interact with the host file system
+
+---
+
+### Example: Python Application with Volume
+
+**Project Structure:**
+```
+volume-app/
+├── app.py
+└── Dockerfile
+```
+
+#### Step 1: Create Python Application
+
+**app.py**
+```python
+import os
+
+# File path inside container
+file_path = '/app/data.txt'
+
+# Write data
+with open(file_path, 'w') as f:
+    f.write('Hello from Docker Volume!\n')
+    f.write('This data persists even after container stops.\n')
+
+print('Data written to file.')
+
+# Read data
+if os.path.exists(file_path):
+    with open(file_path, 'r') as f:
+        content = f.read()
+    print('File content:')
+    print(content)
+else:
+    print('File not found.')
+```
+
+#### Step 2: Create Dockerfile
+
+**Dockerfile**
+```dockerfile
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY app.py .
+
+CMD ["python", "app.py"]
+```
+
+#### Step 3: Build Image
+
+```bash
+docker build -t vol-img .
+```
+
+#### Step 4: Run Container with Volume
+
+```bash
+docker run -it --rm -v my-vol:/app/ vol-img:latest
+```
+
+**Explanation:**
+- `-v my-vol:/app/` - Creates a volume named `my-vol` and mounts it to `/app/` inside container
+- `--rm` - Removes container after it stops
+- `-it` - Interactive terminal
 
 ---
 
 ### Volume Commands
 
+#### List All Volumes
+
 ```bash
-# List volumes
 docker volume ls
+```
 
-# Create volume
-docker volume create <volume-name>
+**Output:**
+```
+DRIVER    VOLUME NAME
+local     my-vol
+```
 
-# Inspect volume
-docker volume inspect <volume-name>
+#### Inspect Volume
 
-# Remove volume
-docker volume rm <volume-name>
+```bash
+docker volume inspect my-vol
+```
 
-# Remove unused volumes
+**Output:**
+```json
+[
+    {
+        "CreatedAt": "2024-02-10T10:30:00Z",
+        "Driver": "local",
+        "Mountpoint": "/var/lib/docker/volumes/my-vol/_data",
+        "Name": "my-vol",
+        "Scope": "local"
+    }
+]
+```
+
+#### Remove Specific Volume
+
+```bash
+docker volume rm my-vol
+```
+
+#### Remove All Unused Volumes
+
+```bash
 docker volume prune
-
-# Run container with volume
-docker run -v <volume-name>:<container-path> <image-name>
-docker run -v $(pwd):/app <image-name>  # Bind mount
 ```
+
+**Warning:** This removes all volumes not used by any container!
 
 ---
 
-## Docker Networking
+## Bind Mounts
 
-### Network Types
+### What is a Bind Mount?
 
-1. **Bridge Network** (Default)
-   - Isolated network for containers
-   - Containers can communicate with each other
+A **Bind Mount** maps a specific directory or file from the **host machine** to a directory inside the container. Changes in either location are reflected in both.
 
-2. **Host Network**
-   - Container shares host network
-   - No network isolation
+### Bind Mount vs Volume
 
-3. **None Network**
-   - No networking
-   - Complete isolation
-
-**Example:**
-```bash
-# Create custom bridge network
-docker network create my-network
-
-# Run containers on the network
-docker run -d --network my-network --name app1 my-app
-docker run -d --network my-network --name app2 my-app
-
-# Containers can communicate using container names
-```
+| Feature | Volume | Bind Mount |
+|---------|--------|------------|
+| **Managed by** | Docker | User (host filesystem) |
+| **Location** | Docker area | Any host path |
+| **Portability** | ✅ High | ❌ Low |
+| **Use Case** | Persist data | Development, share files |
 
 ---
 
-## Docker Volumes
+### Example: Bind Mount with Python Application
 
-### Why Volumes?
-- Persist data beyond container lifecycle
-- Share data between containers
-- Back up and restore data
-
-### Volume Types
-
-1. **Named Volumes**
-```bash
-docker volume create my-data
-docker run -v my-data:/app/data my-app
+**Project Structure:**
+```
+bind-mount-app/
+├── app.py
+├── servers.txt
+└── Dockerfile
 ```
 
-2. **Bind Mounts**
-```bash
-docker run -v /host/path:/container/path my-app
-docker run -v $(pwd):/app my-app
+#### Step 1: Create Application Files
+
+**app.py**
+```python
+try:
+    with open('servers.txt', 'r') as file:
+        content = file.readlines()
+except Exception as e:
+    print(f'Error: {e}, Type: {type(e)}')
+else:
+    print('Server List:')
+    for line in content:
+        print(f'{line.rstrip()}')
 ```
 
-3. **Anonymous Volumes**
-```bash
-docker run -v /container/path my-app
+**servers.txt**
+```
+Server1
+Server2
+Server3
 ```
 
----
+#### Step 2: Create Dockerfile
 
-## Best Practices
-
-### 1. Use Official Base Images
+**Dockerfile**
 ```dockerfile
-FROM node:18-alpine  # Official and lightweight
-```
+FROM python:3.10-slim
 
-### 2. Use Specific Tags
-```dockerfile
-FROM node:18-alpine  # Good
-FROM node:latest     # Avoid (unpredictable)
-```
-
-### 3. Minimize Layers
-```dockerfile
-# Bad (multiple layers)
-RUN apt-get update
-RUN apt-get install -y package1
-RUN apt-get install -y package2
-
-# Good (single layer)
-RUN apt-get update && \
-    apt-get install -y package1 package2 && \
-    rm -rf /var/lib/apt/lists/*
-```
-
-### 4. Use .dockerignore
-```
-node_modules
-.git
-.env
-*.log
-```
-
-### 5. Don't Run as Root
-```dockerfile
-RUN useradd -m appuser
-USER appuser
-```
-
-### 6. Use Multi-Stage Builds
-```dockerfile
-# Build stage
-FROM node:18 AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-
-# Production stage
-FROM node:18-alpine
-WORKDIR /app
-COPY --from=build /app/dist ./dist
-COPY package*.json ./
-RUN npm install --production
-CMD ["node", "dist/index.js"]
-```
-
-### 7. Order Instructions by Change Frequency
-```dockerfile
-FROM node:18-alpine
 WORKDIR /app
 
-# These change less frequently
-COPY package*.json ./
-RUN npm install
+COPY app.py .
+COPY servers.txt .
 
-# These change more frequently
-COPY . .
-
-CMD ["npm", "start"]
-```
-
-### 8. Keep Images Small
-- Use Alpine-based images
-- Remove unnecessary files
-- Use multi-stage builds
-- Combine RUN commands
-
-### 9. Security Best Practices
-- Don't include secrets in images
-- Use .dockerignore
-- Scan images for vulnerabilities
-- Keep base images updated
-- Run containers with limited privileges
-
-### 10. Use Health Checks
-```dockerfile
-HEALTHCHECK --interval=30s --timeout=3s \
-  CMD curl -f http://localhost:3000/health || exit 1
-```
-
----
-
-## Common Use Cases
-
-### 1. Node.js Application
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
-### 2. Python Application
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
-EXPOSE 5000
 CMD ["python", "app.py"]
 ```
 
-### 3. Java Application
-```dockerfile
-FROM openjdk:17-alpine
-WORKDIR /app
-COPY target/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+#### Step 3: Build Image
+
+```bash
+docker build -t mount-img .
+```
+
+#### Step 4: Run Without Bind Mount
+
+```bash
+docker run --rm mount-img:latest
+```
+
+**Output:**
+```
+Server List:
+Server1
+Server2
+Server3
+```
+
+#### Step 5: Run With Bind Mount
+
+```bash
+docker run --rm -v /path/to/host/servers.txt:/app/servers.txt mount-img:latest
+```
+
+**Example (Windows):**
+```bash
+docker run --rm -v C:/Users/YourName/servers.txt:/app/servers.txt mount-img:latest
+```
+
+**Example (Linux/Mac):**
+```bash
+docker run --rm -v $(pwd)/servers.txt:/app/servers.txt mount-img:latest
 ```
 
 ---
 
-## Troubleshooting
+## Working with MySQL Container
 
-### Common Issues
+### Running MySQL Container
 
-**Issue 1: Container Exits Immediately**
 ```bash
-# Check logs
-docker logs <container-id>
-
-# Run in interactive mode to debug
-docker run -it <image-name> sh
+docker run -d --name mysqldb mysql:latest
 ```
 
-**Issue 2: Port Already in Use**
+**Explanation:**
+- `-d` - Run in detached mode (background)
+- `--name mysqldb` - Container name
+- `mysql:latest` - MySQL image
+
+---
+
+### Common Issues and Solutions
+
+#### Issue: MySQL Container Exits Immediately
+
+**Problem:** MySQL requires environment variables.
+
+**Solution:**
 ```bash
-# Use different host port
-docker run -p 8081:8080 my-app
+docker run -d \
+  --name mysqldb \
+  -e MYSQL_ROOT_PASSWORD=rootpassword \
+  -e MYSQL_DATABASE=mydb \
+  -e MYSQL_USER=user \
+  -e MYSQL_PASSWORD=userpassword \
+  mysql:latest
 ```
 
-**Issue 3: Permission Denied**
-```bash
-# Run with sudo (Linux)
-sudo docker run my-app
+---
 
-# Add user to docker group
-sudo usermod -aG docker $USER
+### Check MySQL Logs
+
+```bash
+docker logs mysqldb
 ```
 
-**Issue 4: Image Build Fails**
-```bash
-# Clear build cache
-docker builder prune
-
-# Build without cache
-docker build --no-cache -t my-app .
+**Output:**
 ```
+2024-02-10 10:30:00+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server started.
+2024-02-10 10:30:01+00:00 [Note] [Entrypoint]: Initializing database files
+...
+2024-02-10 10:30:10+00:00 [Note] [Server]: ready for connections.
+```
+
+---
+
+### Follow Logs in Real-Time
+
+```bash
+docker logs mysqldb -f
+```
+
+Press `Ctrl+C` to exit log streaming.
 
 ---
 
