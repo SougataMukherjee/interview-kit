@@ -1987,8 +1987,8 @@ src/
 │   │   ├── Interface.ts
 │   │   ├── ComponentNameConstant.ts
 │   │   └── enum.ts
-│   └── parts/
-│       └── [same structure]
+│   └── 
+│      
 ├── app/
 │   ├── actions.ts
 │   ├── store.ts
