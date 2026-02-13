@@ -12,10 +12,10 @@ export const counterReducer = (
 ): CounterState => {
   switch (action.type) {
     case INCREMENT:
-      return { value: state.value + 1 }
+      return {...state, value: state.value + 1 }
 
     case DECREMENT:
-      return { value: state.value - 1 }
+      return {...state, value: state.value - 1 }
 
     case RESET:
       return initialState

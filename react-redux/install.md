@@ -9,4 +9,7 @@ npm install -D jsdom @vitest/ui
 
 npm i @emotion/react @emotion/styled
 
+npm i @mui/material @mui/icons-material
+npm i @emotion/react @emotion/styled
+
 

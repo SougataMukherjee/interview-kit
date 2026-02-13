@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
-import { counterReducer } from '../domain/counter/reducers/counterReducer'
+import { counterReducer } from '../domain/counter/reducers/counterReducer';
+import todoReducer from '../domain/todo/reducers/todoReducer'
 
 const appReducer = combineReducers({
   counter: counterReducer
@@ -7,7 +8,8 @@ const appReducer = combineReducers({
 
 export const store = configureStore({
   reducer: {
-    app: appReducer 
+    app: appReducer,
+    todo: todoReducer,
   }
 })
 

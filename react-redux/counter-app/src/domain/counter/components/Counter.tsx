@@ -4,27 +4,37 @@ import { increment, decrement ,reset} from '../actions/counterActions'
 import { selectCounterValue } from '../selectors/counterSelectors';
 import BackgroundBox from '../../../ui/components/background-box/components';
 import { BackgroundBoxVariant } from '../../../ui/components/background-box/enums'
+import Button,{ ButtonVariant } from '../../../ui/components/button';
+import { Alert, AlertVariant } from '../../../ui/components/alert';
 
 const Counter: React.FC = () => {
   const dispatch = useDispatch()
   const count = useSelector(selectCounterValue)
 
   return (
+    <>
+    <Alert
+      message="Data saved successfully!"
+      variant={AlertVariant.SUCCESS}
+      onClose={() => console.log('closed')}
+      fullWidth
+   />
     <BackgroundBox variant={BackgroundBoxVariant.PRIMARY}>
       <h2>Counter: {count}</h2>
 
-      <button aria-label="increment" onClick={() => dispatch(increment())}>
+      <Button aria-label="increment" onClick={() => dispatch(increment())}>
         +
-      </button>
+      </Button>
 
-      <button aria-label="decrement" onClick={() => dispatch(decrement())}>
+      <Button variant={ButtonVariant.OUTLINED} aria-label="decrement" onClick={() => dispatch(decrement())}>
         -
-      </button>
+      </Button>
 
-      <button aria-label="reset" onClick={() => dispatch(reset())}>
+      <Button aria-label="reset" onClick={() => dispatch(reset())}>
         Reset
-      </button>
+      </Button>
     </BackgroundBox>
+</>
   )
 }
 
