@@ -22,6 +22,8 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-redux": "^9.2.0",
+    "redux": "^5.0.1",
+    "redux-saga": "^1.4.2",
     "reselect": "^5.1.1"
   },
   "devDependencies": {
