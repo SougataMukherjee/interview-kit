@@ -3,8 +3,9 @@ import createSagaMiddleware from 'redux-saga';
 import { counterReducer } from '../domain/counter/reducers/counterReducer';
 import todoReducer from '../domain/todo/reducers/todoReducer';
 import galleryReducer from '../domain/image-gallery/reducers';
-import gallerySearchReducer from '../domain/search-filter/reducers';
 import { galleryWatcherSaga } from '../domain/image-gallery/sagas/gallerySaga';
+import gallerySearchReducer from '../domain/search-filter/reducers';
+import { gallerySaga } from '../domain/search-filter/sagas/gallerySaga';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -22,7 +23,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
 })
-sagaMiddleware.run(galleryWatcherSaga);
+// sagaMiddleware.run(galleryWatcherSaga);
+sagaMiddleware.run(gallerySaga);
 
 // Types for hooks
 export type RootState = ReturnType<typeof store.getState>

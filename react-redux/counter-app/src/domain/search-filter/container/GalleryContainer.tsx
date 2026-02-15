@@ -2,27 +2,31 @@ import { connect } from 'react-redux';
 import * as C from '../constants/galleryConstants';
 import type { RootState } from '../../../app/store';
 import { filteredItemsSelector } from '../selectors/gallerySelectors';
-
-import { SearchBox } from '../components/SearchBox';
+import { useEffect } from 'react';
+import Input from '../../../ui/components/input';
 import { Tabs } from '../components/Tabs';
 import { ItemCard } from '../components/ItemCard';
 import { Container, Grid } from '../styles';
+import type {Props} from '../interfaces';
 
 const GallerySearchContainer = ({
   items,
-  search,
+//   search,
   activeTab,
   fetchItems,
   setSearch,
   setTab
-}: any) => {
+}: Props) => {
+    useEffect(() => {
+    fetchItems(); 
+  }, [fetchItems]);
   return (
     <Container>
-      <SearchBox onSearch={setSearch} />
+      <Input onChange={(e)=>setSearch(e.target.value)} placeholder='Search...'/>
       <Tabs active={activeTab} onChange={setTab} />
 
       <Grid>
-        {items.map((item: any) => (
+        {items.map((item) => (
           <ItemCard key={item.id} {...item} />
         ))}
       </Grid>
@@ -30,11 +34,15 @@ const GallerySearchContainer = ({
   );
 };
 
-const mapState = (state: RootState) => ({
-  items: filteredItemsSelector(state),
-  search: state.gallery.search,
-  activeTab: state.gallery.activeTab
-});
+const mapState = (state: RootState) => {
+    console.log('container',state)
+    return{
+        items: filteredItemsSelector(state),
+        search: state.gallerySearch.search,
+        activeTab: state.gallerySearch.activeTab
+    }
+
+};
 
 const mapDispatch = {
   fetchItems: () => ({ type: C.FETCH_ITEMS_REQUEST }),

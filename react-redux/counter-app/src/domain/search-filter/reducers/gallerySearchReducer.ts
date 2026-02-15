@@ -1,5 +1,6 @@
 import type { GalleryState } from '../interfaces/gallery';
 import * as C from '../constants/galleryConstants';
+import type { AnyAction } from 'redux';
 
 const initialState: GalleryState = {
   items: [],
@@ -10,8 +11,9 @@ const initialState: GalleryState = {
 
  const gallerySearchReducer = (
   state = initialState,
-  action: any
+  action: AnyAction
 ): GalleryState => {
+   console.log('REDUCER:',state, action.type);
   switch (action.type) {
     case C.FETCH_ITEMS_REQUEST:
       return { ...state, loading: true };
