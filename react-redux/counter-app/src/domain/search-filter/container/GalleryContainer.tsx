@@ -8,7 +8,7 @@ import { Tabs } from '../components/Tabs';
 import { ItemCard } from '../components/ItemCard';
 import { Container, Grid } from '../styles';
 
-const GalleryContainer = ({
+const GallerySearchContainer = ({
   items,
   search,
   activeTab,
@@ -42,4 +42,4 @@ const mapDispatch = {
   setTab: (tab: string) => ({ type: C.SET_TAB, payload: tab })
 };
 
-export default connect(mapState, mapDispatch)(GalleryContainer);
+export default connect(mapState, mapDispatch)(GallerySearchContainer);
