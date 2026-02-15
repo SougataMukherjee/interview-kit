@@ -3,6 +3,7 @@ import createSagaMiddleware from 'redux-saga';
 import { counterReducer } from '../domain/counter/reducers/counterReducer';
 import todoReducer from '../domain/todo/reducers/todoReducer';
 import galleryReducer from '../domain/image-gallery/reducers';
+import gallerySearchReducer from '../domain/search-filter/reducers';
 import { galleryWatcherSaga } from '../domain/image-gallery/sagas/gallerySaga';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -16,6 +17,7 @@ export const store = configureStore({
     app: appReducer,
     todo: todoReducer,
     gallery: galleryReducer,
+    gallerySearch:gallerySearchReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
