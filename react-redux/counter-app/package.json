@@ -22,6 +22,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-redux": "^9.2.0",
+    "react-router-dom": "^5.3.4",
     "redux": "^5.0.1",
     "redux-saga": "^1.4.2",
     "reselect": "^5.1.1"
@@ -33,6 +34,7 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^5.1.1",
     "@vitest/ui": "^4.0.18",
     "eslint": "^9.39.1",
