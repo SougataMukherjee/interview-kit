@@ -4,13 +4,14 @@
 1. [Introduction to Redux](#introduction-to-redux)
 2. [Introduction to Redux-Saga](#introduction-to-redux-saga)
 3. [Generator Functions](#generator-functions)
-4. [Project Architecture](#project-architecture)
-5. [Core Concepts](#core-concepts)
-6. [Project 1: E-commerce Product CRUD](#project-1-e-commerce-product-crud)
-7. [Project 2: Image Gallery with Infinite Scroll](#project-2-image-gallery-with-infinite-scroll)
-8. [Debugging Techniques](#debugging-techniques)
-9. [Common Mistakes](#common-mistakes)
-10. [Best Practices](#best-practices)
+4. [Redux Saga Effects](#redux-saga-effects)
+5. [Basic Project Structure](#basic-project-structure)
+6. [Core Concepts](#core-concepts)
+7. [Project 1: E-commerce Product CRUD](#project-1-e-commerce-product-crud)
+8. [Project 2: Image Gallery with Infinite Scroll](#project-2-image-gallery-with-infinite-scroll)
+9. [Debugging Techniques](#debugging-techniques)
+10. [Common Mistakes](#common-mistakes)
+11. [Best Practices](#best-practices)
 
 ---
 
@@ -154,7 +155,41 @@ function* combinedGenerator(): Generator<number | string> {
 const gen = combinedGenerator();
 console.log([...gen]); // [1, 2, 3, 'A', 'B', 'C', 10, 20, 30]
 ```
+### Basic Generator  Example 4
+```typescript
+function* genfun(){
+    yield "happy"
+    const newvar = yield "coding"
+    return newvar;
+}
 
+const result = genfun()
+
+console.log(result.next())//{ value: "happy", done: false }
+console.log(result.next())//{ value: "coding", done: false }
+console.log(result.next("this is me"))//{ value: "this is me", done: true }
+```
+### Basic Generator  Example 5
+```typescript
+function* one(){
+    yield '1'
+}
+function foo(test){
+    return test
+}
+function* two(){
+    const param = yield "waiting for input";
+    yield foo(param);
+}
+function* root(){
+    yield [one(),two()]
+}
+const gen=root();
+const generators = gen.next().value;
+console.log(generators[1].next())
+console.log(generators[1].next("hi"))
+console.log(generators[0].next())
+```
 ---
 
 ### Generator with Parameters
@@ -246,47 +281,281 @@ function* errorHandlingGen(): Generator<string, void, unknown> {
   }
 }
 ```
-
 ---
+## Redux Saga Effects
 
-## Project Architecture
-
-### Folder Structure
+### take:
+Waits for a specific action (blocking) until specific action will be dispatched .its a watcher function execute based on action changes and it runs only once
+Use case: When you need to wait for a specific action before proceeding.
+```typescript
+import { take } from "redux-saga/effects";
+function* watchLoginSaga() {
+  // Pause until LOGIN action is dispatched
+  const action = yield take('LOGIN');
+  console.log('User credentials:', action.payload);
+}
 
 ```
-src/
-├── store/
-│   ├── index.ts                 # Configure store
-│   └── rootReducer.ts           # Combine all reducers
+### takeLatest:
+Takes only the latest action of a specific type
+Use case: For operations like search where only the latest request matters.
+```typescript
+import { takeLatest } from "redux-saga/effects";
+function* watchSearchSaga() {
+  // Only handle the most recent SEARCH action
+  yield takeLatest('FETCH_USER', performSearchSaga);
+}
+
+function* performSearchSaga(action) {
+  const results = yield call(api.search, action.payload);
+  yield put({ type: 'SEARCH_RESULTS', payload: results });
+}
+```
+### put:
+Dispatches an action to the Redux store, its Equivalent to dispatch()
+Use case: When your saga needs to dispatch Redux actions or to trigger reducers after async work we need this.
+```typescript
+import { put } from "redux-saga/effects";
+function* loginSaga(credentials) {
+  // Dispatch action to update loading state
+  yield put({ type: 'LOGIN_LOADING' });
+  
+  // After login logic completes
+  yield put({ 
+    type: 'LOGIN_SUCCESS', 
+    payload: userData 
+  });
+}
+
+```
+### call
+Calls a function (usually async) and waits for result (blocking)
+Use case: For calling API (especially promises) and waiting for their result.
+```typescript
+import { call } from "redux-saga/effects";
+function* fetchUserSaga(userId) {
+  // Call API and wait for response
+  const user = yield call(api.fetchUser, userId);
+  console.log('User data:', user);
+}
+```
+### select 
+Extracts data from Redux state
+Use case: When you need to access current Redux state.
+```typescript
+function* userProfileSaga() {
+  // Get current user ID from Redux state
+  const userId = yield select(state => state.auth.userId);
+  
+  // Use the ID to fetch profile
+  const profile = yield call(api.fetchProfile, userId);
+}
+```
+### all:
+Runs multiple effects in parallel
+Use case: When you need to run multiple operations concurrently.
+
+```typescript
+import { all, call } from "redux-saga/effects";
+function* initializeAppSaga() {
+  // Run all these sagas in parallel
+  yield all([
+    call(fetchUserSaga),
+    call(fetchSettingsSaga),
+    call(fetchNotificationsSaga)
+  ]);
+  
+  yield put({ type: 'APP_INITIALIZED' });
+}
+
+```
+### fork: 
+Runs a saga in the background (non-blocking) it replace call 
+Use case: For starting "watcher" sagas that run independently.
+```typescript
+import { fork } from "redux-saga/effects";
+function* mainSaga() {
+  // Start watchLoginSaga in background it will not block untill response come
+  yield fork(watchLoginSaga);
+  
+  // This code runs immediately, doesn't wait for watchLoginSaga
+  console.log('Main saga continues...');
+}
+```
+### delay:
+Pauses execution for a specified time
+Use case: When you need to add timing to your saga flow.
+```typescript
+import { delay } from "redux-saga/effects";
+function* notificationSaga() {
+  yield put({ type: 'SHOW_NOTIFICATION', message: 'Success!' });
+  
+  // Wait 3 seconds
+  yield delay(3000);
+  
+  yield put({ type: 'HIDE_NOTIFICATION' });
+}
+
+```
+### race:
+Runs effects in a race, cancels losers
+Use case: For implementing timeouts or handling competing conditions.
+```typescript
+function* fetchWithTimeoutSaga() {
+  const { data, timeout } = yield race({
+    data: call(api.fetchData),
+    timeout: delay(5000)
+  });
+  
+  if (data) {
+    yield put({ type: 'FETCH_SUCCESS', data });
+  } else {
+    yield put({ type: 'FETCH_TIMEOUT' });
+  }
+}
+
+```
+---
+
+## Basic Project Structure
+
+### Complete flow visualize
+
+```
+Dispatch Action: INCREMENT_ASYNC
 │
-├── features/
-│   ├── products/
-│   │   ├── actions/
-│   │   │   ├── productActions.ts
-│   │   │   └── actionTypes.ts
-│   │   ├── reducers/
-│   │   │   └── productReducer.ts
-│   │   ├── sagas/
-│   │   │   └── productSaga.ts
-│   │   ├── selectors/
-│   │   │   └── productSelectors.ts
-│   │   ├── services/
-│   │   │   └── productService.ts
-│   │   └── types/
-│   │       └── product.types.ts
-│   │
-│   └── images/
-│       ├── actions/
-│       ├── reducers/
-│       ├── sagas/
-│       ├── selectors/
-│       └── services/
+▼
+Redux Store
 │
-└── components/
-    ├── ProductList/
-    │   └── ProductList.tsx
-    └── ImageGallery/
-        └── ImageGallery.tsx
+▼
+Saga Middleware intercepts
+│
+▼
+watchIncrementAsync (takeLatest)
+│
+▼
+incrementAsync (worker saga)
+│
+▼
+delay(3000)
+│
+▼
+put({ type: 'INCREMENT' })
+│
+▼
+Redux Store
+│
+▼
+Reducer (counter)
+│
+▼
+New State = state + 1
+│
+▼
+State Saved
+│
+▼
+store.subscribe()
+│
+▼
+UI / Console Updated
+
+```
+```typescript
+//npm install redux redux-saga
+//node main.js
+
+//reducers.js
+export default function counter(state = 0, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1;
+    case 'INCREMENT_IF_ODD':
+      return (state % 2 !== 0) ? state + 1 : state;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
+  }
+}
+
+
+//sagas.js
+import { put, takeEvery, takeLatest, delay } from 'redux-saga/effects';
+
+// Helper function for creating delays
+// const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
+// worker saga
+export function* incrementAsync() {
+  yield delay(3000);
+  yield put({ type: 'INCREMENT' });
+}
+
+// watcher saga
+export function* watchIncrementAsync() {
+  yield takeLatest('INCREMENT_ASYNC', incrementAsync);
+}
+
+// You could add more sagas here
+export function* watchDecrementAsync() {
+  yield takeEvery('DECREMENT_ASYNC', function* () {
+    yield delay(1000);
+    yield put({ type: 'DECREMENT' });
+  });
+}
+
+// Root saga a watcher function execute first
+export function* rootSaga() {
+  yield* [
+    watchIncrementAsync(),
+    watchDecrementAsync()
+  ];
+}
+
+
+//main.js
+import { createStore, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import counter from './reducers';
+import { rootSaga } from './sagas';
+
+// Create the saga middleware
+const sagaMiddleware = createSagaMiddleware();
+
+// Create store with the reducer and saga middleware
+const store = createStore(
+  counter,
+  applyMiddleware(sagaMiddleware)
+);
+
+// Run the root saga
+sagaMiddleware.run(rootSaga);
+
+// Log initial state
+console.log('Initial state:', store.getState());
+
+// Subscribe to state changes
+store.subscribe(() => {
+  console.log('Current state:', store.getState());
+});
+
+// Dispatch actions to test
+console.log('Dispatching INCREMENT');
+store.dispatch({ type: 'INCREMENT' });
+
+console.log('Dispatching DECREMENT');
+store.dispatch({ type: 'DECREMENT' });
+
+console.log('Dispatching INCREMENT_IF_ODD');
+store.dispatch({ type: 'INCREMENT_IF_ODD' });
+
+console.log('Dispatching INCREMENT_ASYNC (will increment after 3 seconds)');
+store.dispatch({ type: 'INCREMENT_ASYNC' });
+
+console.log('Dispatching DECREMENT_ASYNC (will decrement after 1 second)');
+store.dispatch({ type: 'DECREMENT_ASYNC' });
+
 ```
 
 ---

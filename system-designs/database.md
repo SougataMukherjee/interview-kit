@@ -199,3 +199,30 @@ Used in
 Distributed caches
 
 Load balancers
+
+## Monolith vs Distributed: Application Architecture What's the difference?
+
+Monolith: Single, unified codebase and deployment
+Distributed: Multiple independent services working together
+When to use each?
+
+Monolith: Smaller teams, simpler applications, early startups
+Distributed: Large-scale applications, multiple teams, need for selective scaling
+Example:
+
+Early Instagram was a monolith. As it grew to billions of users, they split into services: one for photos, one for user profiles, one for direct messages, etc.
+
+## Database Storage Types: Different Data, Different Needs What are the main types?
+
+Relational (SQL): Structured data in tables
+Document (NoSQL): Flexible schema, JSON-like documents
+Key-Value: Simple key-to-value mapping
+Graph: For connected data
+Column-family: Wide-column storage
+
+## Normalization vs Denormalization: Database Organization What's the difference?
+
+Normalization: Divide data into separate tables to reduce redundancy
+Denormalization: Combine data into fewer tables for faster reads
+
+

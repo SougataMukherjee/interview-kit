@@ -21,6 +21,8 @@ Needs a load balancer
 Purpose
 Distributes traffic evenly
 Improves availability
+`Example:`
+Amazon.com uses load balancers during Black Friday sales to distribute millions of shoppers across thousands of servers, preventing crashes.
 
 ## Types of Load Balancers
 `L4 Load Balancer` TCP/UDP (faster)NGINX TCP load balancing

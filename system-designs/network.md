@@ -88,11 +88,11 @@ Nginx is a high‑performance web server, reverse proxy, and load balancer.
 
 
 ### latency
-Latency is the time taken to complete one request.measured in milliseconds,used in CDN,caching
+Latency is the time taken to complete one request(from source to destination).measured in milliseconds,we can reduce latency using Caching or CDN
+Latency = Network Delay + Processing Delay
 Example:
+When you click a website link, 200ms latency feels instant, but 2000ms feels slow. Netflix uses CDNs to store movies closer to viewers, reducing buffering time.
 
-India → India server: ~30 ms
-India → US server: ~250 ms
 ### throughput
 Throughput is the number of requests processed per unit time.
 Measured in requests/sec (RPS)

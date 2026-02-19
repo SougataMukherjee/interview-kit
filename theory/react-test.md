@@ -12,6 +12,7 @@
 9. [Advanced Patterns](#advanced-patterns)
 10. [Common Mistakes](#common-mistakes)
 11. [Best Practices](#best-practices)
+12. [Debug Test](#debug-test)
 
 ---
 
@@ -1176,7 +1177,7 @@ describe('SafeComponent', () => {
 A mock function replaces a real function during testing.
 Internally: Jest tracks calls, arguments, return values, and lets you define fake implementations.
 
-### Example 28: jest.fn() - Basic Mock
+### jest.fn() - Basic Mock
 
 **Description:** Create mock functions to test callbacks and function calls.
 
@@ -1213,6 +1214,43 @@ describe('LoginForm Component', () => {
     expect(mockSubmit).not.toHaveBeenCalled();
   });
 });
+```
+### jest.fn(() => value) - Mock with return value
+
+When component uses function return
+```typescript
+const getTitle = jest.fn(() => "Hello");
+
+expect(getTitle()).toBe("Hello");
+
+```
+### jest.fn().mockReturnValue(value)- Fixed return value
+most used in hook and utilities
+```typescript
+const isLoggedIn = jest.fn();
+isLoggedIn.mockReturnValue(true);
+
+expect(isLoggedIn()).toBe(true);
+
+```
+### Mocking hook return value
+```typescript
+import { useQuery } from "react-query";
+
+jest.mock("react-query");
+
+it("shows loading text", () => {
+  useQuery.mockReturnValue({
+    isLoading: true,
+    error: null,
+    data: null,
+  });
+
+  render(<PostList isDrawerOpen={false} closeDrawer={jest.fn()} />);
+
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
+});
+
 ```
 
 ---
@@ -1334,6 +1372,22 @@ describe('UserTable Component', () => {
     expect(rows).toHaveLength(users.length + 1);
   });
 });
+```
+**it.each():** is a Jest utility that allows you to run the same test multiple times with different data inputs. It helps reduce repetitive test code by parameterize your tests.
+```typescript
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+describe('Email validation', () => {
+  it.each([
+    ['test@example.com', true],
+    ['invalid-email', false],
+    ['test@domain', false],
+    ['test@.com', false],
+    ['@domain.com', false],
+  ])('validates that %s is %s', (email, expected) => {
+    expect(isValidEmail(email)).toBe(expected);
+  });
+}); 
 ```
 
 ---
@@ -2256,3 +2310,138 @@ test("toEqual vs toStrictEqual", () => {
 ```
 
 ---
+## Debug Test
+1. Using screen.debug()
+```typescript
+import { render, screen } from '@testing-library/react';
+
+test('debug the entire rendered DOM', () => {
+  render(<MyComponent />);
+  
+  // Print the entire rendered DOM
+  screen.debug();
+  
+  // Debug a specific element
+  const button = screen.getByRole('button');
+  screen.debug(button);
+});
+```
+2. Using logRoles to Identify Accessibility Issues
+```typescript
+import { render, screen, logRoles } from '@testing-library/react';
+
+test('log all available roles', () => {
+  const { container } = render(<MyComponent />);
+  
+  // Log all roles in the component
+  logRoles(container);
+});
+```
+3. Using prettyDOM for Custom Logging
+```typescript
+import { render, prettyDOM } from '@testing-library/react';
+
+test('use prettyDOM for custom logging', () => {
+  const { container } = render(<MyComponent />);
+  
+  // Log specific parts of the DOM
+  console.log(prettyDOM(container.querySelector('.specific-class')));
+});
+```
+4. Testing Asynchronous Code with waitFor
+```typescript
+import { render, screen, waitFor } from '@testing-library/react';
+
+test('debug async rendering', async () => {
+  render(<AsyncComponent />);
+  
+  // Debug before async operation
+  console.log('Before async:');
+  screen.debug();
+  
+  // Wait for element to appear
+  await waitFor(() => screen.getByText('Loaded Data'));
+  
+  // Debug after async operation
+  console.log('After async:');
+  screen.debug();
+});
+```
+5. Using within to Debug Nested Components
+```typescript
+import { render, screen, within } from '@testing-library/react';
+
+test('debug within a specific section', () => {
+  render(<PageWithSections />);
+  
+  // Find a specific section
+  const sidebar = screen.getByTestId('sidebar');
+  
+  // Debug only elements within that section
+  console.log('Sidebar contents:');
+  within(sidebar).debug();
+});
+```
+6. Debugging Events and User Interactions
+```typescript
+import { render, screen, fireEvent } from '@testing-library/react';
+
+test('debug before and after interaction', () => {
+  render(<ToggleComponent />);
+  
+  // Debug initial state
+  console.log('Before click:');
+  screen.debug();
+  
+  // Perform interaction
+  const toggleButton = screen.getByText('Toggle');
+  fireEvent.click(toggleButton);
+  
+  // Debug after interaction
+  console.log('After click:');
+  screen.debug();
+});
+```
+7.Debugging Redux Connected Components
+```typescript
+import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
+
+test('debug Redux connected component', () => {
+  const mockStore = configureStore([]);
+  const store = mockStore({
+    user: { name: 'Test User' }
+  });
+  
+  render(
+    <Provider store={store}>
+      <ConnectedComponent />
+    </Provider>
+  );
+  
+  // Log dispatched actions
+  console.log('Dispatched actions:', store.getActions());
+  
+  // Debug rendered output
+  screen.debug();
+});
+```
+8. Debugging Props and State
+```typescript
+import { render, screen } from '@testing-library/react';
+
+test('debug component with specific props', () => {
+  const testProps = {
+    name: 'Test Name',
+    isActive: true
+  };
+  
+  console.log('Testing with props:', testProps);
+  render(<UserProfile {...testProps} />);
+  
+  screen.debug();
+});
+```
+---
+
