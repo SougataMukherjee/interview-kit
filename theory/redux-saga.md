@@ -422,43 +422,70 @@ function* fetchWithTimeoutSaga() {
 ### Complete flow visualize
 
 ```
-Dispatch Action: INCREMENT_ASYNC
-│
-▼
-Redux Store
-│
-▼
-Saga Middleware intercepts
-│
-▼
-watchIncrementAsync (takeLatest)
-│
-▼
-incrementAsync (worker saga)
-│
-▼
-delay(3000)
-│
-▼
-put({ type: 'INCREMENT' })
-│
-▼
-Redux Store
-│
-▼
-Reducer (counter)
-│
-▼
-New State = state + 1
-│
-▼
-State Saved
-│
-▼
-store.subscribe()
-│
-▼
-UI / Console Updated
+1. User Interaction
+   │
+   ▼
+2. React Component receives the event
+   │
+   ▼
+3. Component calls a prop function from Container
+   │
+   ▼
+4. Container's mapDispatchToProps creates and dispatches an action
+   │
+   ▼
+5. Action object flows to Redux Store
+   │
+   │
+   ├─────► 6a. Reducer receives the action
+   │       │
+   │       ▼
+   │      7a. Reducer checks action type in switch statement
+   │       │
+   │       ▼
+   │      8a. Reducer creates new state (if relevant action)
+   │       │
+   │       ▼
+   │      9a. Store updates with new state
+   │
+   │
+   └─────► 6b. Saga Middleware intercepts the action
+           │
+           ▼
+          7b. Watcher saga checks if it should respond to this action
+           │
+           ▼
+          8b. Worker saga executes to handle the action
+           │
+           ▼
+          9b. Saga calls Service for external data (API, etc.)
+           │
+           ▼
+         10b. Service makes external request and returns data/promise
+           │
+           ▼
+         11b. Saga receives data and dispatches success/failure action
+           │
+           ▼
+         12b. New action goes back to step 5 (to be handled by Reducer)
+           │
+           │
+           └─────► Back to 6a for state update
+                   │
+                   ▼
+                  13. Store notifies connected components of state change
+                   │
+                   ▼
+                  14. Container's mapStateToProps runs with new state
+                   │
+                   ▼
+                  15. Selectors extract and format specific data from state
+                   │
+                   ▼
+                  16. Container passes new props to Component
+                   │
+                   ▼
+                  17. Component re-renders with new data
 
 ```
 ```typescript
@@ -830,7 +857,7 @@ const productSlice = createSlice({
 
 ### 3. Combine Reducers
 
-**Description:** Combine multiple reducers into a single root reducer for the store.
+**Description:** Combine multiple reducers into a single root reducer for the store.allowing you to split state management by domain or feature.
 
 **store/rootReducer.ts**
 ```typescript
@@ -1174,7 +1201,55 @@ export default function* productSaga() {
 ### Step 4: React Component
 
 **Description:** Connect React component to Redux store using `connect` HOC or hooks.
+**Key Functions**
+	`mapStateToProps` 
 
+	- Takes Redux state as parameter
+	- Returns object of props derived from state
+	- Runs whenever state changes
+	- Can access component's own props via second parameter
+
+	`mapDispatchToProps`
+
+	- Takes dispatch function as parameter
+	- Returns object of action creator functions
+	- Acts similar to useDispatch in hooks
+	- Automatically wraps action creators in dispatch()
+
+**Connect Variations & Use Cases**
+1. Both State and Dispatch Mapping
+Use case: When component needs both state data and to dispatch actions Example: User profile showing user data and allowing updates
+```typescript
+export default connect(mapStateToProps, mapDispatchToProps)(UserProfile)
+```
+2. State Mapping Only
+Use case: Read-only components that display data but don't update it Example: Dashboard displaying statistics from Redux store
+```typescript
+export default connect(mapStateToProps)(Dashboard)
+```
+3. Dispatch Mapping Only
+Use case: Components that trigger actions but don't need state Example: Form submit button that dispatches data
+```typescript
+export default connect(null, mapDispatchToProps)(SubmitButton)
+```
+4. Inline Component with Connect
+Use case: Quick connection of simple components without creating separate files Example: One-off buttons or small UI elements that need Redux actions
+```typescript
+export default connect(null, mapDispatchToProps)((props) => <Button {...props} />)
+```
+5. Object Shorthand for Actions
+Use case: When using pre-defined action creators Example: Counter component using standard increment/decrement actions
+```typescript
+export default connect(mapStateToProps, {increment, decrement})(Counter)
+```
+6. With Component's Own Props
+Use case: When Redux data selection depends on component props Example: Todo item that needs to find its data based on ID prop
+```typescript
+const mapStateToProps = (state, ownProps) => ({
+  todo: state.todos.find(todo => todo.id === ownProps.id)
+})
+export default connect(mapStateToProps)(TodoItem)
+```
 **components/ProductList/ProductList.tsx**
 ```typescript
 import React, { useEffect, useState } from 'react';

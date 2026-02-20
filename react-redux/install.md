@@ -14,6 +14,8 @@ npm i @emotion/react @emotion/styled
 
 npm install redux-saga react-router-dom@5
 
+npx storybook@latest init
+
 
 
 
