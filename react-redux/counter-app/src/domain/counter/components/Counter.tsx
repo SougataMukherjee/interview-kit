@@ -23,11 +23,11 @@ const Counter: React.FC = () => {
       <h2>Counter: {count}</h2>
 
       <Button aria-label="increment" onClick={() => dispatch(increment())}>
-        +
+        increment
       </Button>
 
       <Button variant={ButtonVariant.OUTLINED} aria-label="decrement" onClick={() => dispatch(decrement())}>
-        -
+        decrement
       </Button>
 
       <Button aria-label="reset" onClick={() => dispatch(reset())}>

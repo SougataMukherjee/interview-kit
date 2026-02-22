@@ -8,12 +8,14 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "vitest -c vitest.app.config.ts",
     "test:ui": "vitest --ui",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage",
     "storybook": "storybook dev -p 6006",
-    "test:storybook": "storybook test",
+    "test:storybook": "vitest -c vitest.storybook.config.ts",
+    "test:app": "vitest -c vitest.app.config.ts",
+    "test:storybook:vitest": "vitest --project storybook",
     "build-storybook": "storybook build"
   },
   "dependencies": {

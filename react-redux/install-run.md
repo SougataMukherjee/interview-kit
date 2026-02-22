@@ -18,6 +18,13 @@ npx storybook@latest init
 npm i -D @storybook/react @storybook/testing-library
 npx playwright install 
 
+==================
+for ECOMPROMISED error npm cache clean --force  and delete node_module and package lock file then npm i
+vite.config.ts configure and package.json configure
 
+for storybook run - npm run storybook
+for storybook test run - npm run test:storybook
+for app run - npm run dev
+for app test run - npm run test:app
 
 

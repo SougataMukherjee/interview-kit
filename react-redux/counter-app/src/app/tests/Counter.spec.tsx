@@ -1,9 +1,9 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
-import { store } from '../app/store'
-import Counter from '../domain/counter/components/Counter'
+import { store } from '../store'
+import Counter from '../../domain/counter/components/Counter'
 import {describe, expect, it,beforeEach } from 'vitest'
-import { reset } from '../domain/counter/actions/counterActions'
+import { reset } from '../../domain/counter/actions/counterActions'
 
 describe('Counter components',()=>{
   beforeEach(() => {
