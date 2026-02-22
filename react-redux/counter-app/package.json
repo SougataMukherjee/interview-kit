@@ -13,10 +13,11 @@
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage",
     "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "publish-storybook": "chromatic --project-token=chpt_facac49f8baec82",
     "test:storybook": "vitest -c vitest.storybook.config.ts",
     "test:app": "vitest -c vitest.app.config.ts",
-    "test:storybook:vitest": "vitest --project storybook",
-    "build-storybook": "storybook build"
+    "test:storybook:vitest": "vitest --project storybook"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -51,6 +52,7 @@
     "@vitest/browser-playwright": "^4.0.18",
     "@vitest/coverage-v8": "^4.0.18",
     "@vitest/ui": "^4.0.18",
+    "chromatic": "^15.1.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",

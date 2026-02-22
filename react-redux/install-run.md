@@ -1,3 +1,8 @@
+# React + Redux + Vite + Storybook Setup Notes
+
+## 1. Create Vite App (React + TypeScript)
+
+```bash
 npm create vite@latest react-redux-vite -- --template react-ts
 cd react-redux-vite
 npm install
@@ -18,13 +23,40 @@ npx storybook@latest init
 npm i -D @storybook/react @storybook/testing-library
 npx playwright install 
 
-==================
-for ECOMPROMISED error npm cache clean --force  and delete node_module and package lock file then npm i
-vite.config.ts configure and package.json configure
-
-for storybook run - npm run storybook
-for storybook test run - npm run test:storybook
-for app run - npm run dev
-for app test run - npm run test:app
+If you face ECOMPROMISED or npm install issues:
+npm cache clean --force
+Then:
+Delete node_modules
+Delete package-lock.json
+Reinstall dependencies
+npm install
+Also ensure:
+vite.config.ts is properly configured
+package.json scripts are correctly set
+```
+## for storybook run -
+```bash
+ npm run storybook
+ ```
+## for storybook test run - 
+```bash
+npm run test:storybook
+```
+## for app run -
+```bash
+ npm run dev
+ ```
+## for app test run -
+```bash
+ npm run test:app
+ ```
+## 🚀every time publish latest code:
+```bash
+npm run publish-storybook
+```
+## 🚀storybook url :
+```bash
+https://699b2af93c3e04b84507bebf-cvxyrmfqwn.chromatic.com/
+```
 
 
