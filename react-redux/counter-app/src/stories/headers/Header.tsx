@@ -24,7 +24,7 @@ const [checked, setChecked] = React.useState(true);
   <header>
     <div className="storybook-header">
       <div>
-        {user ?(<><Input value='test' onChange={()=>{}} label="Search"/></>):(<></>)}
+        {user ?(<><Input value='12345' onChange={()=>{}} label="Search RO"/></>):(<></>)}
       </div>
       <div>
           <>
