@@ -75,10 +75,12 @@ export interface SlatItem {
 }
 
 export interface SlatContentProps {
-  items: SlatItem[]
+  items: SlatItem[],
+  onItemSelect: (item: SlatItem) => void,
+  sidebarOpen?:boolean
 }
 
-const SlatContent: React.FC<SlatContentProps> = ({ items }) => {
+const SlatContent: React.FC<SlatContentProps> = ({ items,onItemSelect,sidebarOpen }) => {
   const [openId, setOpenId] = React.useState<string | null>(null)
 
   const handleToggle = (id: string) => {
@@ -197,7 +199,13 @@ const EllipsisText = ({ children }: { children: React.ReactNode }) => (
           >
             {/* SLAT ROW */}
             <Box
-              onClick={() => handleToggle(item.id)}
+              onClick={() => {
+                  if (sidebarOpen) {
+                    onItemSelect(item)
+                  } else {
+                    handleToggle(item.id)
+                  }
+                }}
               sx={{
                 cursor: 'pointer',
                 padding: 2,
@@ -251,7 +259,7 @@ const EllipsisText = ({ children }: { children: React.ReactNode }) => (
                   </Typography>
                 </Grid>
               </Grid> */}
-              <Grid container spacing={2} sx={{ mb: 3 }} >
+              <Grid container spacing={2} sx={{ mb: 3 ,flexWrap:'nowrap'}} >
   {/* Column 1 */}
   <Grid item xs={12} md={2.4} >
     <EllipsisText>RO#: {item.itemData.description.roNumber}</EllipsisText>

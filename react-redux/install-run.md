@@ -56,7 +56,7 @@ npm run publish-storybook
 ```
 ## 🚀storybook url :
 ```bash
-https://699b2af93c3e04b84507bebf-cvxyrmfqwn.chromatic.com/
+https://699b2af93c3e04b84507bebf-hecmgdzgnb.chromatic.com/
 ```
 
 
