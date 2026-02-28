@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Grid, Collapse, Typography } from '@mui/material'
+import Highlighter from "react-highlight-words";
 
 export interface ItemDescription {
   roNumber: string
@@ -77,10 +78,11 @@ export interface SlatItem {
 export interface SlatContentProps {
   items: SlatItem[],
   onItemSelect: (item: SlatItem) => void,
-  sidebarOpen?:boolean
+  sidebarOpen?:boolean,
+  searchText: string
 }
 
-const SlatContent: React.FC<SlatContentProps> = ({ items,onItemSelect,sidebarOpen }) => {
+const SlatContent: React.FC<SlatContentProps> = ({ items,onItemSelect,sidebarOpen,searchText }) => {
   const [openId, setOpenId] = React.useState<string | null>(null)
 
   const handleToggle = (id: string) => {
@@ -172,7 +174,7 @@ const SlatContent: React.FC<SlatContentProps> = ({ items,onItemSelect,sidebarOpe
       </Box>
     )
   }
-const EllipsisText = ({ children }: { children: React.ReactNode }) => (
+const EllipsisText = ({ children,searchText }: { children: React.ReactNode,searchText: string }) => (
   <Typography
     variant="body2"
     noWrap
@@ -262,7 +264,18 @@ const EllipsisText = ({ children }: { children: React.ReactNode }) => (
               <Grid container spacing={2} sx={{ mb: 3 ,flexWrap:'nowrap'}} >
   {/* Column 1 */}
   <Grid item xs={12} md={2.4} >
-    <EllipsisText>RO#: {item.itemData.description.roNumber}</EllipsisText>
+    <EllipsisText>RO#:
+      <Highlighter
+      highlightStyle={{
+        backgroundColor: '#ffe58f',
+        padding: 0,
+      }}
+      searchWords={searchText ? [searchText] : []}
+      autoEscape={true}
+      textToHighlight={item.itemData.description.roNumber}
+    />
+       
+    </EllipsisText>
     <EllipsisText>Name: {item.itemData.description.name}</EllipsisText>
     <EllipsisText>Vehicle: {item.itemData.description.vehicle}</EllipsisText>
     <EllipsisText>Estimator: {item.itemData.description.estimator}</EllipsisText>

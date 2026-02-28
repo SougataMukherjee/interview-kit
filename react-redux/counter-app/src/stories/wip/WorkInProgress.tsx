@@ -8,6 +8,7 @@ import SlatContent from '../content/SlatContent'
 import type { SlatItem } from '../content/SlatContent'
 import Sidebar from '../sidebar/Sidebar'
 
+
 export interface WorkInProgressProps {
   items: SlatItem[]
 }
@@ -17,17 +18,30 @@ const WorkInProgress: React.FC<WorkInProgressProps> = ({ items }) => {
   const [search, setSearch] = React.useState('')
   const [selectedItem, setSelectedItem] = React.useState<SlatItem | null>(null);
   const [check,setCheck]=React.useState<boolean>(false)
+  const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
+  
   
 
-  /** 🔍 Search filter (RO Number) */
-  const filteredItems = React.useMemo(() => {
-    if (!search.trim()) return items
-    return items.filter(item =>
+const filteredItems = React.useMemo(() => {
+  return items.filter(item => {
+
+    const matchesSearch =
+      !search.trim() ||
       item.itemData.description.roNumber
         .toLowerCase()
-        .includes(search.toLowerCase())
-    )
-  }, [search, items])
+        .includes(search.toLowerCase());
+
+    const matchesDate =
+      !selectedDate ||
+      new Date(item.itemData.dates.deliveryDate).toDateString() ===
+        selectedDate.toDateString();
+
+    return matchesSearch && matchesDate;
+
+  });
+}, [search, selectedDate, items]);
+
+
 
   /** 📌 Open sidebar with selected item */
   const handleItemSelect = (item: SlatItem) => {
@@ -43,6 +57,8 @@ const WorkInProgress: React.FC<WorkInProgressProps> = ({ items }) => {
         onSearch={setSearch}
         sidebarOpen={check}
         onToggleSidebar={setCheck}
+        selectedDate={selectedDate}
+        onDateChange={setSelectedDate}
       />
 
       {/* MAIN CONTENT */}
@@ -52,6 +68,7 @@ const WorkInProgress: React.FC<WorkInProgressProps> = ({ items }) => {
           onItemSelect={handleItemSelect}
           sidebarOpen={check}
           onToggleSidebar={setCheck}
+          searchText={search}
         />
 
         {filteredItems.length === 0 && (

@@ -1,8 +1,11 @@
 
 import  Switch  from '@mui/material/Switch';
 import Input from '../../ui/components/input'
-import * as React from 'react'
 import './header.css';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import './header.css';
+
 
 type User = {
   name: string;
@@ -76,12 +79,14 @@ export interface HeaderProps {
   onCreateAccount?: () => void;
   onSearch: (value: string) => void
   onToggleSidebar: (value:boolean) => void;
-
-   sidebarOpen?:boolean
+  sidebarOpen?:boolean;
+  selectedDate: Date | null;
+  onDateChange: (date: Date | null) => void;
    
 }
 
-export const Header = ({  onSearch,sidebarOpen,onToggleSidebar }: HeaderProps) => {
+export const Header = ({  onSearch,sidebarOpen,onToggleSidebar,selectedDate,
+  onDateChange, }: HeaderProps) => {
 
   return(
   <header>
@@ -89,6 +94,15 @@ export const Header = ({  onSearch,sidebarOpen,onToggleSidebar }: HeaderProps) =
       <div>
         <Input label="Search RO"
         onChange={(e) => onSearch(e.target.value)}/>
+        {/* 📅 React DatePicker */}
+        <DatePicker
+          selected={selectedDate}
+          onChange={(date) => onDateChange(date)}
+          placeholderText="Filter by Delivery Date"
+          dateFormat="dd/MM/yyyy"
+          isClearable
+          className="date-picker-input"
+        />
       </div>
       <div>
           <>

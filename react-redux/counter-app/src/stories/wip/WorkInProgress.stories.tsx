@@ -19,13 +19,13 @@ const mockItems = {
         "details": {
           "preferenceCompany": "Canada Dev/Quarterly",
           "shop": "Preferred Check Shops 2158",
-          "dueIn": "9/7/2024",
-          "dueOut": "9/7/2024"
+          "dueIn": "9/7/2026",
+          "dueOut": "9/7/2026"
         },
         "dates": {
-          "started": "9/7/2024",
-          "completed": "9/7/2024",
-          "deliveryDate": "9/7/2024",
+          "started": "9/7/2026",
+          "completed": "9/7/2026",
+          "deliveryDate": "9/7/2026",
           "totalCosts": "$198.34"
         },
         "amounts": {
@@ -77,13 +77,13 @@ const mockItems = {
         "details": {
           "preferenceCompany": "Auto Services",
           "shop": "Elite Repair Center 1205",
-          "dueIn": "9/8/2024",
-          "dueOut": "9/10/2024"
+          "dueIn": "9/8/2026",
+          "dueOut": "9/10/2026"
         },
         "dates": {
-          "started": "9/8/2024",
-          "completed": "9/9/2024",
-          "deliveryDate": "9/10/2024",
+          "started": "9/8/2026",
+          "completed": "9/9/2026",
+          "deliveryDate": "9/10/2026",
           "totalCosts": "$425.67"
         },
         "amounts": {
@@ -136,11 +136,11 @@ const mockItems = {
         "details": {
           "preferenceCompany": "Express Auto Group",
           "shop": "Quick Fix Garage 3401",
-          "dueIn": "9/9/2024",
-          "dueOut": "9/12/2024"
+          "dueIn": "9/9/2026",
+          "dueOut": "9/12/2026"
         },
         "dates": {
-          "started": "9/9/2024",
+          "started": "9/9/2026",
           "completed": "Pending",
           "deliveryDate": "TBD",
           "totalCosts": "$312.89"
