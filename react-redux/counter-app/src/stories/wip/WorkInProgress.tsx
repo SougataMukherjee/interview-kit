@@ -7,6 +7,9 @@ import {Header} from '../headers/Header'
 import SlatContent from '../content/SlatContent'
 import type { SlatItem } from '../content/SlatContent'
 import Sidebar from '../sidebar/Sidebar'
+import { pdf } from "@react-pdf/renderer";
+import { DocumentPrintHelper } from "../../ui/common/utility/DocumentPrintHelper";
+import SlatPdfDocument from '../content/SlatPdfDocument'
 
 
 export interface WorkInProgressProps {
@@ -48,7 +51,24 @@ const filteredItems = React.useMemo(() => {
     setSelectedItem(item)
     setSidebarOpen(true)
   }
+const handlePrint = async () => {
+  try {
+    const dataToPrint = check ? filteredItems : items;
 
+    const blob = await pdf(
+      <SlatPdfDocument items={dataToPrint} />
+    ).toBlob();
+
+    DocumentPrintHelper.printDocument(
+      blob,
+      "WorkInProgress.pdf",
+      true
+    );
+
+  } catch (error) {
+    console.error("Print error:", error);
+  }
+};
 
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -59,6 +79,7 @@ const filteredItems = React.useMemo(() => {
         onToggleSidebar={setCheck}
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
+        onPrint={handlePrint}
       />
 
       {/* MAIN CONTENT */}

@@ -18,6 +18,7 @@ npm i @mui/material @mui/icons-material
 npm i @emotion/react @emotion/styled
 npm install react-highlight-words
 npm install react-datepicker
+npm install @react-pdf/renderer
 
 
 npm install redux-saga react-router-dom@5

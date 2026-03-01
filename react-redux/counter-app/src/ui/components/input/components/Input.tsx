@@ -5,6 +5,7 @@ import { InputVariant } from '../enums/input.enum'
 import { DEFAULT_PLACEHOLDER } from '../constants/input.constants'
 import type { AppInputProps } from '../interface/input.interface'
 
+
 const Input: React.FC<AppInputProps> = ({
   value,
   onChange,
@@ -30,6 +31,15 @@ const Input: React.FC<AppInputProps> = ({
       fullWidth={fullWidth}
       error={error}
       helperText={helperText}
+      sx={{
+        width: 250,
+        '& .MuiOutlinedInput-root': {
+          height: 50,
+        },
+        '& .MuiOutlinedInput-input': {
+          padding: '10px 14px',
+        },
+      }}
     />
   )
 }

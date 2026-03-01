@@ -4,8 +4,14 @@ import Input from '../../ui/components/input'
 import './header.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import './header.css';
+import Button from '../../ui/components/button'
+import { ButtonVariant } from '../../ui/components/button';
+import styled from '@emotion/styled'
 
+ const InputArea =styled.div`
+  display:flex;
+  gap:1rem;
+`
 
 type User = {
   name: string;
@@ -82,16 +88,16 @@ export interface HeaderProps {
   sidebarOpen?:boolean;
   selectedDate: Date | null;
   onDateChange: (date: Date | null) => void;
-   
+  onPrint: () => void;
 }
 
 export const Header = ({  onSearch,sidebarOpen,onToggleSidebar,selectedDate,
-  onDateChange, }: HeaderProps) => {
+  onDateChange, onPrint}: HeaderProps) => {
 
   return(
   <header>
     <div className="storybook-header">
-      <div>
+      <InputArea>
         <Input label="Search RO"
         onChange={(e) => onSearch(e.target.value)}/>
         {/* 📅 React DatePicker */}
@@ -103,12 +109,14 @@ export const Header = ({  onSearch,sidebarOpen,onToggleSidebar,selectedDate,
           isClearable
           className="date-picker-input"
         />
-      </div>
+      </InputArea>
       <div>
           <>
             <Switch  checked={sidebarOpen} onChange={(e) => onToggleSidebar(e.target.checked)} color="secondary" />
             {/* <Switch checked={checked} onChange={handleChange} color="secondary"/> */}
-            
+            <Button onClick={onPrint} variant={ButtonVariant.OUTLINED}>
+              Print
+            </Button>
           </>
         
       </div>
