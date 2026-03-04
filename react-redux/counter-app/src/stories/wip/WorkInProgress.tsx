@@ -1,77 +1,50 @@
-import React from 'react'
-import {
-  Box,
-  Typography,
-} from '@mui/material'
-import {Header} from '../headers/Header'
-import SlatContent from '../content/SlatContent'
-import type { SlatItem } from '../content/SlatContent'
-import Sidebar from '../sidebar/Sidebar'
-import { pdf } from "@react-pdf/renderer";
-import { DocumentPrintHelper } from "../../ui/common/utility/DocumentPrintHelper";
-import SlatPdfDocument from '../content/SlatPdfDocument'
-
+import React from "react";
+import { Box, Typography } from "@mui/material";
+import { Header } from "../headers/Header";
+import SlatContent from "../content/SlatContent";
+import type { SlatItem } from "../content/SlatContent";
+import Sidebar from "../sidebar/Sidebar";
+import { usePrintDownload } from "../../ui/common/hooks/usePrintDownload";
 
 export interface WorkInProgressProps {
-  items: SlatItem[]
+  items: SlatItem[];
 }
 
 const WorkInProgress: React.FC<WorkInProgressProps> = ({ items }) => {
-  const [sidebarOpen, setSidebarOpen] = React.useState<boolean>(false)
-  const [search, setSearch] = React.useState<string>('')
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [search, setSearch] = React.useState("");
   const [selectedItem, setSelectedItem] = React.useState<SlatItem | null>(null);
-  const [check,setCheck]=React.useState<boolean>(false)
+  const [check, setCheck] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
-  
-  
 
-const filteredItems = React.useMemo(() => {
-  return items.filter(item => {
-
-    const matchesSearch =
-      !search.trim() ||
-      item.itemData.description.roNumber
-        .toLowerCase()
-        .includes(search.toLowerCase());
-
-    const matchesDate =
-      !selectedDate ||
-      new Date(item.itemData.dates.deliveryDate).toDateString() ===
-        selectedDate.toDateString();
-
-    return matchesSearch && matchesDate;
-
+  const { componentRef, handlePrint } = usePrintDownload({
+    fileName: "WorkInProgress",
   });
-}, [search, selectedDate, items]);
 
+  const filteredItems = React.useMemo(() => {
+    return items.filter((item) => {
+      const matchesSearch =
+        !search.trim() ||
+        item.itemData.description.roNumber
+          .toLowerCase()
+          .includes(search.toLowerCase());
 
+      const matchesDate =
+        !selectedDate ||
+        new Date(item.itemData.dates.deliveryDate).toDateString() ===
+          selectedDate.toDateString();
 
-  /** 📌 Open sidebar with selected item */
+      return matchesSearch && matchesDate;
+    });
+  }, [search, selectedDate, items]);
+
   const handleItemSelect = (item: SlatItem) => {
-    setSelectedItem(item)
-    setSidebarOpen(true)
-  }
-const handlePrint = async () => {
-  try {
-    const dataToPrint = check ? filteredItems : items;
-
-    const blob = await pdf(
-      <SlatPdfDocument items={dataToPrint} />
-    ).toBlob();
-
-    DocumentPrintHelper.printDocument(
-      blob,
-      "WorkInProgress.pdf",
-      true
-    );
-
-  } catch (error) {
-    console.error("Print error:", error);
-  }
-};
+    setSelectedItem(item);
+    setSidebarOpen(true);
+  };
 
   return (
-    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       {/* HEADER */}
       <Header
         onSearch={setSearch}
@@ -82,8 +55,16 @@ const handlePrint = async () => {
         onPrint={handlePrint}
       />
 
-      {/* MAIN CONTENT */}
-      <Box sx={{ flex: 1, overflow: 'auto', p: 2 }}>
+      {/* PRINTABLE AREA */}
+      <Box
+        ref={componentRef}
+        sx={{
+          flex: 1,
+          overflow: "auto",
+          p: 2,
+          backgroundColor: "white",
+        }}
+      >
         <SlatContent
           items={filteredItems}
           onItemSelect={handleItemSelect}
@@ -99,7 +80,7 @@ const handlePrint = async () => {
         )}
       </Box>
 
-      {/* RIGHT SIDEBAR */}
+      {/* SIDEBAR */}
       <Sidebar
         open={sidebarOpen}
         anchor="right"
@@ -107,7 +88,7 @@ const handlePrint = async () => {
         detailsData={selectedItem?.detailsData}
       />
     </Box>
-  )
-}
+  );
+};
 
-export default WorkInProgress
+export default WorkInProgress;

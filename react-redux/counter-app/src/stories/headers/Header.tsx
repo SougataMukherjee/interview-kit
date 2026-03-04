@@ -1,125 +1,65 @@
-
-import  Switch  from '@mui/material/Switch';
-import Input from '../../ui/components/input'
-import './header.css';
+import Switch from "@mui/material/Switch";
+import Input from "../../ui/components/input";
+import "./header.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Button from '../../ui/components/button'
-import { ButtonVariant } from '../../ui/components/button';
-import styled from '@emotion/styled'
+import Button from "../../ui/components/button";
+import { ButtonVariant } from "../../ui/components/button";
+import styled from "@emotion/styled";
 
- const InputArea =styled.div`
-  display:flex;
-  gap:1rem;
-`
-
-type User = {
-  name: string;
-};
-export interface ItemDescription {
-  roNumber: string
-  name: string
-  vehicle: string
-  estimator: string
-}
-
-export interface ItemDetails {
-  preferenceCompany: string
-  shop: string
-  dueIn: string
-  dueOut: string
-}
-
-export interface ItemDates {
-  started: string
-  completed: string
-  deliveryDate: string
-  totalCosts: string
-}
-
-export interface ItemAmounts {
-  salesTotal: string
-  subtotal: string
-  salesTotal2: string
-  grossProfitAmount: string
-}
-
-export interface ItemPercentages {
-  grossProfitPercent: string
-  hrsProfit: string
-  hrsPercent: string
-  hrsLeft: string
-}
-export interface ItemData {
-  description: ItemDescription
-  details: ItemDetails
-  dates: ItemDates
-  amounts: ItemAmounts
-  percentages: ItemPercentages
-}
-
-export interface DetailsData {
-  id: string
-  partsNew: string
-  partsAM: string
-  partsUsed: string
-  glass: string
-  partsOthers: string
-  paint: string
-  body: string
-  mech: string
-  frame: string
-  misc: string
-  detail: string
-  labourOther: string
-  sublet: string
-  customLabour: string
-  customTax: string
-  payableTaxes: string
-}
+const InputArea = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
 
 export interface HeaderProps {
-  user?: User;
-  onLogin?: () => void;
-  onLogout?: () => void;
-  onCreateAccount?: () => void;
-  onSearch: (value: string) => void
-  onToggleSidebar: (value:boolean) => void;
-  sidebarOpen?:boolean;
+  onSearch: (value: string) => void;
+  onToggleSidebar: (value: boolean) => void;
+  sidebarOpen?: boolean;
   selectedDate: Date | null;
   onDateChange: (date: Date | null) => void;
   onPrint: () => void;
 }
 
-export const Header = ({  onSearch,sidebarOpen,onToggleSidebar,selectedDate,
-  onDateChange, onPrint}: HeaderProps) => {
+export const Header = ({
+  onSearch,
+  sidebarOpen,
+  onToggleSidebar,
+  selectedDate,
+  onDateChange,
+  onPrint,
+}: HeaderProps) => {
+  return (
+    <header>
+      <div className="storybook-header">
+        <InputArea>
+          <Input
+            label="Search RO"
+            onChange={(e) => onSearch(e.target.value)}
+          />
 
-  return(
-  <header>
-    <div className="storybook-header">
-      <InputArea>
-        <Input label="Search RO"
-        onChange={(e) => onSearch(e.target.value)}/>
-        {/* 📅 React DatePicker */}
-        <DatePicker
-          selected={selectedDate}
-          onChange={(date) => onDateChange(date)}
-          placeholderText="Filter by Delivery Date"
-          dateFormat="dd/MM/yyyy"
-          isClearable
-          className="date-picker-input"
-        />
-      </InputArea>
-      <div>
-          <>
-            <Switch  checked={sidebarOpen} onChange={(e) => onToggleSidebar(e.target.checked)} color="secondary" />
-            {/* <Switch checked={checked} onChange={handleChange} color="secondary"/> */}
-            <Button onClick={onPrint} variant={ButtonVariant.OUTLINED}>
-              Print
-            </Button>
-          </>
-        
+          <DatePicker
+            selected={selectedDate}
+            onChange={(date) => onDateChange(date)}
+            placeholderText="Filter by Delivery Date"
+            dateFormat="dd/MM/yyyy"
+            isClearable
+            className="date-picker-input"
+          />
+        </InputArea>
+
+        <div>
+          <Switch
+            checked={sidebarOpen}
+            onChange={(e) => onToggleSidebar(e.target.checked)}
+            color="secondary"
+          />
+
+          <Button onClick={onPrint} variant={ButtonVariant.OUTLINED}>
+            Print
+          </Button>
+        </div>
       </div>
-    </div>
-  </header>
-  )};
+    </header>
+  );
+};

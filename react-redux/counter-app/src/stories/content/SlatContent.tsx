@@ -1,6 +1,8 @@
 import React from 'react'
 import { Box, Grid, Collapse, Typography } from '@mui/material'
 import Highlighter from "react-highlight-words";
+import InfiniteScroll from "react-infinite-scroller";
+import CircularProgress from '@mui/material/CircularProgress';
 
 export interface ItemDescription {
   roNumber: string
@@ -83,12 +85,21 @@ export interface SlatContentProps {
 }
 
 const SlatContent: React.FC<SlatContentProps> = ({ items,onItemSelect,sidebarOpen,searchText }) => {
-  const [openId, setOpenId] = React.useState<string | null>(null)
-
+  const [openId, setOpenId] = React.useState<string | null>(null);
+  const ITEMS_PER_PAGE = 4;
+  const [visibleCount, setVisibleCount] = React.useState(ITEMS_PER_PAGE);
+  React.useEffect(() => {
+  setVisibleCount(ITEMS_PER_PAGE);
+}, [items]);
+ const loadMore = () => {
+  setTimeout(() => {
+    setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
+  }, 500); // simulate loading delay
+};
   const handleToggle = (id: string) => {
     setOpenId((prev) => (prev === id ? null : id))
   }
-
+  
 
   const renderDetailsContent = (item: SlatItem) => {
     const { detailsData } = item
@@ -174,7 +185,7 @@ const SlatContent: React.FC<SlatContentProps> = ({ items,onItemSelect,sidebarOpe
       </Box>
     )
   }
-const EllipsisText = ({ children,searchText }: { children: React.ReactNode,searchText: string }) => (
+const EllipsisText = ({ children }: { children: React.ReactNode,searchText: string }) => (
   <Typography
     variant="body2"
     noWrap
@@ -188,8 +199,22 @@ const EllipsisText = ({ children,searchText }: { children: React.ReactNode,searc
 );
 
   return (
-    <Box>
-      {items.map((item) => {
+    <Box sx={{
+      height: '80vh',        
+      overflow: 'auto',   
+    }}>
+    <InfiniteScroll
+  pageStart={0}
+  loadMore={loadMore}
+  hasMore={visibleCount < items.length}
+  loader={
+    <Box sx={{width:'100%',display:'flex',justifyContent:'center'}}>
+      <CircularProgress size={60} thickness={6}/>
+    </Box>
+  }
+  useWindow={false} 
+>
+      {items.slice(0, visibleCount).map((item) => {
         const isOpen = openId === item.id
 
         return (
@@ -347,6 +372,7 @@ const EllipsisText = ({ children,searchText }: { children: React.ReactNode,searc
           </Box>
         )
       })}
+      </InfiniteScroll>
     </Box>
   )
 }

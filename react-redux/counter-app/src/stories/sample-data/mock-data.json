@@ -173,6 +173,235 @@
         "customTax": "$0.00",
         "payableTaxes": "$191.53"
       }
+    },
+    {
+  "id": "RO-12348",
+  "itemStatus": "UNCHECKED",
+  "slatType": "CHECKABLE",
+  "isDeletable": true,
+  "itemData": {
+    "description": {
+      "roNumber": "12348",
+      "name": "Emily Carter",
+      "vehicle": "2017 BMW X3",
+      "estimator": "Daniel Reed"
+    },
+    "details": {
+      "preferenceCompany": "North Auto Claims",
+      "shop": "Premium Collision 7781",
+      "dueIn": "9/11/2024",
+      "dueOut": "9/14/2024"
+    },
+    "dates": {
+      "started": "9/11/2024",
+      "completed": "9/13/2024",
+      "deliveryDate": "9/14/2024",
+      "totalCosts": "$689.45"
+    },
+    "amounts": {
+      "salesTotal": "$720.00",
+      "subtotal": "$689.45",
+      "salesTotal2": "$689.45",
+      "grossProfitAmount": "$30.55"
+    },
+    "percentages": {
+      "grossProfitPercent": "4.2%",
+      "hrsProfit": "30.00",
+      "hrsPercent": "20.00",
+      "hrsLeft": "10.00"
     }
+  },
+  "detailsData": {
+    "id": "detail-4",
+    "partsNew": "$300.00",
+    "partsAM": "$120.00",
+    "partsUsed": "$0.00",
+    "glass": "$50.00",
+    "partsOthers": "$0.00",
+    "paint": "$80.00",
+    "body": "$60.00",
+    "mech": "$0.00",
+    "frame": "$0.00",
+    "misc": "$0.00",
+    "detail": "$0.00",
+    "labourOther": "$40.00",
+    "sublet": "$20.00",
+    "customLabour": "$19.45",
+    "customTax": "$0.00",
+    "payableTaxes": "$95.00"
+  }
+},
+{
+  "id": "RO-12349",
+  "itemStatus": "CHECKED",
+  "slatType": "CHECKABLE",
+  "isDeletable": true,
+  "itemData": {
+    "description": {
+      "roNumber": "12349",
+      "name": "Michael Brown",
+      "vehicle": "2016 Ford F-150",
+      "estimator": "Anna Lee"
+    },
+    "details": {
+      "preferenceCompany": "City Insurance",
+      "shop": "Metro Repairs 6610",
+      "dueIn": "9/12/2024",
+      "dueOut": "9/15/2024"
+    },
+    "dates": {
+      "started": "9/12/2024",
+      "completed": "9/14/2024",
+      "deliveryDate": "9/15/2024",
+      "totalCosts": "$540.20"
+    },
+    "amounts": {
+      "salesTotal": "$600.00",
+      "subtotal": "$540.20",
+      "salesTotal2": "$540.20",
+      "grossProfitAmount": "$59.80"
+    },
+    "percentages": {
+      "grossProfitPercent": "9.9%",
+      "hrsProfit": "22.00",
+      "hrsPercent": "16.00",
+      "hrsLeft": "6.00"
+    }
+  },
+  "detailsData": {
+    "id": "detail-5",
+    "partsNew": "$200.00",
+    "partsAM": "$100.00",
+    "partsUsed": "$0.00",
+    "glass": "$0.00",
+    "partsOthers": "$30.00",
+    "paint": "$50.00",
+    "body": "$60.00",
+    "mech": "$20.00",
+    "frame": "$0.00",
+    "misc": "$0.00",
+    "detail": "$0.00",
+    "labourOther": "$40.00",
+    "sublet": "$10.00",
+    "customLabour": "$30.20",
+    "customTax": "$0.00",
+    "payableTaxes": "$75.00"
+  }
+},
+{
+  "id": "RO-12350",
+  "itemStatus": "INFO",
+  "slatType": "INFO",
+  "isDeletable": false,
+  "infoStatusMessage": "Waiting for parts shipment",
+  "itemData": {
+    "description": {
+      "roNumber": "12350",
+      "name": "Olivia Martinez",
+      "vehicle": "2021 Hyundai Tucson",
+      "estimator": "Chris Evans"
+    },
+    "details": {
+      "preferenceCompany": "Rapid Auto Care",
+      "shop": "Speedy Garage 9982",
+      "dueIn": "9/13/2024",
+      "dueOut": "9/18/2024"
+    },
+    "dates": {
+      "started": "9/13/2024",
+      "completed": "Pending",
+      "deliveryDate": "TBD",
+      "totalCosts": "$275.90"
+    },
+    "amounts": {
+      "salesTotal": "$320.00",
+      "subtotal": "$275.90",
+      "salesTotal2": "$275.90",
+      "grossProfitAmount": "$44.10"
+    },
+    "percentages": {
+      "grossProfitPercent": "13.7%",
+      "hrsProfit": "18.00",
+      "hrsPercent": "14.00",
+      "hrsLeft": "4.00"
+    }
+  },
+  "detailsData": {
+    "id": "detail-6",
+    "partsNew": "$90.00",
+    "partsAM": "$70.00",
+    "partsUsed": "$0.00",
+    "glass": "$0.00",
+    "partsOthers": "$0.00",
+    "paint": "$20.00",
+    "body": "$30.00",
+    "mech": "$0.00",
+    "frame": "$0.00",
+    "misc": "$0.00",
+    "detail": "$0.00",
+    "labourOther": "$25.00",
+    "sublet": "$0.00",
+    "customLabour": "$40.90",
+    "customTax": "$0.00",
+    "payableTaxes": "$65.00"
+  }
+},
+{
+  "id": "RO-12351",
+  "itemStatus": "UNCHECKED",
+  "slatType": "CHECKABLE",
+  "isDeletable": true,
+  "itemData": {
+    "description": {
+      "roNumber": "12351",
+      "name": "James Anderson",
+      "vehicle": "2019 Nissan Altima",
+      "estimator": "Rachel Green"
+    },
+    "details": {
+      "preferenceCompany": "Prime Assurance",
+      "shop": "Downtown Auto 2211",
+      "dueIn": "9/14/2024",
+      "dueOut": "9/16/2024"
+    },
+    "dates": {
+      "started": "9/14/2024",
+      "completed": "9/15/2024",
+      "deliveryDate": "9/16/2024",
+      "totalCosts": "$410.75"
+    },
+    "amounts": {
+      "salesTotal": "$450.00",
+      "subtotal": "$410.75",
+      "salesTotal2": "$410.75",
+      "grossProfitAmount": "$39.25"
+    },
+    "percentages": {
+      "grossProfitPercent": "8.7%",
+      "hrsProfit": "20.00",
+      "hrsPercent": "15.00",
+      "hrsLeft": "5.00"
+    }
+  },
+  "detailsData": {
+    "id": "detail-7",
+    "partsNew": "$150.00",
+    "partsAM": "$90.00",
+    "partsUsed": "$0.00",
+    "glass": "$0.00",
+    "partsOthers": "$20.00",
+    "paint": "$45.00",
+    "body": "$35.00",
+    "mech": "$10.00",
+    "frame": "$0.00",
+    "misc": "$0.00",
+    "detail": "$0.00",
+    "labourOther": "$25.00",
+    "sublet": "$0.00",
+    "customLabour": "$35.75",
+    "customTax": "$0.00",
+    "payableTaxes": "$70.00"
+  }
+}
   ]
 }
