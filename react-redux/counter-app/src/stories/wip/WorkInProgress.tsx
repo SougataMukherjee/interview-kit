@@ -17,8 +17,8 @@ export interface WorkInProgressProps {
 }
 
 const WorkInProgress: React.FC<WorkInProgressProps> = ({ items }) => {
-  const [sidebarOpen, setSidebarOpen] = React.useState(true)
-  const [search, setSearch] = React.useState('')
+  const [sidebarOpen, setSidebarOpen] = React.useState<boolean>(false)
+  const [search, setSearch] = React.useState<string>('')
   const [selectedItem, setSelectedItem] = React.useState<SlatItem | null>(null);
   const [check,setCheck]=React.useState<boolean>(false)
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);

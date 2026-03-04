@@ -3,8 +3,8 @@ export const printDocument = (
   filename: string,
   contentRef?: React.RefObject<HTMLIFrameElement>
 ): void => {
-  if ((window.navigator as any).msSaveOrOpenBlob) {
-    (window.navigator as any).msSaveOrOpenBlob(
+  if ((window.navigator).msSaveOrOpenBlob) {
+    (window.navigator).msSaveOrOpenBlob(
       blob,
       filename.replace('blob:', '')
     );
