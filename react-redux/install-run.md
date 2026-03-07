@@ -38,6 +38,21 @@ npm install
 Also ensure:
 vite.config.ts is properly configured
 package.json scripts are correctly set
+
+npm install -D prettier eslint-plugin-prettier eslint-config-prettier
+npm install -D @typescript-eslint/parser @typescript-eslint/eslint-plugin
+npm install -D husky lint-staged
+npm install -D eslint-plugin-react eslint-plugin-react-hooks
+
+npx husky-init
+npm install
+
+
+npm run lint
+npm run lint:fix
+
+npm run format
+npm run type-check
 ```
 ## for storybook run -
 ```bash

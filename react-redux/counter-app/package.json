@@ -2,6 +2,7 @@
   "name": "counter-app",
   "private": true,
   "version": "0.0.0",
+  "sideEffects": false,
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -40,6 +41,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^5.3.4",
     "react-to-print": "^3.3.0",
+    "react-window": "^2.2.7",
     "redux": "^5.0.1",
     "redux-saga": "^1.4.2",
     "reselect": "^5.1.1"
@@ -87,12 +89,12 @@
     "vitest": "^4.0.18"
   },
   "lint-staged": {
-  "*.{js,jsx,ts,tsx}": [
-    "eslint --fix",
-    "prettier --write"
-  ],
-  "*.{css,scss,md}": [
-    "prettier --write"
-  ]
-}
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,scss,md}": [
+      "prettier --write"
+    ]
+  }
 }
