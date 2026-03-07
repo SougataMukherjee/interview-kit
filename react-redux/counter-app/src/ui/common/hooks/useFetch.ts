@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export interface UseFetchState<T> {
   data: T | null;
@@ -19,7 +19,7 @@ export const useFetch = <T = unknown>(url: string) => {
     const fetchData = async () => {
       try {
         const response = await fetch(url);
-        if (!response.ok) throw new Error('Failed to fetch');
+        if (!response.ok) throw new Error("Failed to fetch");
 
         const data: T = await response.json();
 
@@ -31,7 +31,7 @@ export const useFetch = <T = unknown>(url: string) => {
           setState({
             data: null,
             loading: false,
-            error: err instanceof Error ? err.message : 'Error',
+            error: err instanceof Error ? err.message : "Error",
           });
         }
       }

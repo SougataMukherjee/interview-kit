@@ -37,10 +37,10 @@ export interface GalleryProps {
 
 // Action types
 export enum GalleryActionTypes {
-  FETCH_IMAGES_REQUEST = 'FETCH_IMAGES_REQUEST',
-  FETCH_IMAGES_SUCCESS = 'FETCH_IMAGES_SUCCESS',
-  FETCH_IMAGES_FAILURE = 'FETCH_IMAGES_FAILURE',
-  LOAD_MORE_IMAGES = 'LOAD_MORE_IMAGES',
+  FETCH_IMAGES_REQUEST = "FETCH_IMAGES_REQUEST",
+  FETCH_IMAGES_SUCCESS = "FETCH_IMAGES_SUCCESS",
+  FETCH_IMAGES_FAILURE = "FETCH_IMAGES_FAILURE",
+  LOAD_MORE_IMAGES = "LOAD_MORE_IMAGES",
 }
 
 // Action interfaces
@@ -67,4 +67,3 @@ export type GalleryActions =
   | FetchImagesSuccessAction
   | FetchImagesFailureAction
   | LoadMoreImagesAction;
-  

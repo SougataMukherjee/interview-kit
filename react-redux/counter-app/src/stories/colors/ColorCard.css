@@ -2,7 +2,9 @@
   height: 120px;
   border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   position: relative;
   display: flex;
   align-items: flex-end;
@@ -29,7 +31,7 @@
 .color-value {
   font-size: 14px;
   font-weight: 700;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
 }
 
 .copied-indicator {

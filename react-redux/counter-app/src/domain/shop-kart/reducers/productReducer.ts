@@ -1,14 +1,14 @@
 import {
   FETCH_PRODUCTS,
   FETCH_PRODUCTS_SUCCESS,
-  FETCH_PRODUCTS_ERROR
-} from '../constants/actionTypes';
-import type { AnyAction } from 'redux';
+  FETCH_PRODUCTS_ERROR,
+} from "../constants/actionTypes";
+import type { AnyAction } from "redux";
 
 const initialState = {
   data: [],
   loading: false,
-  error: null
+  error: null,
 };
 
 export const productReducer = (state = initialState, action: AnyAction) => {

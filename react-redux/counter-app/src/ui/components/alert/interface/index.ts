@@ -1,1 +1,1 @@
-export * from './alert.interface.ts'
+export * from "./alert.interface.ts";

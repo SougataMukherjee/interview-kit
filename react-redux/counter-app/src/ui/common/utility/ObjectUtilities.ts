@@ -2,12 +2,12 @@
  * @param value object
  */
 export const isMergeableObject = (value: any) => {
-  const nonNullObject = value && typeof value === 'object';
+  const nonNullObject = value && typeof value === "object";
 
   return (
     nonNullObject &&
-    Object.prototype.toString.call(value) !== '[object RegExp]' &&
-    Object.prototype.toString.call(value) !== '[object Date]'
+    Object.prototype.toString.call(value) !== "[object RegExp]" &&
+    Object.prototype.toString.call(value) !== "[object Date]"
   );
 };
 
@@ -16,7 +16,7 @@ export const isMergeableObject = (value: any) => {
  * @param obj object
  */
 export const isNullOrUndefined = (obj: any) => {
-  return obj === null || typeof obj === 'undefined';
+  return obj === null || typeof obj === "undefined";
 };
 
 /**

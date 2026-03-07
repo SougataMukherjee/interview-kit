@@ -1,23 +1,21 @@
 export const convertDateToYearMonthDay = (
-  estimatedDateOfAvailability: Date | undefined
+  estimatedDateOfAvailability: Date | undefined,
 ): string => {
-  if (estimatedDateOfAvailability === undefined) return '';
+  if (estimatedDateOfAvailability === undefined) return "";
 
-  return estimatedDateOfAvailability.toLocaleDateString('en-ZA');
+  return estimatedDateOfAvailability.toLocaleDateString("en-ZA");
 };
 
-export const convertDateToMonthDayYear = (
-  estimatedDateOfAvailability: Date
-): string => {
-  return estimatedDateOfAvailability.toLocaleDateString('default', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+export const convertDateToMonthDayYear = (estimatedDateOfAvailability: Date): string => {
+  return estimatedDateOfAvailability.toLocaleDateString("default", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 };
 
-export const formatTime = (date: Date | string, locale = 'en-US'): string =>
+export const formatTime = (date: Date | string, locale = "en-US"): string =>
   new Date(date).toLocaleTimeString(locale, {
-    hour: '2-digit',
-    minute: '2-digit',
+    hour: "2-digit",
+    minute: "2-digit",
   });

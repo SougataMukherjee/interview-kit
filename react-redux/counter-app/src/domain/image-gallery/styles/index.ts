@@ -1,1 +1,1 @@
-export * from './galleryStyles'
+export * from "./galleryStyles";

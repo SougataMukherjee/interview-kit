@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import Tooltip from '@mui/material/Tooltip';
-import Button from '@mui/material/Button';
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import Tooltip from "@mui/material/Tooltip";
+import Button from "@mui/material/Button";
 
 const meta: Meta<typeof Tooltip> = {
-  title: 'UI/Tooltip',
+  title: "UI/Tooltip",
   component: Tooltip,
 };
 

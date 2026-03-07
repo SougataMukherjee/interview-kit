@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import Divider from '@mui/material/Divider';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import Divider from "@mui/material/Divider";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 const meta: Meta<typeof Divider> = {
-  title: 'UI/Divider',
+  title: "UI/Divider",
   component: Divider,
 };
 

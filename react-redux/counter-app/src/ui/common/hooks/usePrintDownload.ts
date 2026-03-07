@@ -5,15 +5,12 @@ interface UsePrintDownloadProps {
   fileName?: string;
 }
 
-export const usePrintDownload = ({
-  fileName = "document",
-}: UsePrintDownloadProps) => {
+export const usePrintDownload = ({ fileName = "document" }: UsePrintDownloadProps) => {
   const componentRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
     documentTitle: fileName,
-
 
     print: async (printIframe) => {
       if (printIframe.contentWindow) {

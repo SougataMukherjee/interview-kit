@@ -25,14 +25,11 @@ const WorkInProgress: React.FC<WorkInProgressProps> = ({ items }) => {
     return items.filter((item) => {
       const matchesSearch =
         !search.trim() ||
-        item.itemData.description.roNumber
-          .toLowerCase()
-          .includes(search.toLowerCase());
+        item.itemData.description.roNumber.toLowerCase().includes(search.toLowerCase());
 
       const matchesDate =
         !selectedDate ||
-        new Date(item.itemData.dates.deliveryDate).toDateString() ===
-          selectedDate.toDateString();
+        new Date(item.itemData.dates.deliveryDate).toDateString() === selectedDate.toDateString();
 
       return matchesSearch && matchesDate;
     });

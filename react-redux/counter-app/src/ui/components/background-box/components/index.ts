@@ -1,1 +1,1 @@
-export { default } from './BackgroundBox'
+export { default } from "./BackgroundBox";

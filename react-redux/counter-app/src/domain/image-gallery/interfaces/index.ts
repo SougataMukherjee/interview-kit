@@ -1,1 +1,1 @@
-export * from './ImageGalleryTypes'
+export * from "./ImageGalleryTypes";

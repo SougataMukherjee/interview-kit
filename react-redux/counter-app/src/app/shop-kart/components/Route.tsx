@@ -1,7 +1,7 @@
-import { Switch, Route } from 'react-router-dom';
-import Home from '../../../domain/shop-kart/container/Home';
-import Cart from '../../../domain/shop-kart/container/Cart';
-import {Tabs} from '../../../domain/shop-kart/components/Tabs';
+import { Switch, Route } from "react-router-dom";
+import Home from "../../../domain/shop-kart/container/Home";
+import Cart from "../../../domain/shop-kart/container/Cart";
+import { Tabs } from "../../../domain/shop-kart/components/Tabs";
 
 const Routes = () => (
   <>

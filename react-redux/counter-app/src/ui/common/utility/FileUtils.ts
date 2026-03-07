@@ -1,13 +1,10 @@
 export const printDocument = (
   blob: Blob,
   filename: string,
-  contentRef?: React.RefObject<HTMLIFrameElement>
+  contentRef?: React.RefObject<HTMLIFrameElement>,
 ): void => {
-  if ((window.navigator).msSaveOrOpenBlob) {
-    (window.navigator).msSaveOrOpenBlob(
-      blob,
-      filename.replace('blob:', '')
-    );
+  if (window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(blob, filename.replace("blob:", ""));
   } else if (contentRef) {
     const iframe: HTMLIFrameElement | null = contentRef.current;
 

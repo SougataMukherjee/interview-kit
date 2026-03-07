@@ -1,1 +1,1 @@
-export { default } from './gallerySearchReducer'
+export { default } from "./gallerySearchReducer";

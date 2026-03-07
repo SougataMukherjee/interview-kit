@@ -1,1 +1,1 @@
-export * from './backgroundBox.styles'
+export * from "./backgroundBox.styles";

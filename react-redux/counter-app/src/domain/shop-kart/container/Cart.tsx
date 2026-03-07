@@ -1,6 +1,6 @@
-import { connect } from 'react-redux';
-import { removeFromCart } from '../actions/cartActions';
-import { getCartItems } from '../selectors/cartSelectors';
+import { connect } from "react-redux";
+import { removeFromCart } from "../actions/cartActions";
+import { getCartItems } from "../selectors/cartSelectors";
 
 const Cart = ({ cart, removeFromCart }: any) => (
   <>
@@ -14,9 +14,9 @@ const Cart = ({ cart, removeFromCart }: any) => (
 );
 
 const mapState = (state: any) => {
-  console.log('FULL Cart STATE 👉', state);
+  console.log("FULL Cart STATE 👉", state);
   return {
-    cart: getCartItems(state.root)
+    cart: getCartItems(state.root),
   };
 };
 

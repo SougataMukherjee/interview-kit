@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import './ColorCard.css';
+import React, { useState } from "react";
+import "./ColorCard.css";
 
 const ColorCard = ({ colorName, colorValue, shade }) => {
   const [copied, setCopied] = useState(false);
@@ -10,7 +10,7 @@ const ColorCard = ({ colorName, colorValue, shade }) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy: ', err);
+      console.error("Failed to copy: ", err);
     }
   };
 
@@ -22,16 +22,18 @@ const ColorCard = ({ colorName, colorValue, shade }) => {
     return brightness > 128;
   };
 
-  const textColor = isLightColor(colorValue) ? '#000000' : '#ffffff';
+  const textColor = isLightColor(colorValue) ? "#000000" : "#ffffff";
 
   return (
-    <div 
+    <div
       className="color-card"
       style={{ backgroundColor: colorValue }}
       onClick={() => copyToClipboard(colorValue)}
     >
       <div className="color-info" style={{ color: textColor }}>
-        <div className="color-name">{colorName}-{shade}</div>
+        <div className="color-name">
+          {colorName}-{shade}
+        </div>
         <div className="color-value">{colorValue.toUpperCase()}</div>
         {copied && <div className="copied-indicator">Copied!</div>}
       </div>

@@ -4,13 +4,13 @@ export class DocumentPrintHelper {
     fileName: string,
     shouldFocusWindowOnPrint?: boolean,
     loadSuccessCallback?: () => void,
-    loadFailureCallback?: () => void
+    loadFailureCallback?: () => void,
   ): Blob {
-    if ((window.navigator as any).msSaveOrOpenBlob) {
-      (window.navigator as any).msSaveOrOpenBlob(blob, fileName);
+    if (window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(blob, fileName);
     } else {
       const url = window.URL.createObjectURL(blob);
-      const printWindow: Window | null = window.open(url, '_blank');
+      const printWindow: Window | null = window.open(url, "_blank");
 
       if (printWindow) {
         if (loadSuccessCallback) {

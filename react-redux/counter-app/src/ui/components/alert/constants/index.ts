@@ -1,1 +1,1 @@
-export * from './alert.constant.ts'
+export * from "./alert.constant.ts";

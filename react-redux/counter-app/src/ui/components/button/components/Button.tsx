@@ -1,9 +1,9 @@
-import React from 'react'
-import MuiButton from '@mui/material/Button'
-import type { AppButtonProps } from '../interface/button.interface'
-import { ButtonVariant } from '../enums/button.enum'
-import { DEFAULT_RADIUS } from '../constants/button.constant'
-import { buttonStyle } from '../styles/button.styles'
+import React from "react";
+import MuiButton from "@mui/material/Button";
+import type { AppButtonProps } from "../interface/button.interface";
+import { ButtonVariant } from "../enums/button.enum";
+import { DEFAULT_RADIUS } from "../constants/button.constant";
+import { buttonStyle } from "../styles/button.styles";
 
 const Button: React.FC<AppButtonProps> = ({
   children,
@@ -21,11 +21,11 @@ const Button: React.FC<AppButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       fullWidth={fullWidth}
-      variant={variant === ButtonVariant.OUTLINED ? 'outlined' : 'contained'}
+      variant={variant === ButtonVariant.OUTLINED ? "outlined" : "contained"}
     >
       {children}
     </MuiButton>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

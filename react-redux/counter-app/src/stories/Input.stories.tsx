@@ -1,66 +1,66 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import { useState } from 'react'
-import Input from '../ui/components/input'
-import { InputVariant } from '../ui/components/input'
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
+import Input from "../ui/components/input";
+import { InputVariant } from "../ui/components/input";
 
 const meta: Meta<typeof Input> = {
-  title: 'UI/Input',
+  title: "UI/Input",
   component: Input,
   argTypes: {
     variant: {
-      control: 'select',
+      control: "select",
       options: Object.values(InputVariant),
     },
     disabled: {
-      control: 'boolean',
+      control: "boolean",
     },
     fullWidth: {
-      control: 'boolean',
+      control: "boolean",
     },
     error: {
-      control: 'boolean',
+      control: "boolean",
     },
-    onChange: { action: 'changed' },
+    onChange: { action: "changed" },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof Input>
+export default meta;
+type Story = StoryObj<typeof Input>;
 const ControlledInput = (args: any) => {
-  const [value, setValue] = useState(args.value || '')
+  const [value, setValue] = useState(args.value || "");
 
   return (
     <Input
       {...args}
       value={value}
       onChange={(e) => {
-        setValue(e.target.value)
-        args.onChange?.(e)
+        setValue(e.target.value);
+        args.onChange?.(e);
       }}
     />
-  )
-}
+  );
+};
 export const Default: Story = {
   render: (args) => <ControlledInput {...args} />,
   args: {
-    label: 'Name',
-    placeholder: 'Enter your name',
+    label: "Name",
+    placeholder: "Enter your name",
     variant: InputVariant.OUTLINED,
   },
-}
+};
 export const Filled: Story = {
   render: (args) => <ControlledInput {...args} />,
   args: {
-    label: 'Email',
-    placeholder: 'Enter email',
+    label: "Email",
+    placeholder: "Enter email",
     variant: InputVariant.FILLED,
   },
-}
+};
 export const Error: Story = {
   render: (args) => <ControlledInput {...args} />,
   args: {
-    label: 'Username',
+    label: "Username",
     error: true,
-    helperText: 'Username is required',
+    helperText: "Username is required",
   },
-}
+};

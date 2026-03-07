@@ -1,6 +1,6 @@
-import { TabButton } from '../styles';
+import { TabButton } from "../styles";
 
-const tabs = ['All', 'Fruit', 'Vegetable'];
+const tabs = ["All", "Fruit", "Vegetable"];
 
 interface Props {
   active: string;
@@ -9,12 +9,8 @@ interface Props {
 
 export const Tabs = ({ active, onChange }: Props) => (
   <div>
-    {tabs.map(tab => (
-      <TabButton
-        key={tab}
-        active={tab === active}
-        onClick={() => onChange(tab)}
-      >
+    {tabs.map((tab) => (
+      <TabButton key={tab} active={tab === active} onClick={() => onChange(tab)}>
         {tab}
       </TabButton>
     ))}

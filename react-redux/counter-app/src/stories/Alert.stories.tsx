@@ -1,66 +1,66 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import {Alert} from '../ui/components/alert'
-import  {AlertVariant}  from '../ui/components/alert'
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Alert } from "../ui/components/alert";
+import { AlertVariant } from "../ui/components/alert";
 
 const meta: Meta<typeof Alert> = {
-  title: 'UI/Alert',
+  title: "UI/Alert",
   component: Alert,
   argTypes: {
     variant: {
-      control: 'select',
+      control: "select",
       options: Object.values(AlertVariant),
     },
     showIcon: {
-      control: 'boolean',
+      control: "boolean",
     },
     elevation: {
-      control: 'number',
+      control: "number",
     },
     fullWidth: {
-      control: 'boolean',
+      control: "boolean",
     },
     onClose: {
-      action: 'closed',
+      action: "closed",
     },
   },
-}
+};
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof Alert>
+type Story = StoryObj<typeof Alert>;
 export const Info: Story = {
   args: {
-    message: 'This is an info alert',
+    message: "This is an info alert",
     variant: AlertVariant.INFO,
   },
-}
+};
 export const Success: Story = {
   args: {
-    message: 'Operation completed successfully',
+    message: "Operation completed successfully",
     variant: AlertVariant.SUCCESS,
   },
-}
+};
 export const Warning: Story = {
   args: {
-    message: 'Please double-check your input',
+    message: "Please double-check your input",
     variant: AlertVariant.WARNING,
   },
-}
+};
 export const Error: Story = {
   args: {
-    message: 'Something went wrong',
+    message: "Something went wrong",
     variant: AlertVariant.ERROR,
   },
-}
+};
 export const Closable: Story = {
   args: {
-    message: 'You can close this alert',
+    message: "You can close this alert",
     onClose: () => {},
   },
-}
+};
 export const FullWidth: Story = {
   args: {
-    message: 'Full width alert',
+    message: "Full width alert",
     fullWidth: true,
   },
-}
+};

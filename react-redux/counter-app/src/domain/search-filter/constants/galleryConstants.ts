@@ -1,5 +1,5 @@
-export const FETCH_ITEMS_REQUEST = 'FETCH_ITEMS_REQUEST';
-export const FETCH_ITEMS_SUCCESS = 'FETCH_ITEMS_SUCCESS';
+export const FETCH_ITEMS_REQUEST = "FETCH_ITEMS_REQUEST";
+export const FETCH_ITEMS_SUCCESS = "FETCH_ITEMS_SUCCESS";
 
-export const SET_SEARCH = 'SET_SEARCH';
-export const SET_TAB = 'SET_TAB';
+export const SET_SEARCH = "SET_SEARCH";
+export const SET_TAB = "SET_TAB";

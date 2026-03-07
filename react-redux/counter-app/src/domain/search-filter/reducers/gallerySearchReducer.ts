@@ -1,19 +1,16 @@
-import type { GalleryState } from '../interfaces/gallery';
-import * as C from '../constants/galleryConstants';
-import type { AnyAction } from 'redux';
+import type { GalleryState } from "../interfaces/gallery";
+import * as C from "../constants/galleryConstants";
+import type { AnyAction } from "redux";
 
 const initialState: GalleryState = {
   items: [],
   loading: false,
-  search: '',
-  activeTab: 'All',
+  search: "",
+  activeTab: "All",
 };
 
- const gallerySearchReducer = (
-  state = initialState,
-  action: AnyAction
-): GalleryState => {
-   console.log('REDUCER:',state, action.type);
+const gallerySearchReducer = (state = initialState, action: AnyAction): GalleryState => {
+  console.log("REDUCER:", state, action.type);
   switch (action.type) {
     case C.FETCH_ITEMS_REQUEST:
       return { ...state, loading: true };

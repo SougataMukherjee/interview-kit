@@ -1,8 +1,8 @@
-import React from 'react'
-import { Box } from '../styles'
-import type { BackgroundBoxProps } from '../interface'
-import { BackgroundBoxVariant } from '../enums'
-import { DEFAULT_PADDING } from '../constants'
+import React from "react";
+import { Box } from "../styles";
+import type { BackgroundBoxProps } from "../interface";
+import { BackgroundBoxVariant } from "../enums";
+import { DEFAULT_PADDING } from "../constants";
 
 const BackgroundBox: React.FC<BackgroundBoxProps> = ({
   children,
@@ -13,7 +13,7 @@ const BackgroundBox: React.FC<BackgroundBoxProps> = ({
     <Box variant={variant} padding={padding}>
       {children}
     </Box>
-  )
-}
+  );
+};
 
-export default BackgroundBox
+export default BackgroundBox;

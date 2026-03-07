@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
 export const Container = styled.div`
   padding: 20px;
@@ -19,6 +19,6 @@ export const Card = styled.div`
 export const TabButton = styled.button<{ active?: boolean }>`
   margin-right: 8px;
   padding: 6px 12px;
-  background: ${p => (p.active ? '#333' : '#eee')};
-  color: ${p => (p.active ? '#fff' : '#000')};
+  background: ${(p) => (p.active ? "#333" : "#eee")};
+  color: ${(p) => (p.active ? "#fff" : "#000")};
 `;

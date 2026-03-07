@@ -1,30 +1,30 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import Sidebar from './Sidebar'
-import type { DetailsData } from './interface'
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import Sidebar from "./Sidebar";
+import type { DetailsData } from "./interface";
 
 const meta: Meta<typeof Sidebar> = {
-  title: 'Components/Sidebar',
+  title: "Components/Sidebar",
   component: Sidebar,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
   argTypes: {
     open: {
-      control: 'boolean',
+      control: "boolean",
     },
     anchor: {
-      control: 'select',
-      options: ['left', 'right', 'top', 'bottom'],
+      control: "select",
+      options: ["left", "right", "top", "bottom"],
     },
     onClose: {
-      action: 'closed',
+      action: "closed",
     },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof Sidebar>
+export default meta;
+type Story = StoryObj<typeof Sidebar>;
 
 const mockDetailsData: DetailsData = {
   id: "detail-1",
@@ -43,8 +43,8 @@ const mockDetailsData: DetailsData = {
   sublet: "$0.00",
   customLabour: "$98.90",
   customTax: "$0.00",
-  payableTaxes: "$111.53"
-}
+  payableTaxes: "$111.53",
+};
 
 const mockDetailsData2: DetailsData = {
   id: "detail-2",
@@ -63,45 +63,45 @@ const mockDetailsData2: DetailsData = {
   sublet: "$0.00",
   customLabour: "$18.90",
   customTax: "$0.00",
-  payableTaxes: "$11.53"
-}
+  payableTaxes: "$11.53",
+};
 
 export const RightSidebarWithData: Story = {
   args: {
     open: true,
-    anchor: 'right',
+    anchor: "right",
     detailsData: mockDetailsData,
   },
-}
+};
 
 export const LeftSidebarWithData: Story = {
   args: {
     open: true,
-    anchor: 'left',
+    anchor: "left",
     detailsData: mockDetailsData,
   },
-}
+};
 
 export const RightSidebarAlternateData: Story = {
   args: {
     open: true,
-    anchor: 'right',
+    anchor: "right",
     detailsData: mockDetailsData2,
   },
-}
+};
 
 export const RightSidebarNoData: Story = {
   args: {
     open: true,
-    anchor: 'right',
+    anchor: "right",
     detailsData: null,
   },
-}
+};
 
 export const ClosedSidebar: Story = {
   args: {
     open: false,
-    anchor: 'right',
+    anchor: "right",
     detailsData: mockDetailsData,
   },
-}
+};

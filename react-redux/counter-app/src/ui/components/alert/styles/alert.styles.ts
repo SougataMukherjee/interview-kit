@@ -1,8 +1,8 @@
-import { css } from '@emotion/react'
-import { AlertVariant } from '../enums/alert.enum'
+import { css } from "@emotion/react";
+import { AlertVariant } from "../enums/alert.enum";
 
 export const alertStyle = (variant: AlertVariant, fullWidth: boolean) => css`
-  width: ${fullWidth ? '100%' : 'auto'};
+  width: ${fullWidth ? "100%" : "auto"};
   border-radius: 8px;
   font-weight: 500;
 
@@ -21,4 +21,4 @@ export const alertStyle = (variant: AlertVariant, fullWidth: boolean) => css`
   &.MuiAlert-standardInfo {
     background-color: #e8f0fe;
   }
-`
+`;

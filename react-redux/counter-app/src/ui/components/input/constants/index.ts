@@ -1,1 +1,1 @@
-export * from './input.constants'
+export * from "./input.constants";

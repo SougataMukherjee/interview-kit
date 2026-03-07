@@ -24,4 +24,3 @@ interface DispatchProps {
 }
 
 export type Props = StateProps & DispatchProps;
-

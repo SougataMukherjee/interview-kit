@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import Box from '@mui/material/Box';
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import Box from "@mui/material/Box";
 
 const meta: Meta<typeof Box> = {
-  title: 'UI/Box',
+  title: "UI/Box",
   component: Box,
 };
 
@@ -15,11 +15,11 @@ export const Basic: Story = {
       sx={{
         width: 200,
         height: 100,
-        bgcolor: 'primary.main',
-        color: 'white',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        bgcolor: "primary.main",
+        color: "white",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         borderRadius: 2,
       }}
     >

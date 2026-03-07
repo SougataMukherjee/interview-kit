@@ -8,5 +8,4 @@
 
 // export default rootReducer;
 
-
-export { default } from './galleryReducer';
+export { default } from "./galleryReducer";

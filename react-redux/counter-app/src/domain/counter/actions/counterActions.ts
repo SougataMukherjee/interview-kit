@@ -1,18 +1,19 @@
-import { INCREMENT, DECREMENT ,RESET} from '../constants/counterConstants'
+import { INCREMENT, DECREMENT, RESET } from "../constants/counterConstants";
 
 export const increment = () => ({
-  type: INCREMENT
-})
+  type: INCREMENT,
+});
 
 export const decrement = () => ({
-  type: DECREMENT
-})
+  type: DECREMENT,
+});
 
-export const reset = () => ({
-  type: RESET,
-} as const)
+export const reset = () =>
+  ({
+    type: RESET,
+  }) as const;
 
 export type CounterAction =
   | ReturnType<typeof increment>
   | ReturnType<typeof decrement>
-  | ReturnType<typeof reset>
+  | ReturnType<typeof reset>;

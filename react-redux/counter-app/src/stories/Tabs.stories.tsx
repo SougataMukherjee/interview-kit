@@ -1,24 +1,24 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import BasicTabs from '../ui/components/tabs'
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import BasicTabs from "../ui/components/tabs";
 
 const meta: Meta<typeof BasicTabs> = {
-  title: 'UI/Tabs',
+  title: "UI/Tabs",
   component: BasicTabs,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-}
+};
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof BasicTabs>
+type Story = StoryObj<typeof BasicTabs>;
 export const Default: Story = {
   render: () => <BasicTabs />,
-}
+};
 export const FullWidth: Story = {
   render: () => (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: "100%" }}>
       <BasicTabs />
     </div>
   ),
-}
+};

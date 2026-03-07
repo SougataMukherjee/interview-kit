@@ -1,1 +1,1 @@
-export * from './galleryConstants'
+export * from "./galleryConstants";

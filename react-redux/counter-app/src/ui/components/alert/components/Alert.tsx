@@ -1,15 +1,12 @@
-import React from 'react'
-import MuiAlert from '@mui/material/Alert'
-import IconButton from '@mui/material/IconButton'
-import CloseIcon from '@mui/icons-material/Close'
+import React from "react";
+import MuiAlert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
-import type { AppAlertProps } from '../interface/alert.interface'
-import { AlertVariant } from '../enums/alert.enum'
-import {
-  DEFAULT_ELEVATION,
-  DEFAULT_SHOW_ICON,
-} from '../constants/alert.constant'
-import { alertStyle } from '../styles/alert.styles'
+import type { AppAlertProps } from "../interface/alert.interface";
+import { AlertVariant } from "../enums/alert.enum";
+import { DEFAULT_ELEVATION, DEFAULT_SHOW_ICON } from "../constants/alert.constant";
+import { alertStyle } from "../styles/alert.styles";
 
 const Alert: React.FC<AppAlertProps> = ({
   message,
@@ -37,7 +34,7 @@ const Alert: React.FC<AppAlertProps> = ({
     >
       {message}
     </MuiAlert>
-  )
-}
+  );
+};
 
-export default Alert
+export default Alert;

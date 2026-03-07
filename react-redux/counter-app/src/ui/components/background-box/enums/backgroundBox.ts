@@ -1,5 +1,5 @@
 export enum BackgroundBoxVariant {
-  LIGHT = 'light',
-  DARK = 'dark',
-  PRIMARY = 'primary',
+  LIGHT = "light",
+  DARK = "dark",
+  PRIMARY = "primary",
 }

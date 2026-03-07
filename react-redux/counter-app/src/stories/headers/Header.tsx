@@ -33,10 +33,7 @@ export const Header = ({
     <header>
       <div className="storybook-header">
         <InputArea>
-          <Input
-            label="Search RO"
-            onChange={(e) => onSearch(e.target.value)}
-          />
+          <Input label="Search RO" onChange={(e) => onSearch(e.target.value)} />
 
           <DatePicker
             selected={selectedDate}

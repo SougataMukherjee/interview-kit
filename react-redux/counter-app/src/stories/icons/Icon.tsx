@@ -1,5 +1,5 @@
 import React from "react";
-import { getIconConfig,type IconName } from "./iconUtils";
+import { getIconConfig, type IconName } from "./iconUtils";
 
 export interface IconProps {
   name: IconName;
@@ -7,11 +7,7 @@ export interface IconProps {
   color?: string;
 }
 
-export const Icon: React.FC<IconProps> = ({
-  name,
-  size = 24,
-  color = "inherit",
-}) => {
+export const Icon: React.FC<IconProps> = ({ name, size = 24, color = "inherit" }) => {
   const config = getIconConfig(name);
 
   if (config.type === "react-icon") {
@@ -20,12 +16,6 @@ export const Icon: React.FC<IconProps> = ({
   }
 
   return (
-    <img
-      src={config.src}
-      alt={name}
-      width={size}
-      height={size}
-      style={{ objectFit: "contain" }}
-    />
+    <img src={config.src} alt={name} width={size} height={size} style={{ objectFit: "contain" }} />
   );
 };

@@ -1,1 +1,1 @@
-export * from './ImageGalleryAction'
+export * from "./ImageGalleryAction";

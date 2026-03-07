@@ -1,7 +1,7 @@
-import React from 'react';
-import ColorCard from './ColorCard';
-import { colorPalette } from './colors';
-import './ColorCard.css';
+import React from "react";
+import ColorCard from "./ColorCard";
+import { colorPalette } from "./colors";
+import "./ColorCard.css";
 
 const ColorPalette = () => {
   return (
@@ -9,8 +9,8 @@ const ColorPalette = () => {
       <div className="palette-header">
         <h1 className="palette-title">Design System Colors</h1>
         <p className="palette-description">
-          Click on any color to copy its hex code to your clipboard. 
-          Our color system provides consistent and accessible colors for your designs.
+          Click on any color to copy its hex code to your clipboard. Our color system provides
+          consistent and accessible colors for your designs.
         </p>
       </div>
 

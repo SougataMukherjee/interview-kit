@@ -1,15 +1,9 @@
-import type{ IconType } from "react-icons";
+import type { IconType } from "react-icons";
 import { FaUser, FaHome } from "react-icons/fa";
 
-export type IconName =
-  | "user"
-  | "home"
-  | "customSvg"
-  | "customImage";
+export type IconName = "user" | "home" | "customSvg" | "customImage";
 
-type IconConfig =
-  | { type: "react-icon"; icon: IconType }
-  | { type: "image"; src: string };
+type IconConfig = { type: "react-icon"; icon: IconType } | { type: "image"; src: string };
 
 const iconMap: Record<IconName, IconConfig> = {
   user: {

@@ -1,10 +1,10 @@
-import styled from '@emotion/styled'
-import { BACKGROUND_COLORS, BORDER_RADIUS } from '../constants'
-import { BackgroundBoxVariant } from '../enums'
+import styled from "@emotion/styled";
+import { BACKGROUND_COLORS, BORDER_RADIUS } from "../constants";
+import { BackgroundBoxVariant } from "../enums";
 
 interface StyleProps {
-  variant: BackgroundBoxVariant
-  padding: string
+  variant: BackgroundBoxVariant;
+  padding: string;
 }
 
 export const Box = styled.div<StyleProps>`
@@ -13,4 +13,4 @@ export const Box = styled.div<StyleProps>`
   padding: ${({ padding }) => padding};
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
-`
+`;

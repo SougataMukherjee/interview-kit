@@ -1,1 +1,1 @@
-export * from './button.interface.ts'
+export * from "./button.interface.ts";

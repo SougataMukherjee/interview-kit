@@ -1,8 +1,6 @@
-export const isValidEmail = (email: string): boolean =>
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+export const isValidEmail = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-export const isValidPhone = (phone: string): boolean =>
-  /^\+?[\d\s\-()]{7,15}$/.test(phone);
+export const isValidPhone = (phone: string): boolean => /^\+?[\d\s\-()]{7,15}$/.test(phone);
 
 export const isValidUrl = (url: string): boolean => {
   try {
@@ -15,7 +13,6 @@ export const isValidUrl = (url: string): boolean => {
 
 export const isValidPassword = (password: string): boolean =>
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
-
 
 export const isAlphanumeric = (str: string): boolean => /^[a-z0-9]+$/i.test(str);
 

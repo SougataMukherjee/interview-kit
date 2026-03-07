@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 const meta: Meta<typeof Modal> = {
-  title: 'UI/Modal',
+  title: "UI/Modal",
   component: Modal,
 };
 
@@ -25,12 +25,12 @@ export const Default: Story = {
         <Modal open={open} onClose={() => setOpen(false)}>
           <Box
             sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
               width: 300,
-              bgcolor: 'background.paper',
+              bgcolor: "background.paper",
               p: 4,
               borderRadius: 2,
             }}

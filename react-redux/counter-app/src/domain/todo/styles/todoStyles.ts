@@ -1,5 +1,5 @@
-import styled from '@emotion/styled'
-import { css } from '@emotion/react'
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 
 export const TodoContainer = styled.div`
   max-width: 500px;
@@ -8,7 +8,7 @@ export const TodoContainer = styled.div`
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`
+`;
 
 export const TodoItem = styled.div<{ completed: boolean }>`
   display: flex;
@@ -24,7 +24,7 @@ export const TodoItem = styled.div<{ completed: boolean }>`
       text-decoration: line-through;
       opacity: 0.6;
     `}
-`
+`;
 
 export const Button = styled.button`
   border: none;
@@ -33,4 +33,4 @@ export const Button = styled.button`
   padding: 0.3rem 0.6rem;
   cursor: pointer;
   border-radius: 4px;
-`
+`;

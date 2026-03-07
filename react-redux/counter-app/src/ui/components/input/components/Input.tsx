@@ -1,10 +1,9 @@
-import React from 'react'
-import TextField from '@mui/material/TextField'
-import { inputStyle } from '../styles/input.styles'
-import { InputVariant } from '../enums/input.enum'
-import { DEFAULT_PLACEHOLDER } from '../constants/input.constants'
-import type { AppInputProps } from '../interface/input.interface'
-
+import React from "react";
+import TextField from "@mui/material/TextField";
+import { inputStyle } from "../styles/input.styles";
+import { InputVariant } from "../enums/input.enum";
+import { DEFAULT_PLACEHOLDER } from "../constants/input.constants";
+import type { AppInputProps } from "../interface/input.interface";
 
 const Input: React.FC<AppInputProps> = ({
   value,
@@ -33,15 +32,15 @@ const Input: React.FC<AppInputProps> = ({
       helperText={helperText}
       sx={{
         width: 250,
-        '& .MuiOutlinedInput-root': {
+        "& .MuiOutlinedInput-root": {
           height: 50,
         },
-        '& .MuiOutlinedInput-input': {
-          padding: '10px 14px',
+        "& .MuiOutlinedInput-input": {
+          padding: "10px 14px",
         },
       }}
     />
-  )
-}
+  );
+};
 
-export default Input
+export default Input;

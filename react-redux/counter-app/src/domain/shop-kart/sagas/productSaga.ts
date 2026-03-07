@@ -1,19 +1,13 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
-import {
-  FETCH_PRODUCTS
-} from '../constants/actionTypes';
-import {
-  fetchProductsSuccess,
-  fetchProductsError
-} from '../actions/productActions';
-import type { SagaIterator } from 'redux-saga';
+import { call, put, takeLatest } from "redux-saga/effects";
+import { FETCH_PRODUCTS } from "../constants/actionTypes";
+import { fetchProductsSuccess, fetchProductsError } from "../actions/productActions";
+import type { SagaIterator } from "redux-saga";
 
 function fetchApi() {
-  return fetch('https://fakestoreapi.com/products')
-    .then(res => res.json());
+  return fetch("https://fakestoreapi.com/products").then((res) => res.json());
 }
 
-function* fetchProductsSaga():SagaIterator {
+function* fetchProductsSaga(): SagaIterator {
   try {
     const data = yield call(fetchApi);
     yield put(fetchProductsSuccess(data));

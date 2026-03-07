@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 const meta: Meta<typeof CircularProgress> = {
-  title: 'UI/CircularProgress',
+  title: "UI/CircularProgress",
   component: CircularProgress,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 };
 
 export default meta;

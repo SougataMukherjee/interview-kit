@@ -1,1 +1,1 @@
-export * from './input.interface'
+export * from "./input.interface";

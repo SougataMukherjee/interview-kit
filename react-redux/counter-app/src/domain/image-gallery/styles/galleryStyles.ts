@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { colors } from '../../../ui/common/styles/magnatic.style'
+import styled from "@emotion/styled";
+import { colors } from "../../../ui/common/styles/magnatic.style";
 
 // Gallery container
 export const GalleryContainer = styled.div`
@@ -28,9 +28,11 @@ export const ImageCardContainer = styled.div`
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   background-color: ${colors.white};
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
@@ -51,7 +53,7 @@ export const StyledImage = styled.img`
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
-  
+
   &:hover {
     transform: scale(1.05);
   }
@@ -86,11 +88,11 @@ export const LoadMoreButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
-  
+
   &:hover {
     background-color: #303f9f;
   }
-  
+
   &:disabled {
     background-color: #bdbdbd;
     cursor: not-allowed;
@@ -111,7 +113,7 @@ export const Spinner = styled.div`
   border-radius: 50%;
   border-top-color: ${colors.primary};
   animation: spin 1s ease-in-out infinite;
-  
+
   @keyframes spin {
     to {
       transform: rotate(360deg);
@@ -143,14 +145,14 @@ export const StatsContainer = styled.div`
 export const StatItem = styled.div`
   text-align: center;
   padding: 1rem;
-  
+
   h3 {
     margin: 0;
     font-size: 0.875rem;
     color: #666;
     font-weight: 400;
   }
-  
+
   p {
     margin: 0.5rem 0 0;
     font-size: 1.5rem;
