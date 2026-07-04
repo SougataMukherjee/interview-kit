@@ -6,14 +6,6 @@
 3. [Initial Setup](#initial-setup)
 4. [Basic Commands](#basic-commands)
 5. [File States](#file-states)
-6. [Commit Operations](#commit-operations)
-7. [Viewing Changes](#viewing-changes)
-8. [Undoing Changes](#undoing-changes)
-9. [Branching](#branching)
-10. [Merging](#merging)
-11. [Remote Repository](#remote-repository)
-12. [Advanced Commands](#advanced-commands)
-13. [Best Practices](#best-practices)
 
 ---
 
