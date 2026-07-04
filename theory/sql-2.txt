@@ -371,6 +371,229 @@ SELECT id, score,
   END AS score_category 
 FROM customer;
 
+=========================================================================
+
+
+CREATE TABLE Emp_Data(
+
+  Id int,
+  name varchar(255),
+  email varchar(255)
+
+);
+
+INSERT INTO Emp_Data VALUES(1,'sam','sam@gmail.com');
+
+SELECT * FROM Emp_Data;
+
+SELECT email AS "Email Address"
+
+FROM Emp_Data;
+
+SELECT DISTINCT id, name
+
+FROM Emp_Data;
+
+SELECT *
+
+FROM Emp_Data
+
+WHERE email = 'sougata@gmail.com';
+
+SELECT *
+
+FROM Emp_Data
+
+WHERE id BETWEEN 1 AND 3
+
+  AND email = 'sougata@gmail.com';
+
+SELECT name
+
+FROM Emp_Data
+
+WHERE name LIKE 's%m';
+
+SELECT *
+
+FROM Emp_Data
+
+ORDER BY name DESC;
+
+UPDATE Emp_Data SET name='sougata',email='sougata@gmail.com' WHERE Emp_Data.Id=1
+
+CREATE TABLE employees (
+    employee_id NUMBER,
+    last_name VARCHAR2(20),
+    department_id NUMBER,
+    salary NUMBER,
+    commission_pct NUMBER
+);
 
 
 
+CREATE TABLE departments (
+    department_id NUMBER,
+    department_name VARCHAR2(20),
+    location_id NUMBER
+);
+
+
+
+CREATE TABLE job_grades (
+    grade_level VARCHAR2(10),
+    lowest_sal NUMBER,
+    highest_sal NUMBER
+);
+
+
+
+INSERT INTO employees VALUES (101, 'King', 10, 24000, NULL);
+INSERT INTO employees VALUES (102, 'Kochhar', 20, 17000, 0.2);
+INSERT INTO employees VALUES (103, 'Fay', 20, 6000, NULL);
+INSERT INTO employees VALUES (104, 'Higgins', 30, 12000,
+
+
+
+INSERT INTO departments VALUES (10, 'Administration', 1700);
+INSERT INTO departments VALUES (20, 'Marketing', 1800);
+INSERT INTO departments VALUES (30, 'IT', 1400);
+
+
+
+INSERT INTO job_grades VALUES ('GRADE 1', 20000, 30000);
+INSERT INTO job_grades VALUES ('GRADE 2', 10000, 19999);
+INSERT INTO job_grades VALUES ('GRADE 3', 5000, 9999);
+``
+
+
+
+SELECT e.employee_id,
+       e.last_name,
+       e.department_id,
+       d.department_name,
+       d.location_id
+FROM employees e, departments d
+WHERE e.department_id = d.department_id;
+
+
+
+
+
+SELECT e.employee_id,
+       e.last_name,
+       d.department_name
+FROM employees e
+INNER JOIN departments d
+ON e.department_id = d.department_id;
+
+
+
+SELECT j.grade_level,
+       COUNT(e.employee_id) AS emp_count
+FROM employees e, job_grades j
+WHERE e.salary BETWEEN j.lowest_sal AND j.highest_sal
+GROUP BY j.grade_level
+HAVING j.grade_level = 'GRADE 1';
+
+
+
+//Aggregate Functions
+SELECT MAX(salary) AS max_salary
+FROM employees;
+SELECT SUM(salary) AS total_salary
+FROM employees;
+SELECT COUNT(DISTINCT department_id) AS dept_count
+FROM employees;
+//replace NULL value to 0 using NVL
+SELECT last_name,
+       NVL(commission_pct, 0) AS commission
+FROM employees;
+
+
+
+
+
+create a view
+=============
+
+
+
+CREATE TABLE employee (
+    emp_id   NUMBER PRIMARY KEY,
+    emp_name VARCHAR2(50),
+    dept_id  NUMBER,
+    salary   NUMBER
+);
+INSERT INTO employee VALUES (1, 'Amit',   10, 30000);
+INSERT INTO employee VALUES (2, 'Ravi',   20, 35000);
+INSERT INTO employee VALUES (3, 'Neha',   10, 32000);
+INSERT INTO employee VALUES (4, 'Pooja',  30, 40000);
+INSERT INTO employee VALUES (5, 'Ankit',  20, 36000);
+INSERT INTO employee VALUES (6, 'Suman',  10, 31000);
+INSERT INTO employee VALUES (7, 'Raj',    30, 42000);
+INSERT INTO employee VALUES (8, 'Kiran',  20, 38000);
+INSERT INTO employee VALUES (9, 'Meena',  10, 33000);
+INSERT INTO employee VALUES (10,'Vikas',  30, 45000);
+
+
+
+
+
+CREATE VIEW dept10_view AS
+SELECT emp_id, emp_name, salary
+FROM employee
+WHERE dept_id = 10;
+
+
+
+SELECT *
+FROM dept10_view
+ORDER BY salary DESC;
+
+
+
+
+
+SELECT text
+FROM user_views
+WHERE view_name = 'DEPT10_VIEW'
+
+
+
+CREATE OR REPLACE VIEW empvu80
+(
+  id_number,
+  name,
+  sal,
+  department_id
+)
+AS
+SELECT employee_id,
+       first_name || ' ' || last_name,
+       salary,
+       department_id
+FROM employees
+WHERE department_id = 80;
+
+
+
+DROP VIEW dept10_view;
+
+
+
+A sequence is a database object used to generate unique numeric values, commonly for primary keys.
+
+
+
+CREATE SEQUENCE dept_deptid_seq
+    INCREMENT BY 10
+    START WITH 120
+    MAXVALUE 9999;
+  
+ALTER SEQUENCE dept_deptid_seq
+INCREMENT BY 5;
+
+
+
+DROP SEQUENCE dept_deptid_seq
