@@ -546,3 +546,440 @@ app.get("/api/users", (req, res) => {
 });
 
 ```
+*Project 1*
+
+installation and url:
+
+```txt
+npm install express cors swagger-ui-express swagger-jsdoc nodemon
+add Using Swagger JSDoc in main.js
+run node main.js
+npx nodemon main.js
+
+http://localhost:5000/api/user
+http://localhost:5000/api-docs
+```
+user.json
+```js
+[
+  {
+    "id": 1,
+    "name": "Sougata"
+  }
+]
+```
+
+main.js
+
+```js
+const express = require("express");
+const cors = require("cors");
+const fs = require("fs");
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
+
+const app = express();
+const PORT = 5000;
+
+app.use(cors());
+app.use(express.json());
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "User CRUD API",
+      version: "1.0.0",
+      description: "Simple CRUD API using Express and JSON file"
+    },
+    servers: [
+      {
+        url: "http://localhost:5000"
+      }
+    ]
+  },
+  apis: ["./main.js"]
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
+const FILE = "./user.json";
+
+if (fs.existsSync(FILE)) {
+  console.log("✅ DB found");
+} else {
+  console.log("❌ DB not found");
+}
+// Read Data
+
+/**
+ * @swagger
+ * /api/user:
+ *   get:
+ *     summary: Get all users
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+
+app.get("/api/user", (req, res) => {
+  const data = JSON.parse(fs.readFileSync(FILE));
+  res.status(200).json(data);
+});
+
+// Create User
+
+
+/**
+ * @swagger
+ * /api/user:
+ *   post:
+ *     summary: Create user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User created
+ */
+
+app.post("/api/user", (req, res) => {
+
+  const users = JSON.parse(fs.readFileSync(FILE));
+
+  const newUser = {
+    id: Date.now(),
+    ...req.body
+  };
+
+  users.push(newUser);
+
+  fs.writeFileSync(FILE, JSON.stringify(users, null, 2));
+
+  res.status(201).json(newUser);
+});
+
+// Update User
+
+
+/**
+ * @swagger
+ * /api/user/{id}:
+ *   put:
+ *     summary: Update user
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User updated
+ */
+
+app.put("/api/user/:id", (req, res) => {
+
+  const users = JSON.parse(fs.readFileSync(FILE));
+
+  const updated = users.map(user =>
+    user.id == req.params.id
+      ? { ...user, ...req.body }
+      : user
+  );
+
+  fs.writeFileSync(FILE, JSON.stringify(updated, null, 2));
+
+  res.status(200).json({ message: "Updated" });
+});
+
+// Delete User
+
+
+/**
+ * @swagger
+ * /api/user/{id}:
+ *   delete:
+ *     summary: Delete user
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: User deleted
+ */
+
+app.delete("/api/user/:id", (req, res) => {
+
+  const users = JSON.parse(fs.readFileSync(FILE));
+
+  const filtered = users.filter(
+    x => x.id != req.params.id
+  );
+
+  fs.writeFileSync(FILE, JSON.stringify(filtered, null, 2));
+
+  res.sendStatus(204).json({ message: "Deleted" });
+});
+
+app.listen(PORT, () =>
+  console.log(` ✅ Server running on ${PORT}`)
+);
+```
+*Project 2*
+
+installation, cred and url:
+
+```txt
+mongodb username pass with url:
+
+sougatamukherjee_db_user
+fbPJDtUAgWzjGE83
+mongodb+srv://sougatamukherjee_db_user:fbPJDtUAgWzjGE83@cluster0.eytkkg9.mongodb.net/?appName=Cluster0
+ data:https://cloud.mongodb.com/v2/6a4660fb3fdbae474dc36c6b#/explorer/6a46619e1169dc5cd4b154dd/test/users/find
+
+npm install express cors mongoose swagger-ui-express swagger-jsdoc nodemon
+add Using Swagger JSDoc in main.js
+run node main.js
+npx nodemon main.js
+
+http://localhost:5000/api/user
+http://localhost:5000/api-docs
+```
+
+main.js
+
+```js
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
+
+const app = express();
+const PORT = 5000;
+
+app.use(cors());
+app.use(express.json());
+
+/* ==========================
+   MongoDB Connection
+========================== */
+
+mongoose.connect("mongodb+srv://sougatamukherjee_db_user:fbPJDtUAgWzjGE83@cluster0.eytkkg9.mongodb.net/?appName=Cluster0");
+
+mongoose.connection.on("connected", () => {
+  console.log("✅ MongoDB Connected");
+});
+
+mongoose.connection.on("error", (err) => {
+  console.log("❌ MongoDB Error:", err);
+});
+
+/* ==========================
+   User Schema
+========================== */
+
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true
+    }
+  },
+  {
+    timestamps: true
+  }
+);
+
+const User = mongoose.model("User", userSchema);
+
+/* ==========================
+   Swagger Config
+========================== */
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "User CRUD API",
+      version: "1.0.0",
+      description: "CRUD API using Express + MongoDB + Mongoose"
+    },
+    servers: [
+      {
+        url: "http://localhost:5000"
+      }
+    ]
+  },
+  apis: ["./main.js"]
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         name:
+ *           type: string
+ */
+
+/**
+ * @swagger
+ * /api/user:
+ *   get:
+ *     summary: Get all users
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+app.get("/api/user", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/user:
+ *   post:
+ *     summary: Create User
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: User Created
+ */
+app.post("/api/user", async (req, res) => {
+  try {
+    const user = await User.create({
+      name: req.body.name
+    });
+
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/user/{id}:
+ *   put:
+ *     summary: Update User
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User Updated
+ */
+app.put("/api/user/:id", async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: req.body.name
+      },
+      {
+        new: true
+      }
+    );
+
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/user/{id}:
+ *   delete:
+ *     summary: Delete User
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User Deleted
+ */
+app.delete("/api/user/:id", async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      message: "User Deleted"
+    });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`✅ Server running on ${PORT}`);
+});
+```
