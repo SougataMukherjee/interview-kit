@@ -1,30 +1,53 @@
 **How NodeJS works**
 ```txt
- [BROWSER] ---- HTTP Request ----> [NODE SERVER]
-                                   |
-                                   | (Event Loop)
-                                   ▼
-                         ┌──────────────────────┐
-                         │      Event Loop      │
-                         ├──────────────────────┤
-                         │   Call Stack         │
-                         │   Callback Queue     │
-                         │   Microtask Queue    │
-                         └──────────────────────┘
-                                   |
-                                   ▼
-                            [MongoDB Query]
-                                   |
-                                   ▼
-                            [Send Data Back]
+Node Process
+│
+└── Main JS Thread
+    │
+    ├── Execute Top-Level Code (not inside any function)
+    │
+    ├── require("fs")
+    │      ↓
+    │   Load module synchronously
+    │
+    ├── console.log("Start")
+    │      ↓
+    │   Execute immediately
+    │
+    ├── setTimeout(...)
+    │      ↓
+    │   Register timer with Event Loop
+    │
+    ├── fs.readFile(...)  I/O pooling
+    │      ↓
+    │   Send I/O task to libuv
+    │
+    ├── console.log("End")
+    │      ↓
+    │   Execute immediately
+    │
+    └── Event Loop Starts
+           │
+           ├── Timers Phase
+           │      │
+           │      └── Execute setTimeout callback
+           │
+           ├── I/O Poll Phase
+           │      │
+           │      └── Execute fs.readFile callback
+           │
+           └── Other Phases
+                  ├── Pending Callbacks
+                  ├── Check
+                  └── Close Callbacks
 
 ```
 **What is Node.js? (Simple Explanation)**
 
 When you write JavaScript in the browser, it runs inside the browser's JavaScript engine (V8).
-But you cannot run JavaScript outside the browser directly.
+But you cannot run JavaScript outside the browser directly.JavaScript by itself cannot create a web server. It is primarily a scripting language that was originally designed to run inside web browsers.
 
-Node.js is a JavaScript Asynchronous runtime environment built on Google's V8 engine, which allows you to run JavaScript outside the browser, such as in command line, server, or backend systems.It is written in C++.you can build different type of application like web application, real-time chat application, REST API server etc.
+Google Chrome uses the V8 Engine to execute JavaScript code. The V8 engine is written in C++ and converts JavaScript into machine code for fast execution.
 
 Node.js was written and introduced by Ryan Dahl in 2009
 Lightweight framework that includes bare minimum modules.
