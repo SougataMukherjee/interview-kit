@@ -173,68 +173,13 @@ Initialized empty Git repository in /path/to/my-project/.git/
 git status
 ```
 
-**Output Example:**
-```
-On branch main
-Your branch is up to date with 'origin/main'.
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-        modified:   index.html
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        script.js
-
-no changes added to commit (use "git add" and/or "git commit -a")
-```
-
----
-
-### Add Files to Staging Area
-
-```bash
-# Add a specific file
-git add <file-name>
-git add index.html
-
-# Add multiple files
-git add file1.js file2.css
-
-# Add all files in current directory
-git add .
-
-# Add all files with specific extension
-git add *.js
-
-# Add all files in the repository
-git add -A
-```
-
 ---
 
 ### List Files in Staging Area
 
 ```bash
-# Show files in staging area
-git ls-files
-
 # Show files in working directory
 ls
-```
-
----
-
-### Remove Files from Staging Area
-
-```bash
-# Remove specific file from staging (unstage)
-git reset <file-name>
-git reset index.html
-
-# Remove all files from staging
-git reset
 ```
 
 ---
@@ -284,251 +229,6 @@ Changes not staged for commit:
 ```bash
 Changes to be committed:
         modified:   index.html
-```
-
----
-
-### File State Flow
-
-```
-Untracked → [git add] → Staged → [git commit] → Committed
-                ↓
-            Modified → [git add] → Staged → [git commit] → Committed
-```
-
----
-
-## Commit Operations
-
-### Create a Commit
-
-```bash
-# Commit with message
-git commit -m "commit message"
-
-# Commit with detailed message
-git commit -m "Title" -m "Description line 1" -m "Description line 2"
-
-# Add and commit in one step (only for tracked files)
-git commit -am "commit message"
-
-# Open default editor for commit message
-git commit
-```
-
-**Best Practice Commit Messages:**
-```bash
-# Good examples
-git commit -m "Add user authentication feature"
-git commit -m "Fix login button alignment issue"
-git commit -m "Update dependencies to latest versions"
-
-# Bad examples
-git commit -m "changes"
-git commit -m "update"
-git commit -m "fix"
-```
-
----
-
-### View Commit History
-
-```bash
-# Full commit log
-git log
-
-# One line per commit
-git log --oneline
-
-# Show graph with branches
-git log --oneline --graph --all
-
-# Show last N commits
-git log -n 5
-
-# Show commits by author
-git log --author="John Doe"
-
-# Show commits within date range
-git log --since="2024-01-01" --until="2024-02-01"
-
-# Show commits affecting specific file
-git log -- index.html
-
-# Show detailed changes in each commit
-git log -p
-
-# Show statistics
-git log --stat
-```
-
-**Output Example:**
-```bash
-git log --oneline
-
-a1b2c3d (HEAD -> main) Add navigation menu
-e4f5g6h Fix typo in homepage
-i7j8k9l Initial commit
-```
-
----
-
-### Amend Last Commit
-
-```bash
-# Change last commit message
-git commit --amend -m "New commit message"
-
-# Add forgotten files to last commit
-git add forgotten-file.js
-git commit --amend --no-edit
-```
-
----
-
-## Viewing Changes
-
-### Git Diff
-
-**Description:** Compare file content between different states.
-
----
-
-### Compare Working Directory with Staging Area
-
-```bash
-# Show all unstaged changes
-git diff
-
-# Show changes in specific file
-git diff <file-name>
-git diff index.html
-```
-
-**Output Example:**
-```diff
-diff --git a/index.html b/index.html
-index 1234567..abcdefg 100644
---- a/index.html
-+++ b/index.html
-@@ -10,7 +10,7 @@
- <body>
--    <h1>Hello World</h1>
-+    <h1>Hello Git World</h1>
-     <p>Welcome to my website</p>
- </body>
-```
-
-**Legend:**
-- `-` = Line removed (red)
-- `+` = Line added (green)
-- `---` = Source file (before changes)
-- `+++` = Destination file (after changes)
-
----
-
-### Compare Staging Area with Last Commit (HEAD)
-
-```bash
-# Show staged changes
-git diff --staged
-# or
-git diff --cached
-
-# Show staged changes for specific file
-git diff --staged index.html
-```
-
----
-
-### Compare Working Directory with Last Commit
-
-```bash
-# Compare with HEAD
-git diff HEAD
-
-# Compare specific file with HEAD
-git diff HEAD index.html
-```
-
----
-
-### Compare Between Commits
-
-```bash
-# Compare two commits
-git diff <commit-id1> <commit-id2>
-git diff a1b2c3d e4f5g6h
-
-# Compare specific file between commits
-git diff <commit-id1> <commit-id2> index.html
-
-# Compare with previous commit
-git diff HEAD~1 HEAD
-```
-
----
-
-### View File Content
-
-```bash
-# View file content in working directory
-cat index.html
-
-# View file content from specific commit
-git show <commit-id>:index.html
-git show a1b2c3d:index.html
-
-# View file content from HEAD
-git show HEAD:index.html
-```
-
----
-
-## Undoing Changes
-
-### Discard Changes in Working Directory (Checkout)
-
-```bash
-# Discard changes in specific file (restore from last commit)
-git checkout -- <file-name>
-git checkout -- index.html
-
-# Discard all changes in working directory
-git checkout -- .
-```
-
-**⚠️ Note:** 
-- Only works on **tracked files**
-- Cannot discard changes in **untracked files**
-- Changes are permanently lost
-
-**Alternative (Git 2.23+):**
-```bash
-# Restore file from last commit
-git restore <file-name>
-git restore index.html
-
-# Restore all files
-git restore .
-```
-
----
-
-### Remove Untracked Files
-
-```bash
-# Show what will be deleted (dry run)
-git clean -n
-
-# Delete untracked files
-git clean -f
-
-# Delete untracked files and directories
-git clean -fd
-
-# Delete untracked and ignored files
-git clean -fdx
 ```
 
 ---
@@ -633,842 +333,217 @@ git reset --hard HEAD~1
 **⚠️ Warning:** Changes are permanently lost!
 
 ---
+🌿 Git Workflow
+Branch Naming Conventions
 
-### Reset Comparison Table
+in cmd tyle ls to see folders
+and tree for structure
 
-| Mode | Commits | Staging Area | Working Directory |
-|------|---------|--------------|-------------------|
-| **--mixed** | Removed | Cleared | Unchanged |
-| **--soft** | Removed | Unchanged | Unchanged |
-| **--hard** | Removed | Cleared | Cleared |
+Redux Repository Branches:
+# Global labor posted unit
+development/mcr-global-posted-attribute-enhance
 
----
+# Local labor posted unit  
+development/mcr-local-posted-attribute-enhance
 
-### Git Revert
+# General pattern
+development/mcr-story-[story-number]-[brief-description]
+development/mcr-task-[task-number]-[brief-description]
 
-**Description:** Create a new commit that undoes changes from a previous commit (safer than reset).
+UX Repository Branches:
+# Example
+development/mcr-mig-workorder-technician-name-label-v2
 
-```bash
-# Revert specific commit
-git revert <commit-id>
-git revert a1b2c3d
+# General pattern
+development/mcr-[type]-[feature-description]-[version]
 
-# Revert without creating commit immediately
-git revert -n <commit-id>
+Git Commands Workflow
 
-# Revert multiple commits
-git revert <commit-id1> <commit-id2>
-```
+npm login
 
-**Difference between Reset and Revert:**
-- **Reset:** Removes commits from history
-- **Revert:** Creates new commit that undoes changes (preserves history)
+# Normal start → use plain clone
+git clone https://github.com/org/project.git
 
----
+# When someone shares a specific branch to work on
+git clone -b feature/payment https://github.com/org/project.git
 
-## Branching
-
-### What is a Branch?
-
-**Definition:** A branch is an independent line of development. By default, all code is stored in the **main/master** branch.
-
-**Why Use Branches?**
-- Work on features without affecting main branch
-- Isolate bug fixes
-- Experiment with new ideas
-- Collaborate with team members
-
----
-
-### Branch Visualization
-
-```
-main:     C1 ← C2 ← C3 ← C4 (HEAD)
-                ↓
-         feature: C5 ← C6 (new commits)
-```
-
----
-
-### View Branches
-
-```bash
-# List all local branches
-git branch
-
-# List all branches (local + remote)
-git branch -a
-
-# List remote branches only
-git branch -r
-
-# Show current branch
-git branch --show-current
-```
-
----
-
-### Create a Branch
-
-```bash
-# Create new branch
-git branch <branch-name>
-git branch feature-login
-
-# Create branch from specific commit
-git branch <branch-name> <commit-id>
-git branch feature-login a1b2c3d
-```
-
----
-
-### Switch Between Branches
-
-```bash
-# Switch to existing branch
-git checkout <branch-name>
-git checkout feature-login
-
-# Alternative (Git 2.23+)
-git switch <branch-name>
-git switch feature-login
-```
-
----
-
-### Create and Switch to Branch
-
-```bash
-# Create and switch in one command
-git checkout -b <branch-name>
-git checkout -b feature-login
-
-# Alternative (Git 2.23+)
-git switch -c <branch-name>
-git switch -c feature-login
-```
-
----
-
-### Rename a Branch
-
-```bash
-# Rename current branch
-git branch -m <new-name>
-git branch -m feature-authentication
-
-# Rename specific branch
-git branch -m <old-name> <new-name>
-git branch -m feature-login feature-authentication
-```
-
----
-
-### Delete a Branch
-
-```bash
-# Delete merged branch
-git branch -d <branch-name>
-git branch -d feature-login
-
-# Force delete (even if not merged)
-git branch -D <branch-name>
-git branch -D feature-login
-
-# Delete remote branch
-git push origin --delete <branch-name>
-git push origin --delete feature-login
-```
-
----
-
-## Merging
-
-### What is Merging?
-
-**Definition:** Combining changes from one branch into another.
-
----
-
-### Types of Merging
-
-#### 1. Fast-Forward Merge
-
-**When:** No new commits on main branch since feature branch was created.
-
-**Before:**
-```
-main:    C1 ← C2
-               ↓
-        feature: C3 ← C4
-```
-
-**After:**
-```
-main:    C1 ← C2 ← C3 ← C4
-```
-
-**Command:**
-```bash
-git checkout main
-git merge feature-login
-```
-
----
-
-#### 2. Three-Way Merge (Non-Fast-Forward)
-
-**When:** Both branches have new commits.
-
-**Before:**
-```
-main:    C1 ← C2 ← C5
-               ↓
-        feature: C3 ← C4
-```
-
-**After:**
-```
-main:    C1 ← C2 ← C5 ← C6 (merge commit)
-                ↓    ↗
-        feature: C3 ← C4
-```
-
-**Command:**
-```bash
-git checkout main
-git merge feature-login
-```
-
----
-
-### Merge Commands
-
-```bash
-# Switch to target branch
-git checkout main
-
-# Merge feature branch into main
-git merge <branch-name>
-git merge feature-login
-
-# Merge with commit message
-git merge <branch-name> -m "Merge feature-login into main"
-
-# Merge without fast-forward (create merge commit)
-git merge --no-ff <branch-name>
-
-# Abort merge in case of conflicts
-git merge --abort
-```
-
----
-
-### Merge Conflicts
-
-**What is a Merge Conflict?**
-
-A conflict occurs when:
-- Same file is modified in both branches
-- Same line is changed differently
-- Git cannot automatically merge
-
----
-
-### Resolving Merge Conflicts
-
-**Step 1: Attempt Merge**
-```bash
-git checkout main
-git merge feature-login
-```
-
-**Output:**
-```
-Auto-merging index.html
-CONFLICT (content): Merge conflict in index.html
-Automatic merge failed; fix conflicts and then commit the result.
-```
-
-**Step 2: Check Conflicted Files**
-```bash
-git status
-```
-
-**Output:**
-```
-Unmerged paths:
-  (use "git add <file>..." to mark resolution)
-        both modified:   index.html
-```
-
-**Step 3: Open Conflicted File**
-
-**index.html:**
-```html
-<body>
-<<<<<<< HEAD
-    <h1>Welcome to Main Branch</h1>
-=======
-    <h1>Welcome to Feature Branch</h1>
->>>>>>> feature-login
-    <p>Content here</p>
-</body>
-```
-
-**Conflict Markers:**
-- `<<<<<<< HEAD` - Current branch (main) changes
-- `=======` - Separator
-- `>>>>>>> feature-login` - Incoming branch changes
-
-**Step 4: Resolve Conflict**
-
-Edit the file to keep desired content:
-
-```html
-<body>
-    <h1>Welcome to Our Website</h1>
-    <p>Content here</p>
-</body>
-```
-
-**Step 5: Mark as Resolved**
-```bash
-git add index.html
-```
-
-**Step 6: Complete Merge**
-```bash
-git commit -m "Resolve merge conflict in index.html"
-```
-
----
-
-### Alternative Conflict Resolution
-
-```bash
-# Use version from current branch (main)
-git checkout --ours index.html
-
-# Use version from incoming branch (feature)
-git checkout --theirs index.html
-
-# After choosing, complete merge
-git add index.html
-git commit
-```
-
----
-
-## Remote Repository
-
-### What is a Remote Repository?
-
-**Definition:** A repository hosted on a server (GitHub, GitLab, Bitbucket) that allows collaboration.
-
----
-
-### Add Remote Repository
-
-```bash
-# Add remote repository
-git remote add origin <repository-url>
-git remote add origin https://github.com/username/repo.git
-
-# View remote repositories
-git remote -v
-
-# Show remote details
-git remote show origin
-```
-
----
-
-### Clone Repository
-
-```bash
-# Clone repository
-git clone <repository-url>
-git clone https://github.com/username/repo.git
-
-# Clone specific branch
-git clone -b <branch-name> <repository-url>
-git clone -b develop https://github.com/username/repo.git
-
-# Clone into specific folder
-git clone <repository-url> <folder-name>
-git clone https://github.com/username/repo.git my-project
-```
-
----
-
-### Push to Remote Repository
-
-```bash
-# Push to remote branch
-git push <remote> <branch>
-git push origin main
-
-# Push all branches
-git push --all origin
-
-# Push tags
-git push --tags
-
-# Force push (⚠️ use with caution)
-git push -f origin main
-
-# Set upstream branch
-git push -u origin main
-```
-
----
-
-### Pull from Remote Repository
-
-```bash
-# Fetch and merge changes
-git pull origin main
-
-# Pull with rebase
-git pull --rebase origin main
-
-# Pull all branches
-git pull --all
-```
-
----
-
-### Fetch from Remote Repository
-
-```bash
-# Fetch changes without merging
+# Initial setup
+git init
+npm i --verbose
+git fetch
 git fetch origin
 
-# Fetch specific branch
-git fetch origin main
+git pull origin main
 
-# Fetch all remotes
-git fetch --all
-```
+# Create new branch
+git checkout -b "development/mcr-task-1234-technician-display"
 
----
+# Check branch
+git branch
 
-### Remove Remote Repository
+# Check difference
+git status / git diff
+git diff src/file.tsx 
 
-```bash
-# Remove remote
-git remote remove origin
+# Compare two commits
+git diff <commit-id1> <commit-id2>
+git diff a1b2c3d e4f5g6h
 
-# Rename remote
-git remote rename origin upstream
-```
-
----
-
-## Advanced Commands
-
-### Git Stash
-
-**Description:** Temporarily save changes without committing.
-
-```bash
-# Stash current changes
-git stash
-
-# Stash with message
-git stash save "work in progress"
+# Compare with previous commit
+git diff HEAD~1 HEAD
 
 # List all stashes
 git stash list
 
-# Apply most recent stash
-git stash apply
+# Stage changes
+git add .                    # stages ALL changed files
+git add src/file.tsx         # stages ONLY this one file
+git add src/components/      # stages all files inside folder
+git add file1.js file2.css   # Add multiple files
+git add *.js                 # Add all files with specific extension
 
-# Apply specific stash
-git stash apply stash@{0}
+# Stage Changes with commit
+git commit -m "WIP: technician display logic implementation"
+Best Practice Commit Messages:
+#✅ Good examples
+git commit -m "Add user authentication feature"
+git commit -m "Fix login button alignment issue"
+git commit -m "Update dependencies to latest versions"
 
-# Apply and remove stash
-git stash pop
+# for retriggure jenkins
+git commit --allow-empty -m "trigger jenkins" then push
 
-# Remove specific stash
-git stash drop stash@{0}
+# for Shows commit history in compact single-line format
+git log --oneline
 
-# Clear all stashes
+# Stash work (with descriptive name)
+git stash push -m "WIP: technician display logic implementation"
+
+# Applies most recent stash (stash@{0})
+git stash pop   (REMOVES stash from list)
+git stash apply (KEEPS stash in list)
+
+# Stash REMAINS in stash list after apply
+git stash apply "stash@{1}"
+
+# delete all stashes
 git stash clear
 
-# Show stash changes
-git stash show
-```
+# Push branch
+git push origin feature/new   //Pushes branch to remote one time Next time you still have to type full command
+git push -u origin development/mcr-my-branch  //Pushes branch AND links local branch to remote branch permanently,After this, just typing git push or git pull is enough
 
----
+# Show last commit with file changes/full difference
+git show --stat  or git show
 
-### Git Tag
+# Show commits with one line each show last 10 commit
+git log --oneline -10
 
-**Description:** Mark specific commits (usually for releases).
+# see Last 5 changes (with PR number) to a file
+git log --oneline -5 src/components/suppliers/components/SuppliersList.tsx
 
-```bash
-# Create lightweight tag
-git tag v1.0.0
+# discard ALL unstaged changes
+git restore .                         
 
-# Create annotated tag
-git tag -a v1.0.0 -m "Release version 1.0.0"
-
-# List all tags
-git tag
-
-# Show tag details
-git show v1.0.0
-
-# Push tags to remote
-git push origin v1.0.0
-git push --tags
-
-# Delete tag
-git tag -d v1.0.0
-
-# Delete remote tag
-git push origin --delete v1.0.0
-```
-
----
-
-### Git Cherry-Pick
-
-**Description:** Apply specific commit from one branch to another.
-
-```bash
-# Apply specific commit
+# Bring all changes from a specific commit
 git cherry-pick <commit-id>
-git cherry-pick a1b2c3d
-
-# Cherry-pick without committing
-git cherry-pick -n <commit-id>
-
-# Cherry-pick multiple commits
 git cherry-pick <commit-id1> <commit-id2>
-```
+git cherry-pick abc1234 def5678
 
----
+# Push with Skip Hooks
+git push origin development/mcr-my-branch --no-verify
+git push origin development/mcr-my-branch --no-verify  --force
 
-### Git Rebase
+# Force Push Feature Branch
+git push -f origin feature-branch
 
-**Description:** Reapply commits on top of another base commit.
+# Before push - validate
+npm run validate-ts
 
-```bash
-# Rebase current branch onto main
+# Install Specific UX Component Version
+npm i @mitchell/react.component.ux@2.2.xxxxxx
+
+# Reset to last commit, DESTROYS all uncommitted changes
+git reset --soft HEAD~1
+git reset --hard
+git reset --hard <commit-hash>
+git reset <file-name> # Remove specific file from staging (unstage)
+
+# revert last push commit
+git revert HEAD
+git push
+
+# Revert specific commit
+git revert <commit-id>
+git revert a1b2c3d
+
+# Revert multiple commits
+git revert <commit-id1> <commit-id2>
+
+# Rebase feature branch onto main
+git checkout feature-branch
 git rebase main
-
-# Interactive rebase (last 3 commits)
-git rebase -i HEAD~3
-
-# Continue after resolving conflicts
-git rebase --continue
 
 # Abort rebase
 git rebase --abort
-```
 
----
+# Fetches changes from remote and rebases your local commits on top instead of creating a merge commit
+git pull --rebase origin main
 
-### Git Blame
+Handling Merge Conflicts
+# In terminal when conflict occurs:
+# 1. Press ESC
+# 2. Type: :wq
+# 3. Press Enter
 
-**Description:** Show who modified each line of a file.
+# Alternative - resolve in VS Code:
+# 1. Open conflicted files
+# 2. Choose "Accept Current Change" or "Accept Incoming Change"
+# 3. Save and commit
 
-```bash
-# Show line-by-line authorship
-git blame <file-name>
-git blame index.html
+# Clears npm's local package cache stored on your machine
+npm cache clean --force
+#Rebuilds the barrel file (index.ts) transform cache for your monorepo
+npm run build-barrel-transform
 
-# Show specific line range
-git blame -L 10,20 index.html
-```
+jenkins Fails check
+npm ci && npm run lint && npm run build && npm run test
 
----
+📝 Git Push Error Fix - Quick Reference Note
+🚨 When You See This Error:
+To https://github.com/enlyte-apd/monorepo-react-redux-module.git
+ ! [rejected]              development/mcr-local-labor-post-screen -> development/mcr-local-labor-post-screen (non-fast-forward)
+error: failed to push some refs to 'https://github.com/enlyte-apd/monorepo-react-redux-module.git'      
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help'
 
-### Git Reflog
+🔧 Quick Fix Steps:
+Step 1: Pull Remote Changes
+git pull origin your-current-branch
 
-**Description:** Show history of HEAD movements (useful for recovering lost commits).
+Step 2: Exit Merge Editor or merge conflict(resolved)
+:wq enter
 
-```bash
-# Show reflog
-git reflog
+Step 3: Push Again
+git push origin your-current-branch --force
 
-# Recover lost commit
-git checkout <commit-id>
-```
 
----
 
-## Best Practices
+📝 Git Pull Unnecessory commit come Fix - Quick Reference Note
 
-### 1. Write Meaningful Commit Messages
-
-✅ **Good:**
-```bash
-git commit -m "Add user authentication with JWT"
-git commit -m "Fix navbar alignment on mobile devices"
-git commit -m "Update README with installation instructions"
-```
-
-❌ **Bad:**
-```bash
-git commit -m "update"
-git commit -m "fix"
-git commit -m "changes"
-```
-
----
-
-### 2. Commit Often
-
-- Make small, logical commits
-- Each commit should represent one change
-- Easier to track and revert
-
----
-
-### 3. Use Branches for Features
-
-```bash
-# Create feature branch
-git checkout -b feature-user-profile
-
-# Work on feature
-git add .
-git commit -m "Add user profile page"
-
-# Merge when ready
-git checkout main
-git merge feature-user-profile
-```
-
----
-
-### 4. Pull Before Push
-
-```bash
-# Always pull latest changes before pushing
-git pull origin main
-git push origin main
-```
-
----
-
-### 5. Review Changes Before Committing
-
-```bash
-# Check what you're committing
-git status
-git diff
-git diff --staged
-
-# Then commit
-git commit -m "message"
-```
-
----
-
-### 6. Keep Main Branch Stable
-
-- Never commit directly to main
-- Always use feature branches
-- Test before merging
-
----
-
-### 7. Use .gitignore
-
-**Create `.gitignore` file:**
-
-```
-# Node modules
-node_modules/
-
-# Environment variables
-.env
-
-# Build files
-dist/
-build/
-
-# IDE files
-.vscode/
-.idea/
-
-# OS files
-.DS_Store
-Thumbs.db
-```
-
----
-
-### 8. Protect Sensitive Data
-
-- Never commit passwords or API keys
-- Use environment variables
-- Add sensitive files to `.gitignore`
-
----
-
-## Git Workflow Example
-
-### Complete Workflow
-
-```bash
-# 1. Clone repository
-git clone https://github.com/username/repo.git
-cd repo
-
-# 2. Create feature branch
-git checkout -b feature-navbar
-
-# 3. Make changes
-# ... edit files ...
-
-# 4. Check status
-git status
-
-# 5. Stage changes
-git add .
-
-# 6. Commit changes
-git commit -m "Add responsive navbar"
-
-# 7. Push feature branch
-git push -u origin feature-navbar
-
-# 8. Create Pull Request on GitHub
-
-# 9. After review, merge to main
 git checkout main
 git pull origin main
-git merge feature-navbar
+git checkout origin your-current-branch
+git rebase main
 
-# 10. Push to main
-git push origin main
+if [conflict (Esc → :wq → Enter)]
+   resolve commit 
+   git rebase --continue
+   git push origin feature-branch --no-verify --force
 
-# 11. Delete feature branch
-git branch -d feature-navbar
-git push origin --delete feature-navbar
-```
+else 
+   nothing
 
----
-
-## Git Practice Resources
-
-### Interactive Learning
-
-- **Git School:** https://git-school.github.io
-- **Learn Git Branching:** https://learngitbranching.js.org
-- **GitHub Skills:** https://skills.github.com
-
----
-
-## Common Git Errors and Solutions
-
-### 1. Merge Conflict
-
-**Error:**
-```
-CONFLICT (content): Merge conflict in file.txt
-```
-
-**Solution:**
-```bash
-# Edit conflicted file
-# Remove conflict markers
-git add file.txt
-git commit
-```
-
----
-
-### 2. Pushed to Wrong Branch
-
-**Solution:**
-```bash
-# Reset local branch
-git reset --hard HEAD~1
-
-# Force push
-git push -f origin branch-name
-```
-
----
-
-### 3. Forgot to Add File to Commit
-
-**Solution:**
-```bash
-# Add forgotten file
-git add forgotten-file.js
-
-# Amend last commit
-git commit --amend --no-edit
-```
-
----
-
-### 4. Committed to Wrong Branch
-
-**Solution:**
-```bash
-# Create new branch with current changes
-git branch correct-branch
-
-# Reset current branch
-git reset --hard HEAD~1
-
-# Switch to correct branch
-git checkout correct-branch
-```
-
----
-
-## Git Cheat Sheet
-
-### Setup
-```bash
-git config --global user.name "Name"
-git config --global user.email "email@example.com"
-git init
-```
-
-### Basic Commands
-```bash
-git status
-git add <file>
-git add .
-git commit -m "message"
-git log
-git log --oneline
-```
-
-### Branching
-```bash
-git branch
-git branch <name>
-git checkout <name>
-git checkout -b <name>
-git merge <branch>
-```
-
-### Remote
-```bash
-git remote add origin <url>
-git push origin <branch>
-git pull origin <branch>
-git clone <url>
-```
-
-### Undo
-```bash
-git checkout -- <file>
-git reset <file>
-git reset --hard HEAD
-git revert <commit-id>
-```
-
----
 
