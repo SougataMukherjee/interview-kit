@@ -325,217 +325,368 @@ git reset --hard HEAD~1
 **⚠️ Warning:** Changes are permanently lost!
 
 ---
-🌿 Git Workflow
-Branch Naming Conventions
+# 🌿 Git Workflow
 
-in cmd tyle ls to see folders
-and tree for structure
+## Branch Naming Conventions
 
-Redux Repository Branches:
-# Global labor posted unit
-development/mcr-global-posted-attribute-enhance
+---
 
-# Local labor posted unit  
-development/mcr-local-posted-attribute-enhance
+## Git Commands Workflow
 
-# General pattern
-development/mcr-story-[story-number]-[brief-description]
-development/mcr-task-[task-number]-[brief-description]
+### Login & Clone
 
-UX Repository Branches:
-# Example
-development/mcr-mig-workorder-technician-name-label-v2
-
-# General pattern
-development/mcr-[type]-[feature-description]-[version]
-
-Git Commands Workflow
-
+**Login to npm**
+```bash
 npm login
+```
 
-# Normal start → use plain clone
+**Normal start → use plain clone**
+```bash
 git clone https://github.com/org/project.git
+```
 
-# When someone shares a specific branch to work on
+**When someone shares a specific branch to work on**
+```bash
 git clone -b feature/payment https://github.com/org/project.git
+```
 
-# Initial setup
+---
+
+### Initial Setup
+
+```bash
 git init
 npm i --verbose
 git fetch
 git fetch origin
-
 git pull origin main
+```
 
-# Create new branch
+---
+
+### Branching
+
+**Create new branch**
+```bash
 git checkout -b "development/mcr-task-1234-technician-display"
+```
 
-# Check branch
+**Check current branch**
+```bash
 git branch
+```
 
-# Check difference
-git status / git diff
-git diff src/file.tsx 
+---
 
-# Compare two commits
+### Checking Differences
+
+**Check status / diff**
+```bash
+git status
+git diff src/file.tsx
+```
+
+**Compare two commits**
+```bash
 git diff <commit-id1> <commit-id2>
 git diff a1b2c3d e4f5g6h
+```
 
-# Compare with previous commit
+**Compare with previous commit**
+```bash
 git diff HEAD~1 HEAD
+```
 
-# List all stashes
+---
+
+### Stashing
+
+**List all stashes**
+```bash
 git stash list
+```
 
-# Stage changes
+**Stash work (with descriptive name)**
+```bash
+git stash push -m "WIP: technician display logic implementation"
+```
+
+**Apply/pop stash**
+```bash
+git stash pop    # Applies most recent stash (stash@{0}) and REMOVES it from list
+git stash apply  # Applies most recent stash and KEEPS it in list
+```
+
+**Apply a specific stash (stays in list)**
+```bash
+git stash apply "stash@{1}"
+```
+
+**Delete all stashes**
+```bash
+git stash clear
+```
+
+---
+
+### Staging Changes
+
+```bash
 git add .                    # stages ALL changed files
 git add src/file.tsx         # stages ONLY this one file
 git add src/components/      # stages all files inside folder
-git add file1.js file2.css   # Add multiple files
-git add *.js                 # Add all files with specific extension
+git add file1.js file2.css   # add multiple files
+git add *.js                 # add all files with specific extension
+```
 
-# Stage Changes with commit
+---
+
+### Committing
+
+```bash
 git commit -m "WIP: technician display logic implementation"
-Best Practice Commit Messages:
-#✅ Good examples
+```
+
+**Best Practice Commit Messages**
+
+✅ Good examples:
+```bash
 git commit -m "Add user authentication feature"
 git commit -m "Fix login button alignment issue"
 git commit -m "Update dependencies to latest versions"
+```
 
-# for retriggure jenkins
-git commit --allow-empty -m "trigger jenkins" then push
+**Retrigger Jenkins**
+```bash
+git commit --allow-empty -m "trigger jenkins"
+git push
+```
 
-# for Shows commit history in compact single-line format
+---
+
+### Viewing History
+
+**Compact single-line commit history**
+```bash
 git log --oneline
+```
 
-# Stash work (with descriptive name)
-git stash push -m "WIP: technician display logic implementation"
+**Last commit with file changes / full diff**
+```bash
+git show --stat
+git show
+```
 
-# Applies most recent stash (stash@{0})
-git stash pop   (REMOVES stash from list)
-git stash apply (KEEPS stash in list)
-
-# Stash REMAINS in stash list after apply
-git stash apply "stash@{1}"
-
-# delete all stashes
-git stash clear
-
-# Push branch
-git push origin feature/new   //Pushes branch to remote one time Next time you still have to type full command
-git push -u origin development/mcr-my-branch  //Pushes branch AND links local branch to remote branch permanently,After this, just typing git push or git pull is enough
-
-# Show last commit with file changes/full difference
-git show --stat  or git show
-
-# Show commits with one line each show last 10 commit
+**Last 10 commits (one line each)**
+```bash
 git log --oneline -10
+```
 
-# see Last 5 changes (with PR number) to a file
+**Last 5 changes (with PR number) to a specific file**
+```bash
 git log --oneline -5 src/components/suppliers/components/SuppliersList.tsx
+```
 
-# discard ALL unstaged changes
-git restore .                         
+---
 
-# Bring all changes from a specific commit
-git cherry-pick <commit-id>
-git cherry-pick <commit-id1> <commit-id2>
-git cherry-pick abc1234 def5678
+### Pushing
 
-# Push with Skip Hooks
+**Push branch**
+```bash
+git push origin feature/new
+# Pushes branch to remote one time. Next time you still have to type full command.
+```
+
+**Push and link local branch to remote permanently**
+```bash
+git push -u origin development/mcr-my-branch
+# After this, just typing `git push` or `git pull` is enough
+```
+
+**Push with skip hooks**
+```bash
 git push origin development/mcr-my-branch --no-verify
-git push origin development/mcr-my-branch --no-verify  --force
+git push origin development/mcr-my-branch --no-verify --force
+```
 
-# Force Push Feature Branch
+**Force push feature branch**
+```bash
 git push -f origin feature-branch
+```
 
-# Before push - validate
-npm run validate-ts
+---
 
-# Install Specific UX Component Version
-npm i @mitchell/react.component.ux@2.2.xxxxxx
+### Discarding & Resetting
 
-# Reset to last commit, DESTROYS all uncommitted changes
+**Discard ALL unstaged changes**
+```bash
+git restore .
+```
+
+**Reset to last commit (DESTROYS all uncommitted changes)**
+```bash
 git reset --soft HEAD~1
 git reset --hard
 git reset --hard <commit-hash>
-git reset <file-name> # Remove specific file from staging (unstage)
+```
 
-# revert last push commit
+**Remove specific file from staging (unstage)**
+```bash
+git reset <file-name>
+```
+
+---
+
+### Cherry-picking
+
+**Bring changes from a specific commit**
+```bash
+git cherry-pick <commit-id>
+git cherry-pick <commit-id1> <commit-id2>
+git cherry-pick abc1234 def5678
+```
+
+---
+
+### Reverting
+
+**Revert last push commit**
+```bash
 git revert HEAD
 git push
+```
 
-# Revert specific commit
+**Revert specific commit**
+```bash
 git revert <commit-id>
 git revert a1b2c3d
+```
 
-# Revert multiple commits
+**Revert multiple commits**
+```bash
 git revert <commit-id1> <commit-id2>
+```
 
-# Rebase feature branch onto main
+---
+
+### Rebasing
+
+**Rebase feature branch onto main**
+```bash
 git checkout feature-branch
 git rebase main
+```
 
-# Abort rebase
+**Abort rebase**
+```bash
 git rebase --abort
+```
 
-# Fetches changes from remote and rebases your local commits on top instead of creating a merge commit
+**Fetch changes from remote and rebase local commits on top (instead of merge commit)**
+```bash
 git pull --rebase origin main
+```
 
-Handling Merge Conflicts
-# In terminal when conflict occurs:
+---
+
+### Validation & Misc
+
+**Before push - validate**
+```bash
+npm run validate-ts
+```
+
+**Install specific UX component version**
+```bash
+npm i @mitchell/react.component.ux@2.2.xxxxxx
+```
+
+**Clears npm's local package cache stored on your machine**
+```bash
+npm cache clean --force
+```
+
+**Rebuilds the barrel file (index.ts) transform cache for monorepo**
+```bash
+npm run build-barrel-transform
+```
+
+**Jenkins fails check**
+```bash
+npm ci && npm run lint && npm run build && npm run test
+```
+
+---
+
+## Handling Merge Conflicts
+
+**In terminal when conflict occurs:**
+```bash
 # 1. Press ESC
 # 2. Type: :wq
 # 3. Press Enter
+```
 
-# Alternative - resolve in VS Code:
+**Alternative - resolve in VS Code:**
+```bash
 # 1. Open conflicted files
 # 2. Choose "Accept Current Change" or "Accept Incoming Change"
 # 3. Save and commit
+```
 
-# Clears npm's local package cache stored on your machine
-npm cache clean --force
-#Rebuilds the barrel file (index.ts) transform cache for your monorepo
-npm run build-barrel-transform
+---
 
-jenkins Fails check
-npm ci && npm run lint && npm run build && npm run test
+## 📝 Git Push Error Fix - Quick Reference
 
-📝 Git Push Error Fix - Quick Reference Note
-🚨 When You See This Error:
+### 🚨 When You See This Error:
+```bash
 To https://github.com/enlyte-apd/monorepo-react-redux-module.git
  ! [rejected]              development/mcr-local-labor-post-screen -> development/mcr-local-labor-post-screen (non-fast-forward)
-error: failed to push some refs to 'https://github.com/enlyte-apd/monorepo-react-redux-module.git'      
+error: failed to push some refs to 'https://github.com/enlyte-apd/monorepo-react-redux-module.git'
 hint: Updates were rejected because the tip of your current branch is behind
 hint: its remote counterpart. If you want to integrate the remote changes,
 hint: use 'git pull' before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help'
+```
 
-🔧 Quick Fix Steps:
-Step 1: Pull Remote Changes
+### 🔧 Quick Fix Steps:
+
+**Step 1: Pull remote changes**
+```bash
 git pull origin your-current-branch
+```
 
-Step 2: Exit Merge Editor or merge conflict(resolved)
-:wq enter
+**Step 2: Exit merge editor / resolve merge conflict**
+```bash
+:wq
+# then press Enter
+```
 
-Step 3: Push Again
+**Step 3: Push again**
+```bash
 git push origin your-current-branch --force
+```
 
+---
 
+## 📝 Git Pull Unnecessary Commit Fix - Quick Reference
 
-📝 Git Pull Unnecessory commit come Fix - Quick Reference Note
-
+```bash
 git checkout main
 git pull origin main
 git checkout origin your-current-branch
 git rebase main
+```
 
-if [conflict (Esc → :wq → Enter)]
-   resolve commit 
-   git rebase --continue
-   git push origin feature-branch --no-verify --force
+**If conflict occurs:**
+```bash
+# Esc → :wq → Enter
+# resolve conflict, then:
+git rebase --continue
+git push origin feature-branch --no-verify --force
+```
 
-else 
-   nothing
-
-
+**Else:**
+```bash
+# nothing to do
+```
