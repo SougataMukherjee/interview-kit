@@ -1,3 +1,55 @@
+| Feature | CommonJS (CJS) | ECMAScript Modules (ESM) |
+|----------|----------|----------|
+| Import syntax | `require()` | `import` |
+| Export syntax | `module.exports` / `exports` | `export` / `export default` |
+| Loading | Synchronous | Asynchronous (static analysis friendly) |
+| File extension | `.js`, `.cjs` | `.mjs` or `.js` with `"type":"module"` |
+| Standard | Node.js-specific (originally) | JavaScript standard |
+| Tree shaking | Not supported well | Supported |
+| Top-level `await` | ❌ | ✅ |
+| `__dirname`, `__filename` | ✅ Available | ❌ Not available directly |
+| Browser support | ❌ | ✅ Native support |
+
+| Feature | Synchronous (Sync) | Asynchronous (Async) |
+|----------|----------|----------|
+| Execution | One task at a time | Multiple tasks can progress concurrently |
+| Blocking | ✅ Blocks execution | ❌ Does not block execution |
+| Performance | Slower for I/O-heavy tasks | Faster and scalable |
+| Thread behavior | Main thread waits | Main thread remains free |
+| Callback/Promise | Not needed | Uses Callbacks, Promises, Async/Await |
+| Use case | Small scripts, startup tasks | APIs, DB calls, file/network operations |
+| Node.js recommendation | Limited use | Preferred approach |
+
+| Feature | HTML | Template Engine (EJS, Pug	) |
+|----------|----------|----------|
+| Purpose | Creates static web pages | Creates dynamic web pages |
+| Content | Fixed content | Content changes based on data |
+| Data Handling | Cannot directly use server-side variables | Can receive and display server-side data |
+| Syntax | Pure HTML tags | HTML + template syntax |
+| Output | HTML file | Generates HTML file |
+| Dynamic Data | ❌ Not suitable | ✅ Designed for dynamic data |
+| Loops & Conditions | ❌ Not available | ✅ Available |
+| Reusability | Limited | High (layouts, partials, components) |
+| Use Case | Static websites, landing pages | Blogs, dashboards, e-commerce, admin panels |
+| Rendering | Browser renders HTML directly | Server renders template into HTML, then sends it to browser |
+
+**What is a Server?**
+A server is a computer program or device that receives requests from clients, processes those requests, and sends back a response over a network (such as the Internet).
+My Notes (Corrected)
+
+A server is a program that receives tasks or requests, processes them, and sends responses back over the Internet.
+A web server is a server that handles HTTP/HTTPS requests from web browsers and returns web pages, JSON data, images, videos, or other web content.
+When I type facebook.com in the browser, an encrypted HTTPS request travels through the internet to Facebook's server. The server processes the request and sends back a response, which the browser displays as the Facebook webpage. 
+```js
+In Node.js, we can create a web server using modules such as:
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+    res.end('Hello World');
+});
+server.listen(3000);
+```
+
 **How NodeJS works**
 ```txt
 Node Process
@@ -68,6 +120,78 @@ Uses npm, the largest ecosystem for packages.
 
 Useful for building APIs, microservices, CLI tools, automation scripts, etc.
 
+**In Node.js, we can create a server using the built-in http module, but why do we still use Express.js to make a server?**
+
+Problems:
+Manual URL and method checking
+No built-in routing
+No middleware support
+Repetitive boilerplate code
+Hard to scale and maintain
+
+Raw http Module — What It Looks Like
+```js
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+    if (req.method === 'GET' && req.url === '/users') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ users: [] }));
+    } else if (req.method === 'POST' && req.url === '/users') {
+        res.writeHead(201, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: 'created' }));
+    } else {
+        res.writeHead(404);
+        res.end('Not Found');
+    }
+});
+
+server.listen(3000);
+```
+Same Thing With Express.js
+Express is built on top of Node.js http, but it removes a lot of repetitive code and makes routing/API development easier.
+With http, you manually check URLs, methods, headers, and parse requests. Express provides simple methods like app.get() and app.post().
+```js
+const express = require('express');
+const app = express();
+
+app.use(express.json()); // built-in middleware
+
+app.get('/users', (req, res) => {
+    res.status(200).json({ users: [] });
+});
+
+app.post('/users', (req, res) => {
+    res.status(201).json({ message: 'created' });
+});
+
+app.listen(3000);
+```
+**👉why call back better than async await in  slightly faster in extremely performance-sensitive code? in node**
+
+async/await is built on top of Promises, so it inherits all Promise overhead. Callbacks are closer to the runtime and therefore can be slightly faster in hot code paths.
+callback
+```txt
+Operation completes
+      ↓
+Direct callback invocation
+      ↓
+process()
+```
+
+Async/Await
+```txt
+Create Promise
+      ↓
+Resolve Promise
+      ↓
+Schedule microtask
+      ↓
+Resume async function
+      ↓
+process()
+```
+
 **Is Node.js Single-Threaded?**  
 
 Yes — Node.js uses a single main thread, but it handles many tasks at once using:
@@ -85,38 +209,6 @@ JavaScript is a scripting language, while Node.js is a runtime environment that 
 **What are the main disadvantages of Node.js?**  
 
 Disadvantages include its single-threaded nature, preference for NoSQL databases, and rapid API changes that can cause instability.
-
-
-**Synchronous(Blocking) vs Asynchronous in Node.js**  
-
-Synchronous (Blocking)
-Code runs line by line
-Next line waits for previous line
-Slow for heavy I/O tasks
-Example:
-```js
-const data = fs.readFileSync("file.txt");
-console.log(data);
-```
-Asynchronous (Non-blocking)
-Does not block the main thread.When User Performs the I/O operation then Node will freezes the Browser and
-allow the User to interact, The I/O operation is running in the background.
-Uses callbacks, promises, async/await
-Best for API calls, DB queries, file system operations
-
-Example:
-```js
-fs.readFile("file.txt","utf-8", (err, data) => {
-  console.log(data);        //execute second
-});
-console.log('this is message') //execute first
-```
-Blocking I/O                    Non-Blocking I/O
---------------                  -----------------
-Fetch user 1 (wait)             Fetch user 1 (async)
-Print user 1                    Continue other tasks
-Fetch user 2 (wait)             Print user 1 later (callback)
-Print user 2                    Print user 2 later (callback)
 
 
 **Chaining in Node.js**  
@@ -147,7 +239,6 @@ const { xyz, abc } = require("./math");
 
 console.log(xyz());
 console.log(abc);
-
 
 ```
 2. Global Module
@@ -182,7 +273,31 @@ res → output we send back
 
 **What is middleware?**  
 
-Middleware functions execute between the request and response cycle, performing tasks like logging, authentication, and data processing.
+Middleware is a callback function runs between the request coming in and the response going out. performing tasks like logging, authentication, and data processing.
+that has three parameters: req, res, and next. It executes before the route handler.
+
+Data sent by the client to the server is available in the req (request) object.
+Data sent from the server to the client is handled through the res (response) object.
+After executing its logic, the middleware passes control to the next middleware or route handler by calling next().
+
+```js
+const express = require("express");
+const app = express();
+
+const logger = (req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next(); // pass control to next middleware
+};
+
+app.use(logger); //every time runs before route
+
+app.get("/", (req, res) => {
+  res.send("Hello");
+});
+
+app.listen(3000);
+```
+
 **What do you mean by event loop in Node.js?**  
 
 The event loop is a mechanism that processes asynchronous tasks in a single thread by continuously checking for and executing callback functions
@@ -195,22 +310,17 @@ The event loop is a mechanism that processes asynchronous tasks in a single thre
 **What is buffer in Node.js?**
 A buffer is a temporary storage space for binary data, allowing Node.js to handle raw data directly.
 **What are streams in Node.js?**  
+A Stream is a way to process data piece-by-piece (chunks) instead of loading the entire data into memory at once.
+Think of it like drinking water through a straw:
+
+Without stream → You try to drink the entire bottle at once.
+With stream → You consume it little by little.
 
 Streams are objects used to handle continuous data flows, process data chunk by chunk, not all at once and its faster for big file
 
 ```js
-const fs = require("fs");
-
-const readStream = fs.createReadStream("./blog.txt");
-const writeStream = fs.createWriteStream("./copy.txt");
-
-readStream.on("data", (chunk) => {
-  console.log("---- NEW CHUNK ----");
-  console.log(chunk.toString());
-
-  writeStream.write("\n NEW CHUNK \n");
-  writeStream.write(chunk);
-});
+const fs = require('fs');
+const data = fs.readFileSync('movie.mp4');
 
 ```
 
