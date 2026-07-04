@@ -10,6 +10,7 @@
 | `__dirname`, `__filename` | ✅ Available | ❌ Not available directly |
 | Browser support | ❌ | ✅ Native support |
 
+
 | Feature | Synchronous (Sync) | Asynchronous (Async) |
 |----------|----------|----------|
 | Execution | One task at a time | Multiple tasks can progress concurrently |
@@ -20,20 +21,9 @@
 | Use case | Small scripts, startup tasks | APIs, DB calls, file/network operations |
 | Node.js recommendation | Limited use | Preferred approach |
 
-| Feature | HTML | Template Engine (EJS, Pug	) |
-|----------|----------|----------|
-| Purpose | Creates static web pages | Creates dynamic web pages |
-| Content | Fixed content | Content changes based on data |
-| Data Handling | Cannot directly use server-side variables | Can receive and display server-side data |
-| Syntax | Pure HTML tags | HTML + template syntax |
-| Output | HTML file | Generates HTML file |
-| Dynamic Data | ❌ Not suitable | ✅ Designed for dynamic data |
-| Loops & Conditions | ❌ Not available | ✅ Available |
-| Reusability | Limited | High (layouts, partials, components) |
-| Use Case | Static websites, landing pages | Blogs, dashboards, e-commerce, admin panels |
-| Rendering | Browser renders HTML directly | Server renders template into HTML, then sends it to browser |
 
 **What is a Server?**
+
 A server is a computer program or device that receives requests from clients, processes those requests, and sends back a response over a network (such as the Internet).
 My Notes (Corrected)
 
@@ -308,6 +298,7 @@ The event loop is a mechanism that processes asynchronous tasks in a single thre
 
 
 **What is buffer in Node.js?**
+
 A buffer is a temporary storage space for binary data, allowing Node.js to handle raw data directly.
 **What are streams in Node.js?**  
 A Stream is a way to process data piece-by-piece (chunks) instead of loading the entire data into memory at once.
@@ -328,43 +319,6 @@ const data = fs.readFileSync('movie.mp4');
 
 `setTimeout()` schedules a callback after a specified delay, whereas `setImmediate()` executes it immediately after I/O events.
 
-**What is fork in Node.js?**  
-
-Fork is a method to create child processes that allow parallel execution of tasks in Node.js.
-
-**What is body-parser in Node.js?**  
-
-Body-parser is middleware that parses incoming request bodies in a middleware before handling it in Node.js applications.
-
-**What is a cluster in Node.js?**  
-
-A cluster allows Node.js to utilize multiple cores of a machine by creating child processes that share the same server port.
-
-**How can we implement authentication and authorization in Node.js?**  
-
- Use packages like Passport for authentication and JWT for managing tokens to implement security in Node.js applications.
-
-**What are child processes in Node.js?**  
-
-Child processes allow Node.js to handle multiple tasks concurrently by creating subprocesses that can run independently.
-
-**Relational vs Non-Relational Databases**  
-Relational Database (SQL)
-
-A relational database stores data in tables, with rows & columns, and uses relations (foreign keys) between tables. it has structured and fixed schema
-
-Non-Relational Database (NoSQL)
-
-Data stored in document, key-value, graph, or wide-column formats.
-Schema is flexible and can change anytime.it has no fixed schema high scalable and design for big data.
-
-**Global Object vs Window Object**  
-In the browser → window
-In Node.js → global
-
-window exists only in browser JavaScript and represents browser environment.
-
-global is Node.js runtime’s top-level object
 
 **FileSystem – readFile vs readFileSync**  
 It allows you to read, write, update, delete files on your computer.
