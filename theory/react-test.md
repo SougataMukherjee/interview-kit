@@ -1,5 +1,27 @@
 # 🧪 React Testing Notes (Jest / RTL / Vitest)
 
+### Installation
+
+```bash
+# Install React Testing Library
+npm install --save-dev @testing-library/react @testing-library/jest-dom @testing-library/user-event
+
+# TypeScript types (usually included)
+npm install --save-dev @types/jest
+```
+
+### Configuration
+
+**setupTests.ts**
+```typescript
+import '@testing-library/jest-dom';
+```
+
+**File Naming Convention**
+- `ComponentName.test.tsx` or `ComponentName.spec.tsx`
+- Keep test files next to components or in `__tests__` folder
+
+---
 ## 1. Test Lifecycle Hooks
 
 ---
@@ -478,9 +500,13 @@ expect(store.getActions()).toContainEqual(myAction());
 ---
 
 ✅ Use accessible queries first (`getByRole` → `getByLabelText` → `getByText` → `getByTestId` last)
+
 ✅ Always `await` `userEvent` actions
+
 ✅ Organize tests with nested `describe` blocks (Rendering / Interactions / Edge Cases)
+
 ✅ Clean up after each test: `jest.clearAllMocks()`, `jest.restoreAllMocks()`
+
 ✅ Test **behavior**, not implementation
 
 ```tsx
@@ -492,6 +518,7 @@ expect(screen.getByRole('dialog')).toBeVisible();
 ```
 
 ✅ Prefer `findBy` over manual `waitFor` for simple async lookups
+
 ✅ Write descriptive test names starting with `'should'`
 
 ```tsx
@@ -509,4 +536,5 @@ screen.getByRole('button', { name: /submit/i });
 ```
 
 ✅ Test description should not mention implementation details (variable/function/constant names)
+
 ✅ Avoid logic (`if`, loops) inside test bodies
