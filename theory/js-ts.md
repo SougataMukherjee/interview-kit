@@ -1605,6 +1605,63 @@ switch (day) {
 }
 
 ```
+3. variation of switch
+```js
+function createResponse(
+    status: number,
+    env: 'prod' | 'dev' | 'qa' | 'uat'
+) {
+    switch (status) {
+        case 200:
+            return success(); 
+
+        case 404:
+            return {
+			    ...state,
+                success: false,
+                message: 'Not Found',
+                error: 'RESOURCE_NOT_FOUND'
+            };
+
+        case 500:
+            return env === 'prod'
+                ? {
+                    success: false,
+                    message: 'Something went wrong',
+                    error: 'SERVER_ERROR'
+                }
+                : {
+                    success: false,
+                    message: 'Server Error',
+                    error: 'INTERNAL_ERROR'
+                };
+
+        default:
+			return require('../responses/default.json');
+    }
+}
+
+
+function filterSublets(type, list) {
+  switch (type) {
+    case "ACTIVE":
+      return list.filter(s =>
+        [
+          RepairSubletConstants.SUBLET_STATUS_SCHEDULED,
+          RepairSubletConstants.SUBLET_STATUS_COMPLETED
+        ].includes(s.status)
+      );
+    
+   case "SCHEDULED":
+    return selectedRepairSublets.filter(
+      s => s.status === RepairSubletConstants.SUBLET_STATUS_SCHEDULED
+    );
+
+    default:
+      return list;
+  }
+}
+```
 
 **Q59:map vs forEach**  
 

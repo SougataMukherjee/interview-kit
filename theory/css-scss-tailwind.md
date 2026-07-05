@@ -29,7 +29,7 @@ CSS3 Features & Advantages:
 3 ways we can include css in webpage
 1. Inline CSS 
 ```js
-<p style="color:red;">Hello</p>
+<p style=={{ ...a, ...b,...(isActive && {color:'red'}) }}>Hello</p>
 ```
 2. Internal CSS 
 ```js
@@ -269,6 +269,24 @@ Grid useful for 2D layout (rows and columns)
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
+const Container = styled.div`
+  display: grid;
+  gap: 10px;
+  grid-template-columns: ${(props) => {
+    if (props.columns === 4) {
+      if (props.viewportSize.size === ViewportSize.EXTRA_LARGE) {
+        return '1fr 1fr 1fr 1.6fr';
+      }
+      return '1.2fr 0.9fr 0.9fr 1.2fr';
+    }
+
+    if (props.columns === 3) {
+      return '1.5fr 0.8fr 1.5fr';
+    }
+
+    return '1fr 1fr';
+  }};
+`;
 ```
 - grid area with grid template area
 ```js
@@ -285,7 +303,20 @@ Grid useful for 2D layout (rows and columns)
   display: grid;
   grid-template-columns: repeat(4, minmax(150px, 1fr));
 }
+const StyledInnerGrid = styled(Grid)(
+  (props: {
+    hasClockIconOffset?: boolean;
+    isDatePickerContainer?: boolean;
+  }) => `
+    display: flex;
+    ${props.hasClockIconOffset ? 'margin-left: 20px;' : ''}
+    ${props.isDatePickerContainer ? 'padding: 10px; background: #f0f0f0;' : ''}
 
+    &:focus {
+      outline: none;
+    }
+  `
+);
 ```
 Note:in grid auto-fill fill the entire row and create empty columns ,auto-fill Empty tracks reserved and items do not stretch to fill empty space
 ```txt
