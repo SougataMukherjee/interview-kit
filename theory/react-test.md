@@ -5,8 +5,11 @@
 ---
 
 **`beforeAll`** — runs once before all tests (heavy setup, e.g. DB connection)
+
 **`afterAll`** — runs once after all tests (final cleanup)
+
 **`beforeEach`** — runs before every single test (fresh setup)
+
 **`afterEach`** — runs after every single test (cleanup)
 
 ```tsx
@@ -24,6 +27,7 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.clearAllMocks();
+  expect.hasAssertions();
 });
 ```
 
@@ -34,8 +38,30 @@ beforeEach → test2 → afterEach
 ```
 
 ---
+## 2.1 `describe`
 
-## 2. `describe.only` / `it.only`
+as long as the nesting reflects meaningful groupings. The goal is to organize tests by behavior
+
+```tsx
+describe('MyComponent', () => {
+  describe('Rendering', () => {
+    it('renders the title', () => {});
+    it('renders the button', () => {});
+  });
+
+  describe('Interactions', () => {
+    it('calls onClick when the button is clicked', () => {});
+    it('opens the modal', () => {});
+  });
+
+  describe('Updates', () => {
+    it('updates when props change', () => {});
+    it('displays loading state', () => {});
+  });
+});
+```
+---
+## 2.2. `describe.only` / `it.only`
 
 ---
 
@@ -62,6 +88,14 @@ it.only('should show loading state', () => {});
 ```tsx
 act(() => {
   result.current.increment();
+});
+
+act(() => {
+  fireEvent.click(getByText('Increment'));
+});
+
+act(() => {
+  rerender(<User name="Alice" />);
 });
 ```
 
@@ -101,10 +135,29 @@ user.getName();
 expect(spy).toHaveBeenCalled(); // ✅
 ```
 
-**Mock multiple imports independently**
+**Mock jest.requireActual()**
+
+Used when you want to mock only part of a module/hook/utility.
+
 ```tsx
-(getPartPriceChangeInfo as jest.Mock).mockReturnValue({ price: 100 });
-(getLatestEstimate as jest.Mock).mockReturnValue({ estimateId: 5 });
+// math.js
+
+export const add = (a, b) => a + b;
+export const subtract = (a, b) => a - b;
+
+//test
+
+jest.mock('./math', () => ({
+  ...jest.requireActual('./math'),
+  add: jest.fn(() => 100),
+}));
+add(2, 3);       // 100
+subtract(5, 2);  // 3 (real function)
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => jest.fn(),
+}));
 ```
 
 ---
