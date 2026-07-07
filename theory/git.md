@@ -339,7 +339,10 @@ git reset --hard HEAD~1
 ```bash
 npm login
 ```
-
+**Check npm Registry URL**
+```bash
+npm config get registry
+```
 **Normal start → use plain clone**
 ```bash
 git clone https://github.com/org/project.git
@@ -446,6 +449,10 @@ git add *.js                 # add all files with specific extension
 ```bash
 git commit -m "WIP: technician display logic implementation"
 ```
+### Commit All Tracked Changes (Does not include newly created untracked files.)
+	```bash
+        git commit -a -m "message"
+        ```
 
 **Best Practice Commit Messages**
 
@@ -566,7 +573,10 @@ git revert a1b2c3d
 ```bash
 git revert <commit-id1> <commit-id2>
 ```
-
+**Restore Deleted/Modified File**
+```bash
+git restore css/index.js
+```
 ---
 
 ### Rebasing

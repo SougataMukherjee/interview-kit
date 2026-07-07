@@ -1,31 +1,8 @@
-| Feature | CommonJS (CJS) | ECMAScript Modules (ESM) |
-|----------|----------|----------|
-| Import syntax | `require()` | `import` |
-| Export syntax | `module.exports` / `exports` | `export` / `export default` |
-| Loading | Synchronous | Asynchronous (static analysis friendly) |
-| File extension | `.js`, `.cjs` | `.mjs` or `.js` with `"type":"module"` |
-| Standard | Node.js-specific (originally) | JavaScript standard |
-| Tree shaking | Not supported well | Supported |
-| Top-level `await` | ❌ | ✅ |
-| `__dirname`, `__filename` | ✅ Available | ❌ Not available directly |
-| Browser support | ❌ | ✅ Native support |
-
-
-| Feature | Synchronous (Sync) | Asynchronous (Async) |
-|----------|----------|----------|
-| Execution | One task at a time | Multiple tasks can progress concurrently |
-| Blocking | ✅ Blocks execution | ❌ Does not block execution |
-| Performance | Slower for I/O-heavy tasks | Faster and scalable |
-| Thread behavior | Main thread waits | Main thread remains free |
-| Callback/Promise | Not needed | Uses Callbacks, Promises, Async/Await |
-| Use case | Small scripts, startup tasks | APIs, DB calls, file/network operations |
-| Node.js recommendation | Limited use | Preferred approach |
-
 
 **What is a Server?**
 
 A server is a computer program or device that receives requests from clients, processes those requests, and sends back a response over a network (such as the Internet).
-My Notes (Corrected)
+<img src="./img/server.jpeg" alt="server" />
 
 A server is a program that receives tasks or requests, processes them, and sends responses back over the Internet.
 A web server is a server that handles HTTP/HTTPS requests from web browsers and returns web pages, JSON data, images, videos, or other web content.
@@ -98,6 +75,21 @@ node app.js
 ```
 This executes JS using Node's V8 engine, without needing Chrome
 
+**What is CLI and GUI in Node.js?**
+
+- CLI (Command Line Interface)
+
+CLI allows users to interact with applications through text commands in the terminal.its fast and lightweight
+node app.js
+npm install
+npm start
+- GUI (Graphical User Interface)
+
+GUI allows users to interact using graphical elements such as buttons, menus, and windows.its user friendly and easy navigation
+Examples
+VS Code
+Browser
+
 **Why do we use Node.js?**
 
 To run JavaScript on the server (backend development).
@@ -109,6 +101,29 @@ Perfect for real-time apps (chat, notifications, streaming).
 Uses npm, the largest ecosystem for packages.
 
 Useful for building APIs, microservices, CLI tools, automation scripts, etc.
+
+| Feature | CommonJS (CJS) | ECMAScript Modules (ESM) |
+|----------|----------|----------|
+| Import syntax | `require()` | `import` |
+| Export syntax | `module.exports` / `exports` | `export` / `export default` |
+| Loading | Synchronous | Asynchronous (static analysis friendly) |
+| File extension | `.js`, `.cjs` | `.mjs` or `.js` with `"type":"module"` |
+| Standard | Node.js-specific (originally) | JavaScript standard |
+| Tree shaking | Not supported well | Supported |
+| Top-level `await` | ❌ | ✅ |
+| `__dirname`, `__filename` | ✅ Available | ❌ Not available directly |
+| Browser support | ❌ | ✅ Native support |
+
+
+| Feature | Synchronous (Sync) | Asynchronous (Async) |
+|----------|----------|----------|
+| Execution | One task at a time | Multiple tasks can progress concurrently |
+| Blocking | ✅ Blocks execution | ❌ Does not block execution |
+| Performance | Slower for I/O-heavy tasks | Faster and scalable |
+| Thread behavior | Main thread waits | Main thread remains free |
+| Callback/Promise | Not needed | Uses Callbacks, Promises, Async/Await |
+| Use case | Small scripts, startup tasks | APIs, DB calls, file/network operations |
+| Node.js recommendation | Limited use | Preferred approach |
 
 **In Node.js, we can create a server using the built-in http module, but why do we still use Express.js to make a server?**
 
@@ -983,3 +998,60 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on ${PORT}`);
 });
 ```
+
+1. What is NestJS?
+NestJS is a progressive Node.js framework used for building scalable, maintainable, and enterprise-grade backend applications.
+It is built on top of:
+- Node.js
+- Express.js (default)
+
+### Features
+
+- TypeScript Support
+- Dependency Injection
+- Modular Architecture
+- REST APIs
+- GraphQL
+- Microservices
+- Testing support
+
+2. Does NestJS Support TypeScript?
+✅ Yes.
+3. Can We Write Test Cases in NestJS?
+✅ Yes.
+
+4. Why NestJS Instead of Express in Production?
+
+Express is minimal and flexible, whereas NestJS provides architecture, dependency injection, testing, validation, and TypeScript support, making it more suitable for large production applications.
+
+5. Decorators in NestJS
+Decorators add metadata to classes, methods, and properties.
+- @Controller()
+Marks a class as a controller.
+- @Injectable()
+Makes a class available for Dependency Injection.
+- @Module()
+Defines a module.
+- @Schema()
+Used to create MongoDB schema.
+- @Get()
+Handles GET request.
+- @Post()
+Handles POST request.
+- @Patch()
+Handles PATCH request.
+- @Delete()
+Handles DELETE request.
+6. Use of Constructor
+
+Constructor is mainly used for Dependency Injection.
+## Benefits
+
+- Inject Services
+- Reuse Logic
+- Loose Coupling
+
+7. What is DTO?
+
+DTO = Data Transfer Object
+Used to define and validate request data.

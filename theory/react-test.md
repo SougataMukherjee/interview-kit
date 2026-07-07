@@ -248,6 +248,44 @@ it('fetches and displays user data', async () => {
   });
 });
 ```
+---
+**it.each()**
+
+it.each() is a Jest feature used for Parameterized Testing (Data-Driven Testing).
+Instead of writing multiple test cases for different input values, we can write a single test and execute it multiple times with different datasets.
+### Syntax
+
+```tsx
+it.each([
+  [input1, expected1],
+  [input2, expected2]
+])(
+  'test description',
+  (input, expected) => {
+      // test logic
+  }
+);
+```
+### Benefits
+
+- Less code
+- Easy maintenance
+- Better readability
+- Avoid duplicate tests
+### Example
+
+```tsx
+
+it.each([
+  ['', false],
+  ['John', true]
+])(
+  'should validate username',
+  (input, expected) => {
+      expect(isValid(input)).toBe(expected);
+  }
+);
+```
 
 ---
 

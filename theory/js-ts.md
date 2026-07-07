@@ -725,6 +725,49 @@ What problem it solves:
 Avoids callback hell and complex .then() chaining in Promises Used to handle errors gracefully so app doesn't crash.
 Makes async code more readable single try..catch, cleaner, and easier to handle errors using try…catch
 
+### variation of try-catch block
+
+```tsx
+//variation 1
+try {
+
+}
+catch(error) {
+
+}
+//variation 2
+try {
+
+}
+finally {
+
+}
+//variation 3
+try {
+
+}
+catch(error) {
+
+}
+finally {
+
+}
+//variation 4
+try {
+
+    try {
+
+    }
+    catch(error){
+
+    }
+
+}
+catch(error){
+
+}
+```
+
 
 **Q18: What is Debounce & Throttle?**  
 
