@@ -998,8 +998,9 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on ${PORT}`);
 });
 ```
+---
+## What is NestJS?
 
-1. What is NestJS?
 NestJS is a progressive Node.js framework used for building scalable, maintainable, and enterprise-grade backend applications.
 It is built on top of:
 - Node.js
@@ -1016,8 +1017,10 @@ It is built on top of:
 - Testing support
 
 2. Does NestJS Support TypeScript?
+
 ✅ Yes.
 3. Can We Write Test Cases in NestJS?
+
 ✅ Yes.
 
 4. Why NestJS Instead of Express in Production?
@@ -1025,6 +1028,7 @@ It is built on top of:
 Express is minimal and flexible, whereas NestJS provides architecture, dependency injection, testing, validation, and TypeScript support, making it more suitable for large production applications.
 
 5. Decorators in NestJS
+
 Decorators add metadata to classes, methods, and properties.
 - @Controller()
 Marks a class as a controller.
@@ -1042,6 +1046,7 @@ Handles POST request.
 Handles PATCH request.
 - @Delete()
 Handles DELETE request.
+
 6. Use of Constructor
 
 Constructor is mainly used for Dependency Injection.
