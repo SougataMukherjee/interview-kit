@@ -1008,8 +1008,8 @@ def delete_model(model_id: int):
 - Faster than Python lists
 - Less memory usage
 - Supports multidimensional arrays
-- Efficient mathematical calculations
-- Supports vectorized operations
+- Stores data in rows and columns.
+- Can hold only one data type
 
 ---
 
@@ -1039,7 +1039,7 @@ jupyter notebook
 - Stores same-datatype elements
 - Supports 1D, 2D, 3D arrays
 - Fast calculations
-- Efficient memory usage
+- Can hold only one data type.
 
 ```python
 import numpy as np
@@ -1059,13 +1059,18 @@ import numpy as np
 
 arr = np.array([10, 20, 30])
 print(arr)
+
+np.zeros((2,3))
+np.ones((3,2))
+np.empty((2,2))
+np.full((2,2),5)
 ```
 
 ---
 
 ## 5. Structured Array
 
-📝 Different fields can be stored using custom datatypes.
+📝 Different fields can be stored using custom datatypes.It's stores multiple data types in one array (like database rows).
 
 ```python
 student_dtype = [
@@ -1081,6 +1086,13 @@ students = np.array([
 ], dtype=student_dtype)
 
 print(students)
+
+student = np.array([
+    (1,"Rahul",85.5),
+    (2,"Amit",90.0)
+],dtype=[("id","i4"),("name","U10"),("marks","f4")])
+
+print(student["name"]) #['Rahul' 'Amit']
 ```
 
 ---
@@ -1088,6 +1100,7 @@ print(students)
 ## 6. Shape of Array
 
 📝 Shape tells the dimensions of an array.
+Shape = Number of rows and columns.
 
 ```python
 a = np.array([1, 2, 3])
@@ -1096,6 +1109,10 @@ b = np.array([4, 5, 6])
 print(a.shape)
 print(b.shape)
 print(a.shape == b.shape)
+
+a.ndim      # dimensions
+a.size      # total elements
+a.dtype     # datatype
 ```
 
 ---
@@ -1171,7 +1188,7 @@ print(flat)
 
 ## 12. Broadcasting
 
-📝 Allows operations between arrays and scalars of different sizes.
+📝 Allows operations between arrays of different sizes.
 
 ```python
 arr = np.array([1, 2, 3])
@@ -1189,6 +1206,7 @@ arr = np.array([10, 20, 30, 40])
 
 print(arr[0])    # 10
 print(arr[2])    # 30
+# using negative index
 print(arr[-1])   # 40
 print(arr[-2])   # 30
 ```
@@ -1230,6 +1248,8 @@ np.var(a)
 
 ## 16. Boolean Filtering
 
+Filter using conditions.
+
 **Values less than 100**
 ```python
 products = np.array([10, 40, 300, 100, 55])
@@ -1248,6 +1268,16 @@ print(employee[employee[:, 2] > 50000])
 ```
 
 ---
+## 17.Mathematical Operations
+
+```python
+arr.sum()
+arr.mean()
+arr.max()
+arr.min()
+arr.std()
+np.random.rand(3)
+```
 ---
 
 # 🐼 Pandas
@@ -1357,6 +1387,9 @@ print(df["Name"])
 # Multiple columns
 print(df[["Name", "Salary"]])
 
+# Row by loc
+print(df.loc[0])
+
 # Row by position
 print(df.iloc[0])
 
@@ -1400,6 +1433,8 @@ df = pd.DataFrame(data)
 
 **Check, remove, and replace missing values**
 ```python
+df.isnull()
+df.notnull()
 df.isna()
 df.isna().sum()
 df.isna().any()
@@ -1415,6 +1450,7 @@ df["Salary"] = df["Salary"].replace(np.nan, 30000)
 ```python
 df = pd.read_csv("customer.csv")
 df = pd.read_excel("customer.xlsx")
+df = pd.read_json("data.json")
 ```
 
 **Useful inspection functions**
@@ -1438,7 +1474,13 @@ df.duplicated()
 - Standardize data formats
 
 ```python
-df.dropna()
+#Rename columns
+df.rename(columns={"Age":"StudentAge"})
+
+#Replace datatype
+df.replace("NA",0)
+
+#Remove dupliicate
 df.drop_duplicates()
 ```
 
@@ -1450,6 +1492,8 @@ df.drop_duplicates()
 
 **Count employees by department**
 ```python
+df.groupby("Department")["Salary"].mean()
+
 gp = df.groupby("Department").agg({"Gender": "count"})
 print(gp)
 ```
@@ -1537,6 +1581,11 @@ df = pd.DataFrame(
 
 ## 13. Filtering Data
 
+**Multiple condition**
+```python
+df[(df["Age"]>20) & (df["Marks"]>80)]
+```
+
 **Row names ending with 'e'**
 ```python
 df.filter(regex='e$', axis=0)
@@ -1564,3 +1613,22 @@ df = pd.DataFrame(
     columns=['Year1', 'Year2']
 )
 ```
+---
+## 15.String operation
+```python
+df["Name"].str.upper()
+
+df["Name"].str.lower()
+
+df["Name"].str.contains("A")
+```
+---
+## 16.Date & time
+```python
+df["Date"] = pd.to_datetime(df["Date"])
+
+df["Year"] = df["Date"].dt.year
+
+df["Month"] = df["Date"].dt.month
+```
+---
