@@ -487,26 +487,43 @@ function* fetchWithTimeoutSaga() {
 ### 1. Actions
 
 **Description:** Actions are plain JavaScript objects that sends data from React to Redux. They must have a `type` property and can carry data as payload.
+👉 It does not change data directly.
+
+**Real-Life Example**
+- Imagine you're ordering food.
+- You tell the waiter:"Add 1 Burger",This message is the Action.
 
 **Rules:**
 - Must be a plain object
 - Must contain a type field
 - Can carry data via payload
 
-
+**Usage**
+- Add data
+- Delete data
+- Update data
+- Fetch data
 
 ---
 
 ### 2. Reducers
 
 **Description:** Reducers are pure functions that take the current state and an action, then return a new state. They must not mutate state.
+A Reducer is a function that decides:
+
+"Given the current state and action, what should the new state be?"
 
 **Rules**
 
 - Must be a pure function
-- Must not mutate state
+- Must not change original state
 - Must always return a value
 
+**Usage**
+- Update state
+- Reset state
+- Handle CRUD operations
+- Manage feature-specific state
 
 ---
 
@@ -514,26 +531,75 @@ function* fetchWithTimeoutSaga() {
 
 **Description:** Combine multiple reducers into a single root reducer for the store.allowing you to split state management by domain or feature.
 
+**Real-Life Example**
+
+Different departments in a company:
+
+HR Department
+Finance Department
+Sales Department
+
+Each handles its own work.
+
+**Rules**
+
+✅ Each reducer manages its own state
+
+✅ Reducers should be independent
+
+✅ Root reducer is passed to Store
+
 ---
 
 ### 4. Store Configuration
 
 **Description:** Create and configure the Redux store with saga middleware.
+Real-Life Example
 
+Warehouse storing all company products.
+
+Every department gets data from the same warehouse.
+
+**Responsibilities**
+
+✅ Hold application state
+
+✅ Dispatch actions
+
+✅ Update state through reducers
+
+✅ Allow components to subscribe
 
 ---
 
 ### 5. Selectors
 
 **Description:** Selectors extract and compute derived data from the Redux store. Use `reselect` for memoization.
+Instead of accessing store directly everywhere, use selectors.
+**Real-Life Example**
 
+You ask:
+
+"Show me only active users."
+
+A helper finds and returns that data.
+
+**Rules** 
+
+✅ Select data from store
+
+✅ Keep logic reusable
+
+✅ Use reselect for expensive calculations
+
+✅ Avoid repeating filter/map logic in components
 
 ---
 
 ## Project 1: Redux Button Disable With Async Promise Flow
 
 ### Description
-Create a JSON Server API for e-commerce products with full CRUD operations using Redux-Saga.
+Implemented a Redux-based button interaction where clicking the button triggers an API request and immediately disables the button to prevent multiple submissions. A loading state is displayed while waiting for the response, and the button remains disabled for 2000 milliseconds before becoming active again after the response is received.
 
 **App.jsx**
 ```typescript
@@ -842,7 +908,7 @@ call(responseService.fetchData)     → Promise delay 2000ms
 ## Project 2: User List Search Disable State
 
 ### Description
-Create a JSON Server API for e-commerce products with full CRUD operations using Redux-Saga.
+Developed a user search functionality using Redux to manage API requests and state updates. When a user enters a name and clicks the search button, the application fetches data, checks for matching records from the response, and displays the matched results; otherwise, it shows a "No Match Found" message.
 
 **App.jsx**
 ```typescript
@@ -1292,7 +1358,7 @@ Type in Search Box + Enter  OR  Click Search Button
 ## Project 3: Form Submit Toast Notification Flow
 
 ### Description
-Create a JSON Server API for e-commerce products with full CRUD operations using Redux-Saga.
+Created a form submission workflow with Redux, where a success toast notification is displayed after a successful form submission with a 2000-millisecond delay. If validation fails or an incorrect input is provided, an appropriate warning toast message is displayed after the configured delay to improve user feedback and experience.
 
 **App.jsx**
 ```typescript
@@ -1844,7 +1910,7 @@ Enter Email + Password → Click Submit
 ## Project 4: Modal Spinner Data Load Flow
 
 ### Description
-Create a JSON Server API for e-commerce products with full CRUD operations using Redux-Saga.
+Built a modal component that opens when a button is clicked and fetches data dynamically. A loading spinner is displayed inside the modal while the data is being retrieved, ensuring users receive visual feedback until the content is fully loaded and rendered.
 
 **App.jsx**
 ```typescript
@@ -2411,7 +2477,7 @@ Close Modal → dispatch(getModalResetAction()) → state cleared
 ## Project 5: E-Commerce Product CRUD Flow
 
 ### Description
-Create a JSON Server API for e-commerce products with full CRUD operations using Redux-Saga.
+Developed a complete e-commerce product management system using Redux and JSON Server. The application supports Create, Read, Update, and Delete (CRUD) operations for products, along with cart management features such as adding, updating, and removing items, all integrated with real-time JSON Server APIs for data persistence and state synchronization.
 
 Install:`npm install json-server`
 **package.json (add script)**
