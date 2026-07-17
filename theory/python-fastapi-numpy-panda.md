@@ -30,7 +30,9 @@
 ## 2. Identifiers, Keywords, Variables & Data Types
 
 📝 **Identifier** — a name (variable/method name) used for identification.
+
 📝 **Keywords** — reserved words like `True`, `continue`, `for`, `del`, `from`, `pass`, `in`, etc.
+
 📝 **Variable** — a container that stores values in memory.
 
 **Variable naming rules**
