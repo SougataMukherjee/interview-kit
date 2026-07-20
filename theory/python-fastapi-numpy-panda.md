@@ -678,6 +678,26 @@ except Exception:
 finally:
     pass  # always executes
 ```
+```python
+try:
+ # Code
+except ZeroDivisionError:
+ # Code
+except TypeError:
+ # Code
+except:
+ # All other exceptions
+```
+
+```python
+
+try:
+ # Some code
+except:
+ # Some code
+else:
+ # Executed if try was successful
+```
 
 ---
 
@@ -786,6 +806,17 @@ d = dict(((100, 'sam'), (200, 'rik')))
 print(d.get(100))
 print(d.popitem())
 ```
+```python
+{
+ "key": "value",
+ "harry": "code",
+ "marks": "100",
+ "list": [1, 2, 9]
+ }
+ print(a["key"]) # Output: "value"
+ print(a["list"]) # Output: [1, 2, 9]
+```
+
 
 ---
 
@@ -1214,6 +1245,8 @@ print(arr[-2])   # 30
 ---
 
 ## 14. Indexing and Slicing
+
+`s=array[start:end]`
 
 ```python
 arr = np.array([
