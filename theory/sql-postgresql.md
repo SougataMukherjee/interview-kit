@@ -1642,11 +1642,12 @@ DROP SEQUENCE dept_deptid_seq;
 
 ### sample data
 
-employee_id | first_name | last_name | department | salary   | joining_date | age
-1           | Sam        | Muk       | Operations | 65446.8  | 23-05-2024   | 12
-2           | Mik        | Pal       | IT         | 58763.33 | 02-10-2021   | 34
-3           | Rik        | Doe       | Operations | 57123.32 | 30-04-2020   | 44
-4           | Sou        |           | HR         | 45666.64 | 04-04-2021   | 53
+| employee_id | first_name | last_name | department | salary   | joining_date | age |
+|-------------|------------|-----------|------------|----------|--------------|-----|
+| 1           | Sam        | Muk       | Operations | 65446.80 | 23-05-2024   | 12  |
+| 2           | Mik        | Pal       | IT         | 58763.33 | 02-10-2021   | 34  |
+| 3           | Rik        | Doe       | Operations | 57123.32 | 30-04-2020   | 44  |
+| 4           | Sou        |           | HR         | 45666.64 | 04-04-2021   | 53  |
 
 
 ```sql
