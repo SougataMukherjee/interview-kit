@@ -86,7 +86,6 @@ LIMIT/TOP
 
 SQL commands are grouped into 5 categories: **DDL**, **DML**, **DQL**, **DCL**, and **TCL**.
 
----
 
 ### 1. DDL (Data Definition Language)
 
@@ -114,8 +113,6 @@ CREATE TABLE IF NOT EXISTS employee (
 ```sql
 SHOW TABLES;
 ```
-
----
 
 #### ALTER
 
@@ -151,8 +148,6 @@ ALTER TABLE users
 RENAME COLUMN phone TO mobile_number;
 ```
 
----
-
 #### RENAME
 
 **Rename a table**
@@ -160,16 +155,12 @@ RENAME COLUMN phone TO mobile_number;
 RENAME TABLE old TO new;
 ```
 
----
-
 #### DROP
 
 **Drop a table if it exists**
 ```sql
 DROP TABLE IF EXISTS employee;
 ```
-
----
 
 #### TRUNCATE
 
@@ -186,8 +177,6 @@ TRUNCATE TABLE employee;
 TRUNCATE TABLE employee RESTART IDENTITY;
 ```
 
----
-
 ### 2. DML (Data Manipulation Language)
 
 📝 Used to insert, update, or delete data within tables. Commands: `INSERT`, `UPDATE`, `DELETE`.
@@ -203,8 +192,6 @@ INSERT INTO users
 VALUES
 ('Bob', 'bob@example.com', 'Male', '1990-11-23');
 ```
-
----
 
 #### UPDATE
 
@@ -236,8 +223,6 @@ SET salary = 70000
 WHERE id = 5;
 ```
 
----
-
 #### DELETE
 
 📝 Removes specific rows from a table based on a condition (unlike `TRUNCATE`, which removes all rows).
@@ -246,8 +231,6 @@ WHERE id = 5;
 DELETE FROM employee
 WHERE condition;
 ```
-
----
 
 ### 3. DQL (Data Query Language)
 
@@ -258,8 +241,6 @@ SELECT column1, column2
 FROM table_name
 WHERE condition;
 ```
-
----
 
 ### 4. DCL (Data Control Language)
 
@@ -273,7 +254,6 @@ GRANT SELECT, INSERT ON employee TO user_name;
 REVOKE INSERT ON employee FROM user_name;
 ```
 
----
 
 ### 5. TCL (Transaction Control Language)
 
@@ -1661,11 +1641,13 @@ DROP SEQUENCE dept_deptid_seq;
 ## 📦 Project 5: Import csv file
 
 ### sample data
+
 employee_id | first_name | last_name | department | salary   | joining_date | age
 1           | Sam        | Muk       | Operations | 65446.8  | 23-05-2024   | 12
 2           | Mik        | Pal       | IT         | 58763.33 | 02-10-2021   | 34
 3           | Rik        | Doe       | Operations | 57123.32 | 30-04-2020   | 44
 4           | Sou        |           | HR         | 45666.64 | 04-04-2021   | 53
+
 
 ```sql
 CREATE TABLE employee(
