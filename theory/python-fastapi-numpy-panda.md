@@ -33,7 +33,7 @@
 
 📝 **Keywords** — reserved words like `True`, `continue`, `for`, `del`, `from`, `pass`, `in`, etc.
 
-📝 **Variable** — a container that stores values in memory.
+📝 **Variable** — a container that stores values in memory.Examples of a few variable names are: sam, two4, emp_, _id etc.
 
 **Variable naming rules**
 - Cannot contain spaces
@@ -102,8 +102,14 @@ y = x           # Reference created
 📝 `input()` displays a message and returns the value (default type is `string`). Use `print()` to show output.
 
 ```python
+#exp1
 name = input("Enter your name: ")
 print("Hello", name)
+
+#exp 2
+weight_lbs = input('Weight (lbs): ')
+weight_kg = int(weight_lbs) * 0.45
+print(weight_kg)
 ```
 
 ---
@@ -129,9 +135,28 @@ print("Hello", name)
 📝 A string is an **immutable** collection of characters. Syntax: `s[begin:end:step]`
 
 ```python
+#exp 1
 s = 'sam'
 print(s[2] == s[-1])  # True — last char == index 2
+
+#exp 2
+first = 'John'
+last = 'Smith'
+
+message = first + ' [' + last + '] is a coder'
+msg = f'{first} [{last}] is a coder'
+
+print(msg)
 ```
+
+**String Functions**
+Some commonly used functions to manipulate strings are:
+1. `len()` returns the length of the string.
+2. `endswith()` checks if a string ends with given text.
+3. `count()` counts total occurrences of a character.
+4. `capitalize()` capitalizes the first character.
+5. `find()` returns the index of first occurrence.
+6. `replace(old word, new word)` replaces the old word with the new word in the string.
 
 **Comments**
 ```python
@@ -157,6 +182,7 @@ else:
 ```
 
 ```python
+#exp 1
 marks = 85
 
 if marks >= 90:
@@ -165,6 +191,36 @@ elif marks >= 80:
     print("B")
 else:
     print("C")
+
+#exp 2
+food = input("food : ")
+eat = "Yes" if food == "rice" else "no"
+print(eat)
+
+#exp 3
+age = int(input("age : "))
+vote = ("yes", "no")[age >= 18]
+print(vote)
+
+#exp 4
+is_hot = False
+is_cold = False
+
+if is_hot:
+    print("It's a hot day")
+    print("Drink plenty of water")
+elif is_cold:
+    print("It's a cold day")
+    print("Wear warm clothes")
+else:
+    print("It's a lovely day")
+
+#exp 5
+good_credit = True
+criminal_record = False
+
+if good_credit and not criminal_record:
+    print("Eligible for loan")
 ```
 
 **Biggest of three numbers**
@@ -247,9 +303,19 @@ print('You win')
 
 ## 8. break, continue, pass
 
-📝 `break` — exits the loop.
-📝 `continue` — skips the rest of the current iteration.
-📝 `pass` — placeholder that performs no action.
+📝 `break` — exits the loop.'break' is used to come out of the loop when encountered. It instructs the program to – exit the loop now.
+```python
+for i in range (0,80):
+  print(i) # this will print 0,1,2 and 3
+  if i==3:
+  break
+```
+
+📝 `continue` — skips the rest of the current iteration.continue is used to stop the current iteration of the loop and continue with the next one. It instructs the
+Program to 'skip this iteration'.
+
+📝 `pass` — placeholder that performs no action.pass is a null statement in python.
+It instructs to 'do nothing'
 
 ```python
 # continue example
@@ -277,6 +343,13 @@ print('bye')
 📝 Functions are reusable, callable blocks of code.
 
 ```python
+
+def sum(a,b):
+  s=a+b
+  return s
+print(sum(2,3))
+
+
 def greet(name):
     return f"Hello, {name}!"
 
@@ -290,7 +363,25 @@ def add(a, b):
 
 print(add(10, 20))
 ```
+**function with default parameter**
+```python
+def greet(name = "sam"):
+ # function body
+greet() # name will be "sam" in function body (default)
+greet("Rik") # name will be "Rik" in function body (passed)
+```
+**recursion**
+Recursion is a function which calls itself.
+It is used to directly use a mathematical formula as function
 
+```python
+def factorial(n):
+ if i == 0 or i==1:
+ return 1
+ else:
+ return n*factorial(n-1)
+
+```
 **Multiple functions**
 ```python
 def add(a, b):
@@ -365,6 +456,17 @@ print(list(squared))
 
 📝 Decorators modify the behavior of a function.
 
+`@.getters and @.setters`
+
+The method name with '@property' decorator is called getter method.
+We can define a function + @ name.setter decorator like below:
+
+```python
+@name.setter
+def name(self,value):
+ self.ename = value
+```
+
 ```python
 def logger(func):
     def wrapper():
@@ -401,18 +503,45 @@ def show():
 ## 13. Classes and Objects
 
 📝 **Class** — a blueprint of data and functions.
+
 📝 **Object** — a real instance of a class.
 
 ```python
+#exp 1
 class Student:
     pass
+s1 = Student()
+
+#exp 2
+class Student:
+    def __init__(self):
+        print(self)
 
 s1 = Student()
+print(s1) # s1 object reff == self
+
+#exp 3
+
+class Student:
+    def __init__(self, name, marks):
+        self.name = name
+        self.marks = marks
+
+    def get_avg(self):
+        sum = 0
+        for val in self.marks:
+            sum += val
+        print("hi", self.name, "your avg score is:", sum/4)
+
+
+s1 = Student("Sam", [55, 76, 36, 47])
+s1.get_avg()
 ```
 
 **Deep Copy vs Shallow Copy**
 
 📝 A **deep copy** creates a completely independent copy, including nested objects.
+
 📝 A **shallow copy** creates a new object, but nested objects remain shared.
 
 ```python
@@ -435,18 +564,28 @@ print(shallow)    # [[100, 2], [3, 4]]
 
 ## 14. Constructor (`__init__`)
 
-📝 Automatically called when an object is created. `__init__(self)` is the default constructor.
+📝 Automatically called when an object is created. `__init__(self)` is the default constructor.All classes have a function called __init__(), which is always executed when the object is being initiated
 
 **Public Members**
 
 📝 Accessible from anywhere, inside and outside the class.
 ```python
+#exp 1
 class Employee:
     def __init__(self):
         self.name = "Harry"  # Public variable
 
 emp = Employee()
 print(emp.name)
+
+#exp 2
+class Student:
+
+def __init__( self, fullname ):
+
+self.name = fullname
+s1=Student("sam")
+print(s1.name)
 ```
 
 **Private Members**
@@ -494,6 +633,14 @@ print(acc1.get_balance())
 
 📝 Inheritance lets one class acquire properties of another class.
 
+**Types Of Inheritance**
+
+- Single inheritance
+
+- Multiple inheritance
+
+- Multilevel inheritance
+
 ```python
 class Person:
     def __init__(self, name):
@@ -506,6 +653,9 @@ class Employee(Person):
 employee = Employee("Rupai")
 employee.introduce()
 ```
+**super() Method**
+
+super() method is used to access the methods of a super class in the derived class.
 
 **Implicit inheritance**
 
@@ -559,7 +709,7 @@ cat.make_sound()
 
 ## 18. Property (`@property`)
 
-📝 Works with class variables; acts like an attribute but calls a method internally.
+📝 Works with class variables; acts like an attribute but calls a method internally.its a class methods
 
 ```python
 class Person:
@@ -703,6 +853,12 @@ else:
 
 ## 22. File Handling
 
+ A file is data stored in a storage device. A python program can talk to the file by reading content from it and
+writing content to it.
+There are 2 types of files:
+1. Text files (.txt, .c, etc)
+2. Binary files (.jpg, .dat, etc)
+
 ```python
 # Read file
 def read_file(filename):
@@ -733,9 +889,10 @@ if __name__ == "__main__":
 
 ---
 
-## 23. Modules
+## 23. Modules and PIP
 
-📝 A module is a Python file containing code, used for code reusability.
+📝 A module is a Python file containing code, used for code reusability.A module is a file containing code written by somebody else which can be imported and used in our programs.
+Pip is the package manager for Python. You can use pip to install external modules on your system.
 
 ```python
 import math
@@ -816,13 +973,37 @@ print(d.popitem())
  print(a["key"]) # Output: "value"
  print(a["list"]) # Output: [1, 2, 9]
 ```
+**dictionary method**
 
+a.items(): Returns a list of (key,value) tuples.
+
+a.keys(): Returns a list containing dictionary's keys.
+
+a.values( ) #returns all values
+
+a.update({"friends":}): Updates the dictionary with supplied key-value pairs.
+
+a.get("key_name"): Returns the value of the specified keys.
 
 ---
 
 ## 28. Sets
 
 📝 Store unique values; does not follow any order/sequence.
+
+**property of sets**
+
+Sets are unordered => Element’s order doesn’t matter
+
+Sets are unindexed => Cannot access elements by index
+
+There is no way to change items in sets.
+
+Sets cannot contain duplicate values.
+
+**operation on sets**
+
+len(s),remove(),pop(),clear(),union(),intersection()
 
 ```python
 nums = {1, 2, 3, 3, 4}
@@ -842,6 +1023,11 @@ print(point[0])
 # Swap variables using tuple packing/unpacking
 (x, y) = (y, x)
 ```
+**Tuple Methods**
+
+a.count(1): a count (1) will return number of times 1 occurs in a.
+
+a.index(1) will return the index of first occurrence of 1 in a.
 
 ---
 
@@ -850,20 +1036,93 @@ print(point[0])
 📝 A mutable sequence of Python objects, defined with `[]`. Can store multiple values of any type.
 
 ```python
+l1 = [2,4,"sam"]
+l1[2] # sam
+l1[0:2] # [2,4]
+
 nums = [10, 20, 30, 40]
-
 print(nums[2:])    # [30, 40]
-
 nums.pop()
 print(nums)         # [10, 20, 30]
-
 nums.insert(2, 99)
 print(nums)         # [10, 20, 99, 30]
 ```
+**List Methods**
+l1.sort(): updates the list to [1,2,4,6,10,20]
+
+l1.reverse(): updates the list to [20,10,6,4,2,1]
+
+l1.append(8): adds 8 at the end of the list
+
+l1.insert(3,8): This will add 8 at 3 index
+
+l1.pop(2): Will delete element at index 2 and return its value.
+
+l1.remove(21): Will remove 21 from the list.
 
 ---
+## 📦 Project 1: guess game
 
-## 📦 Project 1: Realtime Voice Bot (Streamlit)
+```python
+secret_number = 9
+guess_count = 0
+guess_limit = 5
+
+while guess_count < guess_limit:
+    guess = int(input('Guess: '))
+    guess_count += 1
+
+    if guess == secret_number:
+        print(f"Correct! You guessed the number in {guess_count} attempts.")
+        break
+    elif guess > secret_number:
+        print("Lower number please")
+    elif guess < secret_number:
+        print("Higher number please")
+```
+
+## 📦 Project 2: snake game
+
+```python
+import random
+
+choices = ["snake", "water", "gun"]
+
+user = input("Enter Snake, Water or Gun: ").lower()
+computer = random.choice(choices)
+
+print("Computer chose:", computer)
+
+if user == computer:
+    print("It's a Draw!")
+elif (user == "snake" and computer == "water") or \
+     (user == "water" and computer == "gun") or \
+     (user == "gun" and computer == "snake"):
+    print("You Win!")
+else:
+    print("Computer Wins!")
+```
+
+## 📦 Project 3: emoji converter
+
+```python
+message = input("> ")
+words = message.split(' ')
+
+emojis = {
+    ":)": "😀",
+    ":(": "😞"
+}
+
+output = ""
+
+for word in words:
+    output += emojis.get(word, word) + " "
+
+print(output)
+```
+
+## 📦 Project 4: Realtime Voice Bot (Streamlit)
 
 **Setup**
 ```bash

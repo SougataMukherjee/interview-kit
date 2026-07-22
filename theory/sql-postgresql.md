@@ -399,59 +399,121 @@ GROUP BY gender;
 ---
 
 ## 9.1. GROUP BY
-Groups rows having same values.
+Groups rows having same values.GROUP BY groups rows having the same values into summary rows.Used to perform calculations on groups of data.
 
+**syntax**
+```sql
+SELECT column_name,
+       aggregate_function(column_name)
+FROM table_name
+GROUP BY column_name;
+```
+**example**
+```sql
 SELECT dept_id,
        COUNT(*) AS total
 FROM Employee
 GROUP BY dept_id;
 
+--Calculate Total Salary per Department
+
+SELECT dept,
+       SUM(salary)
+FROM employees
+GROUP BY dept;
+```
+
 ## 9.2. HAVING Clause
+HAVING filters grouped data after GROUP BY.
+
+**syntax**
+```sql
+SELECT column_name,
+       aggregate_function(column_name)
+FROM table_name
+GROUP BY column_name
+HAVING condition;
+```
+**example**
+
+```sql
 SELECT dept_id,
        COUNT(*) AS total
 FROM Employee
 GROUP BY dept_id
 HAVING COUNT(*) > 5;
 
+SELECT dept,
+       SUM(salary) AS total_salary
+FROM employees
+GROUP BY dept
+HAVING SUM(salary) > 100000;
+```
 ---
 
 ## 10. Subqueries
 Query inside another query.Subqueries are useful for breaking down complex
 problems into smaller parts.
-They can be used in:
-SELECT statements
-WHERE clauses
-FROM clauses
+**They can be used in:**
+- SELECT statements
+- WHERE clauses
+- FROM clauses
+**Why Use Subquery?**
+Retrieve data based on another query
+Simplify complex conditions
+Avoid temporary tables
 
 ### Single Row Subquery
+
 Returns one value.
-SELECT *
-FROM Employee
-WHERE salary >
+
+```sql
+SELECT column_name
+FROM table_name
+WHERE column_name OPERATOR
 (
- *  SELECT AVG(salary)
-    FROM Empl*yee
+    SELECT column_name
+    FROM table_name
 );
+```
 
 ### Multi Row Subquery
+
 Returns multiple values.
 
 ---
 
 ## 11. Common Table Expression CTE (WITH Clause)
 
-Temporary result set used in another query.
+A Common Table Expression (CTE) is a temporary named result set that exists only during query execution.
+CTEs improve query readability and simplify complex SQL.
+**Why Use CTE?**
+- Makes queries easier to read
+- Simplifies complex joins
+- Replaces nested subqueries
 
-WITH HighSalary AS
+**syntax**
+```sql
+WITH cte_name AS
 (
-    SELECT *
-    FROM Employee
-    WHERE*salary > 50000
+    SELECT columns
+    FROM table_name
 )
 SELECT *
-FROM Hig*Salary
-WHERE dept_id = 3;
+FROM cte_name;
+```
+**example**
 
+```sql
+WITH high_salary AS
+(
+    SELECT *
+    FROM employees
+    WHERE salary > 50000
+)
+SELECT *
+FROM high_salary;
+```
 ---
 
 ## 12. Constraints and data types
@@ -528,10 +590,14 @@ Stores images, audio, videos and binary files.
 ---
 
 ## 14. DISTINCT
-Removes duplicate records.
+DISTINCT is used to remove duplicate values and return only unique records from a column or combination of columns.
+```sql
+SELECT DISTINCT column_name
+FROM table_name;
+
 SELECT DISTINCT department, city
 FROM Employee;
-
+```
 ---
 
 ## 15. Alias
@@ -575,10 +641,27 @@ WHERE salary NOT BETWEEN 30000 AND 70000 OR manager_id IS NOT NULL;
 ---
 
 ## 19. Indexing
-Improves query performance by reducing full table scans.
+Improves query performance by reducing full table scans.An Index is a database object used to speed up data retrieval from a table.
+
+It works like the index of a book:
+
+Instead of scanning the entire table,
+The database uses the index to quickly locate rows.
+
+**syntax**
+```sql
+CREATE INDEX index_name
+ON table_name(column_name);
+```
+
+**example**
+```sql
 CREATE INDEX idx_employee_name
 ON Employee(name);
 
+CREATE INDEX idx_emp_id
+ON employees(emp_id);
+```
 ---
 
 ## 20. ACID Properties
@@ -639,14 +722,24 @@ No transitive dependency.
 
 ## 27. Views
 Virtual table based on query.
-A view in MySQL is a virtual table based on the result of a SELECT query. It does not store data itself — it
-always reflects the current data in the base tables.
+A view in MySQL is a virtual table based on the result of a SELECT query. It does not store data itself — it always reflects the current data in the base tables.
 Views are useful when:
 - You want to simplify complex queries
 - You want to reuse logic
 - You want to hide certain columns from users
 
+view can not store result but Materialized view can store result
+
 ```sql
+
+CREATE VIEW view_name AS
+SELECT columns
+FROM table_name
+WHERE condition;
+
+SELECT * FROM view_name;
+DROP VIEW view_name;
+
 CREATE VIEW employee_view AS
 SELECT *
 FROM Employee;
@@ -661,11 +754,6 @@ Auto execute on INSERT, UPDATE, DELETE.
 
 ## 29. Cursor
 A pointer used to process query results row-by-row.
-
----
-
-## 30. Stored Procedure
-Precompiled SQL code stored in the database for reuse.
 
 ---
 
@@ -964,6 +1052,24 @@ WHERE is_active = TRUE;
 
 ## 10. Stored Procedures
 A reusable set of SQL statements stored inside the database.Use: Salary calculation, batch processing, business logic.
+**It helps in:**
+- Reusing SQL code
+- Improving performance
+
+**syntax**
+ 
+```sql
+DELIMITER $$
+
+CREATE PROCEDURE procedure_name()
+BEGIN
+    -- SQL Statements
+END $$
+
+DELIMITER ;
+```
+**example**
+
 ```sql
 CREATE OR REPLACE PROCEDURE increase_salary()
 LANGUAGE plpgsql
@@ -973,31 +1079,49 @@ BEGIN
  SET salary=salary+1000;
 END;
 $$;
+CALL increase_salary();
+
 ```
 
 ```sql
-CALL increase_salary();
+DELIMITER $$
+
+CREATE PROCEDURE emp_info()
+BEGIN
+    SELECT *
+    FROM employees
+    ORDER BY salary;
+END $$
+
+DELIMITER ;
+
+CALL emp_info();
 ```
 
 ## 11. Triggers
 
-Automatically runs when an event occurs.Use: Logging, auditing, automatic updates.
+Automatically runs when an event occurs.Use: Logging, auditing, automatic updates.A Trigger is a special stored procedure(set of statements) that automatically executes (fires) when a specific event occurs on a table, such as:INSERT,UPDATE,DELETE
 
 ```sql
-CREATE OR REPLACE FUNCTION log_insert()
-RETURNS TRIGGER AS $$
+
+CREATE TRIGGER trigger_name
+BEFORE | AFTER event_type
+ON table_name
+FOR EACH ROW | FOR EACH COLUMN
 BEGIN
- RAISE NOTICE 'Row Inserted';
- RETURN NEW;
+    -- Trigger body
+    -- SQL statements
 END;
-$$ LANGUAGE plpgsql;
-```
 
-```sql
-CREATE TRIGGER trg_insert
-AFTER INSERT ON employees
+
+CREATE TRIGGER trigger_before_insert
+BEFORE INSERT ON employees
 FOR EACH ROW
-EXECUTE FUNCTION log_insert();
+BEGIN
+    IF NEW.salary < 0 THEN
+        SET NEW.salary = 0;
+    END IF;
+END;
 ```
 
 ## 12. Partitioning
