@@ -10,8 +10,8 @@ A Schema is the logical structure or blueprint of a database that contains table
 
 A table is the basic structure used to store data in a database. It organizes data into rows and columns, similar to an Excel spreadsheet.
 
-Columns(Field) — also referred to as attributes or fields. A column represents one property of all the entities.
-Rows(Records) — also referred to as records or tuples. A row represents all the properties of a single entity.
+`Columns(Field)` — also referred to as attributes or fields. A column represents one property of all the entities.
+`Rows(Records)` — also referred to as records or tuples. A row represents all the properties of a single entity.
 
 ## what is data?
 
@@ -25,7 +25,7 @@ A Database is an organized collection of data stored electronically so that it c
 | 101 | Rahul | Java |
 | 102 | Priya | SQL |
 
-types of databases:
+**types of databases:**
 
 1. Relational Database (RDBMS): Data is stored in the form of tables (rows and columns).
 2. Hierarchical Database : Data is stored in a tree-like structure with Parent-Child relationships.
@@ -39,42 +39,48 @@ types of databases:
 A DBMS is software used to create, store, manage, and manipulate databases.
 Functions of DBMS
 
-Store data
-Retrieve data
-Update data
-Delete data
-Manage security
-Backup and recovery
+- Store data
+
+- Retrieve data
+
+- Update data
+ 
+- Delete data
+
+- Manage security
+
+- Backup and recovery
 
 ## DBMS Software
 `RDBMS` — stores data in the form of tables
+
 `ERDBMS` — Extended/Enhanced RDBMS
 
 ## What is RDBMS (Relational Database Management System)?
 An RDBMS is a type of DBMS that stores data in the form of tables (rows and columns) and maintains relationships between tables using keys.
 Features
 
-Data stored in tables
-Supports Primary Key and Foreign Key
-Reduces data redundancy
-Supports SQL
-Maintains data integrity
+- Data stored in tables
+- Supports Primary Key and Foreign Key
+- Reduces data redundancy
+- Supports SQL
+- Maintains data integrity
 
 ---
 
 ## 2. SQL vs NoSQL
 
-### SQL
-- Structured tables
-- Fixed schema
-- Relational databases
-- Examples: MySQL, PostgreSQL, SQL Server
-
-### NoSQL
-- Flexible schema
-- Stores JSON, documents, key-value pairs
-- Suitable for unstructured data
-- Examples: MongoDB, Cassandra
+| SQL | NoSQL |
+|------|--------|
+| Uses structured tables (rows and columns) | Uses flexible data models (documents, key-value, graph, column-family) |
+| Fixed schema | Flexible or dynamic schema |
+| Relational database | Non-relational database |
+| Best for structured data | Best for structured, semi-structured, and unstructured data |
+| Supports complex joins | Usually avoids joins for better scalability |
+| Scales vertically (more powerful hardware) | Scales horizontally (more servers) |
+| Uses SQL language | Uses database-specific query languages/APIs |
+| ACID compliance (strong consistency) | Often follows BASE/eventual consistency (varies by database) |
+| **Examples:** MySQL, PostgreSQL, SQL Server, Oracle | **Examples:** MongoDB, Cassandra, Redis, CouchDB |
 
 ---
 
@@ -334,12 +340,15 @@ COMMIT;
 ---
 
 ## 5. DELETE vs TRUNCATE vs DROP
-- DELETE → Removes rows and keeps table and support WHERE. 
-  DELETE FROM Employee WHERE id = 1;
-- TRUNCATE → Removes all rows.Faster than DELETE and supports WHERE 
-  TRUNCATE TABLE Employee;
-- DROP → Removes entire table permanently.
-  DROP TABLE Employee;
+| DELETE | TRUNCATE | DROP |
+|--------|-----------|------|
+| Removes selected rows | Removes all rows | Removes the entire table |
+| Supports `WHERE` clause | Does **not** support `WHERE` | Does not support `WHERE` |
+| Table structure remains | Table structure remains | Table structure is deleted |
+| Can be rolled back (inside a transaction in most DBMS) | Usually can be rolled back only in transactional DBMS | Cannot usually be rolled back after commit |
+| Slower (logs each row deletion) | Faster (minimal logging) | Fastest (removes table completely) |
+| Identity/auto-increment value is usually preserved | Identity/auto-increment is usually reset | Table no longer exists |
+| **Example:** `DELETE FROM Employee WHERE id = 1;` | **Example:** `TRUNCATE TABLE Employee;` | **Example:** `DROP TABLE Employee;` |
 
 ---
 
@@ -492,23 +501,25 @@ FROM users
 GROUP BY gender;
 ```
 ### Aggregate vs Window Functions
-Aggregate : Return a single summarized value.
-SUM()
-AVG()
-COUNT()
-Window :Return values for each row with context.
-RANK()
-ROW_NUMBER()
-DENSE_RANK()
+
+| Aggregate Functions | Window Functions |
+|---------------------|------------------|
+| Return a single summarized value | Return a value for each row while preserving all rows |
+| Reduce the number of rows | Do not reduce the number of rows |
+| Used with `GROUP BY` | Used with `OVER()` clause |
+| Perform calculations on groups of rows | Perform calculations across related rows |
+| **Examples:** `SUM()`, `AVG()`, `COUNT()`, `MAX()`, `MIN()` | **Examples:** `RANK()`, `ROW_NUMBER()`, `DENSE_RANK()`, `LAG()`, `LEAD()` |
 
 ---
 
 ## 9.1. GROUP BY
 GROUP BY groups rows having the same values into summary rows.Used to perform calculations on groups of data.
+
 Used to group records. It executes row by row (the HAVING clause then executes group by group). We can pass a column name or an expression to GROUP BY.
 
 - We can write a GROUP BY expression along with a multi-row function in the SELECT clause
-- Any column name/expression written in GROUP BY is known as the group by expression — after GROUP BY executes, it creates groups, and any clause that runs afterward executes group by group
+- Any column name/expression written in GROUP BY is known as the group by expression 
+- after GROUP BY executes, it creates groups, and any clause that runs afterward executes group by group
 
 **syntax**
 ```sql
@@ -543,6 +554,7 @@ HAVING filters grouped data after GROUP BY.
 - We can pass a multi-row function condition in HAVING
 - It executes group by group
 - If using HAVING, it should come after GROUP BY
+
 **Order of execution**
 
 FROM → WHERE → GROUP BY → HAVING → SELECT
@@ -1089,17 +1101,28 @@ Exists only during session.
 ---
 
 ## 32. EXISTS vs IN
-- EXISTS → Checks row existence.
-- IN → Compares values list.
+
+| EXISTS | IN |
+|---------|----|
+| Checks whether matching rows exist | Checks whether a value exists in a list or subquery |
+| Stops searching after finding the first match | Evaluates all values in the list/subquery |
+| Generally faster for large datasets | Better for small lists |
+| Commonly used with correlated subqueries | Commonly used with fixed value lists or subqueries |
+| Returns `TRUE` or `FALSE` | Compares values directly |
+| **Example:** `WHERE EXISTS (SELECT 1 FROM Orders WHERE Orders.CustomerID = Customers.CustomerID)` | **Example:** `WHERE DepartmentID IN (10, 20, 30)` |
 
 ---
 
 ## 33. CHAR vs VARCHAR
-CHAR	VARCHAR
-Unused memory further cannot be accessed	Free/unused memory can be accessed
-Stands for character	Stands for variable character
-Used for fixed-length character data	Used for variable-length character data
-Better performance (fixed size)	Performance not as good (variable size)
+| CHAR | VARCHAR |
+|------|----------|
+| Stands for **Character** | Stands for **Variable Character** |
+| Fixed-length data type | Variable-length data type |
+| Always occupies the specified length | Uses only the required storage (plus small overhead) |
+| Pads remaining space with blank characters | Does not pad unused space |
+| Better performance for fixed-length values | Slightly slower due to variable length |
+| Best for fixed-size values (e.g., Gender, Country Code) | Best for variable-length values (e.g., Name, Address) |
+| Maximum size: **255 characters** (commonly) | Maximum size depends on the database system |
 
 ---
 
