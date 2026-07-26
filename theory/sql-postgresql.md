@@ -9,10 +9,16 @@ SQL (Structured Query Language) is used to store, retrieve, manage, and manipula
 A Schema is the logical structure or blueprint of a database that contains tables, views, relationships, indexes,functions, triggers and other database objects.
 
 A table is the basic structure used to store data in a database. It organizes data into rows and columns, similar to an Excel spreadsheet.
-Rows (Records): Store individual entries.
-Columns (Fields): Define the attributes of the data.
+
+Columns(Field) — also referred to as attributes or fields. A column represents one property of all the entities.
+Rows(Records) — also referred to as records or tuples. A row represents all the properties of a single entity.
+
+## what is data?
+
+📝 Data is a raw fact which describes the attributes of an entity. Data is stored in a database in a systematic and organized manner.
 
 ## What is Database (DB), types of databases?
+
 A Database is an organized collection of data stored electronically so that it can be easily accessed, managed, and updated.
 | Student_ID | Name | Course |
 |------------|--------|---------|
@@ -39,6 +45,10 @@ Update data
 Delete data
 Manage security
 Backup and recovery
+
+## DBMS Software
+`RDBMS` — stores data in the form of tables
+`ERDBMS` — Extended/Enhanced RDBMS
 
 ## What is RDBMS (Relational Database Management System)?
 An RDBMS is a type of DBMS that stores data in the form of tables (rows and columns) and maintains relationships between tables using keys.
@@ -234,12 +244,54 @@ WHERE condition;
 
 ### 3. DQL (Data Query Language)
 
-📝 Used to fetch/query data from the database. Command: `SELECT`.
+📝 Used to fetch/query data from the database.These statements are used to retrieve data from the database. There are 4 categories:
+
+`Select` — retrieves data from the database and displays it
+
+`Projection` — retrieves data by selecting only specific columns; all values in those columns are selected by default
+
+`Selection` — retrieves data by selecting both specific columns as well as specific records
+
+`Joins` — retrieves data from multiple tables simultaneously
 
 ```sql
 SELECT column1, column2
 FROM table_name
 WHERE condition;
+
+-- Find name with a 25% hike
+SELECT sname, sal + (sal * 0.25) FROM student;
+
+-- Find name and salary with a 12% deduction
+SELECT sname, sal - sal * 12 / 100 FROM student;
+
+-- Employee name, annual salary, and salary with a 34% hike
+SELECT ename, sal * 12, sal * 1.34 FROM Emp;
+```
+#### WHERE Clause
+
+📝 Used to filter records.
+
+We pass a filter condition as an argument to WHERE
+- WHERE executes row by row
+- WHERE executes after the FROM clause
+- We can pass multiple conditions using logical operators
+
+```sql
+-- Details of employees working in dept 20 and earning salary more than 1500
+SELECT * FROM Emp WHERE Deptno = 20 AND sal > 1500;
+
+-- Details of employees who are salesmen or earning more than 1500
+SELECT * FROM emp WHERE Job = 'SALESMAN' OR sal > 1500;
+
+-- Name, salary, annual salary, and dept no — dept 20, salary > 1100, annual salary exceeds 12000
+SELECT ename, sal, sal * 12 AS annual_sal, deptno
+FROM emp
+WHERE deptno = 20 AND sal > 1100 AND sal * 12 > 12000;
+
+-- Names of employees hired after 1995 and before 1999
+SELECT ename FROM emp
+WHERE hiredate >= '01-JAN-1995' AND hiredate <= '01-JAN-1999';
 ```
 
 ### 4. DCL (Data Control Language)
@@ -309,10 +361,16 @@ HAVING COUNT(*) > 5;
 
 ---
 ## 7. Joins
+📝 Used to retrieve data from multiple tables simultaneously.
+`Types of Joins`
+
+### Cartesian / Cross Join 
+every record from table 1 is merged with every record of table 2
+
 ### INNER JOIN
-Returns only matching records from both tables.
-Example:
-Customer has an order
+returns only matched records from both table (records that have a pair), using a join condition. We can join up to 256 tables using inner join
+
+**Example:**
 ```sql
 SELECT *
 FROM orders o
@@ -352,15 +410,53 @@ FROM customers c
 FULL JOIN orders o
 ON c.id=o.customer_id;
 ```
+### Outer Join 
+returns unmatched records along with matched records. Has three types:
+1. Left Outer Join
+2. Right Outer Join
+3. Full Outer Join
+### Self Join
+ used to join a table with itself
+ ```sql
+ -- Employee name and manager name if both are working in the same job
+SELECT e1.ename, e2.ename
+FROM emp e1, emp e2
+WHERE e1.mgr = e2.empno AND e1.job = e2.job;
+
+-- Employee name and manager's designation for all employees
+SELECT e1.ename, e2.job
+FROM emp e1, emp e2
+WHERE e1.mgr = e2.empno;
+ ```
+### Natural Join
+ no join condition is written explicitly
+- If the tables contain a similar column, we get the output of an inner join
+- If the tables don't have a similar column, we get the output of a cartesian join
+- If there is no common column name between tables, use natural join; otherwise, use inner join
 
 ---
 
-## 8. Aggregate Functions
+## 8. Aggregate / Multi-row Functions
 
 `Aggregate function` perform a calculation on a set of values and return a single values.
 SQL functions help you analyze, transform, or summarize data in your tables.
+- A multi-row function can accept only a single argument — a column name or an expression
+- MAX() and MIN() can be used with any datatype: CHAR, VARCHAR, NUMBER, and DATE
+- SUM() and AVG() can only take a numeric column as an argument
+- Multi-row functions ignore NULL values
+- We cannot use a multi-row function in the WHERE clause
+- We cannot mix a plain column name with a multi-row function in the SELECT clause (without GROUP BY)
 
+```sql
+-- Number of employees getting salary less than 2000 in dept 10
+SELECT COUNT(ename) FROM emp WHERE sal < 2000 AND deptno = 10;
 
+-- Total salary needed to pay employees working as clerks
+SELECT SUM(sal) FROM emp WHERE job = 'CLERK';
+
+-- Number of employees getting commission in dept 30
+SELECT COUNT(*) FROM emp WHERE comm IS NOT NULL AND deptno = 30;
+```
 ### COUNT()
 Count total number of users:
 ```sql
@@ -395,11 +491,24 @@ AVG(salary) AS avg_salary
 FROM users
 GROUP BY gender;
 ```
+### Aggregate vs Window Functions
+Aggregate : Return a single summarized value.
+SUM()
+AVG()
+COUNT()
+Window :Return values for each row with context.
+RANK()
+ROW_NUMBER()
+DENSE_RANK()
 
 ---
 
 ## 9.1. GROUP BY
-Groups rows having same values.GROUP BY groups rows having the same values into summary rows.Used to perform calculations on groups of data.
+GROUP BY groups rows having the same values into summary rows.Used to perform calculations on groups of data.
+Used to group records. It executes row by row (the HAVING clause then executes group by group). We can pass a column name or an expression to GROUP BY.
+
+- We can write a GROUP BY expression along with a multi-row function in the SELECT clause
+- Any column name/expression written in GROUP BY is known as the group by expression — after GROUP BY executes, it creates groups, and any clause that runs afterward executes group by group
 
 **syntax**
 ```sql
@@ -421,10 +530,22 @@ SELECT dept,
        SUM(salary)
 FROM employees
 GROUP BY dept;
+
+-- Total salary needed to pay all employees, per job
+SELECT SUM(sal), job FROM emp GROUP BY job;
+
+-- Number of employees working in each department, having at least 2 employees per dept
+SELECT COUNT(*) FROM emp GROUP BY deptno HAVING COUNT(*) >= 2;
 ```
 
 ## 9.2. HAVING Clause
 HAVING filters grouped data after GROUP BY.
+- We can pass a multi-row function condition in HAVING
+- It executes group by group
+- If using HAVING, it should come after GROUP BY
+**Order of execution**
+
+FROM → WHERE → GROUP BY → HAVING → SELECT
 
 **syntax**
 ```sql
@@ -437,6 +558,18 @@ HAVING condition;
 **example**
 
 ```sql
+-- Deptno and number of employees per dept, if there are at least 2 clerks in each dept
+SELECT deptno, COUNT(*) FROM emp
+WHERE job = 'CLERK'
+GROUP BY deptno
+HAVING COUNT(*) >= 2;
+
+-- Number of employees earning salary > 1200 per job, and total salary per job must exceed 3800
+SELECT COUNT(*), job FROM emp
+WHERE sal > 1200
+GROUP BY job
+HAVING SUM(sal) > 3800;
+
 SELECT dept_id,
        COUNT(*) AS total
 FROM Employee
@@ -449,11 +582,28 @@ FROM employees
 GROUP BY dept
 HAVING SUM(salary) > 100000;
 ```
+
+## 9.3. ORDER BY
+
+📝 Used to sort records in ascending or descending order. ORDER BY executes after the SELECT clause. By default, it sorts in ascending order. We can pass a column name or expression as an argument.
+
+**order of execution**
+
+FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
+
+**example**
+```sql
+-- Annual salary in descending order
+SELECT sal * 12 FROM emp ORDER BY sal * 12 DESC;
+```
 ---
 
 ## 10. Subqueries
 Query inside another query.Subqueries are useful for breaking down complex
-problems into smaller parts.
+problems into smaller parts.There will be a minimum of 2 queries: an outer query and an inner query.
+- The inner query executes first and generates output
+- The outer query then executes using that output, and generates the final result
+
 **They can be used in:**
 - SELECT statements
 - WHERE clauses
@@ -464,10 +614,54 @@ Simplify complex conditions
 Avoid temporary tables
 
 ### Single Row Subquery
-
+a subquery that returns exactly one output. Operators used: =, IN, NOT IN, ALL, ANY.
 Returns one value.
 
 ```sql
+-- ename and salary of all employees earning more than Miller but less than Allen
+SELECT ename, sal FROM emp
+WHERE sal > (SELECT sal FROM emp WHERE ename = 'MILLER')
+  AND sal < (SELECT sal FROM emp WHERE ename = 'ALLEN');
+
+-- All details of employees working in dept 20 with the same designation as Smith
+SELECT * FROM emp
+WHERE deptno = 20
+  AND job = (SELECT job FROM emp WHERE ename = 'SMITH');
+
+-- Number of employees hired after King
+SELECT COUNT(*) FROM emp
+WHERE hiredate > (SELECT hiredate FROM emp WHERE ename = 'KING');
+
+-- Total salary given to employees working in the same dept as Ward
+SELECT SUM(sal) FROM emp
+WHERE deptno IN (SELECT deptno FROM emp WHERE ename = 'WARD');
+
+-- Name and salary along with annual salary for employees earning less than Blake or more than 3500
+SELECT ename, sal, sal * 12 AS annualsal FROM emp
+WHERE sal > 3500
+   OR sal < (SELECT sal FROM emp WHERE ename = 'BLAKE');
+
+-- 3rd maximum salary
+SELECT MAX(sal) FROM emp
+WHERE sal < (SELECT MAX(sal) FROM emp
+             WHERE sal < (SELECT MAX(sal) FROM emp));
+
+-- Name of the employee earning the 3rd maximum salary
+SELECT ename FROM emp
+WHERE sal IN (SELECT MAX(sal) FROM emp
+              WHERE sal < (SELECT MAX(sal) FROM emp
+                           WHERE sal < (SELECT MAX(sal) FROM emp)));
+
+-- Name of the employee hired before the last-hired employee
+SELECT ename FROM emp
+WHERE hiredate IN (SELECT MAX(hiredate) FROM emp
+                   WHERE hiredate < (SELECT MAX(hiredate) FROM emp));
+
+-- Location of the employee who was hired first
+SELECT loc FROM dept
+WHERE deptno IN (SELECT deptno FROM emp
+                 WHERE hiredate IN (SELECT MIN(hiredate) FROM emp));
+
 SELECT column_name
 FROM table_name
 WHERE column_name OPERATOR
@@ -479,8 +673,26 @@ WHERE column_name OPERATOR
 
 ### Multi Row Subquery
 
+a subquery that returns more than one output. Operators used: IN, NOT IN, ALL, ANY.
 Returns multiple values.
+```sql
+-- Details of employees hired after all the clerks
+SELECT * FROM emp
+WHERE hiredate > ALL (SELECT hiredate FROM emp WHERE job = 'CLERK');
 
+-- Names of employees hired after all managers and earning more than all clerks
+SELECT ename FROM emp
+WHERE hiredate > ALL (SELECT hiredate FROM emp WHERE job = 'MANAGER')
+  AND sal > ALL (SELECT sal FROM emp WHERE job = 'CLERK');
+
+-- Employee name if hired after all employees of dept 101
+SELECT ename FROM emp
+WHERE hiredate > ALL (SELECT hiredate FROM emp WHERE deptno = 101);
+
+-- Name of the employee where the department has fewer than 2 employees
+SELECT ename FROM emp
+WHERE deptno IN (SELECT deptno FROM emp GROUP BY deptno HAVING COUNT(*) < 2);
+```
 ---
 
 ## 11. Common Table Expression CTE (WITH Clause)
@@ -544,14 +756,34 @@ CREATE TABLE users (
  is_active BOOLEAN DEFAULT TRUE
 );
 ```
-- PRIMARY KEY:Uniquely identifies each row. Must be NOT NULL and UNIQUE.
+- PRIMARY KEY: 
+
+A primary key is a constraint assigned to a column to uniquely identify a record in a table. Example: Aadhar card number for a human.
+
+`Characteristics of a primary key`
+
+- We can have only one primary key in a table
+- It cannot accept repeated or duplicate values
+- It cannot accept NULL
+- It is a combination of UNIQUE and NOT NULL
+- A primary key is not mandatory, but recommended, for a table
 ```sql
 CREATE TABLE users (
  id INT PRIMARY KEY,
  name VARCHAR(100)
 );
 ```
-- FOREIGN KEY:Creates relationship between tables.
+- FOREIGN KEY:
+A foreign key is a constraint used to establish a connection between two tables.
+
+`Characteristics of a foreign key`
+
+- We can have any number (n) of foreign keys in a table
+- It can accept repeated or duplicate values
+- It can accept NULL
+- It is not a combination of UNIQUE and NOT NULL
+- It is present in the child table, but actually refers to the parent table
+- Also referred to as a referential integrity constraint
 - COMPOSITE KEY:Combination of multiple columns as primary key.
 - AUTO_INCREMENT:Used with PRIMARY KEY to automatically assign the next number.
 ```sql
@@ -569,28 +801,44 @@ Required by table Recommended, often required Optional
 Dropping Cannot be easily dropped Can be dropped anytime
 
 ### Data Types Explained
+📝 Data types are used to determine what type or kind of data will be stored in a particular memory location.
+
 - INT : Integer type, used for whole numbers.
 - VARCHAR(100) : Variable-length string, up to 100 characters.
 - ENUM : A string object with a value chosen from a list of permitted values.
-- DATE : Stores date values.
+- DATE : Stores date values.A date should always be enclosed in single quotes.
+```sql
+'DD-MON-YY'
+'DD-MON-YYYY'
+```
 - TIMESTAMP : Stores date and time, automatically set to the current timestamp.
 - BOOLEAN : Stores TRUE or FALSE values.
+- CHAR : 
+- NUMBER :This datatype is used to store numerical values. It accepts two arguments precision and scale
+```sql
+NUMBER(precision, [scale])
+```
 - DECIMAL(10, 2) : Stores exact numeric data values, useful for financial data. The first number is the
 total number of digits, and the second is the number of digits after the decimal point.
 
 ---
 
 ## 13. Large Objects
-### CLOB
-Stores large text data Up to approximately 4GB
+### CLOB (Character Large Object) 
+used to store characters up to 4GB in size, whereas VARCHAR2 can store a maximum of 4000 characters.
 
-### BLOB
-Stores images, audio, videos and binary files.
+### BLOB (Binary Large Object)
+used to store binary data such as images, videos, files, etc., up to 4GB in size.
 
 ---
 
 ## 14. DISTINCT
+
 DISTINCT is used to remove duplicate values and return only unique records from a column or combination of columns.
+- We can pass a column name or an expression as an argument to DISTINCT
+- DISTINCT should be used as the first keyword in the SELECT clause
+- We can pass multiple columns to DISTINCT — it removes the duplicate combination across all the columns
+
 ```sql
 SELECT DISTINCT column_name
 FROM table_name;
@@ -602,28 +850,94 @@ FROM Employee;
 
 ## 15. Alias
 
-Alternative name given to a column or expression.
+An alias is an alternative name given to a column or an expression in the result table.
+
+- An alias name can be used with or without the AS keyword
+- An alias name should be a single word, or a string enclosed within double quotes
+- An alias is not mandatory but recommended
+
 ```sql
 SELECT salary AS EmployeeSalary
 FROM Employee;
+
+--Example — name of salary and salary with a 10% hike
+SELECT ename, sal, sal + sal * 10 / 100 "Hike10%" FROM Emp;
 ```
 ---
 
 ## 16. Operators
 - AND :Both conditions must be true.
 - OR  :At least one condition must be true.
-- BETWEEN
-- NOT BETWEEN
-- IS NULL
-- IS NOT NULL
+- BETWEEN : Used when we have a range of values. BETWEEN is inclusive of both endpoints. The range cannot be interchanged (lower bound must come first).
+- NOT BETWEEN : Similar to BETWEEN, but rejects the values in the range instead of selecting them.
+```sql
+-- Display ename, hiredate except those hired in the year 1980
+SELECT ename, hiredate FROM emp
+WHERE hiredate NOT BETWEEN '01-JAN-80' AND '31-DEC-80';
+```
+- IN Operator
+
+📝 The IN operator is a multivalue operator that accepts multiple values on the right-hand side (RHS). It returns TRUE if any one of the given conditions is satisfied.
+
+```sql
+-- Details of employees working in dept 10, 20, 30, 40, 50
+SELECT * FROM emp WHERE deptno IN (10, 20, 30, 40, 50);
+```
+
+- NOT IN Operator
+
+📝 Similar to IN, but rejects the given values instead of selecting them.
+
+column_name / expression NOT IN (v1, v2, ... vn)
+```sql
+-- Details of employees except those working as salesman or analyst
+SELECT ename FROM emp
+WHERE job NOT IN ('SALESMAN', 'ANALYST');
+```
+```sql
+-- ename column of employees if they are earning commission
+SELECT ename FROM emp WHERE comm IS NOT NULL;
+```
 - LIKE : Used for pattern matching.
-  Starts with A ('%A') ,Ends with A('_A%'),Second character is A('_A%'),Second last character is A('%A_')
+  Special characters used for pattern matching:
+
+`% (percentile)` — matches any character, any number of times (including zero)
+`_ (underscore)` — matches exactly one character
+Pattern	Meaning
+'A%'	First character must be A
+'%A'	Last character must be A
+'_A%'	Second character must be A
+'%A_'	Second-last character must be A
+'___A%'	Fourth-last... i.e. 4th character must be
+
+```sql
+-- ename and hiredate, if they were hired in year 95
+SELECT ename, hiredate FROM emp
+WHERE hiredate LIKE '%95';
+
+-- ename and salary if they are earning a three-digit salary
+SELECT ename, sal FROM emp WHERE sal LIKE '%___';
+
+-- Details of employees having 'A' in first place, 'D' in second place, and 'S' in last place
+SELECT * FROM emp WHERE ename LIKE 'AD%S';
+
+-- ename if they have 'A' in first place and are working in dept 10 or 20
+SELECT ename FROM emp
+WHERE ename LIKE 'A%' AND deptno IN (10, 20);
+```
+- NOT LIKE:Similar to LIKE, but rejects the value instead of selecting it.
+```sql
+-- ename except those having character 's' in the last place
+SELECT ename FROM emp WHERE ename NOT LIKE '%s';
+```
+
 - ANY :Accepts multiple values on the right side.
 
+```sql
 SELECT *
 FROM Employee
 WHERE salary NOT BETWEEN 30000 AND 70000 OR manager_id IS NOT NULL;
-
+```
 ---
 
 ## 17. SQL Functions
@@ -695,28 +1009,40 @@ JOIN → Horizontal combination.
 
 ---
 
-## 25. Aggregate vs Window Functions
-Aggregate : Return a single summarized value.
-SUM()
-AVG()
-COUNT()
-Window :Return values for each row with context.
-RANK()
-ROW_NUMBER()
-DENSE_RANK()
+
 
 ---
 
 ## 26. Normalization
-Reduces redundancy and improves data integrity.
-### 1NF
-Atomic values.
+📝 The process of reducing a large table into smaller tables in order to remove redundancy.
 
-### 2NF
-No partial dependency.
+📝 Normal Form — a table without redundancy is said to be in normal form.
+Levels of Normal Form
 
-### 3NF
-No transitive dependency.
+### First Normal Form (1NF)
+
+A table is said to be in 1NF if it satisfies the following conditions:
+
+- The table should not contain multi-valued data
+- The table should not have duplicate or repeated values
+
+### Second Normal Form (2NF)
+
+A table is said to be in 2NF if it satisfies the following conditions:
+
+- The table should already be in 1NF
+- The table should not have partial functional dependency
+
+### Third Normal Form (3NF)
+
+A table is said to be in 3NF if it satisfies the following conditions:
+
+- The table should already be in 2NF
+- The table should not have transitive functional dependency
+
+### BCNF (Boyce-Codd Normal Form)
+
+📝 An updated version of 3NF, also called 3.5NF.
 
 ---
 
@@ -769,17 +1095,37 @@ Exists only during session.
 ---
 
 ## 33. CHAR vs VARCHAR
-- CHAR → Fixed length.
-- VARCHAR → Variable length.
+CHAR	VARCHAR
+Unused memory further cannot be accessed	Free/unused memory can be accessed
+Stands for character	Stands for variable character
+Used for fixed-length character data	Used for variable-length character data
+Better performance (fixed size)	Performance not as good (variable size)
 
 ---
 
 ## 34. Expression
 Statement that produces a result using operands and operators.
+A statement which gives us a result is known as an expression.
 
+An expression consists of two parts:
 
+1. Operand
+2. Operator (+, -, *, /)
+
+Operand types
+
+1. Column name
+2. Literals
+
+Literal types
+
+1. Numeric literal
+2. Character literal
+3. Date literal
+
+---
 	
-	# PostgreSQL Notes
+# PostgreSQL Notes
 
 ## 1. What is PostgreSQL?
 PostgreSQL (Postgres) is an open-source Relational Database Management System (RDBMS) and use SQL to manage relational data.
@@ -875,7 +1221,48 @@ Extracts part of a string.
 ```sql
 SELECT SUBSTRING('PostgreSQL',1,4);
 ```
+### REVERSE() 
+reverse the given string
+```sql
+SELECT REVERSE('123') FROM Dual;
+```
+### TO_CHAR() 
+ convert a date to string format
+```sql
+SELECT TO_CHAR(SYSDATE, 'YEAR') FROM dual;
+```
+### TO_DATE() 
+ convert a date string to date format
+ ```sql
+SELECT TO_CHAR(TO_DATE('15-AUG-1949'), 'DAY') FROM dual;
+```
+### SUBSTR() 
+ extract part of a string from the original string
+ ```sql
+SELECT SUBSTR('Bangalore', 7, 3) FROM dual;
+```
+### MOD() 
+ obtain the modulus (remainder) of the given numbers
+ ```sql
+SELECT * FROM emp WHERE MOD(Empno, 2) = 0;
+```
+### NVL() (Null Value Logic)
+ Accepts 2 arguments:
+- arg1: a column/expression that could be NULL
+- arg2: the value to substitute in place of NULL
+- If arg1 is not NULL, NVL returns the same value present in arg1
+SELECT sal + NVL(comm, 0) FROM emp;
 
+### INSTR() 
+ obtain the index position of a substring within the original string
+ ```sql
+SELECT * FROM emp WHERE INSTR(Ename, 'A', 1, 1) > 0;
+```
+### REPLACE()
+ replace a substring with a new string in the original string
+ ```sql
+SELECT REPLACE('Jline', 'J', 'PY') FROM dual;
+```
 ## 4. Date & Time Functions
 Used to work with dates and timestamps.
 ```sql

@@ -1048,6 +1048,7 @@ nums.insert(2, 99)
 print(nums)         # [10, 20, 99, 30]
 ```
 **List Methods**
+
 l1.sort(): updates the list to [1,2,4,6,10,20]
 
 l1.reverse(): updates the list to [20,10,6,4,2,1]
@@ -1183,7 +1184,7 @@ if audio:
 
 ---
 
-## 📦 Project 2: FastAPI CRUD App
+## 📦 Project 5: FastAPI CRUD App
 
 **Setup**
 ```bash
