@@ -11,9 +11,14 @@
 📝 Example: if you want a chatbot that answers questions from company documents, the LLM alone cannot access those documents. LangChain can retrieve the relevant information and provide it to the model before generating a response.
 
 ```python
-from langchain_openai import ChatOpenAI
+ !pip install langchain_groq
+ 
+from langchain_groq import ChatGroq
 
-llm = ChatOpenAI(model="gpt-4o-mini")
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="YOUR_GROQ_API_KEY"
+)
 
 response = llm.invoke("What is AI?")
 print(response.content)
@@ -28,9 +33,16 @@ print(response.content)
 📝 LLM (Large Language Model) is the core component that generates text responses.
 
 ```python
-from langchain_openai import OpenAI
+# from langchain_openai import OpenAI
+from langchain_groq import ChatGroq
 
-llm = OpenAI()
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="YOUR_GROQ_API_KEY"
+)
+
+
+# llm = OpenAI()
 print(llm.invoke("Tell me a joke"))
 ```
 
@@ -61,57 +73,53 @@ uv add langchain
 📝 Chat models work with messages such as `Human`, `AI`, and `System` messages.
 
 ```python
-from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage
-from dotenv import load_dotenv
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+!pip install -q langchain langchain-core langchain-groq python-dotenv
+
+from kaggle_secrets import UserSecretsClient
 from langchain_groq import ChatGroq
+from langchain_core.messages import (
+    SystemMessage,
+    HumanMessage,
+    AIMessage
+)
 import os
 
-# Load env variables
-load_dotenv()
-model = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.7)
+# Load secret
+user_secrets = UserSecretsClient()
+os.environ["GROQ_API_KEY"] = user_secrets.get_secret("GROQ_API_KEY")
+
+# Verify
 print("API Key loaded?", os.getenv("GROQ_API_KEY") is not None)
 
-# Initialize chat history
-chat_history = []
+# Create model
+model = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0.7
+)
 
-# User message
-message = [
-    SystemMessage(content="Solve the following math problem"),
-    HumanMessage(content="What is 100 divided by 5?")
+# Message history
+messages = [
+    SystemMessage(
+        content="You are a helpful AI assistant and expert mathematician."
+    ),
+    
+    HumanMessage(
+        content="What is 100 divided by 5?"
+    ),
+
+    AIMessage(
+        content="100 divided by 5 is 20."
+    ),
+
+    HumanMessage(
+        content="Now multiply that result by 10."
+    )
 ]
-result = model.invoke(message)
-print(f"Answer from AI: {result.content}")
 
-# With prior AI message included
-message = [
-    SystemMessage(content="Solve the following math problem"),
-    HumanMessage(content="What is 100 divided by 5?"),
-    AIMessage(content="100 divided by 5 is 20"),
-    HumanMessage(content="What is 10 times 5?")
-]
-result = model.invoke(message)
-print(f"Answer from AI: {result.content}")
+# Invoke model
+response = model.invoke(messages)
 
-# Add system role
-system_message = SystemMessage(content="You are a helpful AI assistant")
-chat_history.append(system_message)
-
-# Chat loop
-while True:
-    query = input("You: ")
-    if query.lower() == "exit":
-        break
-    chat_history.append(HumanMessage(content=query))
-
-    result = model.invoke(chat_history)
-    response = result.content
-    chat_history.append(AIMessage(content=response))
-    print(f"AI: {response}")
-
-print("------- Message History ------")
-print(chat_history)
+print("AI:", response.content)
 ```
 
 ---
@@ -189,27 +197,41 @@ messages = [
 
 **Example 1**
 ```python
-from langchain.prompts import PromptTemplate
+!pip install -q langchain
+
+from langchain_core.prompts import PromptTemplate
 
 prompt = PromptTemplate(
     input_variables=["topic"],
     template="Explain {topic} in simple words."
 )
 
-print(prompt.format(topic="Machine Learning"))
+result = prompt.format(topic="Machine Learning")
+
+print(result)
 ```
 
 **Example 2**
 ```python
+
 from langchain_core.prompts import PromptTemplate
+from langchain_groq import ChatGroq
+
+model = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0
+)
 
 prompt = PromptTemplate(
     input_variables=["country"],
     template="What is the capital of {country}?"
 )
 
-formatted_prompt = prompt.format(country="France")
-print(formatted_prompt)
+final_prompt = prompt.format(country="France")
+
+response = model.invoke(final_prompt)
+
+print(response.content)
 ```
 
 ### Advantages of PromptTemplate
@@ -226,15 +248,20 @@ print(formatted_prompt)
 📝 A `PromptTemplate` can be used to build a translation prompt that translates text from one language to another using an LLM.
 
 ```python
-from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from kaggle_secrets import UserSecretsClient
+from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
+import os
 
-# Load environment variables
-load_dotenv()
+# Load Groq API key from Kaggle Secrets
+user_secrets = UserSecretsClient()
+os.environ["GROQ_API_KEY"] = user_secrets.get_secret("GROQ_API_KEY")
 
-# Initialize LLM
-llm = ChatOpenAI(model="gpt-4o-mini")
+# Initialize Groq model
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0
+)
 
 # Create Prompt Template
 prompt = PromptTemplate.from_template("""
@@ -247,7 +274,7 @@ to {output_language}:
 Text: {text}
 """)
 
-# Format the prompt
+# Format prompt
 formatted_prompt = prompt.format(
     input_language="English",
     output_language="French",
@@ -257,7 +284,7 @@ formatted_prompt = prompt.format(
 print("Formatted Prompt:")
 print(formatted_prompt)
 
-# Send prompt to LLM
+# Invoke model
 response = llm.invoke(formatted_prompt)
 
 print("\nAI Response:")
@@ -334,11 +361,20 @@ print(response.content)
 📝 A chain connects multiple LangChain components together.
 
 ```python
+from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+
+prompt = PromptTemplate(
+    input_variables=["topic"],
+    template="Explain {topic} in simple words."
+)
 
 chain = prompt | llm | StrOutputParser()
 
-result = chain.invoke({"topic": "Generative AI"})
+result = chain.invoke({
+    "topic": "Generative AI"
+})
+
 print(result)
 ```
 
@@ -375,30 +411,49 @@ print(result.content)
 📝 A Sequential Chain consists of multiple chains connected together.
 
 ```python
-from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
-load_dotenv()
-
-# Initialize Model
-llm = ChatOpenAI(model="gpt-4o-mini")
-
-# Create Prompt
-prompt = PromptTemplate.from_template(
-    "Explain the topic: {topic} in 50 words."
+# Model
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0.7
 )
 
-# Output Parser
+# Prompt 1
+prompt1 = PromptTemplate.from_template(
+    "Explain the topic: {topic} in 100 words."
+)
+
+# Prompt 2
+prompt2 = PromptTemplate.from_template(
+    "Summarize the following explanation in 20 words:\n\n{text}"
+)
+
+# Parser
 parser = StrOutputParser()
 
-# Create Chain
-chain = prompt | llm | parser
+# Chain 1
+chain1 = prompt1 | llm | parser
 
-# Run Chain
-result = chain.invoke({"topic": "Artificial Intelligence"})
-print(result)
+# Get explanation
+explanation = chain1.invoke({
+    "topic": "Artificial Intelligence"
+})
+
+print("Explanation:\n")
+print(explanation)
+
+# Chain 2
+chain2 = prompt2 | llm | parser
+
+summary = chain2.invoke({
+    "text": explanation
+})
+
+print("\nSummary:\n")
+print(summary)
 ```
 
 ---
@@ -458,13 +513,30 @@ response = client.chat.completions.create(
 📝 An agent chooses tools dynamically to solve tasks.
 
 ```python
-from langchain.agents import create_tool_calling_agent
+from langchain.agents import create_agent
+from langchain_groq import ChatGroq
+from langchain.tools import tool
 
-agent = create_tool_calling_agent(
-    llm,
-    [add],
-    prompt
+@tool
+def add(a: int, b: int) -> int:
+    """Add two numbers."""
+    return a + b
+
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile"
 )
+
+agent = create_agent(
+    model=llm,
+    tools=[add],
+    system_prompt="You are a math assistant."
+)
+
+result = agent.invoke(
+    {"messages": [{"role": "user", "content": "Add 100 and 250"}]}
+)
+
+print(result)
 ```
 
 ---
@@ -577,14 +649,48 @@ if uploaded_file:
 📝 Breaks large documents into chunks.
 
 ```python
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+text = """
+Artificial Intelligence (AI) is a field of computer science
+that focuses on creating systems capable of performing tasks
+that normally require human intelligence.
+""" * 20
 
 splitter = RecursiveCharacterTextSplitter(
-    chunk_size=500,
-    chunk_overlap=50
+    chunk_size=100,
+    chunk_overlap=20
 )
 
-chunks = splitter.split_documents(docs)
+chunks = splitter.split_text(text)
+
+print("Number of chunks:", len(chunks))
+
+for i, chunk in enumerate(chunks):
+    print(f"\nChunk {i+1}:")
+    print(chunk)
+	-----------------------
+	q20
+	from pydantic import BaseModel
+from langchain_groq import ChatGroq
+
+class Person(BaseModel):
+    name: str
+    age: int
+
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile"
+)
+
+structured_llm = llm.with_structured_output(Person)
+
+person = structured_llm.invoke(
+    "My name is Sougata and I am 30 years old."
+)
+
+print(person)
+print(person.name)
+print(person.age)
 ```
 
 ---
@@ -725,7 +831,6 @@ if file:
 ---
 ---
 
-# ➕ Missing Questions (Commonly Asked, Not in Original Notes)
 
 ## Q23. What is LCEL (LangChain Expression Language)?
 
@@ -899,12 +1004,3 @@ for chunk in llm.stream("Tell me a story"):
 📝 LangSmith is LangChain's observability/debugging platform for tracing, monitoring, and evaluating LLM applications (tracks prompts, chain steps, latency, and costs).
 
 ---
-
-## Q35. LangChain vs LlamaIndex — What's the Difference?
-
-**Answer**
-
-- **LangChain** — general-purpose framework for chaining LLMs with tools, memory, agents, and prompts
-- **LlamaIndex** — focused primarily on data indexing and retrieval (RAG pipelines) over documents
-
-Both can be used together in the same project depending on the use case.
