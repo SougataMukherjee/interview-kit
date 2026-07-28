@@ -66,9 +66,30 @@ uv add langchain
 
 ---
 
-## Q5. What is a Chat Model?
+## Q5. what is models? llm vs chat model ?What is a Chat Model?
 
 **Answer**
+
+📝 A Model is the AI engine that generates responses.
+
+```python
+model = ChatOpenAI(
+    model='gpt-4',
+    temperature=1.5,
+    max_completion_tokens=10
+)
+
+result = model.invoke("Write a 3 line poem on home")
+```
+
+| Feature            | LLM             | Chat Model       |
+| ------------------ | --------------- | ---------------- |
+| Input              | String          | Messages         |
+| Output             | String          | AI Message       |
+| Conversation Aware | ❌               | ✅                |
+| Roles              | ❌               | ✅                |
+| Chat History       | ❌               | ✅                |
+| Best For           | Text completion | Chatbots, Agents |
 
 📝 Chat models work with messages such as `Human`, `AI`, and `System` messages.
 
@@ -354,11 +375,23 @@ print(response.content)
 
 ---
 
-## Q11. What is a Chain?
+## Q11. What is a Chain? What problem resolved by Chain?
 
 **Answer**
 
-📝 A chain connects multiple LangChain components together.
+📝 A chain connects multiple LangChain components together (Prompt → LLM → Output Parser) to create a complete workflow.Instead of calling the LLM directly, chains allow you to build a step-by-step pipeline.
+
+```txt
+User Input
+      ↓
+Prompt Template
+      ↓
+LLM (Groq/OpenAI/etc.)
+      ↓
+Output Parser
+      ↓
+Final Result
+```
 
 ```python
 from langchain_core.prompts import PromptTemplate
@@ -377,7 +410,49 @@ result = chain.invoke({
 
 print(result)
 ```
+📝 A Chain solves the problem of manually managing multiple steps in an LLM workflow by connecting components such as Prompt → Model → Output Parser → Next Step into a single pipeline.
 
+```python
+!pip install langchain langchain-openai python-dotenv
+from dotenv import load_dotenv
+from langchain_groq import ChatGroq
+from langchain_core.messages import (
+    SystemMessage,
+    HumanMessage,
+    AIMessage
+)
+
+load_dotenv()
+
+model = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="your_groq_api_key"
+)
+
+chat_history = [
+    SystemMessage(content="You are a helpful AI assistant")
+]
+
+while True:
+    user_input = input("You: ")
+
+    if user_input.lower() == "exit":
+        break
+
+    chat_history.append(
+        HumanMessage(content=user_input)
+    )
+
+    result = model.invoke(chat_history)
+
+    chat_history.append(
+        AIMessage(content=result.content)
+    )
+
+    print("AI:", result.content)
+
+print(chat_history)
+```
 ---
 
 ## Q12. What is a Simple Chain?
@@ -456,6 +531,127 @@ print("\nSummary:\n")
 print(summary)
 ```
 
+---
+## Q13.1. What is Parallel Chain?
+
+A Parallel Chain executes multiple chains at the same time on the same input and returns all results together.
+
+```txt
+          Input
+            |
+    ----------------
+    |              |
+ Prompt1      Prompt2
+    |              |
+   LLM           LLM
+    |              |
+ Output1      Output2
+    ----------------
+            |
+      Combined Result
+```
+```python
+	  
+from langchain_groq import ChatGroq
+from langchain_core.prompts import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnableParallel
+
+# Model
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0.7,
+	api_key="gsk_your_actual_groq_api_key"
+)
+
+parser = StrOutputParser()
+
+# Prompt 1
+summary_prompt = PromptTemplate.from_template(
+    "Provide a short summary of {topic}"
+)
+
+# Prompt 2
+keywords_prompt = PromptTemplate.from_template(
+    "Give 5 keywords related to {topic}"
+)
+
+# Chains
+summary_chain = summary_prompt | llm | parser
+keywords_chain = keywords_prompt | llm | parser
+
+# Parallel Chain
+parallel_chain = RunnableParallel(
+    summary=summary_chain,
+    keywords=keywords_chain
+)
+
+result = parallel_chain.invoke({
+    "topic": "Artificial Intelligence"
+})
+
+print(result)
+```
+---
+## Q13.2. What is Conditional Chain?
+
+A Conditional Chain executes different chains based on a condition.
+```txt
+Input
+  |
+Condition Check
+  |
+---------------------
+|                   |
+Positive         Negative
+|                   |
+Chain A          Chain B
+|                   |
+Output           Output
+```
+```python
+from langchain_groq import ChatGroq
+from langchain_core.prompts import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnableLambda
+
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0.7
+)
+
+parser = StrOutputParser()
+
+# Technical prompt
+tech_prompt = PromptTemplate.from_template(
+    "Answer this technical question: {question}"
+)
+
+# General prompt
+general_prompt = PromptTemplate.from_template(
+    "Answer this general question: {question}"
+)
+
+tech_chain = tech_prompt | llm | parser
+general_chain = general_prompt | llm | parser
+
+# Router Function
+def route(info):
+    question = info["question"]
+
+    if "python" in question.lower():
+        return tech_chain.invoke(info)
+
+    return general_chain.invoke(info)
+
+conditional_chain = RunnableLambda(route)
+
+result = conditional_chain.invoke({
+    "question": "What is Python list comprehension?"
+})
+
+print(result)
+```
 ---
 
 ## Q14. What is Memory?
@@ -541,7 +737,19 @@ print(result)
 
 ---
 
-## Q17. Why Use a Vector DB?
+## Q17.What is vector store? Why Use a Vector DB?
+
+A Vector Store is a system designed to store and retrieve data represented as numerical vectors (embeddings).
+
+`A vector store helps:`
+
+✅ Store embeddings
+
+✅ Perform similarity search
+
+✅ Retrieve relevant chunks
+
+✅ Support RAG applications
 
 **Answer**
 
@@ -557,12 +765,132 @@ vectorstore = Chroma.from_texts(
 ```
 
 ---
+## Q17.1. What is Chroma?
+
+ChromaDB is an open-source vector store/database used to store embeddings and perform similarity searches.
+
+It is one of the most commonly used and easy vector stores in LangChain.
+
+```python
+from langchain_chroma import Chroma
+from langchain_openai import OpenAIEmbeddings
+from langchain_core.documents import Document
+
+docs = [
+    Document(
+        page_content="LangChain is used for LLM applications."
+    ),
+    Document(
+        page_content="Chroma is a vector store."
+    )
+]
+
+vectorstore = Chroma.from_documents(
+    documents=docs,
+    embedding=OpenAIEmbeddings(),
+    persist_directory="./chroma_db"
+)
+```
+---
 
 ## Q18. What is a Document Loader?
 
 **Answer**
 
-📝 Loads files into LangChain.
+📝 A Document Loader is a LangChain component used to load data from different sources (TXT, PDF, CSV, Websites, Word documents, etc.) and convert it into LangChain's standard Document object format.
+
+```python
+ Document(
+    page_content="Actual text content",
+    metadata={"source": "sample.txt"}
+)
+```
+**Types of Document Loaders**
+
+1. TextLoader:
+TextLoader is used to load content from a text file (.txt).
+```python
+from langchain_community.document_loaders import TextLoader
+
+loader = TextLoader(
+    "sample.txt",
+    encoding="utf-8"
+)
+
+docs = loader.load()
+
+print(docs[0])
+print(docs[0].page_content)
+```
+2. PyPDFLoader
+
+PyPDFLoader is a document loader in LangChain used to load content from PDF files and convert each page into a Document object.
+```python
+from langchain_community.document_loaders import PyPDFLoader
+
+loader = PyPDFLoader("sample.pdf")
+
+docs = loader.load()
+```
+
+3. CSVLoader:
+Loads CSV files.
+```python
+from langchain_community.document_loaders import CSVLoader
+
+loader = CSVLoader(
+    file_path="employees.csv"
+)
+
+docs = loader.load()
+
+print(docs)
+```
+4. WebBaseLoader
+
+WebBaseLoader is a document loader used to load and extract text content from web pages (URLs).
+`Use Case`
+- Web scraping
+- Website chatbot
+- Knowledge-base creation
+```python
+from langchain_community.document_loaders import WebBaseLoader
+
+loader = WebBaseLoader(
+    "https://python.langchain.com"
+)
+
+docs = loader.load()
+
+print(docs[0].page_content)
+```
+5. DirectoryLoader
+
+Loads all files inside a folder.
+`Use Case`
+- Multiple files
+- Bulk document ingestion
+```python
+from langchain_community.document_loaders import DirectoryLoader
+
+loader = DirectoryLoader(
+    "documents/",
+    glob="*.txt"
+)
+
+docs = loader.load()
+
+print(docs)
+```
+
+| Feature          | load()        | lazy\_load() |
+| ---------------- | ------------- | ------------ |
+| Loading Type     | Eager         | Lazy         |
+| Returns          | List          | Generator    |
+| Memory Usage     | High          | Low          |
+| Large Files      | ❌             | ✅            |
+| Small Files      | ✅             | ✅            |
+| Processing Speed | Faster Access | Stream Based |
 
 ### 📦 Project: PDF Summarizer
 
@@ -646,8 +974,49 @@ if uploaded_file:
 
 **Answer**
 
-📝 Breaks large documents into chunks.
+📝 Text Splitting is the process of breaking large text (PDFs, books, articles, websites, documents) into smaller chunks that an LLM can process efficiently.
+`Benefits of Text Splitting`
 
+1. Better Embeddings:
+Smaller chunks create more accurate vector embeddings.
+2. Better Semantic Search
+3. Better Summarization
+
+```txt
+Document
+   │
+   ▼
+Document Loader
+   │
+   ▼
+Text Splitter
+   │
+   ▼
++---------+
+| Chunk 1 |
++---------+
+
++---------+
+| Chunk 2 |
++---------+
+
++---------+
+| Chunk 3 |
++---------+
+
+   │
+   ▼
+Embeddings
+   │
+   ▼
+Vector Database
+   │
+   ▼
+Retriever
+   │
+   ▼
+LLM Answer
+```
 ```python
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
@@ -659,38 +1028,15 @@ that normally require human intelligence.
 
 splitter = RecursiveCharacterTextSplitter(
     chunk_size=100,
-    chunk_overlap=20
+    chunk_overlap=20,
+    separator=''
 )
 
 chunks = splitter.split_text(text)
 
 print("Number of chunks:", len(chunks))
 
-for i, chunk in enumerate(chunks):
-    print(f"\nChunk {i+1}:")
-    print(chunk)
-	-----------------------
-	q20
-	from pydantic import BaseModel
-from langchain_groq import ChatGroq
-
-class Person(BaseModel):
-    name: str
-    age: int
-
-llm = ChatGroq(
-    model="llama-3.3-70b-versatile"
-)
-
-structured_llm = llm.with_structured_output(Person)
-
-person = structured_llm.invoke(
-    "My name is Sougata and I am 30 years old."
-)
-
-print(person)
-print(person.name)
-print(person.age)
+print(chunks[0].page_content)
 ```
 
 ---
@@ -699,14 +1045,76 @@ print(person.age)
 
 **Answer**
 
-📝 Returns output in JSON/Pydantic format.
+📝 Structured Output means forcing an LLM to return data in a predefined format instead of free-form text.
+
+**benifit**
+
+- API Friendly
+- Perfect for FastAPI, Streamlit, databases, and agents.
+- Better Reliability
+- Response follows the schema even if the model is creative.
 
 ```python
+# exp1
+from langchain_groq import ChatGroq
 from pydantic import BaseModel
 
-class Person(BaseModel):
-    name: str
-    age: int
+class LLMSchema(BaseModel):
+    setup: str
+    punchline: str
+
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="gsk_your_api_key"
+)
+
+structured_llm = llm.with_structured_output(LLMSchema)
+
+result = structured_llm.invoke(
+    "Tell me a joke about Python programming."
+)
+
+print(result)
+print(result.setup)
+print(result.punchline)
+
+# exp2 more compact context
+
+from dotenv import load_dotenv
+from typing_extensions import TypedDict, Annotated
+
+from langchain_groq import ChatGroq
+
+load_dotenv()
+
+class OutputSummary(TypedDict):
+    summary: Annotated[
+        str,
+        "Write a concise summary in 1-2 sentences"
+    ]
+    
+    sentiment: Annotated[
+        str,
+        "Sentiment of the text: positive, negative, or neutral"
+    ]
+
+model = ChatGroq(
+    model="llama-3.3-70b-versatile"
+)
+
+model = model.with_structured_output(OutputSummary)
+
+result = model.invoke(
+    """
+    LangChain is a powerful framework for building LLM applications.
+    It simplifies prompt management, RAG pipelines, and agent creation.
+    Developers love it because it accelerates AI application development.
+    """
+)
+
+print(result)
+print(result["summary"])
+print(result["sentiment"])
 ```
 
 ---
@@ -822,6 +1230,76 @@ while True:
 print("-------message history------")
 print(chat_history)
 ```
+## 📦 Project: fetch weather report
+
+```python
+!pip install langchain langchain-groq requests python-dotenv
+
+import requests
+from dotenv import load_dotenv
+
+from langchain.tools import tool
+from langchain.agents import create_agent
+from langchain_groq import ChatGroq
+
+# Load environment variables
+load_dotenv()
+
+
+# Tool Definition
+@tool
+def get_weather(city: str) -> str:
+    """
+    Return current weather information for a city.
+    """
+    response = requests.get(
+        f"https://wttr.in/{city}?format=j1"
+    )
+
+    data = response.json()
+
+    current = data["current_condition"][0]
+
+    return (
+        f"City: {city}\n"
+        f"Temperature: {current['temp_C']}°C\n"
+        f"Humidity: {current['humidity']}%\n"
+        f"Weather: {current['weatherDesc'][0]['value']}"
+    )
+
+
+# Groq Model
+model = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0,
+	api_key='YOUR_GROQ_API_KEY'
+)
+
+
+# Create Agent
+agent = create_agent(
+    model=model,
+    tools=[get_weather],
+    system_prompt="""
+    You are a helpful weather assistant.
+    Use the weather tool whenever weather information is requested.
+    """
+)
+
+# Invoke Agent
+response = agent.invoke(
+    {
+        "messages": [
+            {
+                "role": "user",
+                "content": "What is the weather in Delhi?"
+            }
+        ]
+    }
+)
+
+print(response)
+```
 
 ## 📦 Bonus Project: CSV Data Analysis App (Pandas + Streamlit)
 
@@ -903,7 +1381,47 @@ result = chain.invoke({"topic": "AI"})
 
 **Answer**
 
-📝 A retriever fetches the most relevant documents/chunks from a vector store based on a query — the core piece of RAG (Retrieval-Augmented Generation).
+📝 A retriever fetches the most relevant documents/chunks from a vector store based on a query — the core piece of RAG (Retrieval-Augmented Generation).A Retriever is a component in LangChain that fetches relevant documents from a data source in response to a user's query.
+
+**architecture**
+```txt
+              Query
+                │
+                ▼
+           Retriever
+           /       \
+          /         \
+Vector Store      Database
+          \         /
+           \       /
+            ▼     ▼
+
+       Relevant Documents
+                │
+                ▼
+               LLM
+```
+Common Types of Retrievers
+1. VectorStoreRetriever (Most Used)
+
+Searches documents from a vector store using similarity search.
+2. Similarity Retriever
+
+Returns documents with highest similarity score.
+3. MMR Retriever (Maximum Marginal Relevance)
+
+Returns relevant and diverse documents.
+4. MultiQueryRetriever
+
+Generates multiple versions of a query using an LLM.
+| Feature           | Vector Store           | Retriever            |
+| ----------------- | ---------------------- | -------------------- |
+| Purpose           | Stores embeddings      | Retrieves documents  |
+| Stores Data       | ✅ Yes                  | ❌ No                 |
+| Similarity Search | ✅ Yes                  | Uses Vector Store    |
+| Returns Documents | ❌ Directly not focused | ✅ Yes                |
+| Used In           | Storage Layer          | Retrieval Layer      |
+| Example           | Chroma, FAISS          | VectorStoreRetriever |
 
 ```python
 retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
@@ -919,7 +1437,11 @@ docs = retriever.invoke("What is LangChain?")
 📝 RAG combines a retriever with an LLM: relevant documents are fetched first, then passed into the prompt so the LLM answers using that context instead of relying only on its training data.
 
 ```
-User Query → Retriever → Relevant Docs → Prompt + Docs → LLM → Answer
+RAG
+ ├── Document Loaders
+ ├── Text Splitters
+ ├── Vector Databases
+ └── Retrievers
 ```
 
 ---
@@ -943,15 +1465,125 @@ vector = embedding.embed_query("LangChain framework")
 
 **Answer**
 
-📝 Convert raw LLM output into a specific format (string, JSON, Pydantic object).
+📝 Output Parsers in LangChain are used to convert the raw LLM response into a structured format that your application can easily process.
+
+*They help in:*
+
+- Formatting responses consistently
+- Returning JSON, lists, objects, etc.
+- Reducing manual parsing
+- Making AI outputs reliable for automation
+
+1. StrOutputParser:
+
+StrOutputParser is the simplest output parser.It converts the LLM response into a plain string.
 
 ```python
-from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
+from langchain_groq import ChatGroq
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
 
-str_parser = StrOutputParser()   # returns plain string
-json_parser = JsonOutputParser()  # parses model output as JSON
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="YOUR_GROQ_API_KEY"
+)
+
+prompt = ChatPromptTemplate.from_template(
+    "Explain LangChain in one sentence."
+)
+
+chain = prompt | llm | StrOutputParser()
+
+response = chain.invoke({})
+
+print(response)
+```
+2. JsonOutputParser:
+JsonOutputParser forces the LLM to return output in JSON format.
+
+```python
+from langchain_groq import ChatGroq
+from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.prompts import PromptTemplate
+
+parser = JsonOutputParser()
+
+prompt = PromptTemplate(
+    template="""
+    Give details about a programming language.
+
+    {format_instructions}
+
+    Language: {language}
+    """,
+    input_variables=["language"],
+    partial_variables={
+        "format_instructions": parser.get_format_instructions()
+    }
+)
+
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="YOUR_GROQ_API_KEY"
+)
+
+chain = prompt | llm | parser
+
+response = chain.invoke({
+    "language": "Python"
+})
+
+print(response)
 ```
 
+3. StructuredOutputParser:
+
+StructuredOutputParser is used when you want the LLM to return data in a predefined structure with specific fields.
+
+Unlike JsonOutputParser, where the model decides the JSON schema, StructuredOutputParser lets you define exactly what fields should be returned.
+
+```python
+from langchain_groq import ChatGroq
+from langchain.output_parsers import ResponseSchema, StructuredOutputParser
+from langchain_core.prompts import PromptTemplate
+
+# Define output structure
+schemas = [
+    ResponseSchema(name="name", description="Person name"),
+    ResponseSchema(name="city", description="Person city")
+]
+
+parser = StructuredOutputParser.from_response_schemas(schemas)
+
+prompt = PromptTemplate(
+    template="""
+    Extract information from the text.
+
+    {format_instructions}
+
+    Text: {text}
+    """,
+    input_variables=["text"],
+    partial_variables={
+        "format_instructions": parser.get_format_instructions()
+    }
+)
+
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="YOUR_GROQ_API_KEY"
+)
+
+chain = prompt | llm
+
+response = chain.invoke({
+    "text": "Rahul lives in Mumbai."
+})
+
+result = parser.parse(response.content)
+
+print(result)
+```
 ---
 
 ## Q28. What is `ChatPromptTemplate`? (Example)
@@ -1011,16 +1643,67 @@ memory = ConversationBufferWindowMemory(k=3)  # keeps last 3 exchanges
 
 **Answer**
 
-📝 A tool is a function an agent can call to perform an action (e.g. search the web, run a calculation, query a database).
+📝 A tool is a function an agent can call to perform an action (e.g. search the web, run a calculation, query a database).A Tool is a Python function (or API) that is packaged in a way an LLM can understand and call when needed.
 
+```txt
+
+LLM
+ ↓
+Think
+ ↓
+Tool
+ ↓
+Take Action
+```
+**What is @tool Decorator?**
+
+@tool converts a normal Python function into a LangChain Tool.
 ```python
-from langchain.tools import tool
+from langchain_core.tools import tool
 
 @tool
-def add(a: int, b: int) -> int:
-    """Add two numbers."""
-    return a + b
+def multiply(a:int,b:int)->int:
+    """Multiply two numbers"""
+
+    return a*b
+result = multiply.invoke({
+    "a":10,
+    "b":20
+})
+
+print(result)
 ```
+Now LangChain can expose it to the LLM.
+
+`Ways to Create Custom Tools`
+
+- Using @tool decorator ✅ (Most Common)
+- Using StructuredTool
+- Using BaseTool (Advanced)
+
+| Feature             | Tool                                         | Agent                                               |
+| ------------------- | -------------------------------------------- | --------------------------------------------------- |
+| Definition          | A function/API that performs a specific task | An AI system that can reason, decide, and use tools |
+| Purpose             | Execute an action                            | Decide what action to take                          |
+| Can Think?          | ❌ No                                         | ✅ Yes                                               |
+| Can Take Action?    | ✅ Yes                                        | ✅ Yes                                               |
+| Decision Making     | ❌ No                                         | ✅ Yes                                               |
+| Tool Selection      | ❌ Cannot select tools                        | ✅ Chooses tools dynamically                         |
+| Works Independently | ❌ No                                         | ✅ Yes                                               |
+| Uses LLM Reasoning  | ❌ No                                         | ✅ Yes                                               |
+| Input               | Direct function arguments                    | User query                                          |
+| Output              | Task result                                  | Final answer after reasoning                        |
+| Examples            | Weather API, Calculator, Ticket Booking      | ChatGPT Agent, Travel Agent, RAG Agent              |
+
+**How Does an Agent Fetch Answers from Tools in LangChain?**
+
+An Agent does not know the answer directly. Instead, it:
+
+- Understands the user's question
+- Decides which tool is needed
+- Calls the tool
+- Gets the tool's result
+- Uses the result to generate the final answer
 
 ---
 
@@ -1058,3 +1741,9 @@ for chunk in llm.stream("Tell me a story"):
 📝 LangSmith is LangChain's observability/debugging platform for tracing, monitoring, and evaluating LLM applications (tracks prompts, chain steps, latency, and costs).
 
 ---
+
+## Q35.What is Fine-Tuning?
+
+**Answer**
+
+Fine-Tuning is the process of training a pre-trained Large Language Model (LLM) on your own custom dataset so that it learns specific knowledge, style, behavior, or domain expertise.
