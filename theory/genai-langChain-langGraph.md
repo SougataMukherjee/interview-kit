@@ -66,7 +66,7 @@ uv add langchain
 
 ---
 
-## Q5. what is models? llm vs chat model ?What is a Chat Model?
+## Q5. what is models? LLM vs Chat model ? What is a Chat Model?
 
 **Answer**
 
@@ -807,7 +807,7 @@ vectorstore = Chroma.from_documents(
 ```
 **Types of Document Loaders**
 
-1. TextLoader:
+1. `TextLoader:`
 TextLoader is used to load content from a text file (.txt).
 ```python
 from langchain_community.document_loaders import TextLoader
@@ -822,7 +822,7 @@ docs = loader.load()
 print(docs[0])
 print(docs[0].page_content)
 ```
-2. PyPDFLoader
+2. `PyPDFLoader`
 
 PyPDFLoader is a document loader in LangChain used to load content from PDF files and convert each page into a Document object.
 ```python
@@ -833,7 +833,7 @@ loader = PyPDFLoader("sample.pdf")
 docs = loader.load()
 ```
 
-3. CSVLoader:
+3. `CSVLoader:`
 Loads CSV files.
 ```python
 from langchain_community.document_loaders import CSVLoader
@@ -846,7 +846,7 @@ docs = loader.load()
 
 print(docs)
 ```
-4. WebBaseLoader
+4. `WebBaseLoader`
 
 WebBaseLoader is a document loader used to load and extract text content from web pages (URLs).
 `Use Case`
@@ -864,7 +864,7 @@ docs = loader.load()
 
 print(docs[0].page_content)
 ```
-5. DirectoryLoader
+5. `DirectoryLoader`
 
 Loads all files inside a folder.
 `Use Case`
@@ -1402,18 +1402,22 @@ Vector Store      Database
                LLM
 ```
 Common Types of Retrievers
-1. VectorStoreRetriever (Most Used)
+1. `VectorStoreRetriever (Most Used)`
 
 Searches documents from a vector store using similarity search.
-2. Similarity Retriever
+
+2. `Similarity Retriever`
 
 Returns documents with highest similarity score.
-3. MMR Retriever (Maximum Marginal Relevance)
+
+3. `MMR Retriever (Maximum Marginal Relevance)`
 
 Returns relevant and diverse documents.
-4. MultiQueryRetriever
+
+4. `MultiQueryRetriever`
 
 Generates multiple versions of a query using an LLM.
+
 | Feature           | Vector Store           | Retriever            |
 | ----------------- | ---------------------- | -------------------- |
 | Purpose           | Stores embeddings      | Retrieves documents  |
@@ -1474,9 +1478,7 @@ vector = embedding.embed_query("LangChain framework")
 - Reducing manual parsing
 - Making AI outputs reliable for automation
 
-1. StrOutputParser:
-
-StrOutputParser is the simplest output parser.It converts the LLM response into a plain string.
+1. `StrOutputParser:`StrOutputParser is the simplest output parser.It converts the LLM response into a plain string.
 
 ```python
 from langchain_groq import ChatGroq
@@ -1498,7 +1500,7 @@ response = chain.invoke({})
 
 print(response)
 ```
-2. JsonOutputParser:
+2. `JsonOutputParser:`
 JsonOutputParser forces the LLM to return output in JSON format.
 
 ```python
@@ -1536,9 +1538,7 @@ response = chain.invoke({
 print(response)
 ```
 
-3. StructuredOutputParser:
-
-StructuredOutputParser is used when you want the LLM to return data in a predefined structure with specific fields.
+3. `StructuredOutputParser:` StructuredOutputParser is used when you want the LLM to return data in a predefined structure with specific fields.
 
 Unlike JsonOutputParser, where the model decides the JSON schema, StructuredOutputParser lets you define exactly what fields should be returned.
 
