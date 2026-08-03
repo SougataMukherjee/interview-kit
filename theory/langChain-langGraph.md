@@ -2374,10 +2374,15 @@ result = app.invoke({
 
 print(result)
 ```
----------------------
+---
 
-# message graph
+## message graph
+
 A MessageGraph is a LangGraph workflow where the entire state consists of messages.
+
+<img src="./img/message_graph.jpeg" alt="message_graph" />
+
+```python
 from dotenv import load_dotenv
 from IPython.display import Image, display
 import os
@@ -2428,11 +2433,12 @@ display(Image(app.get_graph().draw_mermaid_png()))
 # Print Messages
 for msg in result:
     msg.pretty_print()
+```
+---
 
--------------------
+## chatbot project
 
-chatbot project image add
---------------
+```python
 from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
@@ -2527,8 +2533,10 @@ while True:
         "AI:",
         response["messages"][-1].content
     )
+```
 
-----------------
+---
+
 memory
 ---------
 Is  memory and Persistence are same?
