@@ -2072,10 +2072,15 @@ LangChain is great for prompts, tools, and basic agents, but it struggles when w
 LangGraph solves these problems:
 
 ✅ State Management: Share data across multiple steps.
+
 ✅ Memory: Remember previous interactions using checkpoints.
+
 ✅ Conditional Routing: Easy branching (if/else flows).
+
 ✅ Multi-Agent Workflows: Multiple agents work together.
+
 ✅ Checkpointing: Resume from failures instead of restarting.
+
 ✅ Human-in-the-Loop: Pause for approval and continue later.
 
 ---
@@ -2098,17 +2103,12 @@ Multiple agents can collaborate.
 
 ## Core Concepts of LangGraph
 
-1. Graph
-
-A Graph is the complete workflow.
+1. `Graph`: A Graph is the complete workflow.
 it contains nodes and edges
 
-2. State
-
-State is shared memory.
+2. `State`: State is shared memory.
 
 Each node can:
-
 - Read data
 - Update data
 ```
@@ -2117,12 +2117,13 @@ state = {
     "answer": ""
 }
 ```
-## How to preserve state between invocations?
+ **How to preserve state between invocations?**
 
 You need Memory / Checkpointing.
+
 A checkpoint is a snapshot of the graph's state at a specific point during execution. Instead of saving only the final output, LangGraph saves state values at intermediate steps, allowing the workflow to resume from the last saved checkpoint if a failure occurs.
 
-### InMemorySaver vs SqliteSaver vs PostgresSaver
+ **InMemorySaver vs SqliteSaver vs PostgresSaver**
 
 `InMemorySaver` stores checkpoints in the application's memory (RAM). It is fast and simple, making it ideal for learning, testing, and local development. However, all checkpoints are lost when the application stops or restarts.
 
@@ -2130,83 +2131,46 @@ A checkpoint is a snapshot of the graph's state at a specific point during execu
 
 `PostgresSaver` stores checkpoints in a PostgreSQL database and is the recommended option for production environments. It provides durable storage, supports concurrent users, scales well, and ensures checkpoint data remains available even after application restarts or server failures.
 
-3. Nodes
+3. Nodes: Nodes are the actual work units.every node have a name and a function associate with them
 
-Nodes are the actual work units.every node have a name and a function associate with them
-
-Think of them as:Tasks
-Steps
-Workers
-4. Edges
-
-Edges connect nodes.
+4. Edges: Edges connect nodes.
 Entry Point (START)
 
 The starting point of a graph.
-Finish Point (END)
-
-Marks workflow completion.
-           START
-             ↓
-         Research
-             ↓
-         Summary
-             ↓
-         Review
-             ↓
-            END
-			
-			
-                 START
-                   |
-             Main Agent
-                   |
-         Conditional Router
-          /      |       \
-         /       |        \
-  Research   Analysis    Tool
-      \         |        /
-       \        |       /
-          Merge Results
-                 |
-            Validation
-            /       \
-       retry      success
-          |          |
-          └────► END
-		  
+Finish Point (END)		  
 		  
 APIs Used for Creating a Linear Workflow
-1. TypedDict
-
-TypedDict defines the structure of the shared state.
+1. TypedDict: TypedDict defines the structure of the shared state.
 
 The state is passed between all nodes.
-
+```python
 from typing import TypedDict
 
 class EmployeeState(TypedDict):
     name: str
     salary: float
+```
 	
-2. StateGraph
-
-StateGraph is the main builder class used to create LangGraph workflows.
+2. StateGraph: StateGraph is the main builder class used to create LangGraph workflows.
+```python
 builder = StateGraph(EmployeeState)
-3. START
-
-START is a special constant that marks where execution begins.
+```
+3. START: START is a special constant that marks where execution begins.
+```python
 builder.add_edge(
     START,
     "node1"
 )
+```
 4. END
 
 END marks the completion of the workflow.
+```python
 builder.add_edge(
     "node3",
     END
 )
+```
 
 Required Functions and Methods in LangGraph
 1. Node
@@ -2214,51 +2178,51 @@ Required Functions and Methods in LangGraph
 A Node is a Python function that performs a single task.
 
 A node:
-
-Receives the current state
-Processes data
-Returns updated state
+- Receives the current state
+- Processes data
+- Returns updated state
+```python
 def node1(state):
     return {
         "name": state["name"] + " Kumar"
     }
-
-2. add_node()
-
-Used to register a node in the graph.
+```
+2. add_node(): Used to register a node in the graph.
+```python
 builder.add_node(
     "node1",
     node1
 )
-3. add_edge()
-
-Used to connect nodes.
+```
+3. add_edge(): Used to connect nodes.
+```python
 builder.add_edge(
     "node1",
     "node2"
 )
-4. compile()
-
-Converts the graph definition into an executable workflow.
-
+```
+4. compile(): Converts the graph definition into an executable workflow.
 Without compile(), the graph cannot run.
+```python
 graph = builder.compile()
-5. invoke()
-
-Executes the graph.
+```
+5. invoke(): Executes the graph.
 
 It takes the initial state and returns the final state.
+```python
 result = graph.invoke(
     initial_state
 )
------------------------------------------------
+```
+---
 
-#linear state graph with sequential workflow
+## linear state graph with sequential workflow
 
 from IPython.display import Image, display
 from typing import TypedDict
 from langgraph.graph import StateGraph, START, END
 
+```python
 # Shared State
 class EmployeeState(TypedDict):
     name: str
@@ -2299,56 +2263,46 @@ result = graph.invoke(
 )
 
 print(result)
------------------------------------
-#langgraph conditional state graph workflow
+```
+---
+
+## langgraph conditional state graph workflow
 
 A Conditional Workflow in LangGraph dynamically selects the next node based on a condition or the current workflow state. This enables smart decision-making, ensures only relevant nodes are executed, and supports business rules efficiently.
 
 Benefits:
 
-Dynamic routing based on conditions
-Avoids unnecessary processing
-Supports business logic and rules
-Handles multiple execution paths in a single workflow
+- Dynamic routing based on conditions
+- Avoids unnecessary processing
+- Supports business logic and rules
+- Handles multiple execution paths in a single workflow
 
 Examples:
 
-Employee promotion approvals
-Tax calculation based on income
-Customer discount eligibility
+- Employee promotion approvals
+- Tax calculation based on income
+- Customer discount eligibility
 
 This makes workflows more flexible, efficient, and scalable.
 Parameters of add_conditional_edges()
 
-Source Node
+`Source Node`
 
 The node after which conditional routing is performed.
 
-Routing Function
+`Routing Function`
 
 Receives the current workflow state and returns a routing key based on the defined condition.
 
-Mapping Dictionary
+`Mapping Dictionary`
 
 Maps each routing key returned by the routing function to the corresponding next node (or END) in the workflow
 
 
-project 1:multi-agent recruitment workflow   (img -add)
-Start
-  ↓
-Experience Agent
-  ↓
-Skill Agent
-  ↓
-    Match ?
-   /      \
- Yes      No
-  ↓        ↓
-Schedule  Reject
-Interview  Application
-  ↓        ↓
-  End      End
-  
+## project : multi-agent recruitment workflow
+<img src="./img/multi_agent_workflow.jepg" alt="multi agent workflow" />
+
+```python  
 from typing import TypedDict
 from langgraph.graph import StateGraph,START, END
 
@@ -2419,6 +2373,7 @@ result = app.invoke({
 })
 
 print(result)
+```
 ---------------------
 
 # message graph
