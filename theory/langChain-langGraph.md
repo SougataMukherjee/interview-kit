@@ -2300,7 +2300,7 @@ Maps each routing key returned by the routing function to the corresponding next
 
 
 ## project : multi-agent recruitment workflow
-<img src="./img/multi_agent_workflow.jepg" alt="multi agent workflow" />
+<img src="./img/multi_agent_workflow.jpeg" alt="multi agent workflow" />
 
 ```python  
 from typing import TypedDict
