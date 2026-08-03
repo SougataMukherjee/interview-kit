@@ -2421,3 +2421,766 @@ result = app.invoke({
 print(result)
 ---------------------
 
+# message graph
+A MessageGraph is a LangGraph workflow where the entire state consists of messages.
+from dotenv import load_dotenv
+from IPython.display import Image, display
+import os
+
+from langchain_groq import ChatGroq
+from langchain_core.messages import HumanMessage, AIMessage
+from langgraph.graph import MessageGraph
+
+# Load environment variables
+load_dotenv()
+
+# Create Groq LLM
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="your_api_key"
+)
+
+# Node Function
+def chatbot(messages):
+    response = llm.invoke(messages)
+    return response
+
+# Create MessageGraph
+graph = MessageGraph()
+
+# Add node
+graph.add_node("chatbot", chatbot)
+
+# Set entry and finish points
+graph.set_entry_point("chatbot")
+graph.set_finish_point("chatbot")
+
+# Compile graph
+app = graph.compile()
+
+# Conversation History
+messages = [
+    AIMessage(content="Hello! How can I assist you today?"),
+    HumanMessage(content="I want to learn coding"),
+    AIMessage(content="That's great! What programming language are you interested in learning?"),
+    HumanMessage(content="I want to learn Python")
+]
+
+# Run Graph
+result = app.invoke(messages)
+display(Image(app.get_graph().draw_mermaid_png()))
+
+# Print Messages
+for msg in result:
+    msg.pretty_print()
+
+-------------------
+
+chatbot project image add
+--------------
+from typing import TypedDict, Annotated
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+
+from langchain_core.messages import BaseMessage, HumanMessage
+from langchain_groq import ChatGroq
+
+# -----------------------------
+# Define State
+# -----------------------------
+class ChatState(TypedDict):
+    messages: Annotated[list[BaseMessage], add_messages]
+
+# -----------------------------
+# Create Groq LLM
+# -----------------------------
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="your_api_key"
+)
+
+# -----------------------------
+# Define Node
+# -----------------------------
+def chat_node(state: ChatState):
+    messages = state["messages"]
+
+    response = llm.invoke(messages)
+
+    return {
+        "messages": [response]
+    }
+
+# -----------------------------
+# Build Graph
+# -----------------------------
+graph = StateGraph(ChatState)
+
+graph.add_node("chat_node", chat_node)
+
+graph.add_edge(START, "chat_node")
+graph.add_edge("chat_node", END)
+
+chatbot = graph.compile()
+
+# -----------------------------
+# Draw Graph
+# -----------------------------
+from IPython.display import Image, display
+
+display(Image(chatbot.get_graph().draw_mermaid_png()))
+
+# -----------------------------
+# Initial Invocation
+# -----------------------------
+initial_state = {
+    "messages": [
+        HumanMessage(
+            content="What is the national fruit of India?"
+        )
+    ]
+}
+
+response = chatbot.invoke(initial_state)
+
+print("AI:", response["messages"][-1].content)
+
+# -----------------------------
+# Chat Loop
+# -----------------------------
+while True:
+
+    user_message = input("Type here: ")
+
+    if user_message.lower() in [
+        "exit",
+        "quit",
+        "stop"
+    ]:
+        print("Chat ended.")
+        break
+
+    response = chatbot.invoke(
+        {
+            "messages": [
+                HumanMessage(content=user_message)
+            ]
+        }
+    )
+
+    print(
+        "AI:",
+        response["messages"][-1].content
+    )
+
+----------------
+memory
+---------
+Is  memory and Persistence are same?
+Not exactly, but they are closely related in LangGraph.
+
+Persistence is the broader concept: saving state/data so it survives across graph executions, interruptions, or application restarts.
+its refer to ability to save and restore the state of a workflow over time.
+Persistence in LangGraph is the mechanism used to save graph state across executions. Instead of storing only the final state, it saves snapshots of the state at intermediate steps called checkpoints. These checkpoints are typically stored in a database and are associated with a unique thread ID, which helps differentiate the state of individual workflow executions. Because the state is continuously checkpointed, LangGraph can recover from failures and resume execution from the last saved checkpoint, making applications fault tolerant. Persistence also enables features such as short-term memory, conversation continuity, Human-in-the-Loop (HITL) workflows, and time travel. In LangGraph, persistence is implemented through a Checkpointer, which manages thread-level state and checkpoints, while long-term memory across multiple threads can be maintained using a Store.
+
+
+Memory is a use case built on top of persistence: allowing the agent to remember conversation history, user preferences, facts, and context.
+
+Is Conversational Chain the Same as Memory?
+
+Not exactly, but they are closely related.
+
+Memory stores conversation history or important information from previous interactions.
+Conversational Chain uses that memory (along with tools and the LLM) to provide context-aware responses.
+
+What is a Conversational Chain?
+
+A Conversational Chain is a sequence of steps that enables an AI application to maintain context across multiple interactions and generate intelligent responses.
+
+Unlike a simple chain, it remembers previous messages and can interact with external tools.
+HumanMessage
+      ↓
+   AIMessage
+      ↓
+    Tool
+      ↓
+ ToolMessage
+      ↓
+   AIMessage
+   
+reAct
+--------------------------
+
+Definition of State Schema in LangGraph
+
+A State Schema in LangGraph is the blueprint or structure that defines the shared data flowing through all nodes in a workflow. It specifies the fields in the state, their data types, and the information that nodes can read and update during execution.
+
+The State Schema acts as a single source of truth, ensuring consistent data sharing, type safety, and smooth communication between workflow nodes.
+from typing import TypedDict
+
+class EmployeeState(TypedDict):
+    employee_name: str
+    experience: int
+    performance_rating: float
+    result: str
+In this example, the State Schema defines the data fields (employee_name, experience, performance_rating, and result) that can be accessed and updated throughout the workflow.
+Ways to Create a State Schema in LangGraph
+
+A State Schema defines the structure of the data shared across all nodes in a LangGraph workflow. LangGraph supports multiple ways to define the state schema.
+
+1. Using TypedDict (✅ Recommended)
+
+TypedDict is the most commonly used and preferred approach in LangGraph. It is lightweight, easy to define, and provides type checking without additional overhead.
+from typing import TypedDict
+
+class EmployeeState(TypedDict):
+    employee_name: str
+    experience: int
+    result: str
+Advantages:
+
+Simple and lightweight
+Easy to read and maintain
+Good type safety
+Best choice for most LangGraph workflows
+	
+2. Using dataclass
+
+A dataclass can be used when you want an object-oriented structure with default values and methods.
+from dataclasses import dataclass
+
+@dataclass
+class EmployeeState:
+    employee_name: str
+    experience: int
+    result: str = ""
+
+3. Using Pydantic BaseModel
+
+Pydantic provides built-in data validation and type enforcement, making it suitable for applications requiring strict validation.
+from pydantic import BaseModel
+
+class EmployeeState(BaseModel):
+    employee_name: str
+    experience: int
+    result: str = ""
+Advantages:
+
+Automatic validation
+Detailed error handling
+Strong type enforcement
+---------------------------------
+What is Annotated?
+
+Annotated is a type hint introduced in Python that allows you to attach additional metadata to a type without changing the actual type itself.
+
+The metadata can be used by frameworks such as LangGraph, FastAPI, and Pydantic to provide additional behavior or instructions.
+from typing import Annotated
+
+variable: Annotated[ActualType, Metadata]
+Why Does LangGraph Use Annotated?
+
+In LangGraph, Annotated is mainly used to define how state values should be merged or updated when multiple nodes return values for the same field.
+
+For example, if several nodes update a messages field, LangGraph needs to know whether to:
+
+Replace the existing value
+Append new values
+Merge values together
+
+Annotated provides these merging instructions.
+
+from typing import TypedDict, Annotated
+from operator import add
+from langgraph.graph import StateGraph, START, END
+
+class State(TypedDict):
+    messages: Annotated[list[str], add]
+
+def node1(state):
+    return {"messages": ["Hello"]}
+
+def node2(state):
+    return {"messages": ["Welcome"]}
+
+graph = StateGraph(State)
+
+graph.add_node("node1", node1)
+graph.add_node("node2", node2)
+
+graph.add_edge(START, "node1")
+graph.add_edge("node1", "node2")
+graph.add_edge("node2", END)
+
+app = graph.compile()
+
+result = app.invoke({"messages": []})
+
+print(result)
+{
+    "messages": ["Hello", "Welcome"]
+}
+
+----------------------------
+What is State?
+
+A State is the shared memory used by a LangGraph workflow. It contains the data that flows between nodes during graph execution.
+In LangGraph, the state is mutable and is typically defined as a TypedDict. Before creating the graph, define the state schema and initialize it with key-value pairs (data points). The nodes can then read from and update the shared state throughout the graph execution.
+
+Each node can:
+
+Read the current state
+Update the state
+Pass the updated state to the next node
+
+The state acts as a single source of truth for the entire workflow.
+from typing import TypedDict
+
+class ChatState(TypedDict):
+    messages: list
+-------------------------------
+What is a Reducer?
+
+A Reducer defines how LangGraph updates a state field when multiple nodes return values for the same field.
+
+By default, LangGraph replaces the old value with the new value. A reducer allows you to customize this behavior, such as appending or merging values.
+
+from typing import TypedDict, Annotated
+from langgraph.graph.message import add_messages
+
+class ChatState(TypedDict):
+    messages: Annotated[list, add_messages]
+	
+from typing import TypedDict, Annotated
+from operator import add
+
+class State(TypedDict):
+    tasks: Annotated[list[str], add]
+
+from typing import TypedDict, Annotated
+from operator import add
+
+class State(TypedDict):
+    total_sales: Annotated[int, add]
+----------------------------------
+add
+What is @tool Decorator?
+from langchain_core.tools import tool
+
+@tool
+def add(a: int, b: int) -> int:
+    """
+    Add a and b
+
+    Args:
+        a (int): first number
+        b (int): second number
+
+    Returns:
+        int: the sum
+    """
+    return a + b
+
+print(add.invoke({
+    "a": 10,
+    "b": 5
+}))
+
+
+from langchain_core.tools import tool
+
+@tool
+def employee_info(name: str, age: int) -> str:
+    """Return employee information"""
+    return f"{name} is {age} years old"
+
+result = employee_info.invoke({
+    "name": "Sougata",
+    "age": 30
+})
+
+print(result)
+
+
+
+----------------------------
+What is ToolNode?
+
+ToolNode is a built-in LangGraph node responsible for executing tool calls generated by an LLM (Large Language Model).
+
+When the LLM decides that a tool is needed, it creates a tool call. The ToolNode receives that request, executes the corresponding tool, and returns the result to the workflow.
+{
+    "tool_calls": [
+        {
+            "name": "get_leave_balance",
+            "args": {
+                "employee_id": "EMP101"
+            }
+        }
+    ]
+}
+What Are Tools?
+Tools are Python functions that allow the AI to interact with external systems.
+Tools can be integrated with LLM models to interact with external systems. External systems can be APIs, third-party tools, or custom tools.
+When a user asks a question, the model decides whether to use a tool based on the user's request. The tool returns an output that matches its defined schema.
+Purpose of AI Tools
+Give the chatbot capabilities beyond its training data.
+Why Do We Need Them?
+LLMs cannot reliably provide current or real-time information.
+Check current weather.
+Calculate payroll.
+Database query.
+Call APIs.
+Read real-time data.
+Tools solve this problem
+
+execution flow
+User Question
+      ↓
+Chat Model
+      ↓
+Tool Call
+      ↓
+ToolNode
+      ↓
+Tool Execution
+      ↓
+Tool Result
+      ↓
+Chat Model
+      ↓
+Final Response
+
+from langchain_groq import ChatGroq
+from langchain_core.tools import tool
+from langchain_core.messages import HumanMessage
+
+@tool
+def add(x: float, y: float) -> float:
+    """Add x and y."""
+    return x + y
+
+@tool
+def subtract(x: float, y: float) -> float:
+    """Subtract x from y."""
+    return y - x
+
+@tool
+def multiply(x: float, y: float) -> float:
+    """Multiply x and y."""
+    return x * y
+
+@tool
+def exponentiate(x: float, y: float) -> float:
+    """Raise x to the power of y."""
+    return x ** y
+
+# Groq LLM
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0,
+    api_key="YOUR_GROQ_API_KEY"
+)
+
+# Bind tools
+llm_with_tools = llm.bind_tools(
+    [add, subtract, multiply, exponentiate]
+)
+
+# Invoke model
+response = llm_with_tools.invoke(
+    [
+        HumanMessage(
+            content="What is 15 multiplied by 8?"
+        )
+    ]
+)
+
+print(response)
+print(response.tool_calls)
+--------------------------
+What is tools_condition?
+
+tools_condition is a prebuilt routing function in LangGraph that checks whether the latest AI response contains any tool calls.
+
+Based on the result, it decides whether the workflow should continue to the ToolNode or end.
+it checks
+YES → Route/go to ToolNode
+NO → End the workflow
+AI Response
+      ↓
+tools_condition
+      ↓
+ ┌─────────────┐
+ │ Tool Calls? │
+ └─────────────┘
+      ↓
+  Yes     No
+   ↓       ↓
+ToolNode   END
+graph.add_conditional_edges(
+    "chatbot",
+    tools_condition
+)
+-----------
+What is Streaming?
+
+In LLMs, streaming means the model starts sending tokens (words) as soon as they are generated, instead of waiting for the entire response to be completed before returning it.
+
+Why Streaming?
+Faster response time resulting in lower drop-off rates.
+Mimics human-like conversation, which builds trust, feels more natural, and keeps users engaged.
+Important for multi-modal UIs where different types of outputs may be displayed progressively.
+Better user experience for long outputs, such as code generation or lengthy explanations.
+Users can cancel the response midway, saving tokens and reducing costs.
+Allows real-time UI updates, such as displaying "thinking...", showing tool execution results, or updating progress dynamically.
+
+| Feature         | Streaming                              | Async                                   |
+| --------------- | -------------------------------------- | --------------------------------------- |
+| Purpose         | Return results gradually               | Run tasks without blocking              |
+| Focus           | Output delivery                        | Task execution                          |
+| User Experience | See data immediately                   | Don't wait for other tasks              |
+| Example         | ChatGPT typing response token by token | Multiple API calls running concurrently |
+| Keyword         | `stream()`                             | `async/await`                           |
+| Benefit         | Faster perceived response              | Better throughput and scalability       |
+
+
+In LangGraph, instead of using graph.invoke(), we can use graph.stream() to receive the output incrementally. The stream() method takes the initial state and configuration (such as thread_id) as input and returns a generator object. As the graph executes, the generator yields updates based on the specified stream_mode (for example, "messages" for token-by-token message streaming). We can iterate over this generator using a for loop to process and display outputs in real time. Streaming improves responsiveness because users can see results as they are generated rather than waiting for the entire graph execution to complete.
+from langchain_groq import ChatGroq
+
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0.7,
+    api_key="YOUR_GROQ_API_KEY"
+)
+
+for chunk in llm.stream(
+    "Write a 20-line paragraph about Artificial Intelligence.",
+    config={
+        "run_name": "ai_paragraph_stream",
+        "tags": ["demo", "streaming"],
+        "metadata": {
+            "source": "groq"
+        }
+    }
+):
+    print(chunk.content, end="", flush=True)
+
+A common approach is to create the thread_id when the user starts a chat session and store it in the frontend session storage
+
+---------------
+What is LangSmith?
+
+LangSmith is an observability, debugging, monitoring, and evaluation platform for LLM applications. It helps developers understand how their LLM applications behave by capturing and visualizing the complete execution flow of agents, chains, tools, and models. LangSmith is used to debug issues, monitor performance, analyze costs and latency, evaluate application quality, and improve AI systems in production.
+What Does LangSmith Trace?
+
+LangSmith traces every step of an LLM application's execution. A trace records the sequence of operations performed for a single user request, including LLM calls, tool invocations, retrieval operations, prompt formatting steps, agent decisions, inputs, outputs, execution time, costs, errors, and metadata. This allows developers to inspect exactly what happened during execution and identify the root cause of failures or unexpected responses
+
+	--------------------
+Output refinement in LangGraph
+
+Method 1: Return Only Final Answer
+{
+  "messages": [...],
+  "documents": [...],
+  "retrieved_chunks": [...],
+  "tool_calls": [...],
+  "metadata": {...},
+  "final_answer": "The capital of France is Paris."
+}
+
+def format_response(state):
+    return {
+        "response": state["final_answer"]
+    }
+Method 2: Use a Dedicated Formatting Node
+def formatter(state):
+    return {
+        "output": state["messages"][-1].content
+    }
+Method 3: Structured Output
+{
+  "name": "John",
+  "age": 25,
+  "skills": ["Python", "React"]
+}
+return {
+    "name": result["name"],
+    "skills": result["skills"]
+}
+-------------
+What are AI Agents?
+AI agents are intelligent software systems that can understand a goal, make decisions, use tools, perform actions, and complete tasks with minimal human intervention.
+Unlike a traditional LLM that mainly generates text, an AI agent can reason, plan, interact with external systems, and execute tasks to achieve a goal.
+Components of an AI Agent
+1. LLM (Brain)
+Understands the user's request.
+Reasons about the problem.
+Decides what action to take next.
+Generates responses and tool calls.
+2. Memory
+Stores previous interactions and conversation history.
+Maintains context across multiple user requests.
+Helps the agent remember important information.
+3. Tools
+Provide access to external capabilities.
+Examples:
+Web Search
+Databases
+APIs
+Calculators
+File Systems
+Email Services
+4. Planning
+Breaks a complex task into smaller steps.
+Determines the sequence of actions needed to achieve a goal.
+Chooses the appropriate tools for each step.
+5. Execution
+Performs actions using selected tools.
+Executes API calls, database queries, searches, calculations, etc.
+Returns results to the LLM for generating the final response.
+----------------
+| Feature                  | Tavily      | DuckDuckGo   |
+| ------------------------ | ----------- | ------------ |
+| Web Search               | ✅           | ✅            |
+| Designed for AI Agents   | ✅ Yes       | ❌ No         |
+| Optimized Search Results | ✅           | ❌            |
+| Content Extraction       | ✅           | Limited      |
+| AI-Friendly JSON Output  | ✅           | Limited      |
+| Citations/Sources        | ✅           | ✅            |
+| Requires API Key         | ✅           | ❌ Usually No |
+| LangGraph Agent Usage    | Very Common | Common       |
+
+-----------------
+What is a ReAct Agent?
+ReAct stands for Reason + Act.
+A ReAct Agent is an AI agent that alternates between reasoning about a problem and taking actions (using tools) until it reaches the final answer.
+Instead of Immediately Answering, the Agent:
+Thinks about what to do.
+Uses a tool if needed.
+Observes the tool's output.
+Reasons again.
+Repeats until it can provide the final answer.
+Why is it Called ReAct?
+Reason
+Decide the next step.
+Analyze the user's request.
+Determine whether a tool is needed.
+Act
+Execute a tool or perform an action.
+Query a database, API, calculator, search engine, etc.
+Observe
+Review the tool's output.
+Collect information returned by the tool.
+Repeat
+Continue the cycle until the task is complete.
+
+Key Points
+Reason
+The LLM decides what to do next.
+Act
+The agent executes a tool when needed.
+Observe
+The agent reviews the tool's output.
+Repeat
+The cycle continues until enough information is gathered.
+Final Answer
+The LLM combines reasoning and tool results to produce the response.
+Advantages of ReAct Agents
+Better handling of complex, multi-step tasks.
+Can combine information from multiple tools.
+More reliable because decisions are based on tool outputs.
+Reduces hallucinations by using external data.
+
+
+def get_conversation_history(conversation_id: str) -> list[dict]:
+    conn = get_connection()
+    rows = conn.execute(
+        "SELECT role, content, created_at FROM messages WHERE conversation_id = ? ORDER BY id",
+        (conversation_id,),
+    ).fetchall()
+    conn.close()
+    return [{"role": r["role"], "content": r["content"], "created_at": r["created_at"]} for r in rows]
+
+
+
+transformer architecture
+If you're learning Transformer Architecture and want to relate it to LangChain concepts, think of a Transformer as the "brain" and LangChain as the "orchestrator" that uses that brain along with tools, memory, and workflows.
+Input Text
+    |
+Tokenization
+    |
+Embedding
+    |
+Self-Attention
+    |
+Feed Forward Network
+    |
+Output Representation
+
+--------------------------
+1. What is Fine-Tuning?
+
+Fine-tuning means training a pre-trained LLM on your own data so it learns new patterns, styles, or domain knowledge.
+Types of Fine-Tuning
+A. Full Fine-Tuning
+
+All model parameters are updated.
+7 Billion Parameters
+      ↓
+All Updated
+
+B. Instruction Fine-Tuning (SFT)
+
+Most common in GenAI projects.
+train model using
+{
+  "instruction": "Summarize text",
+  "input": "LangChain provides...",
+  "output": "LangChain is a framework..."
+}
+C. LoRA (Low Rank Adaptation)
+
+Most popular optimization strategy.
+-------------------------------------
+
+supervice unsuperviced learning
+
+Machine Learning
+    |
+    +---- Supervised Learning
+    |
+    +---- Unsupervised Learning
+	
+	1. Supervised Learning
+
+In supervised learning, the model learns from labeled data.
+
+2. Unsupervised Learning
+
+In unsupervised learning, there are no labels.
+---------------------------------------
+
+vector database
+A Vector Database stores embeddings (vectors) instead of storing only plain text.
+
+| Feature               | Traditional DB  | Vector DB         |
+| --------------------- | --------------- | ----------------- |
+| Search Type           | Exact Match     | Semantic Search   |
+| Data Stored           | Rows/Columns    | Embeddings        |
+| Use Case              | Transactions    | AI Search         |
+| Query                 | SQL             | Similarity Search |
+| Meaning Understanding | No              | Yes               |
+| Best For              | Banking, Orders | RAG, Chatbots     |
+
+popular vector database
+| Vector DB       | Best For                       |
+| --------------- | ------------------------------ |
+| FAISS           | Local development              |
+| Chroma          | Small to medium RAG projects   |
+| Pinecone        | Managed cloud vector DB        |
+| Weaviate        | Enterprise AI search           |
+| Milvus          | Large-scale vector search      |
+| Qdrant          | Fast open-source vector DB     |
+| Azure AI Search | Enterprise Microsoft ecosystem |
+
