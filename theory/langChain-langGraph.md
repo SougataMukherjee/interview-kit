@@ -2600,6 +2600,8 @@ for msg in result:
 
 ## chatbot project
 
+<img src="./img/chat_bot.jpeg" alt="chat_bot" />
+
 ```python
 from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, START, END
