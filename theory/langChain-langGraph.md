@@ -2065,5 +2065,359 @@ It helps build:
 - LangChain provides:LLMs, Prompts, Tools, Memory
 ---
 
+## what problem of langchain has ben covered by langgraph?
 
+LangChain is great for prompts, tools, and basic agents, but it struggles when workflows become complex.
+
+LangGraph solves these problems:
+
+✅ State Management: Share data across multiple steps.
+✅ Memory: Remember previous interactions using checkpoints.
+✅ Conditional Routing: Easy branching (if/else flows).
+✅ Multi-Agent Workflows: Multiple agents work together.
+✅ Checkpointing: Resume from failures instead of restarting.
+✅ Human-in-the-Loop: Pause for approval and continue later.
+
+---
+
+## Features Added by LangGraph
+
+`1. Stateful Workflows`
+
+The application can remember information as it moves through the workflow.
+
+`2. Cyclic Graphs (Loops)`
+
+LangGraph can repeat steps.
+
+`3. Agent Orchestration`
+
+Multiple agents can collaborate.
+
+---
+
+## Core Concepts of LangGraph
+
+1. Graph
+
+A Graph is the complete workflow.
+it contains nodes and edges
+
+2. State
+
+State is shared memory.
+
+Each node can:
+
+- Read data
+- Update data
+```
+state = {
+    "question": "What is AI?",
+    "answer": ""
+}
+```
+## How to preserve state between invocations?
+
+You need Memory / Checkpointing.
+A checkpoint is a snapshot of the graph's state at a specific point during execution. Instead of saving only the final output, LangGraph saves state values at intermediate steps, allowing the workflow to resume from the last saved checkpoint if a failure occurs.
+
+### InMemorySaver vs SqliteSaver vs PostgresSaver
+
+`InMemorySaver` stores checkpoints in the application's memory (RAM). It is fast and simple, making it ideal for learning, testing, and local development. However, all checkpoints are lost when the application stops or restarts.
+
+`SqliteSaver` stores checkpoints in a local SQLite database file. Unlike InMemorySaver, the data persists across application restarts. It is suitable for local development, prototypes, and small-scale applications where a lightweight persistent database is sufficient.
+
+`PostgresSaver` stores checkpoints in a PostgreSQL database and is the recommended option for production environments. It provides durable storage, supports concurrent users, scales well, and ensures checkpoint data remains available even after application restarts or server failures.
+
+3. Nodes
+
+Nodes are the actual work units.every node have a name and a function associate with them
+
+Think of them as:Tasks
+Steps
+Workers
+4. Edges
+
+Edges connect nodes.
+Entry Point (START)
+
+The starting point of a graph.
+Finish Point (END)
+
+Marks workflow completion.
+           START
+             ↓
+         Research
+             ↓
+         Summary
+             ↓
+         Review
+             ↓
+            END
+			
+			
+                 START
+                   |
+             Main Agent
+                   |
+         Conditional Router
+          /      |       \
+         /       |        \
+  Research   Analysis    Tool
+      \         |        /
+       \        |       /
+          Merge Results
+                 |
+            Validation
+            /       \
+       retry      success
+          |          |
+          └────► END
+		  
+		  
+APIs Used for Creating a Linear Workflow
+1. TypedDict
+
+TypedDict defines the structure of the shared state.
+
+The state is passed between all nodes.
+
+from typing import TypedDict
+
+class EmployeeState(TypedDict):
+    name: str
+    salary: float
+	
+2. StateGraph
+
+StateGraph is the main builder class used to create LangGraph workflows.
+builder = StateGraph(EmployeeState)
+3. START
+
+START is a special constant that marks where execution begins.
+builder.add_edge(
+    START,
+    "node1"
+)
+4. END
+
+END marks the completion of the workflow.
+builder.add_edge(
+    "node3",
+    END
+)
+
+Required Functions and Methods in LangGraph
+1. Node
+
+A Node is a Python function that performs a single task.
+
+A node:
+
+Receives the current state
+Processes data
+Returns updated state
+def node1(state):
+    return {
+        "name": state["name"] + " Kumar"
+    }
+
+2. add_node()
+
+Used to register a node in the graph.
+builder.add_node(
+    "node1",
+    node1
+)
+3. add_edge()
+
+Used to connect nodes.
+builder.add_edge(
+    "node1",
+    "node2"
+)
+4. compile()
+
+Converts the graph definition into an executable workflow.
+
+Without compile(), the graph cannot run.
+graph = builder.compile()
+5. invoke()
+
+Executes the graph.
+
+It takes the initial state and returns the final state.
+result = graph.invoke(
+    initial_state
+)
+-----------------------------------------------
+
+#linear state graph with sequential workflow
+
+from IPython.display import Image, display
+from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+
+# Shared State
+class EmployeeState(TypedDict):
+    name: str
+    salary: int
+    bonus: int
+
+# Node 1
+def add_bonus(state):
+    state["bonus"] = 5000
+    return state
+
+# Node 2
+def calculate_salary(state):
+    state["salary"] += state["bonus"]
+    return state
+
+# Create Graph
+builder = StateGraph(EmployeeState)
+
+builder.add_node("bonus", add_bonus)
+builder.add_node("salary", calculate_salary)
+
+builder.add_edge(START, "bonus")
+builder.add_edge("bonus", "salary")
+builder.add_edge("salary", END)
+builder.compile()
+
+# Compile Graph
+graph = builder.compile()
+
+# Execute Graph
+result = graph.invoke(
+    {
+        "name": "SAM",
+        "salary": 50000,
+        "bonus": 0
+    }
+)
+
+print(result)
+-----------------------------------
+#langgraph conditional state graph workflow
+
+A Conditional Workflow in LangGraph dynamically selects the next node based on a condition or the current workflow state. This enables smart decision-making, ensures only relevant nodes are executed, and supports business rules efficiently.
+
+Benefits:
+
+Dynamic routing based on conditions
+Avoids unnecessary processing
+Supports business logic and rules
+Handles multiple execution paths in a single workflow
+
+Examples:
+
+Employee promotion approvals
+Tax calculation based on income
+Customer discount eligibility
+
+This makes workflows more flexible, efficient, and scalable.
+Parameters of add_conditional_edges()
+
+Source Node
+
+The node after which conditional routing is performed.
+
+Routing Function
+
+Receives the current workflow state and returns a routing key based on the defined condition.
+
+Mapping Dictionary
+
+Maps each routing key returned by the routing function to the corresponding next node (or END) in the workflow
+
+
+project 1:multi-agent recruitment workflow   (img -add)
+Start
+  ↓
+Experience Agent
+  ↓
+Skill Agent
+  ↓
+    Match ?
+   /      \
+ Yes      No
+  ↓        ↓
+Schedule  Reject
+Interview  Application
+  ↓        ↓
+  End      End
+  
+from typing import TypedDict
+from langgraph.graph import StateGraph,START, END
+
+# State
+class State(TypedDict):
+    experience: int
+    skill_match: str
+    result: str
+
+# Agent/node 1: Categorize Experience
+def categorize_experience(state: State):
+    level = "Experienced" if state["experience"] >= 3 else "Fresher"
+    print("Experience:", level)
+    return {}
+
+# Agent/node 2: Check Skill
+def check_skill(state: State):
+    print("Skill Match:", state["skill_match"])
+    return {}
+
+# Agent/node 3: Schedule Interview
+def schedule_interview(state: State):
+    print("Interview Scheduled")
+    return {"result": "Selected"}
+
+# Agent/node 4: Reject Candidate
+def reject_candidate(state: State):
+    print("Candidate Rejected")
+    return {"result": "Rejected"}
+
+# Router function
+def route(state: State):
+    if state["skill_match"] == "Match":
+        return "schedule_interview"
+    return "reject_candidate"
+
+# Graph
+graph = StateGraph(State)
+
+graph.add_node("categorize_experience", categorize_experience)
+graph.add_node("check_skill", check_skill)
+graph.add_node("schedule_interview", schedule_interview)
+graph.add_node("reject_candidate", reject_candidate)
+
+graph.add_edge(START, "check_skill")
+
+graph.add_conditional_edges(
+    "check_skill",
+    route,
+    {
+        "schedule_interview": "schedule_interview",
+        "reject_candidate": "reject_candidate",
+    },
+)
+
+graph.add_edge("schedule_interview", END)
+graph.add_edge("reject_candidate", END)
+
+app = graph.compile()
+
+#visualize the graph
+display(Image(graph.get_graph().draw_mermaid_png()))
+
+# Run
+result = app.invoke({
+    "experience": 5,
+    "skill_match": "Match"
+})
+
+print(result)
+---------------------
 
