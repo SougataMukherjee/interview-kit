@@ -2542,7 +2542,7 @@ print(result)
 
 A MessageGraph is a LangGraph workflow where the entire state consists of messages.
 
-<img src="./img/message_graph.jpeg" alt="message_graph" />
+<img src="./img/chatbot.jpeg" alt="message_graph" />
 
 ```python
 from dotenv import load_dotenv
@@ -2600,7 +2600,7 @@ for msg in result:
 
 ## chatbot project
 
-<img src="./img/chatbot.jpeg" alt="chat_bot" />
+<img src="./img/message_graph.jpeg" alt="chat_bot" />
 
 ```python
 from typing import TypedDict, Annotated
