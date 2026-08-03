@@ -2537,42 +2537,34 @@ while True:
 
 ---
 
-memory
----------
-Is  memory and Persistence are same?
+## memory
+
+**Is  memory and Persistence are same?**
+
 Not exactly, but they are closely related in LangGraph.
 
-Persistence is the broader concept: saving state/data so it survives across graph executions, interruptions, or application restarts.
+`Persistence is the broader concept:` saving state/data so it survives across graph executions, interruptions, or application restarts.
 its refer to ability to save and restore the state of a workflow over time.
 Persistence in LangGraph is the mechanism used to save graph state across executions. Instead of storing only the final state, it saves snapshots of the state at intermediate steps called checkpoints. These checkpoints are typically stored in a database and are associated with a unique thread ID, which helps differentiate the state of individual workflow executions. Because the state is continuously checkpointed, LangGraph can recover from failures and resume execution from the last saved checkpoint, making applications fault tolerant. Persistence also enables features such as short-term memory, conversation continuity, Human-in-the-Loop (HITL) workflows, and time travel. In LangGraph, persistence is implemented through a Checkpointer, which manages thread-level state and checkpoints, while long-term memory across multiple threads can be maintained using a Store.
 
 
-Memory is a use case built on top of persistence: allowing the agent to remember conversation history, user preferences, facts, and context.
+`Memory` is a use case built on top of persistence: allowing the agent to remember conversation history, user preferences, facts, and context.
 
-Is Conversational Chain the Same as Memory?
+**Is Conversational Chain the Same as Memory?**
 
 Not exactly, but they are closely related.
 
 Memory stores conversation history or important information from previous interactions.
+
 Conversational Chain uses that memory (along with tools and the LLM) to provide context-aware responses.
 
-What is a Conversational Chain?
+**What is a Conversational Chain?**
 
 A Conversational Chain is a sequence of steps that enables an AI application to maintain context across multiple interactions and generate intelligent responses.
 
 Unlike a simple chain, it remembers previous messages and can interact with external tools.
-HumanMessage
-      ↓
-   AIMessage
-      ↓
-    Tool
-      ↓
- ToolMessage
-      ↓
-   AIMessage
    
-reAct
---------------------------
+## reAct
 
 Definition of State Schema in LangGraph
 
@@ -2581,12 +2573,16 @@ A State Schema in LangGraph is the blueprint or structure that defines the share
 The State Schema acts as a single source of truth, ensuring consistent data sharing, type safety, and smooth communication between workflow nodes.
 from typing import TypedDict
 
+```python
 class EmployeeState(TypedDict):
     employee_name: str
     experience: int
     performance_rating: float
     result: str
+```
+
 In this example, the State Schema defines the data fields (employee_name, experience, performance_rating, and result) that can be accessed and updated throughout the workflow.
+
 Ways to Create a State Schema in LangGraph
 
 A State Schema defines the structure of the data shared across all nodes in a LangGraph workflow. LangGraph supports multiple ways to define the state schema.
@@ -2594,65 +2590,66 @@ A State Schema defines the structure of the data shared across all nodes in a La
 1. Using TypedDict (✅ Recommended)
 
 TypedDict is the most commonly used and preferred approach in LangGraph. It is lightweight, easy to define, and provides type checking without additional overhead.
+```python
 from typing import TypedDict
 
 class EmployeeState(TypedDict):
     employee_name: str
     experience: int
     result: str
-Advantages:
+```
+**Advantages:**
 
-Simple and lightweight
-Easy to read and maintain
-Good type safety
-Best choice for most LangGraph workflows
+- Simple and lightweight
+- Easy to read and maintain
+- Good type safety
+- Best choice for most LangGraph workflows
 	
-2. Using dataclass
-
-A dataclass can be used when you want an object-oriented structure with default values and methods.
+2. Using dataclass: A dataclass can be used when you want an object-oriented structure with default values and methods.
 from dataclasses import dataclass
 
+```python
 @dataclass
 class EmployeeState:
     employee_name: str
     experience: int
     result: str = ""
+```
 
 3. Using Pydantic BaseModel
 
 Pydantic provides built-in data validation and type enforcement, making it suitable for applications requiring strict validation.
+```python
 from pydantic import BaseModel
 
 class EmployeeState(BaseModel):
     employee_name: str
     experience: int
     result: str = ""
+```
 Advantages:
+- Automatic validation
+- Detailed error handling
+- Strong type enforcement
+---
 
-Automatic validation
-Detailed error handling
-Strong type enforcement
----------------------------------
-What is Annotated?
+## What is Annotated?
 
 Annotated is a type hint introduced in Python that allows you to attach additional metadata to a type without changing the actual type itself.
 
 The metadata can be used by frameworks such as LangGraph, FastAPI, and Pydantic to provide additional behavior or instructions.
-from typing import Annotated
 
-variable: Annotated[ActualType, Metadata]
-Why Does LangGraph Use Annotated?
+### Why Does LangGraph Use Annotated?
 
 In LangGraph, Annotated is mainly used to define how state values should be merged or updated when multiple nodes return values for the same field.
 
 For example, if several nodes update a messages field, LangGraph needs to know whether to:
 
-Replace the existing value
-Append new values
-Merge values together
+- Replace the existing value
+- Append new values
+- Merge values together
 
-Annotated provides these merging instructions.
-
+```python
 from typing import TypedDict, Annotated
 from operator import add
 from langgraph.graph import StateGraph, START, END
@@ -2683,31 +2680,37 @@ print(result)
 {
     "messages": ["Hello", "Welcome"]
 }
+```
+---
 
-----------------------------
-What is State?
+## What is State?
 
 A State is the shared memory used by a LangGraph workflow. It contains the data that flows between nodes during graph execution.
+
 In LangGraph, the state is mutable and is typically defined as a TypedDict. Before creating the graph, define the state schema and initialize it with key-value pairs (data points). The nodes can then read from and update the shared state throughout the graph execution.
 
-Each node can:
+`Each node can:`
 
-Read the current state
-Update the state
-Pass the updated state to the next node
+- Read the current state
+- Update the state
+- Pass the updated state to the next node
 
 The state acts as a single source of truth for the entire workflow.
+```python
 from typing import TypedDict
 
 class ChatState(TypedDict):
     messages: list
--------------------------------
-What is a Reducer?
+```
+---
+
+## What is a Reducer?
 
 A Reducer defines how LangGraph updates a state field when multiple nodes return values for the same field.
 
 By default, LangGraph replaces the old value with the new value. A reducer allows you to customize this behavior, such as appending or merging values.
 
+```python
 from typing import TypedDict, Annotated
 from langgraph.graph.message import add_messages
 
@@ -2725,7 +2728,8 @@ from operator import add
 
 class State(TypedDict):
     total_sales: Annotated[int, add]
-----------------------------------
+```
+---
 add
 What is @tool Decorator?
 from langchain_core.tools import tool
@@ -2766,8 +2770,8 @@ print(result)
 
 
 
-----------------------------
-What is ToolNode?
+---
+## What is ToolNode?
 
 ToolNode is a built-in LangGraph node responsible for executing tool calls generated by an LLM (Large Language Model).
 
