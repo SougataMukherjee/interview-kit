@@ -861,6 +861,61 @@ result = agent.invoke(
 print(result)
 ```
 
+## What Are Tools?
+
+Tools are Python functions that allow the AI to interact with external systems.
+Tools can be integrated with LLM models to interact with external systems. External systems can be APIs, third-party tools, or custom tools.
+When a user asks a question, the model decides whether to use a tool based on the user's request. The tool returns an output that matches its defined schema.
+
+```python
+from langchain_groq import ChatGroq
+from langchain_core.tools import tool
+from langchain_core.messages import HumanMessage
+
+@tool
+def add(x: float, y: float) -> float:
+    """Add x and y."""
+    return x + y
+
+@tool
+def subtract(x: float, y: float) -> float:
+    """Subtract x from y."""
+    return y - x
+
+@tool
+def multiply(x: float, y: float) -> float:
+    """Multiply x and y."""
+    return x * y
+
+@tool
+def exponentiate(x: float, y: float) -> float:
+    """Raise x to the power of y."""
+    return x ** y
+
+# Groq LLM
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0,
+    api_key="YOUR_GROQ_API_KEY"
+)
+
+# Bind tools
+llm_with_tools = llm.bind_tools(
+    [add, subtract, multiply, exponentiate]
+)
+
+# Invoke model
+response = llm_with_tools.invoke(
+    [
+        HumanMessage(
+            content="What is 15 multiplied by 8?"
+        )
+    ]
+)
+
+print(response)
+print(response.tool_calls)
+```
 ---
 
 ## Q17.What is vector store? Why Use a Vector DB?
@@ -889,6 +944,14 @@ vectorstore = Chroma.from_texts(
     embedding
 )
 ```
+| Feature               | Traditional DB  | Vector DB         |
+| --------------------- | --------------- | ----------------- |
+| Search Type           | Exact Match     | Semantic Search   |
+| Data Stored           | Rows/Columns    | Embeddings        |
+| Use Case              | Transactions    | AI Search         |
+| Query                 | SQL             | Similarity Search |
+| Meaning Understanding | No              | Yes               |
+| Best For              | Banking, Orders | RAG, Chatbots     |
 
 ---
 ## Q17.1. What is Chroma?
@@ -1926,6 +1989,7 @@ Take Action
 
 @tool converts a normal Python function into a LangChain Tool.
 ```python
+#exp 1
 from langchain_core.tools import tool
 
 @tool
@@ -1939,6 +2003,44 @@ result = multiply.invoke({
 })
 
 print(result)
+
+#exp 2
+from langchain_core.tools import tool
+
+@tool
+def add(a: int, b: int) -> int:
+    """
+    Add a and b
+
+    Args:
+        a (int): first number
+        b (int): second number
+
+    Returns:
+        int: the sum
+    """
+    return a + b
+
+print(add.invoke({
+    "a": 10,
+    "b": 5
+}))
+
+#exp 3
+from langchain_core.tools import tool
+
+@tool
+def employee_info(name: str, age: int) -> str:
+    """Return employee information"""
+    return f"{name} is {age} years old"
+
+result = employee_info.invoke({
+    "name": "Sougata",
+    "age": 30
+})
+
+print(result)
+
 ```
 Now LangChain can expose it to the LLM.
 
@@ -1990,14 +2092,53 @@ llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
 
 ## Q33. What is Streaming in LangChain?
 
-**Answer**
-
 📝 Streaming returns the model's output token-by-token as it's generated, instead of waiting for the full response — useful for chat UIs.
+What is Streaming?
 
+In LLMs, streaming means the model starts sending tokens (words) as soon as they are generated, instead of waiting for the entire response to be completed before returning it.
+
+**Why Streaming?**
+
+- Faster response time resulting in lower drop-off rates.
+- Mimics human-like conversation, which builds trust, feels more natural, and keeps users engaged.
+- Important for multi-modal UIs where different types of outputs may be displayed progressively.
+- Better user experience for long outputs, such as code generation or lengthy explanations.
+- Users can cancel the response midway, saving tokens and reducing costs.
+Allows real-time UI updates, such as displaying "thinking...", showing tool execution results, or updating progress dynamically.
+
+| Feature         | Streaming                              | Async                                   |
+| --------------- | -------------------------------------- | --------------------------------------- |
+| Purpose         | Return results gradually               | Run tasks without blocking              |
+| Focus           | Output delivery                        | Task execution                          |
+| User Experience | See data immediately                   | Don't wait for other tasks              |
+| Example         | ChatGPT typing response token by token | Multiple API calls running concurrently |
+| Keyword         | `stream()`                             | `async/await`                           |
+| Benefit         | Faster perceived response              | Better throughput and scalability       |
+
+
+In LangGraph, instead of using graph.invoke(), we can use graph.stream() to receive the output incrementally. The stream() method takes the initial state and configuration (such as thread_id) as input and returns a generator object. As the graph executes, the generator yields updates based on the specified stream_mode (for example, "messages" for token-by-token message streaming). We can iterate over this generator using a for loop to process and display outputs in real time. Streaming improves responsiveness because users can see results as they are generated rather than waiting for the entire graph execution to complete.
+from langchain_groq import ChatGroq
 ```python
-for chunk in llm.stream("Tell me a story"):
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    temperature=0.7,
+    api_key="YOUR_GROQ_API_KEY"
+)
+
+for chunk in llm.stream(
+    "Write a 20-line paragraph about Artificial Intelligence.",
+    config={
+        "run_name": "ai_paragraph_stream",
+        "tags": ["demo", "streaming"],
+        "metadata": {
+            "source": "groq"
+        }
+    }
+):
     print(chunk.content, end="", flush=True)
 ```
+A common approach is to create the thread_id when the user starts a chat session and store it in the frontend session storage
+
 
 **Tokenization (BPE, WordPiece) and Why It Matters for Cost**
 
@@ -2032,9 +2173,30 @@ unhappiness->["un", "happi", "ness"]
 
 ## Q34.What is Fine-Tuning?
 
-**Answer**
-
 Fine-Tuning is the process of training a pre-trained Large Language Model (LLM) on your own custom dataset so that it learns specific knowledge, style, behavior, or domain expertise.
+Fine-tuning means training a pre-trained LLM on your own data so it learns new patterns, styles, or domain knowledge.
+
+`Types of Fine-Tuning`
+
+#### Full Fine-Tuning
+
+All model parameters are updated.
+7 Billion Parameters
+      ↓
+All Updated
+
+#### Instruction Fine-Tuning (SFT)
+
+Most common in GenAI projects.
+train model using
+```
+{
+  "instruction": "Summarize text",
+  "input": "LangChain provides...",
+  "output": "LangChain is a framework..."
+}
+```
+#### LoRA (Low Rank Adaptation)
 
 ---
 
@@ -2729,45 +2891,6 @@ from operator import add
 class State(TypedDict):
     total_sales: Annotated[int, add]
 ```
----
-add
-What is @tool Decorator?
-from langchain_core.tools import tool
-
-@tool
-def add(a: int, b: int) -> int:
-    """
-    Add a and b
-
-    Args:
-        a (int): first number
-        b (int): second number
-
-    Returns:
-        int: the sum
-    """
-    return a + b
-
-print(add.invoke({
-    "a": 10,
-    "b": 5
-}))
-
-
-from langchain_core.tools import tool
-
-@tool
-def employee_info(name: str, age: int) -> str:
-    """Return employee information"""
-    return f"{name} is {age} years old"
-
-result = employee_info.invoke({
-    "name": "Sougata",
-    "age": 30
-})
-
-print(result)
-
 
 
 ---
@@ -2776,6 +2899,7 @@ print(result)
 ToolNode is a built-in LangGraph node responsible for executing tool calls generated by an LLM (Large Language Model).
 
 When the LLM decides that a tool is needed, it creates a tool call. The ToolNode receives that request, executes the corresponding tool, and returns the result to the workflow.
+```python
 {
     "tool_calls": [
         {
@@ -2786,94 +2910,18 @@ When the LLM decides that a tool is needed, it creates a tool call. The ToolNode
         }
     ]
 }
-What Are Tools?
-Tools are Python functions that allow the AI to interact with external systems.
-Tools can be integrated with LLM models to interact with external systems. External systems can be APIs, third-party tools, or custom tools.
-When a user asks a question, the model decides whether to use a tool based on the user's request. The tool returns an output that matches its defined schema.
-Purpose of AI Tools
-Give the chatbot capabilities beyond its training data.
-Why Do We Need Them?
-LLMs cannot reliably provide current or real-time information.
-Check current weather.
-Calculate payroll.
-Database query.
-Call APIs.
-Read real-time data.
-Tools solve this problem
+```
 
-execution flow
-User Question
-      ↓
-Chat Model
-      ↓
-Tool Call
-      ↓
-ToolNode
-      ↓
-Tool Execution
-      ↓
-Tool Result
-      ↓
-Chat Model
-      ↓
-Final Response
+---
 
-from langchain_groq import ChatGroq
-from langchain_core.tools import tool
-from langchain_core.messages import HumanMessage
-
-@tool
-def add(x: float, y: float) -> float:
-    """Add x and y."""
-    return x + y
-
-@tool
-def subtract(x: float, y: float) -> float:
-    """Subtract x from y."""
-    return y - x
-
-@tool
-def multiply(x: float, y: float) -> float:
-    """Multiply x and y."""
-    return x * y
-
-@tool
-def exponentiate(x: float, y: float) -> float:
-    """Raise x to the power of y."""
-    return x ** y
-
-# Groq LLM
-llm = ChatGroq(
-    model="llama-3.3-70b-versatile",
-    temperature=0,
-    api_key="YOUR_GROQ_API_KEY"
-)
-
-# Bind tools
-llm_with_tools = llm.bind_tools(
-    [add, subtract, multiply, exponentiate]
-)
-
-# Invoke model
-response = llm_with_tools.invoke(
-    [
-        HumanMessage(
-            content="What is 15 multiplied by 8?"
-        )
-    ]
-)
-
-print(response)
-print(response.tool_calls)
---------------------------
-What is tools_condition?
+## What is tools_condition?
 
 tools_condition is a prebuilt routing function in LangGraph that checks whether the latest AI response contains any tool calls.
 
 Based on the result, it decides whether the workflow should continue to the ToolNode or end.
 it checks
-YES → Route/go to ToolNode
-NO → End the workflow
+`YES → Route/go to ToolNode , NO → End the workflow`
+```
 AI Response
       ↓
 tools_condition
@@ -2885,68 +2933,26 @@ tools_condition
   Yes     No
    ↓       ↓
 ToolNode   END
+```
+```python
 graph.add_conditional_edges(
     "chatbot",
     tools_condition
 )
------------
-What is Streaming?
-
-In LLMs, streaming means the model starts sending tokens (words) as soon as they are generated, instead of waiting for the entire response to be completed before returning it.
-
-Why Streaming?
-Faster response time resulting in lower drop-off rates.
-Mimics human-like conversation, which builds trust, feels more natural, and keeps users engaged.
-Important for multi-modal UIs where different types of outputs may be displayed progressively.
-Better user experience for long outputs, such as code generation or lengthy explanations.
-Users can cancel the response midway, saving tokens and reducing costs.
-Allows real-time UI updates, such as displaying "thinking...", showing tool execution results, or updating progress dynamically.
-
-| Feature         | Streaming                              | Async                                   |
-| --------------- | -------------------------------------- | --------------------------------------- |
-| Purpose         | Return results gradually               | Run tasks without blocking              |
-| Focus           | Output delivery                        | Task execution                          |
-| User Experience | See data immediately                   | Don't wait for other tasks              |
-| Example         | ChatGPT typing response token by token | Multiple API calls running concurrently |
-| Keyword         | `stream()`                             | `async/await`                           |
-| Benefit         | Faster perceived response              | Better throughput and scalability       |
-
-
-In LangGraph, instead of using graph.invoke(), we can use graph.stream() to receive the output incrementally. The stream() method takes the initial state and configuration (such as thread_id) as input and returns a generator object. As the graph executes, the generator yields updates based on the specified stream_mode (for example, "messages" for token-by-token message streaming). We can iterate over this generator using a for loop to process and display outputs in real time. Streaming improves responsiveness because users can see results as they are generated rather than waiting for the entire graph execution to complete.
-from langchain_groq import ChatGroq
-
-llm = ChatGroq(
-    model="llama-3.3-70b-versatile",
-    temperature=0.7,
-    api_key="YOUR_GROQ_API_KEY"
-)
-
-for chunk in llm.stream(
-    "Write a 20-line paragraph about Artificial Intelligence.",
-    config={
-        "run_name": "ai_paragraph_stream",
-        "tags": ["demo", "streaming"],
-        "metadata": {
-            "source": "groq"
-        }
-    }
-):
-    print(chunk.content, end="", flush=True)
-
-A common approach is to create the thread_id when the user starts a chat session and store it in the frontend session storage
-
----------------
-What is LangSmith?
+```
+---
+## What is LangSmith?
 
 LangSmith is an observability, debugging, monitoring, and evaluation platform for LLM applications. It helps developers understand how their LLM applications behave by capturing and visualizing the complete execution flow of agents, chains, tools, and models. LangSmith is used to debug issues, monitor performance, analyze costs and latency, evaluate application quality, and improve AI systems in production.
-What Does LangSmith Trace?
+
+**What Does LangSmith Trace?**
 
 LangSmith traces every step of an LLM application's execution. A trace records the sequence of operations performed for a single user request, including LLM calls, tool invocations, retrieval operations, prompt formatting steps, agent decisions, inputs, outputs, execution time, costs, errors, and metadata. This allows developers to inspect exactly what happened during execution and identify the root cause of failures or unexpected responses
 
-	--------------------
-Output refinement in LangGraph
+## Output refinement in LangGraph
 
 Method 1: Return Only Final Answer
+```python
 {
   "messages": [...],
   "documents": [...],
@@ -2960,12 +2966,16 @@ def format_response(state):
     return {
         "response": state["final_answer"]
     }
+```
 Method 2: Use a Dedicated Formatting Node
+```python
 def formatter(state):
     return {
         "output": state["messages"][-1].content
     }
+```
 Method 3: Structured Output
+```python
 {
   "name": "John",
   "age": 25,
@@ -2975,38 +2985,32 @@ return {
     "name": result["name"],
     "skills": result["skills"]
 }
--------------
-What are AI Agents?
+```
+---
+
+## What are AI Agents?
+
 AI agents are intelligent software systems that can understand a goal, make decisions, use tools, perform actions, and complete tasks with minimal human intervention.
+
 Unlike a traditional LLM that mainly generates text, an AI agent can reason, plan, interact with external systems, and execute tasks to achieve a goal.
-Components of an AI Agent
-1. LLM (Brain)
-Understands the user's request.
+`Components of an AI Agent`
+
+1. LLM (Brain): Understands the user's request.
 Reasons about the problem.
 Decides what action to take next.
 Generates responses and tool calls.
-2. Memory
-Stores previous interactions and conversation history.
+2. Memory: Stores previous interactions and conversation history.
 Maintains context across multiple user requests.
 Helps the agent remember important information.
-3. Tools
-Provide access to external capabilities.
-Examples:
-Web Search
-Databases
-APIs
-Calculators
-File Systems
-Email Services
-4. Planning
-Breaks a complex task into smaller steps.
+3. Tools: Provide access to external capabilities.
+4. Planning: Breaks a complex task into smaller steps.
 Determines the sequence of actions needed to achieve a goal.
 Chooses the appropriate tools for each step.
-5. Execution
-Performs actions using selected tools.
+5. Execution: Performs actions using selected tools.
 Executes API calls, database queries, searches, calculations, etc.
 Returns results to the LLM for generating the final response.
-----------------
+
+
 | Feature                  | Tavily      | DuckDuckGo   |
 | ------------------------ | ----------- | ------------ |
 | Web Search               | ✅           | ✅            |
@@ -3018,8 +3022,10 @@ Returns results to the LLM for generating the final response.
 | Requires API Key         | ✅           | ❌ Usually No |
 | LangGraph Agent Usage    | Very Common | Common       |
 
------------------
-What is a ReAct Agent?
+---
+
+## What is a ReAct Agent?
+
 ReAct stands for Reason + Act.
 A ReAct Agent is an AI agent that alternates between reasoning about a problem and taking actions (using tools) until it reaches the final answer.
 Instead of Immediately Answering, the Agent:
@@ -3028,12 +3034,13 @@ Uses a tool if needed.
 Observes the tool's output.
 Reasons again.
 Repeats until it can provide the final answer.
-Why is it Called ReAct?
-Reason
+
+`Why is it Called ReAct?`
+- Reason
 Decide the next step.
 Analyze the user's request.
 Determine whether a tool is needed.
-Act
+- Act
 Execute a tool or perform an action.
 Query a database, API, calculator, search engine, etc.
 Observe
@@ -3042,24 +3049,14 @@ Collect information returned by the tool.
 Repeat
 Continue the cycle until the task is complete.
 
-Key Points
-Reason
-The LLM decides what to do next.
-Act
-The agent executes a tool when needed.
-Observe
-The agent reviews the tool's output.
-Repeat
-The cycle continues until enough information is gathered.
-Final Answer
-The LLM combines reasoning and tool results to produce the response.
-Advantages of ReAct Agents
-Better handling of complex, multi-step tasks.
-Can combine information from multiple tools.
-More reliable because decisions are based on tool outputs.
-Reduces hallucinations by using external data.
+**Advantages of ReAct Agents**
 
+- Better handling of complex, multi-step tasks.
+- Can combine information from multiple tools.
+- More reliable because decisions are based on tool outputs.
+- Reduces hallucinations by using external data.
 
+```python
 def get_conversation_history(conversation_id: str) -> list[dict]:
     conn = get_connection()
     rows = conn.execute(
@@ -3068,86 +3065,5 @@ def get_conversation_history(conversation_id: str) -> list[dict]:
     ).fetchall()
     conn.close()
     return [{"role": r["role"], "content": r["content"], "created_at": r["created_at"]} for r in rows]
-
-
-
-transformer architecture
-If you're learning Transformer Architecture and want to relate it to LangChain concepts, think of a Transformer as the "brain" and LangChain as the "orchestrator" that uses that brain along with tools, memory, and workflows.
-Input Text
-    |
-Tokenization
-    |
-Embedding
-    |
-Self-Attention
-    |
-Feed Forward Network
-    |
-Output Representation
-
---------------------------
-1. What is Fine-Tuning?
-
-Fine-tuning means training a pre-trained LLM on your own data so it learns new patterns, styles, or domain knowledge.
-Types of Fine-Tuning
-A. Full Fine-Tuning
-
-All model parameters are updated.
-7 Billion Parameters
-      ↓
-All Updated
-
-B. Instruction Fine-Tuning (SFT)
-
-Most common in GenAI projects.
-train model using
-{
-  "instruction": "Summarize text",
-  "input": "LangChain provides...",
-  "output": "LangChain is a framework..."
-}
-C. LoRA (Low Rank Adaptation)
-
-Most popular optimization strategy.
--------------------------------------
-
-supervice unsuperviced learning
-
-Machine Learning
-    |
-    +---- Supervised Learning
-    |
-    +---- Unsupervised Learning
-	
-	1. Supervised Learning
-
-In supervised learning, the model learns from labeled data.
-
-2. Unsupervised Learning
-
-In unsupervised learning, there are no labels.
----------------------------------------
-
-vector database
-A Vector Database stores embeddings (vectors) instead of storing only plain text.
-
-| Feature               | Traditional DB  | Vector DB         |
-| --------------------- | --------------- | ----------------- |
-| Search Type           | Exact Match     | Semantic Search   |
-| Data Stored           | Rows/Columns    | Embeddings        |
-| Use Case              | Transactions    | AI Search         |
-| Query                 | SQL             | Similarity Search |
-| Meaning Understanding | No              | Yes               |
-| Best For              | Banking, Orders | RAG, Chatbots     |
-
-popular vector database
-| Vector DB       | Best For                       |
-| --------------- | ------------------------------ |
-| FAISS           | Local development              |
-| Chroma          | Small to medium RAG projects   |
-| Pinecone        | Managed cloud vector DB        |
-| Weaviate        | Enterprise AI search           |
-| Milvus          | Large-scale vector search      |
-| Qdrant          | Fast open-source vector DB     |
-| Azure AI Search | Enterprise Microsoft ecosystem |
-
+```
+---
