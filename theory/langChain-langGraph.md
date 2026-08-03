@@ -31,6 +31,30 @@ print(response.content)
 **Answer**
 
 📝 LLM (Large Language Model) is the core component that generates text responses.
+A Large Language Model (LLM) is an Artificial Intelligence model trained on massive amounts of text data to understand, generate, summarize, translate, and answer questions in natural language.
+
+LLMs use Deep Learning and Transformer Architecture to process language.
+
+**Examples**
+
+- ChatGPT (OpenAI)
+- Gemini (Google)
+- Claude (Anthropic)
+- Grok (xAI)
+
+What Does an LLM Do?
+
+✅ Answer questions
+
+✅ Generate text
+
+✅ Summarize content
+
+✅ Translate languages
+
+✅ Write code
+
+✅ Analyze documents
 
 ```python
 # from langchain_openai import OpenAI
@@ -46,6 +70,40 @@ llm = ChatGroq(
 print(llm.invoke("Tell me a joke"))
 ```
 
+**how to reduces llm hallucination in langchain?**
+
+```python
+from langchain_groq import ChatGroq
+from langchain_core.prompts import ChatPromptTemplate
+
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="YOUR_KEY"
+)
+
+context = """
+React is a JavaScript library created by Meta.
+"""
+
+prompt = ChatPromptTemplate.from_template("""
+Answer ONLY from the provided context.
+
+Context:
+{context}
+
+Question:
+{question}
+""")
+
+chain = prompt | llm
+
+response = chain.invoke({
+    "context": context,
+    "question": "Who created React?"
+})
+
+print(response.content)
+```
 ---
 
 ## Q3. What is pip?
@@ -457,25 +515,37 @@ print(chat_history)
 
 ## Q12. What is a Simple Chain?
 
-📝 The most basic form of a LangChain workflow:
+📝 The pipe operator (|) is used to connect components together into a chain.
+The pipe operator (|) indicates that the output from the left side of the pipe is automatically fed as the input to the component on the right side of the pipe.
 ```
 Input → Prompt → LLM → Output
 ```
 
 ```python
-from langchain_core.prompts import PromptTemplate
-from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_groq import ChatGroq
 
-prompt = PromptTemplate(
-    input_variables=["country"],
-    template="What is the capital of {country}?"
+# Create prompt
+prompt = ChatPromptTemplate.from_template(
+    "Create a catchy title for the following article:\n\n{article}"
 )
 
-llm = ChatOpenAI(model="gpt-4o-mini")
+# Initialize Groq model
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="your_api_key"
+)
 
+# Create chain
 chain = prompt | llm
 
-result = chain.invoke({"country": "France"})
+# Execute
+result = chain.invoke(
+    {
+        "article": "Artificial Intelligence is transforming healthcare through predictive analytics and automation."
+    }
+)
+
 print(result.content)
 ```
 
@@ -661,6 +731,7 @@ print(result)
 📝 Memory stores previous conversations.
 
 ```python
+#exp 1
 from langchain.memory import ConversationBufferMemory
 
 memory = ConversationBufferMemory()
@@ -671,6 +742,61 @@ memory.save_context(
 )
 
 print(memory.load_memory_variables({}))
+
+#exp2
+from langchain_groq import ChatGroq
+from langchain.agents import create_agent
+from langgraph.checkpoint.memory import InMemorySaver
+
+# LLM
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="YOUR_GROQ_API_KEY"
+)
+
+# Memory
+memory = InMemorySaver()
+
+# Agent
+agent = create_agent(
+    model=llm,
+    checkpointer=memory
+)
+
+# Conversation Thread
+config = {
+    "configurable": {
+        "thread_id": "sougata_chat"
+    }
+}
+
+# Message 1
+agent.invoke(
+    {
+        "messages": [
+            {
+                "role": "user",
+                "content": "My name is Sougata and I am a React Developer."
+            }
+        ]
+    },
+    config=config
+)
+
+# Message 2
+response = agent.invoke(
+    {
+        "messages": [
+            {
+                "role": "user",
+                "content": "What is my name and profession?"
+            }
+        ]
+    },
+    config=config
+)
+
+print(response["messages"][-1].content)
 ```
 
 ---
@@ -1054,6 +1180,16 @@ print(chunks[0].page_content)
 - Better Reliability
 - Response follows the schema even if the model is creative.
 
+**TypedDict vs dataclass vs Pydantic**
+
+| Feature               | TypedDict | Dataclass | Pydantic |
+| --------------------- | --------- | --------- | -------- |
+| Type Hinting          | ✅         | ✅         | ✅        |
+| Validation            | ❌         | Limited   | ✅        |
+| Object Creation       | ❌         | ✅         | ✅        |
+| LangGraph State       | ✅ Best    | ⚠️        | ⚠️       |
+| LLM Structured Output | ❌         | ⚠️        | ✅ Best   |
+
 ```python
 # exp1
 from langchain_groq import ChatGroq
@@ -1148,6 +1284,22 @@ print(response.choices[0].message.content)
 **Answer**
 
 📝 A technique where multiple independent prompts are sent to the model in a single request instead of several individual requests.
+batch() is a LangChain method that sends multiple inputs to a model at once and returns multiple outputs in a single call pattern.
+instead of 
+```
+llm.invoke("What is React?")
+llm.invoke("What is Python?")
+llm.invoke("What is Java?")
+```
+you can do:
+```
+llm.batch([
+    "What is React?",
+    "What is Python?",
+    "What is Java?"
+])
+```
+This is useful when processing many prompts together.
 
 **Without batch processing**
 ```
@@ -1175,6 +1327,89 @@ Request 3 → API → Response 3
 - More network overhead
 - More code complexity
 
+**example**
+```python
+from langchain_groq import ChatGroq
+
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile",
+    api_key="YOUR_GROQ_API_KEY"
+)
+
+responses = llm.batch([
+    "What is React?",
+    "What is Python?",
+    "What is Docker?"
+])
+
+for r in responses:
+    print(r.content)
+```
+---
+## 📦 Project: search bot
+
+```python
+
+import os
+
+from langchain_groq import ChatGroq
+from langchain.tools import Tool
+from langchain_community.tools.tavily_search import TavilySearchResults
+from langchain.agents import AgentExecutor, create_react_agent
+from langchain import hub
+
+from numexpr import evaluate
+
+# API Keys
+os.environ["GROQ_API_KEY"] = "YOUR_GROQ_API_KEY"
+os.environ["TAVILY_API_KEY"] = "YOUR_TAVILY_API_KEY"
+
+# LLM
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile"
+)
+
+# Search Tool
+search_tool = TavilySearchResults(max_results=2)
+
+# Calculator Tool
+calculator = Tool(
+    name="Calculator",
+    func=lambda x: str(evaluate(x)),
+    description="Useful for solving math calculations."
+)
+
+tools = [search_tool, calculator]
+
+# ReAct Prompt
+prompt = hub.pull("hwchase17/react")
+
+# Agent
+agent = create_react_agent(
+    llm=llm,
+    tools=tools,
+    prompt=prompt
+)
+
+# Executor
+agent_executor = AgentExecutor(
+    agent=agent,
+    tools=tools,
+    verbose=True
+)
+
+# Run
+response = agent_executor.invoke(
+    {
+        "input": """
+        What is the current approx React Developer salary in India?
+        Also calculate 20% joining bonus.
+        """
+    }
+)
+
+print(response["output"])
+```
 ---
 
 ## 📦 Project: Chatbot
@@ -1441,6 +1676,31 @@ docs = retriever.invoke("What is LangChain?")
 📝 RAG combines a retriever with an LLM: relevant documents are fetched first, then passed into the prompt so the LLM answers using that context instead of relying only on its training data.
 
 ```
+
+User Query
+     │
+     ▼
+┌──────────────┐
+│  Retriever   │
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│  Vector DB   │
+└──────┬───────┘
+       │ Relevant Context
+       ▼
+┌─────────────────────┐
+│ Context + Question  │
+└──────────┬──────────┘
+           ▼
+     ┌──────────┐
+     │   LLM    │
+     └────┬─────┘
+          ▼
+      Final Answer
+
+
 RAG
  ├── Document Loaders
  ├── Text Splitters
@@ -1631,6 +1891,13 @@ prompt = ChatPromptTemplate.from_messages([
 - **ConversationBufferWindowMemory** — stores only the last N messages
 - **ConversationSummaryMemory** — stores a summarized version of the conversation (saves tokens)
 
+| Memory Type                     | Stores Everything | Stores Recent Messages | Stores Summary | Token Usage | Production Ready Usage                                 | Speed                                        |
+| ------------------------------- | ----------------- | ---------------------- | -------------- | ----------- | ------------------------------------------------------ | -------------------------------------------- |
+| ConversationBufferMemory        | ✅                 | ✅                      | ❌              | High        | ❌ Low (mainly for demos, POCs, short chats)            | 🟢 Fast initially, 🔴 slows as history grows |
+| ConversationBufferWindowMemory  | ❌                 | ✅                      | ❌              | Low         | ✅ Good for production when only recent context matters | 🟢 Very Fast                                 |
+| ConversationSummaryMemory       | ❌                 | ❌                      | ✅              | Very Low    | ✅ Good for long-running conversations                  | 🟡 Medium (extra LLM call for summarization) |
+| ConversationSummaryBufferMemory | ❌                 | ✅                      | ✅              | Medium      | ⭐ Excellent for enterprise and production systems      | 🟡 Medium to Fast                            |
+
 ```python
 from langchain.memory import ConversationBufferWindowMemory
 
@@ -1732,18 +1999,71 @@ for chunk in llm.stream("Tell me a story"):
     print(chunk.content, end="", flush=True)
 ```
 
+**Tokenization (BPE, WordPiece) and Why It Matters for Cost**
+
+Tokenization is the process of breaking text into smaller units called tokens before sending it to an LLM.
+
+LLMs do not understand text directly. They process tokens.
+
+`Types of Tokenization`
+
+1. Character-Level Tokenization
+
+Breaks text into individual characters.
+```python
+Python->["P", "y", "t", "h", "o", "n"]
+```
+2. Word-Level Tokenization
+
+Breaks text into words.
+```python
+I love Python->["I", "love", "Python"]
+```
+3. Subword Tokenization
+
+Breaks words into meaningful pieces.
+
+This is what modern LLMs use.
+```python
+unhappiness->["un", "happi", "ness"]
+```
+
 ---
 
-## Q34. What is LangSmith?
-
-**Answer**
-
-📝 LangSmith is LangChain's observability/debugging platform for tracing, monitoring, and evaluating LLM applications (tracks prompts, chain steps, latency, and costs).
-
----
-
-## Q35.What is Fine-Tuning?
+## Q34.What is Fine-Tuning?
 
 **Answer**
 
 Fine-Tuning is the process of training a pre-trained Large Language Model (LLM) on your own custom dataset so that it learns specific knowledge, style, behavior, or domain expertise.
+
+---
+
+## LangChain vs LangGraph: When to Use Which?
+
+LangChain is generally used when you want to build AI applications quickly using ready-made components such as models, prompts, memory, retrievers, vector stores, and tools. It works very well for use cases like chatbots, text summarization, RAG applications, conversational assistants, tool-calling agents, and simple multi-step workflows where the execution follows a predefined linear path. For most beginner to intermediate AI applications, LangChain provides enough abstraction and flexibility without adding much complexity.
+
+As applications grow, limitations start appearing in LangChain. Complex workflows often require decisions at runtime, conditional branching, multiple execution paths, and the ability to pause a workflow for human review or approval. Managing these scenarios using only LangChain can become difficult because the framework was originally designed around chains and sequential execution patterns rather than advanced workflow orchestration.
+
+LangGraph was introduced to address these challenges by providing a graph-based approach to workflow design. Instead of moving through a fixed chain of steps, the application can dynamically decide which node to execute next based on the current state. This makes it much more suitable for non-linear workflows where different conditions may lead to different actions, and where execution needs to adapt as new information becomes available.
+
+Another major advantage of LangGraph is its built-in state management. The workflow can maintain and update state throughout the entire execution lifecycle, making it easier to track progress, share information between nodes, and build sophisticated multi-agent systems. It also supports event-driven execution, fault tolerance, and human-in-the-loop patterns where a process can pause, wait for approval, and then continue from the same point.
+
+For enterprise-scale AI applications, LangGraph provides better maintainability because large workflows can be broken into smaller reusable subgraphs. These nested workflows improve code organization, reusability, debugging, and scalability. In simple terms, LangChain is ideal for building AI capabilities, while LangGraph is ideal for orchestrating complex, stateful, and production-grade AI workflows involving branching logic, multiple agents, and human intervention.
+
+---
+
+## What is LangGraph?
+
+LangGraph is an open-source framework built on top of LangChain for creating intelligent,stateful and multistep llm applications.
+
+It helps build:
+
+- Stateful workflows
+- Multi-step processes
+- AI agents
+- Multi-agent systems
+- LangChain provides:LLMs, Prompts, Tools, Memory
+---
+
+
+

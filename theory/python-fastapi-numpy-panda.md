@@ -158,6 +158,45 @@ Some commonly used functions to manipulate strings are:
 5. `find()` returns the index of first occurrence.
 6. `replace(old word, new word)` replaces the old word with the new word in the string.
 
+**docstrings**
+
+A docstring (documentation string) is a string literal enclosed in triple quotes (""" """ or ''' ''') that appears as the first statement in a module, function, class, or method.
+
+**Types of Docstrings**
+1. `Module Docstring`
+
+Describes the purpose of an entire Python file.
+```
+"""
+This module contains utility functions
+for employee management.
+"""
+```
+
+2. `Function Docstring`
+
+Describes a function's purpose, parameters, and return value.
+```python
+def add(a, b):
+    """Add two numbers and return the result."""
+    return a + b
+```
+3. `Class Docstring`
+
+Describes a class and its attributes.
+```python
+class Employee:
+    """Represents an employee."""
+```
+4. `Method Docstring`
+
+Documents a class method.
+```python
+class Employee:
+    def display(self):
+        """Displays employee details."""
+```
+
 **Comments**
 ```python
 # single-line comment
@@ -560,6 +599,43 @@ print(original)  # [[100, 2], [3, 4]]
 print(shallow)    # [[100, 2], [3, 4]]
 ```
 
+## Dataclasses (@dataclass)
+
+A Dataclass is a Python feature introduced in Python 3.7 that automatically generates special methods such as:
+```
+__init__()
+__repr__()
+__eq__()
+__hash__() (optional)
+```
+using the `@dataclass` decorator.
+
+It reduces boilerplate code when creating classes primarily used to store data.
+
+Without @dataclass:
+
+```python
+class Employee:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+emp = Employee("John", 25)
+print(emp.name)
+```
+With @dataclass:
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Employee:
+    name: str
+    age: int
+
+emp = Employee("John", 25)
+print(emp.name)
+```
 ---
 
 ## 14. Constructor (`__init__`)
@@ -794,6 +870,42 @@ print(next(gen))
 ```
 
 ---
+## 20.1  __main__
+
+ `__main__` is a special Python identifier used to determine whether a Python file is being:Run directly
+Imported as a module into another file
+
+Python automatically sets the special variable main.
+
+`Purpose of __main__`
+
+✅ Prevent specific code from running during imports
+
+✅ Separate reusable code from executable code
+
+✅ Improve module organization
+
+✅ Support testing and debugging
+
+✅ Follow Python best practices
+
+```python
+#EXP 1
+def greet():
+    print("Hello")
+
+if __name__ == "__main__":
+    greet()
+
+#EXP 2
+def add(a, b):
+    return a + b
+
+if __name__ == "__main__":
+    result = add(10, 20)
+    print(result)
+```
+---
 
 ## 21. Exception Handling
 
@@ -848,6 +960,25 @@ except:
 else:
  # Executed if try was successful
 ```
+
+**Custom exceptions**
+
+```python
+class InvalidAgeError(Exception):
+    pass
+
+try:
+    age = -10
+
+    if age < 0:
+        raise InvalidAgeError(
+            "Age cannot be negative"
+        )
+
+except InvalidAgeError as e:
+    print("Error:", e)
+```
+
 
 ---
 
@@ -1062,6 +1193,85 @@ l1.pop(2): Will delete element at index 2 and return its value.
 l1.remove(21): Will remove 21 from the list.
 
 ---
+## 31. async, await, and asyncio
+
+Asynchronous Programming allows a program to perform multiple tasks concurrently without waiting for one task to finish before starting another.
+
+Python provides asynchronous programming through:
+
+1. async
+2. await
+3. asyncio module
+
+It is mainly useful for:
+
+- API calls
+- Database operations
+- File operations
+- Network requests
+- Web applications (FastAPI, LangGraph)
+
+Key Components
+
+1. `async`
+
+Used to define an asynchronous function (coroutine).
+async def greet():
+    print("Hello")
+
+2. `await`
+
+Used inside an async function to wait for an asynchronous operation.
+await some_function()
+
+3. `asyncio`
+
+Built-in Python library for asynchronous programming.
+
+```python
+import asyncio
+
+async def demo():
+
+    print("Begin")
+
+    await asyncio.sleep(3)
+
+    print("End")
+
+asyncio.run(demo())
+```
+---
+## 32. Python *args and **kwargs
+
+`*args`
+
+*args allows a function to accept any number of positional arguments.
+
+args stands for arguments.
+Arguments are stored as a tuple.
+The name args is a convention; any name can be used.
+```python
+def show(*args):
+    print(args)
+
+show(10, 20, 30)
+```
+`**kwargs`
+
+**kwargs allows a function to accept any number of keyword arguments.
+
+kwargs stands for keyword arguments.
+Arguments are stored as a dictionary.
+The name kwargs is a convention; any name can be used.
+
+```python
+def show(**kwargs):
+    print(kwargs)
+
+show(name="John", age=25)
+```
+---
 ## 📦 Project 1: guess game
 
 ```python
@@ -1182,6 +1392,224 @@ if audio:
             st.audio(audio_file.read(), format="audio/mp3")
 ```
 
+---
+
+## What is an API?
+
+API (Application Programming Interface) is a contract that allows two software systems to communicate using predefined rules.
+Response comes back through the API from db.
+```
+Database
+   |
+Backend
+   |
+API
+   |
+Frontend
+```
+## Why Do We Need APIs?
+
+Without APIs, every application would need direct access to backend logic and databases.
+Problems:
+- Security Risk
+- Tight Coupling
+- Difficult Maintenance
+------------------------
+## what is FastAPI?
+FastAPI is a modern high-performance Python framework used to build APIs quickly and efficiently.
+It acts as a communication layer between frontend applications and backend services. It is considered fast because it supports asynchronous processing using async and await. Similar to a restaurant waiter who takes multiple orders while food is being prepared, FastAPI can handle other requests while waiting for database queries, external APIs, or LLM responses, resulting in better performance, scalability, and user experience.
+FastAPI supports automatic request and input validation using Pydantic, reducing boilerplate code and improving reliability. It also integrates seamlessly with modern technologies and tools such as JWT authentication, Docker, Kubernetes, databases, and cloud-native applications.
+
+FastAPI HTTP Methods -
+
+HTTP methods define what action a client wants to perform on a resource.FastAPI supports standard HTTP methods such as GET, POST, PUT, PATCH, and DELETE
+
+1. GET Method
+Used to retrieve data.
+2. POST Method
+Used to create new data.
+3. PUT Method
+Used to update an entire resource.
+4. PATCH Method
+Used to partially update data.
+5. DELETE Method
+Used to remove data.
+
+**patients.json**
+```
+[
+    {
+        "id": 1,
+        "name": "John Doe",
+        "age": 35,
+        "disease": "Diabetes",
+        "city": "New York"
+    },
+    {
+        "id": 2,
+        "name": "Alice Smith",
+        "age": 28,
+        "disease": "Fever",
+        "city": "Chicago"
+    },
+    {
+        "id": 3,
+        "name": "Michael Brown",
+        "age": 42,
+        "disease": "Hypertension",
+        "city": "Dallas"
+    }
+]
+```
+
+**main.ts**
+
+```python
+from fastapi import FastAPI, HTTPException
+import json
+from pydantic import BaseModel, Field
+from typing import Annotated
+from fastapi.responses import JSONResponse
+
+app = FastAPI()
+
+class Patient(BaseModel):
+    id: Annotated[
+        int,
+        Field(
+            ...,
+            description="Unique ID of the patient",
+            examples=[1]
+        )
+    ]
+
+    name: Annotated[
+        str,
+        Field(
+            ...,
+            description="Name of the patient",
+            examples=["John Doe"]
+        )
+    ]
+
+    age: Annotated[
+        int,
+        Field(
+            ...,
+            description="Age of the patient"
+        )
+    ]
+
+    disease: Annotated[
+        str,
+        Field(
+            ...,
+            description="Disease diagnosed for the patient",
+            examples=["Diabetes"]
+        )
+    ]
+
+    city: Annotated[
+        str,
+        Field(
+            ...,
+            description="City where the patient lives",
+            examples=["New York"]
+        )
+    ]
+
+def load_data():
+    with open("patients.json", "r") as f:
+        data = json.load(f)
+    return data
+def save_data(data):
+    with open("patients.json", "w") as f:
+        json.dump(data, f, indent=4)
+
+
+@app.get("/patients")
+def get_patients(city: str = None, sort_by: str = None):
+    data = load_data()
+
+    # Filter by city
+    if city:
+        data = [patient for patient in data
+                if patient["city"].lower() == city.lower()]
+
+    # Sort by age
+    if sort_by == "age":
+        data = sorted(data, key=lambda x: x["age"])
+
+    return data
+
+@app.get("/patient/{patient_id}")
+def get_patient(patient_id: int):
+    data = load_data()
+
+    for patient in data:
+        if patient["id"] == patient_id:
+            return patient
+
+    raise HTTPException(
+        status_code=404,
+        detail="Patient not found"
+    )
+
+
+
+@app.post("/create")
+def create_patient(patient: Patient):
+    data = load_data()
+
+    # Check if patient already exists
+    for existing_patient in data:
+        if existing_patient["id"] == patient.id:
+            raise HTTPException(
+                status_code=400,
+                detail="Patient already exists"
+            )
+
+    # Add new patient
+    data.append(patient.model_dump())
+
+    # Save updated data
+    save_data(data)
+
+    return {
+        "message": "Patient created successfully",
+        "patient": patient
+    }
+
+
+@app.delete("/delete/{patient_id}")
+def delete_patient(patient_id: int):
+
+    # load data
+    data = load_data()
+
+    # find patient
+    patient = next(
+        (p for p in data if p["id"] == patient_id),
+        None
+    )
+
+    if patient is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Patient not found"
+        )
+
+    # remove patient
+    data.remove(patient)
+
+    # save updated data
+    save_data(data)
+
+    return JSONResponse(
+        status_code=200,
+        content={"message": "Patient deleted"}
+    )
+```
 ---
 
 ## 📦 Project 5: FastAPI CRUD App
