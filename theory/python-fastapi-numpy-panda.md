@@ -1477,7 +1477,7 @@ while guess_count < guess_limit:
         print("Higher number please")
 ```
 
-## 📦 Project 2: snake game
+## 📦 Project 5: snake game
 
 ```python
 import random
@@ -1499,7 +1499,7 @@ else:
     print("Computer Wins!")
 ```
 
-## 📦 Project 5: emoji converter
+## 📦 Project 6: emoji converter
 
 ```python
 message = input("> ")
@@ -1518,7 +1518,7 @@ for word in words:
 print(output)
 ```
 
-## 📦 Project 6: Realtime Voice Bot (Streamlit)
+## 📦 Project 7: Realtime Voice Bot (Streamlit)
 
 **Setup**
 ```bash

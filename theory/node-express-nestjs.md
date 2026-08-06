@@ -8,59 +8,28 @@ A server is a program that receives tasks or requests, processes them, and sends
 A web server is a server that handles HTTP/HTTPS requests from web browsers and returns web pages, JSON data, images, videos, or other web content.
 When I type facebook.com in the browser, an encrypted HTTPS request travels through the internet to Facebook's server. The server processes the request and sends back a response, which the browser displays as the Facebook webpage. 
 ```js
-In Node.js, we can create a web server using modules such as:
-const http = require('http');
+// npm i -D nodemon
+// in script "start": "nodemon index.js",
 
+import http from 'http';
+
+const PORT = process.env.PORT || 8080;
 const server = http.createServer((req, res) => {
-    res.end('Hello World');
+  
+  console.log(`Request received: ${req.method} ${req.url}`);
+  res.setHeader('Content-Type', 'text/html');
+  res.statusCode = 200;
+  res.end('<h1>Hello!</h1>');
 });
-server.listen(3000);
+
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 ```
 
 **How NodeJS works**
-```txt
-Node Process
-│
-└── Main JS Thread
-    │
-    ├── Execute Top-Level Code (not inside any function)
-    │
-    ├── require("fs")
-    │      ↓
-    │   Load module synchronously
-    │
-    ├── console.log("Start")
-    │      ↓
-    │   Execute immediately
-    │
-    ├── setTimeout(...)
-    │      ↓
-    │   Register timer with Event Loop
-    │
-    ├── fs.readFile(...)  I/O pooling
-    │      ↓
-    │   Send I/O task to libuv
-    │
-    ├── console.log("End")
-    │      ↓
-    │   Execute immediately
-    │
-    └── Event Loop Starts
-           │
-           ├── Timers Phase
-           │      │
-           │      └── Execute setTimeout callback
-           │
-           ├── I/O Poll Phase
-           │      │
-           │      └── Execute fs.readFile callback
-           │
-           └── Other Phases
-                  ├── Pending Callbacks
-                  ├── Check
-                  └── Close Callbacks
+<img src="./img/nodejs-works.jpeg" alt="nodejs-works" />
 
-```
 **What is Node.js? (Simple Explanation)**
 
 When you write JavaScript in the browser, it runs inside the browser's JavaScript engine (V8).
@@ -70,6 +39,13 @@ Google Chrome uses the V8 Engine to execute JavaScript code. The V8 engine is wr
 
 Node.js was written and introduced by Ryan Dahl in 2009
 Lightweight framework that includes bare minimum modules.
+
+✔ Node.js is an open-source(source code of node js is publicly available any one can view and contribute) serverside(outside browser can run)  JavaScript runtime
+✔ Uses the chrome V8 JavaScript engine that making it fast
+✔Mostly used for developing server-side & networking apps/apis
+✔Takes JavaScript out of the browser
+✔Fast, scalable and popular in many areas of the industry
+
 ```js
 node app.js
 ```
@@ -92,15 +68,14 @@ Browser
 
 **Why do we use Node.js?**
 
-To run JavaScript on the server (backend development).
-
-Fast performance because Node uses V8 and non-blocking I/O.
-
-Perfect for real-time apps (chat, notifications, streaming).
-
-Uses npm, the largest ecosystem for packages.
-
-Useful for building APIs, microservices, CLI tools, automation scripts, etc.
+✔ APIs
+✔Server-rendered apps
+✔Real-time applications(chat, notifications, streaming)
+✔Microservices
+✔Command Line Tools
+✔Bots
+✔Web scraping
+✔Web Servers
 
 | Feature | CommonJS (CJS) | ECMAScript Modules (ESM) |
 |----------|----------|----------|
