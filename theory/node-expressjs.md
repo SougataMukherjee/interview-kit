@@ -1,0 +1,2138 @@
+# 🟩 Node.js & Express.js Notes
+
+---
+---
+
+# 🟩 Node.js
+
+## What is a Server?
+
+A server is a computer program or device that receives requests from clients, processes those requests, and sends back a response over a network (such as the Internet).
+
+<img src="./img/server.jpeg" alt="server" />
+
+A server is a program that receives tasks or requests, processes them, and sends responses back over the Internet.
+A web server is a server that handles HTTP/HTTPS requests from web browsers and returns web pages, JSON data, images, videos, or other web content.
+
+When you type facebook.com in the browser, an encrypted HTTPS request travels through the internet to Facebook's server. The server processes the request and sends back a response, which the browser displays as the Facebook webpage.
+
+```js
+// npm i -D nodemon
+// in script "start": "nodemon index.js",
+
+import http from 'http';
+
+const PORT = process.env.PORT || 8080;
+const server = http.createServer((req, res) => {
+
+  console.log(`Request received: ${req.method} ${req.url}`);
+  res.setHeader('Content-Type', 'text/html');
+  res.statusCode = 200;
+  res.end('<h1>Hello!</h1>');
+});
+
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+```
+
+---
+
+## How Node.js Works
+
+<img src="./img/nodejs-works.jpeg" alt="nodejs-works" />
+
+## What is Node.js? (Simple Explanation)
+
+When you write JavaScript in the browser, it runs inside the browser's JavaScript engine (V8). But you cannot run JavaScript outside the browser directly — JavaScript by itself cannot create a web server. It is primarily a scripting language that was originally designed to run inside web browsers.
+
+Google Chrome uses the V8 Engine to execute JavaScript code. The V8 engine is written in C++ and converts JavaScript into machine code for fast execution.
+
+Node.js was written and introduced by Ryan Dahl in 2009. It's a lightweight framework that includes a bare minimum set of modules.
+
+- ✔ Node.js is an **open-source** (source code is publicly available, anyone can view and contribute) **server-side** (runs outside the browser) JavaScript runtime
+- ✔ Uses the Chrome V8 JavaScript engine, making it fast
+- ✔ Mostly used for developing server-side & networking apps/APIs
+- ✔ Takes JavaScript out of the browser
+- ✔ Fast, scalable, and popular in many areas of the industry
+
+```js
+node app.js
+```
+This executes JS using Node's V8 engine, without needing Chrome.
+
+---
+
+## Introduction to npm
+
+`npm` is a popular package manager that comes bundled with Node.js. It is a CLI (Command Line Interface) tool used to install, update, and remove external packages. You can also create your own package and publish it on the npmjs.com registry.
+
+📝 Do not confuse the `npm` CLI with npmjs.com — the latter is the registry where most Node.js packages are stored.
+
+### Semantic Versioning System
+
+Semantic Versioning (SemVer) is a versioning convention used by npm packages and many software projects.
+
+1. **MAJOR Version (1.x.x)** — Breaking changes that are not backward compatible
+2. **MINOR Version (x.1.x)** — New features that are backward compatible
+3. **PATCH Version (x.x.1)** — Small fixes, bugs, and improvements that are backward compatible
+
+| Symbol | Meaning | Example | Resolves To |
+|---|---|---|---|
+| `^` (Caret) | Minor and Patch updates allowed | `^4.17.1` | `4.18.0`, but **not** `5.0.0` |
+| `~` (Tilde) | Only Patch updates allowed | `~4.17.1` | `4.17.2`, but **not** `4.18.0` |
+| *(Exact)* | Fixed version | `4.17.1` | `4.17.1` only |
+| `>` | Greater than | `>4.17.1` | `4.18.0`, `5.0.0`, etc. |
+| `<` | Less than | `<4.17.1` | `4.16.0`, but not `4.17.1` |
+| `>=` | Greater than or equal to | `>=4.17.1` | `4.17.1`, `5.0.0`, etc. |
+| `<=` | Less than or equal to | `<=4.17.1` | `4.17.1`, `4.16.0`, etc. |
+| `*` | Any version | `*` | `4.0.0`, `5.0.0`, etc. |
+
+---
+
+## What is CLI and GUI in Node.js?
+
+**CLI (Command Line Interface)**
+
+CLI allows users to interact with applications through text commands in the terminal. It's fast and lightweight.
+```bash
+node app.js
+npm install
+npm start
+```
+
+**GUI (Graphical User Interface)**
+
+GUI allows users to interact using graphical elements such as buttons, menus, and windows. It's user friendly and easy to navigate.
+
+Examples: VS Code, Browser
+
+---
+
+## Why Do We Use Node.js?
+
+- ✔ APIs
+- ✔ Server-rendered apps
+- ✔ Real-time applications (chat, notifications, streaming)
+- ✔ Microservices
+- ✔ Command Line Tools
+- ✔ Bots
+- ✔ Web scraping
+- ✔ Web Servers
+
+---
+
+## CommonJS vs ECMAScript Modules
+
+| Feature | CommonJS (CJS) | ECMAScript Modules (ESM) |
+|---|---|---|
+| Import syntax | `require()` | `import` |
+| Export syntax | `module.exports` / `exports` | `export` / `export default` |
+| Loading | Synchronous | Asynchronous (static analysis friendly) |
+| File extension | `.js`, `.cjs` | `.mjs` or `.js` with `"type":"module"` |
+| Standard | Node.js-specific (originally) | JavaScript standard |
+| Tree shaking | Not supported well | Supported |
+| Top-level `await` | ❌ | ✅ |
+| `__dirname`, `__filename` | ✅ Available | ❌ Not available directly |
+| Browser support | ❌ | ✅ Native support |
+
+---
+
+## Synchronous vs Asynchronous
+
+| Feature | Synchronous (Sync) | Asynchronous (Async) |
+|---|---|---|
+| Execution | One task at a time | Multiple tasks can progress concurrently |
+| Blocking | ✅ Blocks execution | ❌ Does not block execution |
+| Performance | Slower for I/O-heavy tasks | Faster and scalable |
+| Thread behavior | Main thread waits | Main thread remains free |
+| Callback/Promise | Not needed | Uses Callbacks, Promises, Async/Await |
+| Use case | Small scripts, startup tasks | APIs, DB calls, file/network operations |
+| Node.js recommendation | Limited use | Preferred approach |
+
+---
+
+## In Node.js, We Can Create a Server Using the Built-in `http` Module — So Why Do We Still Use Express.js?
+
+**Problems with raw `http`:**
+- Manual URL and method checking
+- No built-in routing
+- No middleware support
+- Repetitive boilerplate code
+- Hard to scale and maintain
+
+**Raw `http` Module — What It Looks Like**
+```js
+import http from 'http';
+
+const PORT = process.env.PORT || 8080;
+
+const server = http.createServer((req, res) => {
+  try {
+    if (req.method === 'GET') {
+      if (req.url === '/') {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end('<h1>Homepage</h1>');
+      } else if (req.url === '/about') {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end('<h1>About</h1>');
+      } else {
+        res.writeHead(404, { 'Content-Type': 'text/html' });
+        res.end('<h1>Not Found</h1>');
+      }
+    } else {
+      throw new Error('Method Not Allowed');
+    }
+  } catch (err) {
+    res.writeHead(405, { 'Content-Type': 'application/json' });
+    res.end(
+      JSON.stringify({
+        error: err.message
+      })
+    );
+  }
+});
+
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+```
+
+**Same Thing With Express.js**
+
+Express is built on top of Node.js `http`, but it removes a lot of repetitive code and makes routing/API development easier. With `http`, you manually check URLs, methods, headers, and parse requests. Express provides simple methods like `app.get()` and `app.post()`.
+
+```js
+const express = require('express');
+const app = express();
+
+app.use(express.json()); // built-in middleware
+
+app.get('/users', (req, res) => {
+    res.status(200).json({ users: [] });
+});
+
+app.post('/users', (req, res) => {
+    res.status(201).json({ message: 'created' });
+});
+
+app.listen(3000);
+```
+
+---
+
+## Why Is a Callback Sometimes Slightly Faster Than Async/Await in Extremely Performance-Sensitive Code?
+
+`async/await` is built on top of Promises, so it inherits all Promise overhead. Callbacks are closer to the runtime and therefore can be slightly faster in hot code paths.
+
+**Callback**
+```txt
+Operation completes
+      ↓
+Direct callback invocation
+      ↓
+process()
+```
+
+**Async/Await**
+```txt
+Create Promise
+      ↓
+Resolve Promise
+      ↓
+Schedule microtask
+      ↓
+Resume async function
+      ↓
+process()
+```
+
+---
+
+## Is Node.js Single-Threaded?
+
+Yes — Node.js uses a single main thread, but it handles many tasks at once using:
+- Event Loop
+- Callbacks
+- Worker Threads (for heavy CPU tasks)
+
+---
+
+## What Kind of API Function Is Supported by Node.js?
+
+Node.js supports both synchronous (blocking) and asynchronous (non-blocking) API functions.
+
+---
+
+## What Is the Difference Between Node.js and JavaScript?
+
+JavaScript is a scripting language, while Node.js is a runtime environment that allows JavaScript to run on the server side.
+
+---
+
+## What Are the Main Disadvantages of Node.js?
+
+Disadvantages include its single-threaded nature, preference for NoSQL databases, and rapid API changes that can cause instability.
+
+---
+
+## Chaining in Node.js
+
+Calling multiple methods on the same object one after another.
+
+```js
+User.find()
+  .select("name")
+  .limit(10)
+  .sort("age");
+```
+
+---
+
+## Node Modules
+
+A module in Node.js is a block of code that provides specific functionality, which can be reused across different parts of an application.
+
+**1. Local Module** — your own files
+```js
+const xyz = require("./app");
+const abc = 10 + 20;
+
+module.exports = {
+  xyz,
+  abc,
+};
+
+// in app.js
+const { xyz, abc } = require("./math");
+
+console.log(xyz());
+console.log(abc);
+```
+
+**2. Global Module** — built-in
+```js
+const fs = require("fs");
+```
+
+---
+
+## What Do You Mean by the Event Loop in Node.js?
+
+The event loop is a mechanism that processes asynchronous tasks in a single thread by continuously checking for and executing callback functions.
+
+---
+
+## What Is `package.json` in Node.js?
+
+`package.json` is a metadata file in Node.js that contains information about the project, such as dependencies, scripts, and version.
+
+---
+
+## What Is a Buffer in Node.js?
+
+A buffer is a temporary storage space for binary data, allowing Node.js to handle raw data directly.
+
+```js
+const buffer = Buffer.from("Hello");
+
+console.log(buffer);            // <Buffer 48 65 6c 6c 6f>
+console.log(buffer.toString()); // Hello
+```
+
+---
+
+## What Are Streams in Node.js?
+
+<img src="./img/stream.jpeg" alt="stream" />
+
+A Stream is a way to process data piece-by-piece (chunks) instead of loading the entire data into memory at once. They enable reading or writing data piece by piece instead of loading the entire data into memory.
+
+Streams are objects used to handle continuous data flows, processing data chunk by chunk rather than all at once — much faster for big files.
+
+```js
+const fs = require('fs');
+const data = fs.readFileSync('movie.mp4');
+```
+
+---
+
+## What Is the Difference Between `setTimeout()` and `setImmediate()`?
+
+`setTimeout()` schedules a callback after a specified delay, whereas `setImmediate()` executes it immediately after I/O events.
+
+---
+
+## FileSystem — `readFile` vs `readFileSync`
+
+It allows you to read, write, update, and delete files on your computer.
+- `readFile` — Asynchronous, mostly used for web servers
+- `readFileSync()` — Synchronous, used for small scripts
+
+```js
+const fs = require("fs");
+
+// Async
+fs.readFile("./blog.txt", (err, data) => {
+  if (err) return console.log(err);
+  console.log("Async:", data.toString());
+});
+
+// Sync
+const data = fs.readFileSync("./blog.txt");
+console.log("Sync:", data.toString());
+
+// Write file
+fs.writeFile("./blog.txt", "Hello World", () => {
+  console.log("File written");
+});
+```
+
+---
+
+## Path Module — Node.js
+
+In Node.js, the `path` module provides utilities for working with file and directory paths. It is a built-in module, so you do not need to install any external packages to use it.
+
+**Special Node.js Constants**
+
+`__filename` — provides the absolute path of the currently executing file
+`__dirname` — provides the absolute directory path of the currently executing file
+
+```js
+console.log(__filename);
+// C:\Projects\app\index.js
+
+console.log(__dirname);
+// C:\Projects\app
+```
+
+**Common Path Module Methods**
+
+```js
+// path.basename() — returns the last portion of a path
+path.basename('/users/admin/file.txt');
+// file.txt
+
+// path.dirname() — returns the directory name of a path
+path.dirname('/users/admin/file.txt');
+// /users/admin
+
+// path.extname() — returns the file extension
+path.extname('file.txt');
+// .txt
+
+// path.join() — joins path segments into a single path
+path.join('users', 'admin', 'file.txt');
+// users/admin/file.txt
+
+// path.resolve() — resolves a sequence of paths into an absolute path
+path.resolve('file.txt');
+// C:\Projects\app\file.txt
+```
+
+---
+
+## FS Module — Node.js
+
+The `fs` (File System) module in Node.js is a core module that allows you to work with the file system, enabling you to read, write, update, delete, and watch files.
+
+**CRUD Operations — Asynchronous (callback style)**
+
+```js
+const fs = require("fs");
+const path = require("path");
+
+const fileName = "test.txt";
+const filePath = path.join(__dirname, fileName);
+
+// Read
+fs.readFile(filePath, "utf-8", (err, data) => {
+  if (err) console.error(err);
+  else console.log(data);
+});
+
+// Create
+fs.writeFile(filePath, "This is the initial Data", "utf-8", (err) => {
+  if (err) console.error(err);
+  else console.log("File has been Saved");
+});
+
+// Update
+fs.appendFile(filePath, "\nThis is the updated Data", "utf-8", (err) => {
+  if (err) console.error(err);
+  else console.log("File has been Updated");
+});
+
+// Delete
+fs.unlink(filePath, (err) => {
+  if (err) console.error(err);
+  else console.log("File has been Deleted");
+});
+```
+
+**Using Promises**
+
+Advantages:
+- No need for manual callbacks
+- Cleaner and more intuitive asynchronous workflows using async/await
+- Suitable for modern JavaScript applications
+
+Use Cases:
+- Reading files asynchronously in a non-blocking way
+- Writing or appending data to files without blocking the event loop
+- Performing multiple file operations sequentially or concurrently with promise chaining
+- Handling errors gracefully with `.catch()` or `try...catch` blocks
+
+```js
+const fs = require("fs");
+const path = require("path");
+
+const fileName = "fsPromises.txt";
+const filePath = path.join(__dirname, fileName);
+
+const file = __dirname;
+
+fs.promises
+  .readdir(file)
+  .then((data) => console.log(data))
+  .catch((err) => console.error(err));
+
+fs.promises
+  .writeFile(filePath, "", "utf-8")
+  .then(() => console.log("File created successfully!"))
+  .catch((err) => console.log(err));
+```
+
+**Using async/await**
+
+```js
+const readFileExample = async () => {
+  try {
+    const data = await fs.promises.readFile(filePath, "utf-8");
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+readFileExample();
+
+const appendFileExample = async () => {
+  try {
+    await fs.promises.appendFile(filePath, "This is the initial Data", "utf-8");
+    console.log("File created successfully!");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+appendFileExample();
+
+const writeFileExample = async () => {
+  try {
+    await fs.promises.writeFile(filePath, "This is the initial Data", "utf-8");
+    console.log("File created successfully!");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+writeFileExample();
+```
+
+---
+
+## Event Module — Node.js
+
+`EventEmitter` is a core module in Node.js used to create and handle custom events. It is part of the `events` module and is often used for building event-driven systems in Node.js.
+
+**Key Methods**
+
+1. **`emit(eventName, [args])`** — emits (triggers) an event with the specified `eventName`. You can also pass arguments that will be consumed by the listeners. It's like calling a function, but instead it triggers all listeners (functions) attached to the specified event.
+2. **`on(eventName, listener)`** — registers a listener function for the given event.
+
+```js
+const EventEmitter = require("events");
+
+// Create an instance of EventEmitter
+const emitter = new EventEmitter();
+
+// 1. Define an event listener (addListener)
+emitter.on("greet", () => {
+    console.log(`hello Vinod Thapa`);
+});
+
+emitter.on("greet", (arg) => {
+    console.log(`hello ${arg.username}, You are a ${arg.prof}, ri8`);
+});
+
+// 2. Trigger (emit) the "greet" event
+emitter.emit("greet", {
+    username: "Vinod Thapa",
+    prof: "Full Stack Dev"
+});
+```
+
+---
+
+## HTTP Module — Creating a Raw Server
+
+The `http` module is used to create a basic HTTP server without Express.
+
+```js
+const http = require("http");
+const fs = require("fs");
+
+const server = http.createServer((req, res) => {
+  console.log(req.url, req.method);
+
+  res.setHeader("Content-Type", "text/html");
+
+  fs.readFile("./index.html", (err, data) => {
+    if (err) return res.end("Error loading file");
+    res.statusCode = 200;
+    res.end(data);
+  });
+});
+
+server.listen(3000, () => console.log("Server running on port 3000"));
+```
+
+---
+
+## What Is Nodemon?
+
+A development tool that automatically restarts your server when files change.
+
+```bash
+npm install -g nodemon
+nodemon index.js
+```
+
+---
+---
+
+# 🟦 Express.js
+
+## What Is Express.js?
+
+Express.js is a minimal and flexible web application framework for Node.js, built on top of the native HTTP module. It provides routing, middleware, and server handling.
+
+## Why Express?
+
+1. Lightweight
+2. Fast, minimal setup
+3. Middleware support
+4. Easy routing
+5. Perfect for REST APIs
+
+**Basic Route**
+```js
+app.get("/home", (req, res) => {
+  res.send("Welcome Home");
+});
+```
+
+**Request / Response**
+- `req` → incoming data from client
+- `res` → output we send back
+
+---
+
+## What Is Middleware?
+
+Middleware is a callback function that runs between the request coming in and the response going out — performing tasks like logging, authentication, and data processing. It has three parameters: `req`, `res`, and `next`. It executes before the route handler.
+
+- Data sent by the client to the server is available in the `req` (request) object.
+- Data sent from the server to the client is handled through the `res` (response) object.
+- After executing its logic, the middleware passes control to the next middleware or route handler by calling `next()`.
+
+```js
+const express = require("express");
+const app = express();
+
+const logger = (req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next(); // pass control to next middleware
+};
+
+app.use(logger); // runs before every route
+
+app.get("/", (req, res) => {
+  res.send("Hello");
+});
+
+app.listen(3000);
+```
+
+**Custom Middleware Example**
+
+`users.json`
+```json
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "jane@example.com"
+  },
+  {
+    "id": 3,
+    "name": "Bob Johnson",
+    "email": "bob@example.com"
+  }
+]
+```
+
+`userMiddleware.js`
+```js
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export const loadUsers = (req, res, next) => {
+  const filePath = path.join(__dirname, "../users.json");
+
+  fs.readFile(filePath, "utf8", (err, data) => {
+    if (err) {
+      return res.status(500).json({
+        message: "Error reading file",
+      });
+    }
+
+    const users = JSON.parse(data);
+    req.users = users;
+    next();
+  });
+};
+```
+
+`index.js`
+```js
+import express from "express";
+import { loadUsers } from "./middlewares/usersMiddleware.js";
+
+const app = express();
+const PORT = 8080;
+
+app.get("/users", loadUsers, (req, res) => {
+  res.json(req.users);
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
+});
+```
+
+---
+
+## Route Parameters in Express.js
+
+Route parameters in Express.js are dynamic parts of the URL that can be accessed using `req.params`. They are defined in the route path with a colon (`:`), e.g. `/user/:id/view/:article` where `id` is a route parameter.
+
+- You can access the value of a route parameter via `req.params.id`, `req.params.article` in the route handler.
+- Route parameters are used to capture values from the URL and pass them to the route handler for processing, like user IDs, product names, etc.
+- Express automatically parses and makes the values available in `req.params` as an object, where the parameter name is the key.
+
+```js
+import express from "express";
+const app = express();
+
+//http://localhost:3000/user/101
+app.get("/user/:id", (req, res) => {
+    res.send(`User ID: ${req.params.id}`);
+});
+
+app.listen(3000);
+```
+
+---
+
+## Query Parameters in Express.js
+
+Query parameters are key-value pairs appended to a URL after a `?`, separated by `&`, like `/search?query=express&limit=10`.
+
+- In Express.js, they can be accessed using `req.query`, which returns an object containing the parameters.
+- For example, in `/search?page=4`, `req.query.page` will give `"4"`.
+- Query parameters are often used to pass optional or filter data to the server without modifying the route.
+- They are always part of the URL and visible in the browser address bar.
+
+```js
+import express from "express";
+
+const app = express();
+//http://localhost:3000/search?query=nodejs
+
+app.get("/search", (req, res) => {
+    res.send(`Search: ${req.query.query}`);
+});
+
+app.listen(3000);
+```
+
+---
+
+## Basic Route With Express + Basic Form
+
+```js
+const express = require("express");
+const app = express();
+const PORT = 8080;
+
+app.use(express.urlencoded({ extended: false }));
+
+app.get("/", (req, res) => {
+  return res.sendFile("./index.html", { root: __dirname });
+});
+
+app.post("/submit", (req, res) => {
+  return res.sendFile("./submit.html", { root: __dirname });
+});
+
+app.get("/users", (req, res) => {
+  res.send("All Users Coming Soon...");
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).sendFile("./404.html", { root: __dirname });
+});
+
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+```
+
+---
+
+## Template Engines
+
+A template engine in Express.js is used to render dynamic HTML by injecting data into templates. Popular engines like EJS, Pug, or Handlebars can be integrated with Express. All engines have different syntax similar to HTML, but they help pass dynamic values from Express to HTML.
+
+## What Is EJS?
+
+A view engine that lets you write dynamic HTML using JS. Supports JavaScript features like loops and conditionals.
+
+**EJS Tags**
+
+| EJS Tag | Purpose |
+|---|---|
+| `<%= value %>` | Display value |
+| `<%- value %>` | Display raw HTML |
+| `<% code %>` | JavaScript logic |
+| `res.render()` | Send EJS template to browser |
+| `app.set("view engine","ejs")` | Configure EJS |
+| `views/` | Folder containing `.ejs` files |
+
+**CRUD App Using EJS**
+
+```
+project/
+│
+├── index.js
+├── views/
+│   ├── index.ejs
+│   ├── add.ejs
+│   └── edit.ejs
+│
+├── package.json
+```
+
+`index.js`
+```js
+import express from "express";
+
+const app = express();
+const port = 8080;
+
+app.set("view engine", "ejs");
+app.use(express.urlencoded({ extended: true }));
+
+let posts = [
+  { id: 1, title: "Post One" },
+  { id: 2, title: "Post Two" }
+];
+
+// Home Page
+app.get("/", (req, res) => {
+  res.render("index", { posts });
+});
+
+// Add Form
+app.get("/add", (req, res) => {
+  res.render("add");
+});
+
+// Create Post
+app.post("/add", (req, res) => {
+  const newPost = {
+    id: posts.length + 1,
+    title: req.body.title
+  };
+
+  posts.push(newPost);
+  res.redirect("/");
+});
+
+// Edit Form
+app.get("/edit/:id", (req, res) => {
+  const post = posts.find(post => post.id === parseInt(req.params.id));
+
+  if (!post) {
+    return res.send("Post Not Found");
+  }
+
+  res.render("edit", { post });
+});
+
+// Update Post
+app.post("/edit/:id", (req, res) => {
+  const post = posts.find(post => post.id === parseInt(req.params.id));
+
+  if (!post) {
+    return res.send("Post Not Found");
+  }
+
+  post.title = req.body.title;
+  res.redirect("/");
+});
+
+// Delete Post
+app.post("/delete/:id", (req, res) => {
+  posts = posts.filter(post => post.id !== parseInt(req.params.id));
+  res.redirect("/");
+});
+
+app.listen(port, () => {
+  console.log(`Server running on ${port}`);
+});
+```
+
+`index.ejs`
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Posts</title>
+</head>
+<body>
+
+<h1>Posts</h1>
+<a href="/add">Add Post</a>
+<hr>
+
+<ul>
+  <% posts.forEach(post => { %>
+    <li>
+      <%= post.title %>
+      <a href="/edit/<%= post.id %>">Edit</a>
+      <form action="/delete/<%= post.id %>" method="POST" style="display:inline;">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+
+</body>
+</html>
+```
+
+`add.ejs`
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Post</title>
+</head>
+<body>
+
+<h1>Add Post</h1>
+<form action="/add" method="POST">
+  <input type="text" name="title" placeholder="Enter title" required>
+  <button type="submit">Add</button>
+</form>
+
+</body>
+</html>
+```
+
+`edit.ejs`
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Post</title>
+</head>
+<body>
+
+<h1>Edit Post</h1>
+<form action="/edit/<%= post.id %>" method="POST">
+  <input type="text" name="title" value="<%= post.title %>" required>
+  <button type="submit">Update</button>
+</form>
+
+</body>
+</html>
+```
+
+---
+
+## Create a REST API
+
+`mock.json`
+```json
+[
+  { "_id": 1, "name": "Sam", "email": "sam@gmail.com" }
+]
+```
+
+`index.js`
+```js
+const express = require("express");
+const fs = require("fs");
+
+const users = require("./mock.json");
+
+const app = express();
+app.use(express.urlencoded({ extended: false }));
+const PORT = 8080;
+
+// GET all users JSON
+app.get("/api/users", (req, res) => {
+  return res.json(users);
+});
+
+// GET users as HTML
+app.get("/users", (req, res) => {
+  const html = `
+  <ul>
+    ${users.map((u) => `<li>${u.name}</li>`).join("")}
+  </ul>`;
+  res.send(html);
+});
+
+// GET a user by ID
+app.get("/api/user/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const user = users.find((u) => u._id === id);
+
+  if (!user) return res.status(404).json({ msg: "User not found" });
+
+  res.json(user);
+});
+
+// POST user
+app.post("/api/users", (req, res) => {
+  const body = req.body;
+
+  const newUser = { ...body, _id: users.length + 1 };
+  users.push(newUser);
+
+  fs.writeFile("./mock.json", JSON.stringify(users), () => {
+    return res.json({ status: "Success", id: newUser._id });
+  });
+});
+
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+```
+
+---
+
+## Node.js + MongoDB With MVC Pattern
+
+MVC is a software design pattern that separates an application into three distinct layers: Model, View, and Controller, each with a specific responsibility.
+
+**Model** — Manages Data and Logic
+- Represents the data of the application
+- Handles business logic
+- Interacts with the database (e.g. CRUD operations)
+
+**View** — Handles User Interface
+- Displays the data to the user
+- Responsible for rendering the presentation (HTML, CSS, JavaScript) based on the data provided by the Controller
+
+**Controller** — The Mediator
+- Acts as the intermediary between the Model and View
+- Handles user input
+- Interacts with the Model to fetch or update data
+- Passes the data to the View for display
+
+```js
+// model
+const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema(
+  {
+    firstName: { type: String, required: true },
+    lastName: { type: String },
+    email: { type: String, required: true, unique: true }
+  },
+  { timestamps: true }
+);
+
+const User = mongoose.model("User", userSchema);
+module.exports = User;
+
+// controller
+exports.createUser = async (req, res) => {
+  const body = req.body;
+
+  if (!body.firstName || !body.email)
+    return res.status(400).json({ msg: "All fields required" });
+
+  await User.create(body);
+
+  return res.status(201).json({ msg: "User created" });
+};
+
+// view (ejs)
+// <ul>
+//   <% users.forEach(u => { %>
+//     <li><%= u.firstName %></li>
+//   <% }) %>
+// </ul>
+
+// mongodb connection
+mongoose
+  .connect("mongodb://127.0.0.1:27017/mydb")
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(err));
+```
+
+---
+
+## Create a Pagination API
+
+```js
+app.get("/api/users", (req, res) => {
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 3;
+
+  const start = (page - 1) * limit;
+  const end = page * limit;
+
+  return res.json({
+    page,
+    data: users.slice(start, end),
+  });
+});
+```
+
+---
+
+## Cookies
+
+A cookie is a small piece of data stored in the user's browser and sent back to the server with every request.
+
+**How Cookies Work**
+- Server sends a cookie to the browser
+- Browser stores the cookie
+- Browser automatically sends the cookie with future requests to the same domain
+
+<img src="./img/session.jpeg" alt="session" />
+
+```js
+const cookieParser = require('cookie-parser');
+const express = require('express');
+
+const app = express();
+
+app.use(cookieParser());
+
+app.get('/', function (req, res) {
+    res.cookie("name", "harshita");
+    res.send("done");
+});
+
+app.get('/read', function (req, res) {
+    console.log(req.cookies);
+    res.send("read page");
+});
+
+app.get('/delete', function (req, res) {
+    res.clearCookie('name');
+    res.send('Cookie deleted successfully');
+});
+
+app.listen(3000);
+```
+
+---
+
+## Sessions
+
+A session stores user data on the server, while only a session ID is stored in a cookie on the client.
+
+**How Sessions Work**
+- User logs in
+- Server creates a session and assigns a unique session ID
+- Session ID is stored in a cookie
+- Browser sends session ID with future requests
+- Server retrieves user data using that session ID
+
+| Feature | Cookie | Session |
+|---|---|---|
+| Storage Location | Browser | Server |
+| Data Stored | Actual data | Session data on server |
+| Client Side Access | Yes | No (only session ID) |
+| Security | Less secure | More secure |
+| Storage Limit | ~4 KB | Server memory/database |
+| Lifetime | Until expiry/deletion | Until timeout/logout |
+| Common Usage | Preferences, theme, language | Login/authentication |
+
+---
+
+## Express.js Using Zod (Input Validation)
+
+```js
+const express = require("express");
+const { z, ZodError } = require("zod");
+
+const app = express();
+
+app.use(express.json());
+
+// Schema
+const userSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters"),
+  email: z.string().email("Invalid email format"),
+  age: z.number().min(18, "Age must be at least 18"),
+});
+
+// Route
+app.post("/users", (req, res) => {
+  try {
+    const validatedData = userSchema.parse(req.body);
+
+    res.status(201).json({
+      success: true,
+      data: validatedData,
+    });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        errors: error.errors,
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+});
+
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
+```
+
+---
+---
+
+# ➕ Missing Questions
+
+## `window`/`document` vs `global`/`globalThis` Object
+
+📝 In the **browser**, the global object is `window` (holds `document`, DOM APIs, etc.). In **Node.js**, there is no `window` — the global object is `global`. `globalThis` is a **standard JavaScript** property that points to the global object in *any* environment — `window` in the browser, `global` in Node.js — so it's the safe, portable way to access the global object regardless of where the code runs.
+
+```js
+// In the browser
+console.log(window === globalThis); // true
+
+// In Node.js
+console.log(global === globalThis); // true
+console.log(typeof window);          // 'undefined' — window does not exist in Node.js
+
+// Attaching a variable globally in Node.js
+global.appName = "MyApp";
+console.log(globalThis.appName); // MyApp — accessible via globalThis too
+```
+
+| | `window` | `global` | `globalThis` |
+|---|---|---|---|
+| Environment | Browser only | Node.js only | Both (standard JS) |
+| Includes DOM (`document`, etc.) | ✅ | ❌ | Depends on environment |
+| Recommended for cross-platform code | ❌ | ❌ | ✅ |
+
+---
+
+## When to Use Named Export vs Default Export?
+
+📝 **Named export** — use when a file exports multiple things (functions, constants, classes). The import name must match the exported name (unless aliased with `as`).
+
+📝 **Default export** — use when a file exports exactly **one main thing** (e.g. a single component, a single utility function, an Express router). Can be imported with any name.
+
+```js
+// Named exports — math.js
+export const add = (a, b) => a + b;
+export const subtract = (a, b) => a - b;
+
+// Import — must match names (or use *)
+import { add, subtract } from './math.js';
+```
+
+```js
+// Default export — logger.js
+export default function logger(msg) {
+  console.log(msg);
+}
+
+// Import — any name works
+import log from './logger.js';
+```
+
+**Rule of thumb**
+- One main export per file (a component, a router, a class) → **default export**
+- A utility/helper file with multiple related functions/constants → **named exports**
+- A file can have both a default export and named exports at the same time
+
+---
+
+## Input Validation With a Custom Async Validator
+
+📝 Sometimes validation requires checking against the database (e.g. "is this email already taken?") — this needs to be **asynchronous**. Libraries like Zod, Joi, and Mongoose support async/custom validation logic.
+
+**Custom async validator with Zod (`.refine()`)**
+```js
+const { z } = require("zod");
+
+const userSchema = z.object({
+  email: z.string().email()
+}).refine(
+  async (data) => {
+    const existingUser = await User.findOne({ email: data.email });
+    return !existingUser; // return false if email already taken
+  },
+  {
+    message: "Email is already in use",
+    path: ["email"]
+  }
+);
+
+app.post("/users", async (req, res) => {
+  try {
+    const validatedData = await userSchema.parseAsync(req.body);
+    res.status(201).json({ success: true, data: validatedData });
+  } catch (error) {
+    res.status(400).json({ success: false, errors: error.errors });
+  }
+});
+```
+
+**Custom async validator in a Mongoose schema**
+```js
+const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    validate: {
+      validator: async function (value) {
+        const existing = await mongoose.models.User.findOne({ email: value });
+        return !existing; // false triggers validation error
+      },
+      message: "Email already exists"
+    }
+  }
+});
+```
+
+---
+
+## Model and Schema (Mongoose)
+
+📝 **Schema** — defines the *structure/shape* of a document: field names, data types, validation rules, and defaults. It's a blueprint, not a database object.
+
+📝 **Model** — a compiled version of the schema; it's the actual interface used to create, read, update, and delete documents in MongoDB (the "class" built from the schema "blueprint").
+
+```js
+const mongoose = require("mongoose");
+
+// Schema — defines structure & validation
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    age: { type: Number, min: 18, default: 18 }
+  },
+  { timestamps: true }
+);
+
+// Model — compiled from schema, used to interact with the DB
+const User = mongoose.model("User", userSchema);
+
+// Using the model to perform CRUD
+const newUser = await User.create({ name: "Sam", email: "sam@gmail.com" });
+const allUsers = await User.find();
+const oneUser = await User.findById(newUser._id);
+await User.findByIdAndUpdate(newUser._id, { age: 25 });
+await User.findByIdAndDelete(newUser._id);
+```
+
+| | Schema | Model |
+|---|---|---|
+| Purpose | Defines structure/validation | Interacts with the database |
+| Analogy | Blueprint / class definition | The actual class used to create instances |
+| Created with | `new mongoose.Schema({...})` | `mongoose.model("Name", schema)` |
+
+---
+---
+
+# 📦 Projects
+
+## Project 1: CRUD API with JSON File + Swagger Docs
+
+**Installation and URLs**
+```bash
+npm install express cors swagger-ui-express swagger-jsdoc nodemon
+# add Swagger JSDoc comments in main.js
+node main.js
+npx nodemon main.js
+
+# http://localhost:5000/api/user
+# http://localhost:5000/api-docs
+```
+
+`user.json`
+```json
+[
+  {
+    "id": 1,
+    "name": "Sougata"
+  }
+]
+```
+
+`main.js`
+```js
+const express = require("express");
+const cors = require("cors");
+const fs = require("fs");
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
+
+const app = express();
+const PORT = 5000;
+
+app.use(cors());
+app.use(express.json());
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "User CRUD API",
+      version: "1.0.0",
+      description: "Simple CRUD API using Express and JSON file"
+    },
+    servers: [{ url: "http://localhost:5000" }]
+  },
+  apis: ["./main.js"]
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+const FILE = "./user.json";
+
+if (fs.existsSync(FILE)) {
+  console.log("✅ DB found");
+} else {
+  console.log("❌ DB not found");
+}
+
+/**
+ * @swagger
+ * /api/user:
+ *   get:
+ *     summary: Get all users
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+app.get("/api/user", (req, res) => {
+  const data = JSON.parse(fs.readFileSync(FILE));
+  res.status(200).json(data);
+});
+
+/**
+ * @swagger
+ * /api/user:
+ *   post:
+ *     summary: Create user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User created
+ */
+app.post("/api/user", (req, res) => {
+  const users = JSON.parse(fs.readFileSync(FILE));
+
+  const newUser = {
+    id: Date.now(),
+    ...req.body
+  };
+
+  users.push(newUser);
+  fs.writeFileSync(FILE, JSON.stringify(users, null, 2));
+
+  res.status(201).json(newUser);
+});
+
+/**
+ * @swagger
+ * /api/user/{id}:
+ *   put:
+ *     summary: Update user
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User updated
+ */
+app.put("/api/user/:id", (req, res) => {
+  const users = JSON.parse(fs.readFileSync(FILE));
+
+  const updated = users.map(user =>
+    user.id == req.params.id ? { ...user, ...req.body } : user
+  );
+
+  fs.writeFileSync(FILE, JSON.stringify(updated, null, 2));
+
+  res.status(200).json({ message: "Updated" });
+});
+
+/**
+ * @swagger
+ * /api/user/{id}:
+ *   delete:
+ *     summary: Delete user
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: User deleted
+ */
+app.delete("/api/user/:id", (req, res) => {
+  const users = JSON.parse(fs.readFileSync(FILE));
+
+  const filtered = users.filter(x => x.id != req.params.id);
+
+  fs.writeFileSync(FILE, JSON.stringify(filtered, null, 2));
+
+  res.sendStatus(204).json({ message: "Deleted" });
+});
+
+app.listen(PORT, () => console.log(` ✅ Server running on ${PORT}`));
+```
+
+---
+
+## Project 2: CRUD API with MongoDB + Swagger Docs
+
+**Installation, Credentials, and URLs**
+```txt
+MongoDB username/password with URL:
+
+sougatamukherjee_db_user
+fbPJDtUAgWzjGE83
+mongodb+srv://sougatamukherjee_db_user:fbPJDtUAgWzjGE83@cluster0.eytkkg9.mongodb.net/?appName=Cluster0
+
+Data: https://cloud.mongodb.com/v2/6a4660fb3fdbae474dc36c6b#/explorer/6a46619e1169dc5cd4b154dd/test/users/find
+```
+
+```bash
+npm install express cors mongoose swagger-ui-express swagger-jsdoc nodemon
+# add Swagger JSDoc comments in main.js
+node main.js
+npx nodemon main.js
+
+# http://localhost:5000/api/user
+# http://localhost:5000/api-docs
+```
+
+`main.js`
+```js
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerJsdoc = require("swagger-jsdoc");
+
+const app = express();
+const PORT = 5000;
+
+app.use(cors());
+app.use(express.json());
+
+/* ========= MongoDB Connection ========= */
+mongoose.connect("mongodb+srv://sougatamukherjee_db_user:fbPJDtUAgWzjGE83@cluster0.eytkkg9.mongodb.net/?appName=Cluster0");
+
+mongoose.connection.on("connected", () => {
+  console.log("✅ MongoDB Connected");
+});
+
+mongoose.connection.on("error", (err) => {
+  console.log("❌ MongoDB Error:", err);
+});
+
+/* ========= User Schema ========= */
+const userSchema = new mongoose.Schema(
+  { name: { type: String, required: true, unique: true } },
+  { timestamps: true }
+);
+
+const User = mongoose.model("User", userSchema);
+
+/* ========= Swagger Config ========= */
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "User CRUD API",
+      version: "1.0.0",
+      description: "CRUD API using Express + MongoDB + Mongoose"
+    },
+    servers: [{ url: "http://localhost:5000" }]
+  },
+  apis: ["./main.js"]
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         name:
+ *           type: string
+ */
+
+/**
+ * @swagger
+ * /api/user:
+ *   get:
+ *     summary: Get all users
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+app.get("/api/user", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/user:
+ *   post:
+ *     summary: Create User
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: User Created
+ */
+app.post("/api/user", async (req, res) => {
+  try {
+    const user = await User.create({ name: req.body.name });
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/user/{id}:
+ *   put:
+ *     summary: Update User
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User Updated
+ */
+app.put("/api/user/:id", async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { name: req.body.name },
+      { new: true }
+    );
+
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/user/{id}:
+ *   delete:
+ *     summary: Delete User
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User Deleted
+ */
+app.delete("/api/user/:id", async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "User Deleted" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`✅ Server running on ${PORT}`);
+});
+```
+
+---
+
+## Project 3: CRUD App with Express Router
+
+```js
+import express from 'express';
+const router = express.Router();
+const app = express();
+
+// Middleware to parse JSON request bodies
+app.use(express.json());
+app.use(router);
+
+const port = 8080;
+
+const posts = [
+  { id: 1, title: 'Post One' },
+  { id: 2, title: 'Post Two' },
+  { id: 3, title: 'Post Three' },
+];
+
+// Get all posts with limit
+// GET http://localhost:8080/api/posts?limit=2
+router.get('/api/posts', (req, res) => {
+  const limit = parseInt(req.query.limit);
+
+  if (!isNaN(limit) && limit > 0) {
+    res.status(200).json(posts.slice(0, limit));
+  } else {
+    res.status(200).json(posts);
+  }
+});
+
+// Get single post by id
+// GET http://localhost:8080/api/posts/1
+router.get('/api/posts/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const post = posts.filter((post) => post.id === id);
+
+  if (post.length === 0) {
+    return res.status(404).json({ message: 'Post not found' });
+  }
+
+  res.status(200).json(post);
+});
+
+// POST http://localhost:3000/api/posts
+router.post('/api/posts', (req, res) => {
+  if (!req.body.title) {
+    return res.status(400).json({ message: 'Title is required' });
+  }
+
+  const newPost = {
+    id: posts.length + 1,
+    title: req.body.title
+  };
+
+  posts.push(newPost);
+  res.status(201).json(newPost);
+});
+
+// Update Post
+router.put('/api/posts/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const post = posts.find((post) => post.id === id);
+
+  if (!post) {
+    return res.status(404).json({ msg: `A post with the id ${id} was not found` });
+  }
+
+  if (!req.body.title) {
+    return res.status(400).json({ msg: 'Title is required' });
+  }
+
+  post.title = req.body.title;
+  res.status(200).json(post);
+});
+
+// Delete Post
+router.delete('/api/posts/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const post = posts.find((post) => post.id === id);
+
+  if (!post) {
+    return res.status(404).json({ msg: `A post with the id ${id} was not found` });
+  }
+
+  // Actually remove from array
+  const index = posts.findIndex((p) => p.id === id);
+  posts.splice(index, 1);
+
+  res.status(200).json({
+    msg: 'Post deleted successfully',
+    posts: posts
+  });
+});
+
+app.listen(port, () => console.log(`Server is running on port ${port}`));
+```
+
+---
+
+## Project 4: Append User to JSON File
+
+`users.json`
+```json
+[
+  { "id": "1", "name": "John Doe" },
+  { "id": "2", "name": "Jane Smith" },
+  { "id": "3", "name": "Alice Johnson" }
+]
+```
+
+```js
+import express from "express";
+import fs from "fs/promises";
+
+const app = express();
+const PORT = 8080;
+
+app.use(express.json());
+
+app.post("/users", async (req, res) => {
+  try {
+    const data = await fs.readFile("./users.json", "utf8");
+    const users = JSON.parse(data);
+
+    users.push(req.body);
+
+    await fs.writeFile("./users.json", JSON.stringify(users, null, 2));
+
+    res.json({
+      message: "User added successfully",
+      user: req.body,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
+});
+```
+
+---
+
+## Project 5: Encrypt and Decrypt API
+
+```js
+import express from "express";
+import crypto from "crypto";
+
+const app = express();
+
+app.use(express.json());
+
+const algorithm = "aes-256-cbc";
+const key = crypto.randomBytes(32);
+const iv = crypto.randomBytes(16);
+
+app.post("/encrypt", (req, res) => {
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+
+  let encrypted = cipher.update(req.body.text, "utf8", "hex");
+  encrypted += cipher.final("hex");
+
+  res.json({ encrypted });
+});
+
+app.post("/decrypt", (req, res) => {
+  const decipher = crypto.createDecipheriv(algorithm, key, iv);
+
+  let decrypted = decipher.update(req.body.encrypted, "hex", "utf8");
+  decrypted += decipher.final("utf8");
+
+  res.json({ decrypted });
+});
+
+app.listen(8080);
+```
+
+---
+
+## Project 6: Todo App Using CLI
+
+```js
+const readline = require("readline");
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+let todos = [];
+
+function showMenu() {
+  console.log("\n===== TODO APP =====");
+  console.log("1. Add Todo");
+  console.log("2. Show Todos");
+  console.log("3. Delete Todo");
+  console.log("4. Exit");
+
+  rl.question("Choose an option: ", handleInput);
+}
+
+function handleInput(option) {
+  switch (option) {
+    case "1":
+      rl.question("Enter Todo: ", (todo) => {
+        todos.push(todo);
+        console.log("✅ Todo Added");
+        showMenu();
+      });
+      break;
+
+    case "2":
+      console.log("\n----- TODOS -----");
+
+      if (todos.length === 0) {
+        console.log("No todos found");
+      } else {
+        todos.forEach((todo, index) => {
+          console.log(`${index + 1}. ${todo}`);
+        });
+      }
+
+      showMenu();
+      break;
+
+    case "3":
+      if (todos.length === 0) {
+        console.log("No todos to delete");
+        return showMenu();
+      }
+
+      todos.forEach((todo, index) => {
+        console.log(`${index + 1}. ${todo}`);
+      });
+
+      rl.question("Enter todo number to delete: ", (num) => {
+        const index = Number(num) - 1;
+
+        if (index >= 0 && index < todos.length) {
+          const deleted = todos.splice(index, 1);
+          console.log(`🗑 Deleted: ${deleted[0]}`);
+        } else {
+          console.log("Invalid index");
+        }
+
+        showMenu();
+      });
+
+      break;
+
+    case "4":
+      console.log("👋 Goodbye!");
+      rl.close();
+      break;
+
+    default:
+      console.log("Invalid Option");
+      showMenu();
+  }
+}
+
+showMenu();
+```
+
+---
+
+## Project 7: Random Joke Generator
+
+```js
+import https from "https";
+import readline from "readline";
+import chalk from "chalk";
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+function getJoke() {
+  const url = "https://official-joke-api.appspot.com/random_joke";
+
+  https.get(url, (response) => {
+    let data = "";
+
+    response.on("data", (chunk) => {
+      data += chunk;
+    });
+
+    response.on("end", () => {
+      const joke = JSON.parse(data);
+
+      console.log(chalk.green("\n😂 Random Joke\n"));
+      console.log(chalk.yellow(joke.setup));
+      console.log(chalk.red.bold(joke.punchline));
+
+      showMenu();
+    });
+  });
+}
+
+function showMenu() {
+  rl.question("\n1. Get Joke\n2. Exit\nChoose option: ", handleInput);
+}
+
+function handleInput(option) {
+  switch (option) {
+    case "1":
+      getJoke();
+      break;
+
+    case "2":
+      console.log("👋 Goodbye!");
+      rl.close();
+      break;
+
+    default:
+      console.log("Invalid option");
+      showMenu();
+  }
+}
+
+showMenu();
+```
+
+---
+
+## Project 8: Weather App (CLI)
+
+```js
+import readline from "readline/promises";
+
+const API_KEY = "YOUR_API_KEY";
+const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+const getWeather = async (city) => {
+  const url = `${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`;
+
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("City not found. Please check the city name.");
+    }
+
+    const weatherData = await response.json();
+
+    console.log("\n🌤 Weather Information:");
+    console.log(`City: ${weatherData.name}`);
+    console.log(`Temperature: ${weatherData.main.temp}°C`);
+    console.log(`Description: ${weatherData.weather[0].description}`);
+    console.log(`Humidity: ${weatherData.main.humidity}%`);
+    console.log(`Wind Speed: ${weatherData.wind.speed} m/s\n`);
+  } catch (error) {
+    console.log("❌ Error:", error.message);
+  } finally {
+    rl.close();
+  }
+};
+
+const city = await rl.question("Enter city name: ");
+await getWeather(city);
+```
