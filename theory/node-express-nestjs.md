@@ -318,12 +318,19 @@ The event loop is a mechanism that processes asynchronous tasks in a single thre
 **What is buffer in Node.js?**
 
 A buffer is a temporary storage space for binary data, allowing Node.js to handle raw data directly.
-**What are streams in Node.js?**  
-A Stream is a way to process data piece-by-piece (chunks) instead of loading the entire data into memory at once.
-Think of it like drinking water through a straw:
 
-Without stream → You try to drink the entire bottle at once.
-With stream → You consume it little by little.
+```js
+const buffer = Buffer.from("Hello");
+
+console.log(buffer);//<Buffer 48 65 6c 6c 6f>
+console.log(buffer.toString());//Hello
+```
+<img src="./img/stream.jpeg" alt="stream" />
+
+**What are streams in Node.js?**  
+
+A Stream is a way to process data piece-by-piece (chunks) instead of loading the entire data into memory at once.
+They enable reading or writing data piece by piece instead of loading the entire data into memory.
 
 Streams are objects used to handle continuous data flows, process data chunk by chunk, not all at once and its faster for big file
 
@@ -564,6 +571,68 @@ app.get("/api/users", (req, res) => {
 });
 
 ```
+---
+## Cookies
+
+A cookie is a small piece of data stored in the user's browser and sent back to the server with every request.
+
+**How Cookies Work**
+
+- Server sends a cookie to the browser.
+- Browser stores the cookie.
+- Browser automatically sends the cookie with future requests to the same domain.
+
+<img src="./img/session.jpeg" alt="session" />
+
+```js
+const cookieParser = require('cookie-parser');
+const express = require('express');
+
+const app = express();
+
+app.use(cookieParser());
+
+app.get('/', function (req, res) {
+    res.cookie("name", "harshita");
+    res.send("done");
+});
+
+app.get('/read', function (req, res) {
+    console.log(req.cookies);
+    res.send("read page");
+});
+app.get('/delete', function (req, res) {
+    res.clearCookie('name');
+    res.send('Cookie deleted successfully');
+});
+
+
+app.listen(3000);
+```
+
+## Sessions
+
+A session stores user data on the server, while only a session ID is stored in a cookie on the client.
+
+**How Sessions Work**
+
+- User logs in.
+- Server creates a session and assigns a unique session ID.
+- Session ID is stored in a cookie.
+- Browser sends session ID with future requests.
+- Server retrieves user data using that session ID.
+
+| Feature            | Cookie                       | Session                |
+| ------------------ | ---------------------------- | ---------------------- |
+| Storage Location   | Browser                      | Server                 |
+| Data Stored        | Actual data                  | Session data on server |
+| Client Side Access | Yes                          | No (only session ID)   |
+| Security           | Less secure                  | More secure            |
+| Storage Limit      | \~4 KB                       | Server memory/database |
+| Lifetime           | Until expiry/deletion        | Until timeout/logout   |
+| Common Usage       | Preferences, theme, language | Login/authentication   |
+---
+
 *Project 1*
 
 installation and url:
