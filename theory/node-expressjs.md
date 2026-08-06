@@ -138,20 +138,6 @@ Examples: VS Code, Browser
 
 ---
 
-## Synchronous vs Asynchronous
-
-| Feature | Synchronous (Sync) | Asynchronous (Async) |
-|---|---|---|
-| Execution | One task at a time | Multiple tasks can progress concurrently |
-| Blocking | ✅ Blocks execution | ❌ Does not block execution |
-| Performance | Slower for I/O-heavy tasks | Faster and scalable |
-| Thread behavior | Main thread waits | Main thread remains free |
-| Callback/Promise | Not needed | Uses Callbacks, Promises, Async/Await |
-| Use case | Small scripts, startup tasks | APIs, DB calls, file/network operations |
-| Node.js recommendation | Limited use | Preferred approach |
-
----
-
 ## In Node.js, We Can Create a Server Using the Built-in `http` Module — So Why Do We Still Use Express.js?
 
 **Problems with raw `http`:**
@@ -368,6 +354,16 @@ const data = fs.readFileSync('movie.mp4');
 It allows you to read, write, update, and delete files on your computer.
 - `readFile` — Asynchronous, mostly used for web servers
 - `readFileSync()` — Synchronous, used for small scripts
+
+| Feature | Synchronous (Sync) | Asynchronous (Async) |
+|---|---|---|
+| Execution | One task at a time | Multiple tasks can progress concurrently |
+| Blocking | ✅ Blocks execution | ❌ Does not block execution |
+| Performance | Slower for I/O-heavy tasks | Faster and scalable |
+| Thread behavior | Main thread waits | Main thread remains free |
+| Callback/Promise | Not needed | Uses Callbacks, Promises, Async/Await |
+| Use case | Small scripts, startup tasks | APIs, DB calls, file/network operations |
+| Node.js recommendation | Limited use | Preferred approach |
 
 ```js
 const fs = require("fs");
@@ -647,6 +643,8 @@ Middleware is a callback function that runs between the request coming in and th
 - Data sent by the client to the server is available in the `req` (request) object.
 - Data sent from the server to the client is handled through the `res` (response) object.
 - After executing its logic, the middleware passes control to the next middleware or route handler by calling `next()`.
+
+<img src="./img/middleware.jpeg" alt="middleware" />
 
 ```js
 const express = require("express");
@@ -1169,6 +1167,8 @@ app.listen(3000);
 
 A session stores user data on the server, while only a session ID is stored in a cookie on the client.
 
+<img src="./img/sessions.jpeg" alt="sessions" />
+
 **How Sessions Work**
 - User logs in
 - Server creates a session and assigns a unique session ID
@@ -1189,6 +1189,8 @@ A session stores user data on the server, while only a session ID is stored in a
 ---
 
 ## Express.js Using Zod (Input Validation)
+
+<img src="./img/authorization.jpeg" alt="auth" />
 
 ```js
 const express = require("express");
@@ -1235,9 +1237,6 @@ app.listen(3000, () => {
 ```
 
 ---
----
-
-# ➕ Missing Questions
 
 ## `window`/`document` vs `global`/`globalThis` Object
 
@@ -1269,6 +1268,9 @@ console.log(globalThis.appName); // MyApp — accessible via globalThis too
 📝 **Named export** — use when a file exports multiple things (functions, constants, classes). The import name must match the exported name (unless aliased with `as`).
 
 📝 **Default export** — use when a file exports exactly **one main thing** (e.g. a single component, a single utility function, an Express router). Can be imported with any name.
+
+<img src="./img/transfer.jpeg" alt="transfer" />
+
 
 ```js
 // Named exports — math.js
