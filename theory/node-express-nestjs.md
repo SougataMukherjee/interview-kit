@@ -41,9 +41,13 @@ Node.js was written and introduced by Ryan Dahl in 2009
 Lightweight framework that includes bare minimum modules.
 
 ✔ Node.js is an open-source(source code of node js is publicly available any one can view and contribute) serverside(outside browser can run)  JavaScript runtime
+
 ✔ Uses the chrome V8 JavaScript engine that making it fast
+
 ✔Mostly used for developing server-side & networking apps/apis
+
 ✔Takes JavaScript out of the browser
+
 ✔Fast, scalable and popular in many areas of the industry
 
 ```js
@@ -69,12 +73,19 @@ Browser
 **Why do we use Node.js?**
 
 ✔ APIs
+
 ✔Server-rendered apps
+
 ✔Real-time applications(chat, notifications, streaming)
+
 ✔Microservices
+
 ✔Command Line Tools
+
 ✔Bots
+
 ✔Web scraping
+
 ✔Web Servers
 
 | Feature | CommonJS (CJS) | ECMAScript Modules (ESM) |
@@ -111,22 +122,39 @@ Hard to scale and maintain
 
 Raw http Module — What It Looks Like
 ```js
-const http = require('http');
+import http from 'http';
+
+const PORT = process.env.PORT || 8080;
 
 const server = http.createServer((req, res) => {
-    if (req.method === 'GET' && req.url === '/users') {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ users: [] }));
-    } else if (req.method === 'POST' && req.url === '/users') {
-        res.writeHead(201, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'created' }));
+  try {
+    if (req.method === 'GET') {
+      if (req.url === '/') {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end('<h1>Homepage</h1>');
+      } else if (req.url === '/about') {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end('<h1>About</h1>');
+      } else {
+        res.writeHead(404, { 'Content-Type': 'text/html' });
+        res.end('<h1>Not Found</h1>');
+      }
     } else {
-        res.writeHead(404);
-        res.end('Not Found');
+      throw new Error('Method Not Allowed');
     }
+  } catch (err) {
+    res.writeHead(405, { 'Content-Type': 'application/json' });
+    res.end(
+      JSON.stringify({
+        error: err.message
+      })
+    );
+  }
 });
 
-server.listen(3000);
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 ```
 Same Thing With Express.js
 Express is built on top of Node.js http, but it removes a lot of repetitive code and makes routing/API development easier.
