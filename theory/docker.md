@@ -31,28 +31,29 @@ A typical software project contains several components:
 3. **Database** - Data storage
 
 In order to deploy our application on a machine, we need to set up all the required software to run our application.
-
+<img src="./img/docker.jpeg" alt="docker" />
 ---
 
 ## Why Docker?
 
-### The Problem
-In real-time projects, applications should be deployed into multiple environments (Dev, Test, Prod) for testing purposes. Whatever software setup is required needs to be installed manually on each machine.
+### Consistency Across Environments
 
-**Common Issues:**
-- When developers deploy code on a dev machine (VM1) and testers check on a testing machine (VM2), the application might not run due to:
-  - Setup mismatches
-  - Version mismatches
-  - Missing files or dependencies
+`Problem:` Applications often behave differently in development, testing, and production environments due to variations in configurations, dependencies, and infrastructure.
 
-### The Solution
-Instead of transferring only code, create a **Docker Image** (a complete package) from the dev side that includes:
-- Application code
-- Dependencies
-- Libraries
-- Software configurations
+`Solution:` Docker containers encapsulate all the necessary components, ensuring the application runs consistently across all environments.
 
-This Docker image can be transferred from one environment to another, ensuring consistency.
+### Isolation
+
+`Problem:` Running multiple applications on the same host can lead to conflicts, such as dependency clashes or resource contention.
+
+`Solution:` Docker provides isolated environments for each application, preventing interference and ensuring stable performance.
+
+### Scalability
+
+`Problem:` Scaling applications to handle increased load can be challenging, requiring manual intervention and configuration.
+
+`Solution:` Docker makes it easy to scale applications horizontally by running multiple container instances, allowing for quick and efficient scaling.
+
 
 ---
 
@@ -120,6 +121,27 @@ Dockerfile → Image (Blueprint) → Container (Running Instance)
 - Software that helps create images from Dockerfiles
 - Manages containers and images
 - Provides the runtime environment
+<img src="./img/engine.jpeg" alt="container" />
+
+**Components of Docker Engine**
+
+- Docker Daemon (dockerd)
+
+`Function`: The Docker daemon is the background service running on the host machine. It manages Docker objects such as images, containers, networks, and volumes.
+
+`Interaction`: It listens for Docker API requests and processes them, handling container lifecycle operations (start, stop, restart, etc.).
+
+- Docker CLI (docker)
+
+`Function`: The Docker Command Line Interface (CLI) is the tool that users interact with to communicate with the Docker daemon.
+
+`Usage`: Users run Docker commands through the CLI to perform tasks like building images, running containers, and managing Docker resources.
+
+- REST API
+
+`Function`: The Docker REST API allows communication between the Docker CLI and the Docker daemon. It also enables programmatic interaction with Docker.
+
+`Usage`: Developers can use the API to automate Docker operations or integrate Docker functionality into their applications.
 
 ---
 
@@ -133,6 +155,7 @@ A central repository for storing and distributing Docker images.
 - Public registry (like GitHub for code)
 - Stores and shares Docker images
 - Official images for popular software
+<img src="./img/docker-hub.jpeg" alt="dockerhub" />
 
 ### Installation
 - **Docker Desktop** for Windows/Mac
@@ -146,6 +169,37 @@ docker -v
 # View Docker system information
 docker info
 ```
+### Types of Docker Registries
+
+**Docker Hub**
+
+Description:
+ The default public registry provided by Docker, which hosts a vast number of public images and also supports private repositories.
+
+URL:
+` hub.docker.com`
+
+Use Case:
+ Publicly sharing images and accessing a large collection of pre-built images from the community and official repositories.
+
+**Private Registries**
+
+Description:
+ Custom registries set up by organizations to securely store and manage their own Docker images.
+
+Use Case:
+ Ensuring security and control over image distribution within an organization.
+
+**Third-Party Registries**
+
+Examples:
+
+- Amazon Elastic Container Registry (ECR)
+- Google Container Registry (GCR)
+- Azure Container Registry (ACR)
+
+Use Case:
+ Integrating with cloud platforms for seamless deployment and management of images within cloud infrastructure.
 
 ---
 
