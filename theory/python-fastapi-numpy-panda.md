@@ -1272,7 +1272,192 @@ def show(**kwargs):
 show(name="John", age=25)
 ```
 ---
-## 📦 Project 1: guess game
+## 📦 Project 1: quiz game
+```python
+print("🐳 Welcome to Docker Quiz!")
+
+playing = input("Do you want to play? (yes/no): ")
+
+if playing.lower() != "yes":
+    quit()
+
+print("Okay! Let's play 😊")
+score = 0
+
+# Question 1
+answer = input("1. What is Docker Hub? ")
+
+if answer.lower() == "docker registry":
+    print("✅ Correct!")
+    score += 1
+else:
+    print("❌ Incorrect! Docker Hub is a Docker registry.")
+
+# Question 2
+answer = input("2. Which Docker component manages images, containers, networks, and volumes? ")
+
+if answer.lower() == "docker daemon":
+    print("✅ Correct!")
+    score += 1
+else:
+    print("❌ Incorrect! Correct answer: Docker Daemon")
+
+# Question 3
+answer = input("3. What command-line tool is used to interact with Docker? ")
+
+if answer.lower() == "docker cli":
+    print("✅ Correct!")
+    score += 1
+else:
+    print("❌ Incorrect! Correct answer: Docker CLI")
+
+# Question 4
+answer = input("4. What does REST API allow in Docker? ")
+
+if answer.lower() == "communication":
+    print("✅ Correct!")
+    score += 1
+else:
+    print("❌ Incorrect! It allows communication between Docker CLI and Docker Daemon.")
+
+
+
+print("\n📊 Quiz Completed!")
+print("Your score:", score, "/ 4")
+
+percentage = (score / 4) * 100
+print("Percentage:", percentage, "%")
+
+if percentage >= 80:
+    print("🏆 Excellent!")
+elif percentage >= 50:
+    print("👍 Good Job!")
+else:
+    print("📚 Keep Learning Docker!")
+```
+---
+
+## 📦 Project 2:password manager application
+
+```python
+master_pwd = "admin123"
+
+pwd = input("What is the master password? ")
+
+if pwd != master_pwd:
+    print("Incorrect master password!")
+    quit()
+
+
+def view():
+    try:
+        with open("passwords.txt", "r") as f:
+            for line in f.readlines():
+                data = line.rstrip()
+                user, passw = data.split("|")
+                print(f"Account: {user} | Password: {passw}")
+    except FileNotFoundError:
+        print("No passwords saved yet.")
+
+
+def add():
+    name = input("Account Name: ")
+    pwd = input("Password: ")
+
+    with open("passwords.txt", "a") as f:
+        f.write(name + "|" + pwd + "\n")
+
+    print("Password added successfully!")
+
+
+while True:
+    mode = input(
+        "\nWould you like to add a new password or view existing passwords? (view/add, q to quit): "
+    ).lower()
+
+    if mode == "q":
+        break
+
+    if mode == "view":
+        view()
+
+    elif mode == "add":
+        add()
+
+    else:
+        print("Invalid mode.")
+
+
+print("Goodbye!")
+```
+---
+
+## 📦 Project 3:Rock-Paper-Scissors game
+```python
+import random
+
+choices = {
+    "r": "Rock",
+    "p": "Paper",
+    "s": "Scissors"
+}
+
+user_score = 0
+computer_score = 0
+
+
+def is_win(player, computer):
+    return (
+        (player == "r" and computer == "s") or
+        (player == "s" and computer == "p") or
+        (player == "p" and computer == "r")
+    )
+
+
+while True:
+    user = input("\nEnter 'r' for Rock, 'p' for Paper, 's' for Scissors (q to quit): ").lower()
+
+    if user == "q":
+        break
+
+    if user not in ["r", "p", "s"]:
+        print("❌ Invalid choice. Try again!")
+        continue
+
+    computer = random.choice(["r", "p", "s"])
+
+    print(f"\nYou chose: {choices[user]}")
+    print(f"Computer chose: {choices[computer]}")
+
+    if user == computer:
+        print("🤝 It's a Tie!")
+
+    elif is_win(user, computer):
+        print("✅ You Won this round!")
+        user_score += 1
+
+    else:
+        print("❌ Computer Won this round!")
+        computer_score += 1
+
+    print(f"\nCurrent Score:")
+    print(f"You: {user_score}")
+    print(f"Computer: {computer_score}")
+
+print("\n===== GAME OVER =====")
+print(f"Final Score -> You: {user_score} | Computer: {computer_score}")
+
+if user_score > computer_score:
+    print("🏆 Congratulations! You are the overall winner.")
+elif computer_score > user_score:
+    print("💻 Computer wins the game!")
+else:
+    print("🤝 The game ended in a tie.")
+
+print("Thanks for playing!")
+```
+---
+## 📦 Project 4: guess game
 
 ```python
 secret_number = 9
@@ -1314,7 +1499,7 @@ else:
     print("Computer Wins!")
 ```
 
-## 📦 Project 3: emoji converter
+## 📦 Project 5: emoji converter
 
 ```python
 message = input("> ")
@@ -1333,7 +1518,7 @@ for word in words:
 print(output)
 ```
 
-## 📦 Project 4: Realtime Voice Bot (Streamlit)
+## 📦 Project 6: Realtime Voice Bot (Streamlit)
 
 **Setup**
 ```bash

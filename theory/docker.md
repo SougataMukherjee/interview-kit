@@ -31,6 +31,7 @@ A typical software project contains several components:
 3. **Database** - Data storage
 
 In order to deploy our application on a machine, we need to set up all the required software to run our application.
+
 <img src="./img/docker.jpeg" alt="docker" />
 ---
 
