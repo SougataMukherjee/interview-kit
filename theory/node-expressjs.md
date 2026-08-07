@@ -38,12 +38,9 @@ server.listen(PORT, () => {
 
 ---
 
-## How Node.js Works
+## What is Node.js?
 
-<img src="./img/nodejs-works.jpeg" alt="nodejs-works" />
-
-## What is Node.js? (Simple Explanation)
-
+**Node.js is a javascript runtime built on chrome v8 js engine maintain by openJS foundation**
 When you write JavaScript in the browser, it runs inside the browser's JavaScript engine (V8). But you cannot run JavaScript outside the browser directly — JavaScript by itself cannot create a web server. It is primarily a scripting language that was originally designed to run inside web browsers.
 
 Google Chrome uses the V8 Engine to execute JavaScript code. The V8 engine is written in C++ and converts JavaScript into machine code for fast execution.
@@ -61,6 +58,9 @@ node app.js
 ```
 This executes JS using Node's V8 engine, without needing Chrome.
 
+## How Node.js Works
+
+<img src="./img/nodejs-works.jpeg" alt="nodejs-works" />
 ---
 
 ## Introduction to npm
