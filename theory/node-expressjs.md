@@ -120,12 +120,15 @@ Semantic Versioning (SemVer) is a versioning convention used by npm packages and
 **REPL** stands for Read Eval Print Loop and it represents a computer environment like a window console or unix/linux shell where a command is entered and system responds with an output, which is useful for writing and debugging code as it executes the code in on go.
 
 `Read` - Reads user's input, parse the input into JavaScript data-structure and stores in memory.
+
 `Eval` - Takes and evaluates the data structure
+
 `Print` - Prints the result
+
 `Loop` - Loops the above command until user press ctrl-c twice.
 
 ```js
-Open a terminal and type
+//Open a terminal and type
 node
 > 2 * 10
 20
@@ -558,6 +561,7 @@ In Node.js, the `path` module provides utilities for working with file and direc
 **Special Node.js Constants**
 
 `__filename` — provides the absolute path of the currently executing file
+
 `__dirname` — provides the absolute directory path of the currently executing file
 
 ```js
@@ -849,7 +853,8 @@ app.listen(8080, () => {
 ```
 **express router is groupe similar route and handle those instead of write all route in index js**
 
-Create Router File
+**Step 1: Create Router File**
+
 ```js
 //routes/userRouter.js
 const express = require("express");
@@ -873,7 +878,7 @@ userRouter.delete("/:id", (req, res) => {
 module.exports = userRouter;
 ```
 
-Step 2: Register Router
+**Step 2: Register Router**
 
 ```js
 index.js
@@ -1752,6 +1757,13 @@ app.listen(3000, () => {
     console.log("Server running on port 3000");
 });
 ```
+| Point              | bcrypt                                    | Zod                                            |
+| ------------------ | ----------------------------------------- | ---------------------------------------------- |
+| **Purpose**        | Hashes and verifies passwords             | Validates and parses input data                |
+| **Category**       | Security library                          | Data validation library                        |
+| **Used For**       | Authentication and password storage       | API requests, forms, and user input validation |
+| **Main Functions** | `hash()`, `compare()`                     | `parse()`, `safeParse()`                       |
+| **Output**         | Hashed password or boolean (`true/false`) | Validated data or validation errors            |
 ---
 
 ## `window`/`document` vs `global`/`globalThis` Object
@@ -1778,7 +1790,17 @@ console.log(globalThis.appName); // MyApp — accessible via globalThis too
 | Recommended for cross-platform code | ❌ | ❌ | ✅ |
 
 
-common  property of global object
+| Point          | JavaScript Object                                      | JSON                                                                  |
+| -------------- | ------------------------------------------------------ | --------------------------------------------------------------------- |
+| **Purpose**    | Used to store and manipulate data in JavaScript code   | Used to exchange data between systems/applications                    |
+| **Keys**       | Keys can be without quotes (`name`)                    | Keys must be in double quotes (`"name"`)                              |
+| **Data Types** | Can contain functions, `undefined`, and other JS types | Supports only strings, numbers, booleans, arrays, objects, and `null` |
+| **Usage**      | Used directly within JavaScript programs               | Used as a text/string format for data transfer                        |
+| **Conversion** | `JSON.stringify(object)` converts object → JSON        | `JSON.parse(json)` converts JSON → object                             |
+
+
+**common  property of global object**
+
 | Property           | Description                                                              |
 | ------------------ | ------------------------------------------------------------------------ |
 | `global`           | Reference to the global object itself.                                   |
