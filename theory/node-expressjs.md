@@ -1887,11 +1887,21 @@ app.post("/users", async (req, res) => {
 });
 ```
 
-**Custom async validator in a Mongoose schema**
+---
+
+## Model and Schema (Mongoose)
+
+📝 **Schema** — defines the *structure/shape* of a document: field names, data types, validation rules, and defaults. It's a blueprint, not a database object.
+
+📝 **Model** — a compiled version of the schema; it's the actual interface used to create, read, update, and delete documents in MongoDB (the "class" built from the schema "blueprint").
+
 ```js
+
+//models/user-models.js
 const mongoose = require("mongoose");
 const validator = require("validator");
 
+mongoose.connect("mongodb://127.0.0.1:27017");
 // Schema — defines structure & validation
 const userSchema = new mongoose.Schema(
 {
@@ -1901,58 +1911,43 @@ const userSchema = new mongoose.Schema(
         trim: true,          // removes leading/trailing spaces
         maxlength: 50        // maximum length allowed
     },
-
     email: {
         type: String,
         required: true,
         unique: true,
         lowercase: true,     // converts email to lowercase
         trim: true,
-
         validate(value) {
-
             if (!validator.isEmail(value)) {
                 throw new Error("Invalid Email Address");
             }
-
         }
     },
 
     password: {
         type: String,
         required: true,
-
         validate(value) {
-
             if (!validator.isStrongPassword(value)) {
-
                 throw new Error(
                     "Password must contain uppercase, lowercase, number and special character"
                 );
-
             }
-
         }
     },
-
     age: {
         type: Number,
         min: 18,
         default: 18
     },
-
     profileData: {
         type: String,
-
         validate(value) {
-
             if (!validator.isJSON(value)) {
                 throw new Error("Profile data must be valid JSON");
             }
-
         }
     },
-
     skills: [
         {
             type: String,
@@ -1965,41 +1960,10 @@ const userSchema = new mongoose.Schema(
     timestamps: true
 });
 
-
 // Model — compiled from schema
 const User = mongoose.model("User", userSchema);
-```
+module.exports = User
 
----
-
-## Model and Schema (Mongoose)
-
-📝 **Schema** — defines the *structure/shape* of a document: field names, data types, validation rules, and defaults. It's a blueprint, not a database object.
-
-📝 **Model** — a compiled version of the schema; it's the actual interface used to create, read, update, and delete documents in MongoDB (the "class" built from the schema "blueprint").
-
-```js
-const mongoose = require("mongoose");
-
-// Schema — defines structure & validation
-const userSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    age: { type: Number, min: 18, default: 18 }
-  },
-  { timestamps: true }
-);
-
-// Model — compiled from schema, used to interact with the DB
-const User = mongoose.model("User", userSchema);
-
-// Using the model to perform CRUD
-const newUser = await User.create({ name: "Sam", email: "sam@gmail.com" });
-const allUsers = await User.find();
-const oneUser = await User.findById(newUser._id);
-await User.findByIdAndUpdate(newUser._id, { age: 25 });
-await User.findByIdAndDelete(newUser._id);
 ```
 
 | | Schema | Model |
