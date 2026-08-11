@@ -1,7 +1,6 @@
 # 🟩 Node.js & Express.js Notes
 
 ---
----
 
 # 🟩 Node.js
 
@@ -35,17 +34,33 @@ server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 ```
+http server vs domain name server vs proxy server
+| Aspect        | HTTP Server                  | DNS Server                              | Proxy Server                                      |
+| ------------- | ---------------------------- | --------------------------------------- | ------------------------------------------------- |
+| Purpose       | Serves web content and APIs  | Resolves domain names to IP addresses   | Acts as an intermediary between client and server |
+| Main Function | Handles HTTP/HTTPS requests  | Converts domain names into IP addresses | Forwards requests and responses                   |
+| Protocol      | HTTP / HTTPS                 | DNS                                     | HTTP, HTTPS, SOCKS, etc.                          |
+| Data Handled  | Web pages, APIs, files, JSON | Domain records (A, AAAA, MX, CNAME)     | Client requests and server responses              |
+| Example       | Apache, Nginx, Express.js    | Google DNS, Cloudflare DNS              | Squid, Nginx Proxy, HAProxy                       |
+| Default Ports | 80, 443                      | 53                                      | 8080, 3128 (varies)                               |
+| Used By       | Browsers and applications    | Browsers and operating systems          | Clients, enterprises, load balancers              |
+| Primary Role  | Deliver content              | Find server location                    | Control, filter, cache, or secure traffic         |
 
 ---
 
 ## What is Node.js?
 
 **Node.js is a javascript runtime built on chrome v8 js engine maintain by openJS foundation**
+
 When you write JavaScript in the browser, it runs inside the browser's JavaScript engine (V8). But you cannot run JavaScript outside the browser directly — JavaScript by itself cannot create a web server. It is primarily a scripting language that was originally designed to run inside web browsers.
 
 Google Chrome uses the V8 Engine to execute JavaScript code. The V8 engine is written in C++ and converts JavaScript into machine code for fast execution.
 
 Node.js was written and introduced by Ryan Dahl in 2009. It's a lightweight framework that includes a bare minimum set of modules.
+
+V8 is the JavaScript engine used by Node.js to execute JavaScript code. It parses JavaScript, converts it into bytecode, and uses the TurboFan JIT compiler to generate optimised machine code for faster execution. Since V8 only executes JavaScript, Node.js uses libuv and native bindings to interact with the operating system for asynchronous tasks such as file I/O and network requests. Completed operations are returned through the callback queue and processed by the event loop, allowing Node.js to handle many concurrent operations efficiently.
+
+<img src="./img/v8.jpeg" alt="v8" />
 
 - ✔ Node.js is an **open-source** (source code is publicly available, anyone can view and contribute) **server-side** (runs outside the browser) JavaScript runtime
 - ✔ Uses the Chrome V8 JavaScript engine, making it fast
@@ -61,7 +76,7 @@ This executes JS using Node's V8 engine, without needing Chrome.
 ## How Node.js Works
 
 <img src="./img/nodejs-works.jpeg" alt="nodejs-works" />
----
+
 
 ## Introduction to npm
 
@@ -300,12 +315,63 @@ console.log(abc);
 ```js
 const fs = require("fs");
 ```
+### Why Modules Are Used?
 
+By default, every module in Node.js protects its variables and functions from leaking into the global scope. This helps:
+
+- Avoid variable and function name conflicts.
+- Encapsulate code and maintain modularity.
+- Prevent accidental modification of internal module data.
+
+A variable or function declared inside one module cannot be accessed from another module unless it is explicitly exported.
+How Node.js Handles Modules Internally
+
+When Node.js loads a module, it wraps the entire file inside a function before passing it to the V8 engine.
+```js
+Internally, Node.js does something similar to:
+(function (exports, require, module, __filename, __dirname) {
+  // Your module code
+});
+```
+Because of this wrapper function:
+
+All variables and functions are scoped to that module.
+They do not become global variables.
+Each module gets its own private scope.
+
+This behavior is similar to an IIFE (Immediately Invoked Function Expression) because the wrapper function is executed immediately by Node.js.
+
+Exporting Values from a Module
+
+If you want other modules to access variables or functions, you must explicitly export them.
+
+```js
+module.export={x,calculateSum}
+//or
+module.exports.x=x;
+module.exports.calculateSum
+
+// Importing Values Using require()
+const {x,calculateSum} = require('./moduleOne');
+const data=require('./data.json');
+```
 ---
 
 ## What Do You Mean by the Event Loop in Node.js?
 
 The event loop is a mechanism that processes asynchronous tasks in a single thread by continuously checking for and executing callback functions.
+<img src="./img/loop.jpeg" alt="loop" />
+
+**process.nextTick vs setImmediate**
+
+| Aspect           | `process.nextTick()`                                   | `setImmediate()`                                         |
+| ---------------- | ------------------------------------------------------ | -------------------------------------------------------- |
+| Execution Time   | Runs immediately after the current operation completes | Runs in the **Check** phase of the next event loop cycle |
+| Priority         | Higher priority                                        | Lower priority                                           |
+| Event Loop       | Executes **before** the event loop continues           | Executes **after** I/O events are processed              |
+| Queue            | Next Tick Queue                                        | Check Queue                                              |
+| Use Case         | Small, critical callbacks that must run ASAP           | Schedule work after I/O operations                       |
+| Performance Risk | Excessive use can block the event loop                 | Safer for recurring asynchronous tasks                   |
 
 ---
 
@@ -630,9 +696,70 @@ app.get("/home", (req, res) => {
 });
 ```
 
+
 **Request / Response**
 - `req` → incoming data from client
 - `res` → output we send back
+
+In Express.js, creating a route usually means creating an API endpoint. A route defines how the server should respond when a client sends a request to a specific URL and HTTP method.
+
+### Route Order Matters
+
+Express checks routes from top to bottom. The first matching route is executed, so the order of route definitions is very important.
+```js
+app.get("/users/profile", (req, res) => {
+    res.send("Profile Route");
+});
+
+app.get("/users/:id", (req, res) => {
+    res.send("User ID Route");
+});
+```
+### Multiple Route Handlers
+
+Express allows multiple middleware functions for a single route. Each handler receives next() to pass control to the next handler.
+**Multiple routes**
+```js
+const express = require("express");
+const app = express();
+
+app.use(
+    "/user",
+    (req, res, next) => {
+        console.log(
+            "Handling the route user!!"
+        );
+        next();
+    },
+
+    (req, res) => {
+        console.log(
+            "Handling the route user 2!!"
+        );
+        res.send(
+            "2nd Response!!"
+        );
+    }
+);
+
+app.listen(7777, () => {
+    console.log(
+        "Server is successfully listening on port 7777..."
+    );
+});
+```
+
+**Express.js Routing Notes**
+
+| Aspect            | `app.get()`            | `app.use()`                         |
+| ----------------- | ---------------------- | ----------------------------------- |
+| Purpose           | Define a route handler | Register middleware                 |
+| HTTP Method       | Only GET requests      | All HTTP methods                    |
+| Exact Route Match | Yes                    | Prefix/path match                   |
+| Common Use        | APIs and pages         | Logging, authentication, parsing    |
+| Receives Requests | Only GET               | GET, POST, PUT, DELETE, PATCH, etc. |
+| Can Call `next()` | Yes                    | Yes (typically)                     |
+| Route Specific    | Yes                    | Can be global or route-specific     |
 
 ---
 
@@ -732,6 +859,31 @@ app.listen(PORT, () => {
 
 ---
 
+## how express handles middleware behind the scence?
+
+Behind the scenes, Express maintains a stack (array) of middleware functions and route handlers. Whenever a request arrives, Express starts at the top of this stack and executes each matching middleware in order. Each middleware receives three arguments: req (request), res (response), and next(). Calling next() tells Express to move to the next middleware in the stack.
+
+```js
+const express = require("express");
+const app = express();
+
+app.use((req, res, next) => {
+    console.log("Middleware 1");
+    next();
+});
+
+app.use((req, res, next) => {
+    console.log("Middleware 2");
+    next();
+});
+
+app.get("/", (req, res) => {
+    console.log("Route Handler");
+    res.send("Hello");
+});
+```
+---
+
 ## Route Parameters in Express.js
 
 Route parameters in Express.js are dynamic parts of the URL that can be accessed using `req.params`. They are defined in the route path with a colon (`:`), e.g. `/user/:id/view/:article` where `id` is a route parameter.
@@ -752,6 +904,75 @@ app.get("/user/:id", (req, res) => {
 app.listen(3000);
 ```
 
+---
+## Why Avoid Admin Conditions Inside Routes?
+
+❌ Bad Practice: Admin Check in Every Route
+```js
+app.delete('/users/:id', (req, res) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({
+            message: 'Access denied'
+        });
+    }
+    // Delete user logic
+    res.json({ message: 'User deleted' });
+});
+```
+**Problems**
+
+- Code Duplication
+- Same admin check must be repeated in multiple routes.
+- Harder Maintenance
+- If authorization logic changes, every route needs modification.
+- Poor Readability
+- Business logic gets mixed with security logic.
+- Difficult Testing
+- Authorization and route logic are tightly coupled.
+- Recommended Approach: Middleware
+- Middleware executes before the route handler.
+
+Create Admin Middleware
+```js
+// middleware/admin.js
+
+const adminMiddleware = (req, res, next) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({
+            message: 'Admin access required'
+        });
+    }
+    next();
+};
+
+module.exports = adminMiddleware;
+```
+Use Middleware in Routes
+```js
+const adminMiddleware = require('./middleware/admin');
+
+app.delete(
+    '/users/:id',
+    adminMiddleware,
+    (req, res) => {
+        // Only admin reaches here
+        res.json({
+            message: 'User deleted'
+        });
+    }
+);
+```
+---
+## Advanced Routing Techniques
+Express supports advanced routing through route patterns and regular expressions. Special characters such as ?, +, and * allow optional, repeated, or wildcard matching, while regex routes provide powerful pattern-based URL matching. These techniques help reduce duplicate routes and handle complex URL structures efficiently.
+| Route Pattern | Purpose                                      | Matches                     | Does Not Match  |
+| ------------- | -------------------------------------------- | --------------------------- | --------------- |
+| `/ab?c`       | `b` is optional                              | `/abc`, `/ac`               | `/abbc`         |
+| `/ab+c`       | One or more `b` characters                   | `/abc`, `/abbc`, `/abbbc`   | `/ac`           |
+| `/ab*c`       | Zero or more characters between `ab` and `c` | `/abc`, `/abXYZc`, `/ac`    | `/ab`           |
+| `/a(bc)?d`    | Optional `bc` group                          | `/ad`, `/abcd`              | `/abcdx`        |
+| `/a/`         | Regex containing letter `a` anywhere         | `/apple`, `/cat`, `/batman` | `/hello`        |
+| `/.*ab$/`     | Ends with `ab`                               | `/ab`, `/xyzab`, `/testab`  | `/abc`, `/abcd` |
 ---
 
 ## Query Parameters in Express.js
@@ -1260,6 +1481,26 @@ console.log(globalThis.appName); // MyApp — accessible via globalThis too
 | Environment | Browser only | Node.js only | Both (standard JS) |
 | Includes DOM (`document`, etc.) | ✅ | ❌ | Depends on environment |
 | Recommended for cross-platform code | ❌ | ❌ | ✅ |
+
+
+common  property of global object
+| Property           | Description                                                              |
+| ------------------ | ------------------------------------------------------------------------ |
+| `global`           | Reference to the global object itself.                                   |
+| `process`          | Provides information about the current Node.js process and environment.  |
+| `console`          | Used for logging messages to the console (`log`, `error`, `warn`, etc.). |
+| `Buffer`           | Used for handling binary data.                                           |
+| `setTimeout()`     | Executes a function once after a specified delay.                        |
+| `setInterval()`    | Executes a function repeatedly at specified intervals.                   |
+| `setImmediate()`   | Executes a callback immediately after the current event loop cycle.      |
+| `clearTimeout()`   | Cancels a `setTimeout()` timer.                                          |
+| `clearInterval()`  | Cancels a `setInterval()` timer.                                         |
+| `clearImmediate()` | Cancels a `setImmediate()` callback.                                     |
+| `__dirname`        | Returns the absolute path of the current directory.                      |
+| `__filename`       | Returns the absolute path of the current file.                           |
+| `module`           | Represents the current module.                                           |
+| `exports`          | Used to export functionality from a module.                              |
+| `require()`        | Imports modules, files, or packages.                                     |
 
 ---
 
