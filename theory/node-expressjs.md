@@ -46,6 +46,17 @@ http server vs domain name server vs proxy server
 | Used By       | Browsers and applications    | Browsers and operating systems          | Clients, enterprises, load balancers              |
 | Primary Role  | Deliver content              | Find server location                    | Control, filter, cache, or secure traffic         |
 
+| Aspect        | Node.js Server                                     | MongoDB Server                            |
+| ------------- | -------------------------------------------------- | ----------------------------------------- |
+| Purpose       | Handles application logic and API requests         | Stores and manages data                   |
+| Type          | Runtime environment / Application server           | Database server (NoSQL)                   |
+| Role          | Processes requests, business logic, authentication | CRUD operations, data persistence         |
+| Language      | JavaScript/TypeScript                              | Uses MongoDB Query Language (MQL)         |
+| Data Storage  | Does not store data permanently                    | Stores data in collections/documents      |
+| Communication | Receives requests from clients                     | Receives queries from applications        |
+| Example Port  | 3000, 5000, 8080                                   | 27017 (default)                           |
+| Scaling       | Scale application instances                        | Scale database using replication/sharding |
+| Example       | Express.js API server                              | MongoDB database instance                 |
 ---
 
 ## What is Node.js?
@@ -104,6 +115,22 @@ Semantic Versioning (SemVer) is a versioning convention used by npm packages and
 | `*` | Any version | `*` | `4.0.0`, `5.0.0`, etc. |
 
 ---
+## What is REPL in Node?
+
+**REPL** stands for Read Eval Print Loop and it represents a computer environment like a window console or unix/linux shell where a command is entered and system responds with an output, which is useful for writing and debugging code as it executes the code in on go.
+
+`Read` - Reads user's input, parse the input into JavaScript data-structure and stores in memory.
+`Eval` - Takes and evaluates the data structure
+`Print` - Prints the result
+`Loop` - Loops the above command until user press ctrl-c twice.
+
+```js
+Open a terminal and type
+node
+> 2 * 10
+20
+```
+---
 
 ## What is CLI and GUI in Node.js?
 
@@ -124,7 +151,11 @@ Examples: VS Code, Browser
 
 ---
 
-## Why Do We Use Node.js?
+## Why Do We Use Node.js? or What are the benefits of using Node.js?
+
+ Node.js library is very fast in code execution because of JIT compiler.JavaScript is considered both an interpreted and a compiled language because modern JavaScript engines, such as Google's V8, use Just-In-Time (JIT) compilation.
+Node.js applications never buffer any data. These applications simply output the data in chunks.
+   All APIs of Node.js library are aynchronous that is non-blocking.
 
 - ✔ APIs
 - ✔ Server-rendered apps
@@ -257,6 +288,15 @@ Yes — Node.js uses a single main thread, but it handles many tasks at once usi
 - Callbacks
 - Worker Threads (for heavy CPU tasks)
 
+**Why Is Node.js Single-Threaded?**
+
+Node.js is single-threaded because the V8 engine executes JavaScript on a single main thread. All synchronous code runs inside V8. For asynchronous operations like API calls, file system operations, and timers, Node.js uses libuv and OS services. This allows Node.js to handle non-blocking operations without creating a new thread for every request.
+Libuv is a library that helps Node.js interact with the operating system and perform asynchronous operations.
+
+**If Node.js is single threaded then how it handles concurrency?**
+
+Node.js is single-threaded for JavaScript execution,but it handles concurrency through the Event Loop and libuv. When an asynchronous operation/non-blocking I/O such as a file read, API request, or timer is encountered, Node.js delegates the task to libuv or the operating system. Once the task is completed, the callback is placed in the callback queue. The Event Loop then pushes the callback back to the V8 engine for execution. This allows Node.js to handle thousands of concurrent requests efficiently without creating a separate thread for each request.
+
 ---
 
 ## What Kind of API Function Is Supported by Node.js?
@@ -360,6 +400,8 @@ const data=require('./data.json');
 ## What Do You Mean by the Event Loop in Node.js?
 
 The event loop is a mechanism that processes asynchronous tasks in a single thread by continuously checking for and executing callback functions.
+The Event Loop is the core mechanism that enables Node.js to handle asynchronous operations without creating multiple threads for every request. It continuously cycles through phases such as Timers, Pending Callbacks, Poll, Check, and Close callbacks. Before moving between phases, Node.js processes Microtasks like process.nextTick() and Promise callbacks, giving them higher priority.
+
 <img src="./img/loop.jpeg" alt="loop" />
 
 **process.nextTick vs setImmediate**
@@ -373,6 +415,53 @@ The event loop is a mechanism that processes asynchronous tasks in a single thre
 | Use Case         | Small, critical callbacks that must run ASAP           | Schedule work after I/O operations                       |
 | Performance Risk | Excessive use can block the event loop                 | Safer for recurring asynchronous tasks                   |
 
+---
+## What is Event Emmitter? When should I use EventEmitter?
+
+In Node.js, an Event Emitter is a class that allows objects to emit events and register listeners (callbacks) to handle those events. It is part of the events module and is commonly used to handle asynchronous events and to implement an observer pattern, where an object (the emitter) triggers events, and other objects (listeners) respond to those events.
+
+When the EventEmitter object emits an event, all of the functions attached to that specific event are called synchronously.
+```js
+var EventEmitter = require('events');
+
+var crazy = new EventEmitter();
+
+crazy.on('event1', function () {
+    console.log('event1 fired!');
+    process.nextTick(function () {
+        crazy.emit('event2');
+    });
+});
+
+crazy.on('event2', function () {
+    console.log('event2 fired!');
+    process.nextTick(function () {
+        crazy.emit('event3');
+    });
+
+});
+
+crazy.on('event3', function () {
+    console.log('event3 fired!');
+    process.nextTick(function () {
+        crazy.emit('event1');
+    });
+});
+
+crazy.emit('event1');
+```
+Whenever it makes sense for code to subscribe to something rather than get a callback from something. The typical use case would be that there's multiple blocks of code in your application that may need to do something when an event happens.
+
+---
+
+## What is Piping in Node? ☆☆☆☆
+ Piping is a process to connect output of one stream to another stream. It is normally used to get data from one stream and to pass output of that stream to another stream. There is no limit on piping operations.
+
+---
+
+## What's a stub? Name a use case. ☆☆☆☆
+ Stubs are functions/programs that simulate the behaviours of components/modules. Stubs provide canned answers to function calls made during test cases. Also, you can assert on with what these stubs were called.
+ 
 ---
 
 ## What Is `package.json` in Node.js?
@@ -401,6 +490,16 @@ console.log(buffer.toString()); // Hello
 A Stream is a way to process data piece-by-piece (chunks) instead of loading the entire data into memory at once. They enable reading or writing data piece by piece instead of loading the entire data into memory.
 
 Streams are objects used to handle continuous data flows, processing data chunk by chunk rather than all at once — much faster for big files.
+
+**add Types of streams:**
+
+`Readable:` Streams from which data can be read (e.g., fs.createReadStream).
+
+`Writable:` Streams to which data can be written (e.g., fs.createWriteStream).
+
+`Duplex:` Streams that are both Readable and Writable (e.g., TCP sockets).
+
+`Transform:` Duplex streams that can modify the data as it is written and read
 
 ```js
 const fs = require('fs');
@@ -748,9 +847,42 @@ app.listen(7777, () => {
     );
 });
 ```
+**express router is groupe similar route and handle those instead of write all route in index js**
 
-**Express.js Routing Notes**
+Create Router File
+```js
+//routes/userRouter.js
+const express = require("express");
+const userRouter = express.Router();
+userRouter.get("/", (req, res) => {
+    res.send("All Users");
+});
+userRouter.post("/", (req, res) => {
+    res.send("Create User");
+});
+userRouter.get("/:id", (req, res) => {
+    res.send("Get User By ID");
+});
+userRouter.put("/:id", (req, res) => {
+    res.send("Update User");
+});
+userRouter.delete("/:id", (req, res) => {
+    res.send("Delete User");
+});
 
+module.exports = userRouter;
+```
+
+Step 2: Register Router
+
+```js
+index.js
+const express = require("express");
+const app = express();
+const userRouter = require("./routes/userRouter");
+app.use("/users", userRouter);
+app.listen(3000);
+```
 | Aspect            | `app.get()`            | `app.use()`                         |
 | ----------------- | ---------------------- | ----------------------------------- |
 | Purpose           | Define a route handler | Register middleware                 |
@@ -880,6 +1012,73 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
     console.log("Route Handler");
     res.send("Hello");
+});
+```
+**admin authentication middleware**
+```js
+const express = require("express");
+const app = express();
+// Handle Auth Middleware for all admin routes
+
+app.use("/admin", (req, res, next) => {
+    console.log("Admin auth is getting checked!!");
+    const token = "xyz";
+    const isAdminAuthorized = token === "xyz";
+    if (!isAdminAuthorized) {
+        res.status(401).send("Unauthorized request");
+    } else {
+        next();
+    }
+});
+app.get("/user", (req, res) => {
+    res.send("User Data Sent");
+});
+app.get("/admin/getAllData", (req, res) => {
+    res.send("All Data Sent");
+});
+
+app.get("/admin/deleteUser", (req, res) => {
+    res.send("Deleted a User");
+});
+app.listen(7777, () => {
+    console.log(
+        "Server is successfully listening on port 7777..."
+    );
+});
+
+```
+---
+
+
+## Error Middleware Rules
+
+| Rule                            | Description                                                            |
+| ------------------------------- | ---------------------------------------------------------------------- |
+| Must have 4 parameters          | `(err, req, res, next)`                                                |
+| `err` must be first parameter   | Express identifies it as an error handler based on the first parameter |
+| `next` should be last parameter | Allows forwarding errors if needed                                     |
+| Usually registered last         | Error middleware should be placed after all routes                     |
+| Activated by `next(err)`        | Express skips normal middleware and jumps to error handlers            |
+
+```js
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).json({
+        success: false,
+        message: err.message
+    });
+});
+
+//multiple error handlers
+app.use((err, req, res, next) => {
+    console.log("Logging Error");
+    next(err);
+});
+
+app.use((err, req, res, next) => {
+    res.status(500).json({
+        message: err.message
+    });
 });
 ```
 ---
@@ -1347,7 +1546,8 @@ app.get("/api/users", (req, res) => {
 
 ## Cookies
 
-A cookie is a small piece of data stored in the user's browser and sent back to the server with every request.
+A cookie is a small piece of data stored in the user's browser and sent back to the server with every request.whenever user is login server will create a token attach it with cookie and sent back
+now cookie is store by browser in every request to server for validating
 
 **How Cookies Work**
 - Server sends a cookie to the browser
@@ -1377,6 +1577,48 @@ app.get('/read', function (req, res) {
 app.get('/delete', function (req, res) {
     res.clearCookie('name');
     res.send('Cookie deleted successfully');
+});
+
+app.post("/login", async (req, res) => {
+    try {
+        const { emailId, password } = req.body;
+        const user = await User.findOne({
+            emailId: emailId
+        });
+        if (!user) {
+            throw new Error("Invalid credentials");
+        }
+        const isPasswordValid =
+            await bcrypt.compare(
+                password,
+                user.password
+            );
+        if (isPasswordValid) {
+            // Create JWT Token
+            const token = await jwt.sign(
+                { _id: user._id },
+                "DEV@Tinder$790",
+                {
+                    expiresIn: "7d"
+                }
+            );
+            // Add token to cookie
+            res.cookie("token", token, {
+                expires: new Date(
+                    Date.now() + 8 * 3600000
+                )
+            });
+            res.send("Login Successful!!!");
+        } else {
+            throw new Error(
+                "Invalid credentials"
+            );
+        }
+    } catch (err) {
+        res.status(400).send(
+            "ERROR : " + err.message
+        );
+    }
 });
 
 app.listen(3000);
@@ -1409,9 +1651,26 @@ A session stores user data on the server, while only a session ID is stored in a
 
 ---
 
-## Express.js Using Zod (Input Validation)
+## Authentication and Authorization (Input Validation)
+
+**How can we implement authentication and authorization in Node.js?**
+
+Authentication is the process of verifying a user’s identity, while Authorization determines what actions or resources that user is allowed to access. In Node.js, these can be implemented using packages such as Passport (for strategies like OAuth, Google, GitHub, etc.) and JWT(jsonwebtoken) for token-based authentication and role-based authorization.
 
 <img src="./img/authorization.jpeg" alt="auth" />
+
+| Aspect         | Authentication                  | Authorization                              |
+| -------------- | ------------------------------- | ------------------------------------------ |
+| Meaning        | Verifies who the user is        | Verifies what the user can do              |
+| Question       | "Who are you?"                  | "What are you allowed to access?"          |
+| Happens First? | Yes                             | After authentication                       |
+| Purpose        | Identity verification           | Permission control                         |
+| Data Used      | Username, password, OTP, tokens | Roles, permissions, access policies        |
+| Outcome        | User is logged in               | User gets access to resources              |
+| Example        | Login using email and password  | Admin can delete users, normal user cannot |
+| Common Methods | JWT, OAuth, Session, SSO        | RBAC, ABAC, ACL                            |
+
+**using zod**
 
 ```js
 const express = require("express");
@@ -1457,6 +1716,42 @@ app.listen(3000, () => {
 });
 ```
 
+**using bcrypt**
+
+```js
+const express = require('express');
+const app = express();
+
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+
+app.use(cookieParser());
+
+app.get("/", function (req, res) {
+    let token = jwt.sign(
+        { email: "harsh@example.com" },
+        "secret"
+    );
+
+    res.cookie("token", token);
+    res.send("done");
+});
+
+app.get("/read", function (req, res) {
+    let data = jwt.verify(
+        req.cookies.token,
+        "secret"
+    );
+
+    console.log(data);
+    res.send(data);
+});
+
+app.listen(3000, () => {
+    console.log("Server running on port 3000");
+});
+```
 ---
 
 ## `window`/`document` vs `global`/`globalThis` Object
@@ -1573,20 +1868,84 @@ app.post("/users", async (req, res) => {
 **Custom async validator in a Mongoose schema**
 ```js
 const mongoose = require("mongoose");
+const validator = require("validator");
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    validate: {
-      validator: async function (value) {
-        const existing = await mongoose.models.User.findOne({ email: value });
-        return !existing; // false triggers validation error
-      },
-      message: "Email already exists"
-    }
-  }
+// Schema — defines structure & validation
+const userSchema = new mongoose.Schema(
+{
+    name: {
+        type: String,
+        required: true,
+        trim: true,          // removes leading/trailing spaces
+        maxlength: 50        // maximum length allowed
+    },
+
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,     // converts email to lowercase
+        trim: true,
+
+        validate(value) {
+
+            if (!validator.isEmail(value)) {
+                throw new Error("Invalid Email Address");
+            }
+
+        }
+    },
+
+    password: {
+        type: String,
+        required: true,
+
+        validate(value) {
+
+            if (!validator.isStrongPassword(value)) {
+
+                throw new Error(
+                    "Password must contain uppercase, lowercase, number and special character"
+                );
+
+            }
+
+        }
+    },
+
+    age: {
+        type: Number,
+        min: 18,
+        default: 18
+    },
+
+    profileData: {
+        type: String,
+
+        validate(value) {
+
+            if (!validator.isJSON(value)) {
+                throw new Error("Profile data must be valid JSON");
+            }
+
+        }
+    },
+
+    skills: [
+        {
+            type: String,
+            trim: true,
+            lowercase: true
+        }
+    ]
+},
+{
+    timestamps: true
 });
+
+
+// Model — compiled from schema
+const User = mongoose.model("User", userSchema);
 ```
 
 ---
@@ -2378,4 +2737,367 @@ const getWeather = async (city) => {
 
 const city = await rl.question("Enter city name: ");
 await getWeather(city);
+```
+
+## Project 9: User Management CRUD API using Node.js, Express & MongoDB
+
+```js
+// crud-app/
+// │
+// ├── app.js
+// ├── usermodel.js
+// ├── package.json
+
+//usermodel.js
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://127.0.0.1:27017/mongopractice');
+
+const userSchema = mongoose.Schema({
+    name: String,
+    username: String,
+    email: String
+});
+
+module.exports = mongoose.model("user", userSchema);
+
+//app.js
+const express = require('express');
+const app = express();
+
+const userModel = require('./usermodel');
+
+app.get('/', (req, res) => {
+    res.send("hey");
+});
+
+// Create
+app.get('/create', async (req, res) => {
+    let createduser = await userModel.create({
+        name: "sam",
+        email: "sam@gmail.com",
+        username: "sam"
+    });
+
+    res.send(createduser);
+});
+
+// Read
+app.get('/read', async (req, res) => {
+    let user = await userModel.findOne({ username: "sam" });
+
+    res.send(user);
+});
+
+// Update
+app.get('/update', async (req, res) => {
+    let updateduser = await userModel.findOneAndUpdate(
+        { username: "sam" },
+        { name: "Sam Muk" },
+        { new: true }
+    );
+
+    res.send(updateduser);
+});
+
+// Delete
+app.get('/delete', async (req, res) => {
+    let deletedUser = await userModel.findOneAndDelete({
+        username: "sam"
+    });
+
+    if (deletedUser) {
+        res.send("User deleted successfully");
+    } else {
+        res.send("User not found");
+    }
+});
+
+app.listen(3000, () => {
+    console.log("Server running on port 3000");
+});
+
+```
+## Project 10: JWT Authentication & Authorization System
+
+```js
+npm install express mongoose bcrypt jsonwebtoken cookie-parser
+
+const express = require("express");
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+
+const app = express();
+
+app.use(express.json());
+app.use(cookieParser());
+
+mongoose.connect(
+    "mongodb://127.0.0.1:27017/authdb"
+);
+
+const userSchema = new mongoose.Schema({
+
+    name: String,
+
+    username: String,
+
+    email: {
+        type: String,
+        unique: true
+    },
+
+    age: Number,
+
+    password: String
+
+});
+
+const User = mongoose.model(
+    "User",
+    userSchema
+);
+
+
+// REGISTER
+
+app.post("/register", async (req, res) => {
+
+    try {
+
+        const {
+            name,
+            username,
+            email,
+            age,
+            password
+        } = req.body;
+
+        const existingUser =
+            await User.findOne({ email });
+
+        if (existingUser) {
+
+            return res.status(400).json({
+                message: "User already exists"
+            });
+
+        }
+
+        const hashedPassword =
+            await bcrypt.hash(password, 10);
+
+        const user =
+            await User.create({
+
+                name,
+                username,
+                email,
+                age,
+
+                password: hashedPassword
+
+            });
+
+        const token = jwt.sign(
+
+            {
+                userId: user._id,
+                email: user.email
+            },
+
+            "shhhh",
+
+            {
+                expiresIn: "1d"
+            }
+
+        );
+
+        res.cookie("token", token);
+
+        res.status(201).json({
+
+            message:
+                "Registered successfully",
+
+            user
+
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            message: err.message
+        });
+
+    }
+
+});
+
+
+// LOGIN
+
+app.post("/login", async (req, res) => {
+
+    try {
+
+        const {
+            email,
+            password
+        } = req.body;
+
+        const user =
+            await User.findOne({ email });
+
+        if (!user) {
+
+            return res.status(401).json({
+                message:
+                    "Invalid credentials"
+            });
+
+        }
+
+        const match =
+            await bcrypt.compare(
+                password,
+                user.password
+            );
+
+        if (!match) {
+
+            return res.status(401).json({
+                message:
+                    "Invalid credentials"
+            });
+
+        }
+
+        const token = jwt.sign(
+
+            {
+                userId: user._id,
+                email: user.email
+            },
+
+            "shhhh",
+
+            {
+                expiresIn: "1d"
+            }
+
+        );
+
+        res.cookie("token", token);
+
+        res.json({
+            message: "Login successful"
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            message: err.message
+        });
+
+    }
+
+});
+
+
+// AUTH MIDDLEWARE
+
+function isLoggedIn(
+    req,
+    res,
+    next
+) {
+
+    const token =
+        req.cookies.token;
+
+    if (!token) {
+
+        return res.status(401).json({
+            message:
+                "Please login first"
+        });
+
+    }
+
+    try {
+
+        const user =
+            jwt.verify(
+                token,
+                "shhhh"
+            );
+
+        req.user = user;
+
+        next();
+
+    } catch (err) {
+
+        return res.status(401).json({
+            message:
+                "Invalid token"
+        });
+
+    }
+
+}
+
+
+// PROTECTED ROUTE
+
+app.get(
+    "/profile",
+    isLoggedIn,
+
+    (req, res) => {
+
+        res.json({
+
+            message:
+                "Protected Route",
+
+            user:
+                req.user
+
+        });
+
+    }
+);
+
+
+// LOGOUT
+
+app.get("/logout", (req, res) => {
+
+    res.cookie(
+        "token",
+        "",
+        {
+            expires: new Date(0)
+        }
+    );
+
+    res.json({
+        message:
+            "Logged out successfully"
+    });
+
+});
+
+app.listen(3000, () => {
+
+    console.log(
+        "Authentication Server Running"
+    );
+
+});
 ```
