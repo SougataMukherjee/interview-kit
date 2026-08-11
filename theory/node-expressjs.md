@@ -454,14 +454,14 @@ Whenever it makes sense for code to subscribe to something rather than get a cal
 
 ---
 
-## What is Piping in Node? ☆☆☆☆
+## What is Piping in Node?
  Piping is a process to connect output of one stream to another stream. It is normally used to get data from one stream and to pass output of that stream to another stream. There is no limit on piping operations.
 
 ---
 
-## What's a stub? Name a use case. ☆☆☆☆
+## What's a stub? Name a use case.
  Stubs are functions/programs that simulate the behaviours of components/modules. Stubs provide canned answers to function calls made during test cases. Also, you can assert on with what these stubs were called.
- 
+
 ---
 
 ## What Is `package.json` in Node.js?
@@ -841,9 +841,9 @@ app.use(
     }
 );
 
-app.listen(7777, () => {
+app.listen(8080, () => {
     console.log(
-        "Server is successfully listening on port 7777..."
+        "Server is successfully listening on port 8080..."
     );
 });
 ```
@@ -1040,9 +1040,9 @@ app.get("/admin/getAllData", (req, res) => {
 app.get("/admin/deleteUser", (req, res) => {
     res.send("Deleted a User");
 });
-app.listen(7777, () => {
+app.listen(8080, () => {
     console.log(
-        "Server is successfully listening on port 7777..."
+        "Server is successfully listening on port 8080..."
     );
 });
 
@@ -2738,6 +2738,7 @@ const getWeather = async (city) => {
 const city = await rl.question("Enter city name: ");
 await getWeather(city);
 ```
+---
 
 ## Project 9: User Management CRUD API using Node.js, Express & MongoDB
 
@@ -2785,7 +2786,6 @@ app.get('/create', async (req, res) => {
 // Read
 app.get('/read', async (req, res) => {
     let user = await userModel.findOne({ username: "sam" });
-
     res.send(user);
 });
 
@@ -2796,7 +2796,6 @@ app.get('/update', async (req, res) => {
         { name: "Sam Muk" },
         { new: true }
     );
-
     res.send(updateduser);
 });
 
@@ -2818,10 +2817,11 @@ app.listen(3000, () => {
 });
 
 ```
+---
 ## Project 10: JWT Authentication & Authorization System
 
 ```js
-npm install express mongoose bcrypt jsonwebtoken cookie-parser
+// npm install express mongoose bcrypt jsonwebtoken cookie-parser
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -2839,18 +2839,13 @@ mongoose.connect(
 );
 
 const userSchema = new mongoose.Schema({
-
     name: String,
-
     username: String,
-
     email: {
         type: String,
         unique: true
     },
-
     age: Number,
-
     password: String
 
 });
@@ -2860,13 +2855,9 @@ const User = mongoose.model(
     userSchema
 );
 
-
 // REGISTER
-
 app.post("/register", async (req, res) => {
-
     try {
-
         const {
             name,
             username,
@@ -2879,71 +2870,53 @@ app.post("/register", async (req, res) => {
             await User.findOne({ email });
 
         if (existingUser) {
-
             return res.status(400).json({
                 message: "User already exists"
             });
-
         }
-
         const hashedPassword =
             await bcrypt.hash(password, 10);
 
         const user =
             await User.create({
-
                 name,
                 username,
                 email,
                 age,
-
                 password: hashedPassword
 
             });
 
         const token = jwt.sign(
-
             {
                 userId: user._id,
                 email: user.email
             },
-
-            "shhhh",
+            "Token@1",
 
             {
                 expiresIn: "1d"
             }
-
         );
 
         res.cookie("token", token);
-
         res.status(201).json({
-
             message:
                 "Registered successfully",
-
             user
-
         });
 
     } catch (err) {
-
         res.status(500).json({
             message: err.message
         });
-
     }
-
 });
-
 
 // LOGIN
 
 app.post("/login", async (req, res) => {
-
     try {
-
         const {
             email,
             password
@@ -2953,12 +2926,10 @@ app.post("/login", async (req, res) => {
             await User.findOne({ email });
 
         if (!user) {
-
             return res.status(401).json({
                 message:
                     "Invalid credentials"
             });
-
         }
 
         const match =
@@ -2968,14 +2939,11 @@ app.post("/login", async (req, res) => {
             );
 
         if (!match) {
-
             return res.status(401).json({
                 message:
                     "Invalid credentials"
             });
-
         }
-
         const token = jwt.sign(
 
             {
@@ -2983,28 +2951,21 @@ app.post("/login", async (req, res) => {
                 email: user.email
             },
 
-            "shhhh",
-
+            "Token@1",
             {
                 expiresIn: "1d"
             }
-
         );
-
         res.cookie("token", token);
-
         res.json({
             message: "Login successful"
         });
 
     } catch (err) {
-
         res.status(500).json({
             message: err.message
         });
-
     }
-
 });
 
 
@@ -3015,69 +2976,49 @@ function isLoggedIn(
     res,
     next
 ) {
-
     const token =
         req.cookies.token;
-
     if (!token) {
-
         return res.status(401).json({
             message:
                 "Please login first"
         });
-
     }
-
     try {
-
         const user =
             jwt.verify(
                 token,
-                "shhhh"
+                "Token@1"
             );
 
         req.user = user;
-
         next();
 
     } catch (err) {
-
         return res.status(401).json({
             message:
                 "Invalid token"
         });
-
     }
-
 }
-
-
 // PROTECTED ROUTE
 
 app.get(
     "/profile",
     isLoggedIn,
-
     (req, res) => {
-
         res.json({
-
             message:
                 "Protected Route",
-
             user:
                 req.user
 
         });
-
     }
 );
-
-
 // LOGOUT
 
 app.get("/logout", (req, res) => {
-
     res.cookie(
         "token",
         "",
@@ -3085,19 +3026,15 @@ app.get("/logout", (req, res) => {
             expires: new Date(0)
         }
     );
-
     res.json({
         message:
             "Logged out successfully"
     });
-
 });
 
 app.listen(3000, () => {
-
     console.log(
         "Authentication Server Running"
     );
-
 });
 ```
