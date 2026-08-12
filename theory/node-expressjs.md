@@ -27,7 +27,7 @@ const server = http.createServer((req, res) => {
   console.log(`Request received: ${req.method} ${req.url}`);
   res.setHeader('Content-Type', 'text/html');
   res.statusCode = 200;
-  res.end('<h1>Hello!</h1>');
+  res.end('<h1>Hello!</h1>');//Hello!
 });
 
 server.listen(PORT, () => {
@@ -238,20 +238,33 @@ server.listen(PORT, () => {
 Express is built on top of Node.js `http`, but it removes a lot of repetitive code and makes routing/API development easier. With `http`, you manually check URLs, methods, headers, and parse requests. Express provides simple methods like `app.get()` and `app.post()`.
 
 ```js
-const express = require('express');
+import express from 'express';
 const app = express();
 
-app.use(express.json()); // built-in middleware
+//built-in middleware
+app.use(express.json());
+
+// In-memory storage
+const users = [];
 
 app.get('/users', (req, res) => {
-    res.status(200).json({ users: [] });
+    res.status(200).json({ users });
 });
 
 app.post('/users', (req, res) => {
-    res.status(201).json({ message: 'created' });
+    const user = req.body;
+
+    users.push(user);
+
+    res.status(201).json({
+        message: 'created',
+        user
+    });
 });
 
-app.listen(3000);
+app.listen(8080, () => {
+    console.log('Server running on port 8080');
+});
 ```
 
 ---
@@ -425,8 +438,9 @@ In Node.js, an Event Emitter is a class that allows objects to emit events and r
 
 When the EventEmitter object emits an event, all of the functions attached to that specific event are called synchronously.
 ```js
-var EventEmitter = require('events');
-
+import EventEmitter from 'events';
+import express from 'express';
+const app = express();
 var crazy = new EventEmitter();
 
 crazy.on('event1', function () {
@@ -446,12 +460,18 @@ crazy.on('event2', function () {
 
 crazy.on('event3', function () {
     console.log('event3 fired!');
-    process.nextTick(function () {
-        crazy.emit('event1');
-    });
 });
 
 crazy.emit('event1');
+
+app.listen(8080, () => {
+    console.log('Server running on port 8080');
+});
+
+// event1 fired!
+// event2 fired!
+// Server running on port 8080
+// event3 fired!
 ```
 Whenever it makes sense for code to subscribe to something rather than get a callback from something. The typical use case would be that there's multiple blocks of code in your application that may need to do something when an event happens.
 
