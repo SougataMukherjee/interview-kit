@@ -1811,19 +1811,180 @@ mongoose
 ---
 
 ## Create a Pagination API
+**using middleware**
 
 ```js
-app.get("/api/users", (req, res) => {
-  const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 3;
+const express = require('express');
+const fs = require('fs');
 
-  const start = (page - 1) * limit;
-  const end = page * limit;
+const app = express();
+const PORT = 8080;
+// Sample data
+const users = [
+	{ id: 1, name: 'User 1' },
+	{ id: 2, name: 'User 2' },
+	{ id: 3, name: 'User 3' },
+	{ id: 4, name: 'User 4' },
+	{ id: 5, name: 'User 5' },
+	{ id: 6, name: 'User 6' },
+	{ id: 7, name: 'User 7' },
+	{ id: 8, name: 'User 8' },
+	{ id: 9, name: 'User 9' },
+	{ id: 10, name: 'User 10' },
+	{ id: 11, name: 'User 11' },
+	{ id: 12, name: 'User 12' },
+	{ id: 13, name: 'User 13' },
+	{ id: 14, name: 'User 14' },
+	{ id: 15, name: 'User 15' }
+];
 
-  return res.json({
-    page,
-    data: users.slice(start, end),
-  });
+//middleware function to paginate results
+function paginate(model) {
+	return (req, res, next) => {
+		const page = Number(req.query.page) || 1;
+		const limit = Number(req.query.limit) || 5;
+
+		const startIndex = (page - 1) * limit;
+		const endIndex = page * limit;
+		const results = {};
+
+		if (endIndex < model.length) {
+			results.next = {
+				page: page + 1,
+				limit
+			};
+		}
+
+		if (startIndex > 0) {
+			results.previous = {
+				page: page - 1,
+				limit
+			};
+		}
+
+		results.data = model.slice(startIndex, endIndex);
+		res.paginatedResults = results;
+		next();
+	};
+}
+
+// Usage // GET 
+// http://localhost:8080/users?page=1&limit=5
+// http://localhost:8080/users?page=2&limit=5
+
+app.get('/users', paginate(users), (req, res) => {
+	res.json(res.paginatedResults);
+});
+
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+
+```
+
+**using search filter**
+
+```js
+const express = require('express');
+const app = express();
+
+const users = [
+	{ id: 1, name: 'John', role: 'Admin', city: 'London' },
+	{ id: 2, name: 'Mike', role: 'User', city: 'Paris' },
+	{ id: 3, name: 'Sam', role: 'Admin', city: 'India' },
+	{ id: 4, name: 'Bob', role: 'Use r', city: 'London' },
+	{ id: 5, name: 'Emma', role: 'Manager', city: 'Paris' },
+	{ id: 6, name: 'David', role: 'User', city: 'London' },
+	{ id: 7, name: 'Sophia', role: 'Admin', city: 'Berlin' },
+	{ id: 8, name: 'James', role: 'Manager', city: 'London' }
+];
+
+
+app.get('/users', (req, res) => {
+	// Pagination params
+	const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 5;
+
+	// Search param
+	const search = req.query.search || '';
+
+	// Filter params
+	const role = req.query.role;
+	const city = req.query.city;
+
+	let filteredUsers = [...users];
+
+	// Search by name
+  //http://localhost:8080/users?search=sa
+
+	if (search) {
+		filteredUsers = filteredUsers.filter(user =>
+			user.name.toLowerCase().includes(search.toLowerCase())
+		);
+	}
+
+	// Filter by role
+  //http://localhost:8080/users?role=admin
+	if (role) {
+		filteredUsers = filteredUsers.filter(user => user.role.toLowerCase() === role.toLowerCase());
+	}
+
+	// Filter by city
+  //http://localhost:8080/users?city=london
+	if (city) {
+		filteredUsers = filteredUsers.filter(user => user.city.toLowerCase() === city.toLowerCase());
+	}
+	// Sorting
+  //http://localhost:8080/users?sortBy=name&order=asc
+ // http://localhost:8080/users?sortBy=id&order=desc&limit=10
+ 
+	const sortBy = req.query.sortBy;
+	const order = req.query.order || 'asc';
+
+	if (sortBy) {
+		filteredUsers.sort((a, b) => {
+			const valueA = a[sortBy];
+			const valueB = b[sortBy];
+
+			// Number sorting
+			if (typeof valueA === 'number' && typeof valueB === 'number') {
+				return order === 'desc' ? valueB - valueA : valueA - valueB;
+			}
+
+			// String sorting
+			return order === 'desc'
+				? String(valueB).localeCompare(String(valueA))
+				: String(valueA).localeCompare(String(valueB));
+		});
+	}
+	// Pagination
+	const startIndex = (page - 1) * limit;
+	const endIndex = page * limit;
+
+	const results = {
+		totalRecords: filteredUsers.length,
+		currentPage: page,
+		totalPages: Math.ceil(filteredUsers.length / limit)
+	};
+
+	if (endIndex < filteredUsers.length) {
+		results.next = {
+			page: page + 1,
+			limit
+		};
+	}
+
+	if (startIndex > 0) {
+		results.previous = {
+			page: page - 1,
+			limit
+		};
+	}
+
+	results.data = filteredUsers.slice(startIndex, endIndex);
+	res.json(results);
+});
+
+app.listen(8080, () => {
+	console.log('Server running on port 8080');
 });
 ```
 
