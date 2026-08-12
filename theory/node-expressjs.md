@@ -69,14 +69,14 @@ V8 is the JavaScript engine used by Node.js to execute JavaScript code. It parse
 
 V8 (by Google) compiles directly to native machine code.
 
-1. Parsing: Converts code to Abstract Syntax Tree (AST).
+1. `Parsing:` Converts code to Abstract Syntax Tree (AST).
 
-2. Ignition (Interpreter): Converts AST to Bytecode and executes it.
+2. `Ignition (Interpreter):` Converts AST to Bytecode and executes it.
 
-3. TurboFan (Compiler): Takes “hot” (frequently used) functions from bytecode and
+3. `TurboFan (Compiler):` Takes “hot” (frequently used) functions from bytecode and
 optimizes them into machine code for faster execution.
 
-4. Garbage Collection: Automatically frees memory (Orinoco).
+4. `Garbage Collection:` Automatically frees memory (Orinoco).
 
 <img src="./img/v8.jpeg" alt="v8" />
 
@@ -311,15 +311,15 @@ Yes — Node.js uses a single main thread, but it handles many tasks at once usi
 - Callbacks
 - Worker Threads (for heavy CPU tasks)
 
-**What are "Worker Threads"?**
+### What are Worker Threads?
 
-The worker_threads module enables the use of threads that execute in parallel. Unlike cluster (which uses processes), Workers share memory (via SharedArrayBuffer). They are useful for CPU-intensive tasks (image resizing,video compression, complex math) within the same process.
+**The worker_threads module enables the use of threads that execute in parallel.** Unlike cluster (which uses processes), Workers share memory (via SharedArrayBuffer). They are useful for CPU-intensive tasks (image resizing,video compression, complex math) within the same process.
 
 <img src="./img/worker-thread.png" alt="thread" />
 
-**Why Is Node.js Single-Threaded?**
+### Why Is Node.js Single-Threaded?
 
-Node.js is single-threaded because the V8 engine executes JavaScript on a single main thread. All synchronous code runs inside V8. For asynchronous operations like API calls, file system operations, and timers, Node.js uses libuv and OS services. This allows Node.js to handle non-blocking operations without creating a new thread for every request.
+**Node.js is single-threaded because the V8 engine executes JavaScript on a single main thread.** All synchronous code runs inside V8. For asynchronous operations like API calls, file system operations, and timers, Node.js uses libuv and OS services. This allows Node.js to handle non-blocking operations without creating a new thread for every request.
 Libuv is a library that helps Node.js interact with the operating system and perform asynchronous operations.
 
 **If Node.js is single threaded then how it handles concurrency?**
@@ -365,11 +365,11 @@ setTimeout(() => {
 }, 1000);
 
 console.log("5. End");
-1. Start
-5. End
-2. Timeout Callback
-3. First Promise
-4. Second Promise
+// 1. Start
+// 5. End
+// 2. Timeout Callback
+// 3. First Promise
+// 4. Second Promise
 ```
 ---
 
@@ -1144,13 +1144,12 @@ They can:
 
 3. End the request-response cycle.
 
-4. Call next() to pass control to the next middleware.
+4. **Call next() to pass control to the next middleware.**
 
 - Data sent by the client to the server is available in the `req` (request) object.
 - Data sent from the server to the client is handled through the `res` (response) object.
 - After executing its logic, the middleware passes control to the next middleware or route handler by calling `next()`.
 
-<img src="./img/middleware.jpeg" alt="middleware" />
 <img src="./img/middleware.png" alt="middleware" />
 
 ```js
