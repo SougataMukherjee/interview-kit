@@ -34,17 +34,13 @@ server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 ```
-http server vs domain name server vs proxy server
-| Aspect        | HTTP Server                  | DNS Server                              | Proxy Server                                      |
-| ------------- | ---------------------------- | --------------------------------------- | ------------------------------------------------- |
-| Purpose       | Serves web content and APIs  | Resolves domain names to IP addresses   | Acts as an intermediary between client and server |
-| Main Function | Handles HTTP/HTTPS requests  | Converts domain names into IP addresses | Forwards requests and responses                   |
-| Protocol      | HTTP / HTTPS                 | DNS                                     | HTTP, HTTPS, SOCKS, etc.                          |
-| Data Handled  | Web pages, APIs, files, JSON | Domain records (A, AAAA, MX, CNAME)     | Client requests and server responses              |
-| Example       | Apache, Nginx, Express.js    | Google DNS, Cloudflare DNS              | Squid, Nginx Proxy, HAProxy                       |
-| Default Ports | 80, 443                      | 53                                      | 8080, 3128 (varies)                               |
-| Used By       | Browsers and applications    | Browsers and operating systems          | Clients, enterprises, load balancers              |
-| Primary Role  | Deliver content              | Find server location                    | Control, filter, cache, or secure traffic         |
+**http server vs domain name server vs proxy server**
+
+`HTTP Server:` Delivers websites, web pages, APIs, and files to users through HTTP/HTTPS requests.
+
+`DNS Server:` Translates domain names (like google.com) into IP addresses so devices can find the correct server.
+
+`Proxy Server:` Stands between a client and server, forwarding requests while providing security, caching, filtering, or load balancing.
 
 | Aspect        | Node.js Server                                     | MongoDB Server                            |
 | ------------- | -------------------------------------------------- | ----------------------------------------- |
@@ -70,6 +66,17 @@ Google Chrome uses the V8 Engine to execute JavaScript code. The V8 engine is wr
 Node.js was written and introduced by Ryan Dahl in 2009. It's a lightweight framework that includes a bare minimum set of modules.
 
 V8 is the JavaScript engine used by Node.js to execute JavaScript code. It parses JavaScript, converts it into bytecode, and uses the TurboFan JIT compiler to generate optimised machine code for faster execution. Since V8 only executes JavaScript, Node.js uses libuv and native bindings to interact with the operating system for asynchronous tasks such as file I/O and network requests. Completed operations are returned through the callback queue and processed by the event loop, allowing Node.js to handle many concurrent operations efficiently.
+
+V8 (by Google) compiles directly to native machine code.
+
+1. Parsing: Converts code to Abstract Syntax Tree (AST).
+
+2. Ignition (Interpreter): Converts AST to Bytecode and executes it.
+
+3. TurboFan (Compiler): Takes “hot” (frequently used) functions from bytecode and
+optimizes them into machine code for faster execution.
+
+4. Garbage Collection: Automatically frees memory (Orinoco).
 
 <img src="./img/v8.jpeg" alt="v8" />
 
@@ -304,6 +311,12 @@ Yes — Node.js uses a single main thread, but it handles many tasks at once usi
 - Callbacks
 - Worker Threads (for heavy CPU tasks)
 
+**What are "Worker Threads"?**
+
+The worker_threads module enables the use of threads that execute in parallel. Unlike cluster (which uses processes), Workers share memory (via SharedArrayBuffer). They are useful for CPU-intensive tasks (image resizing,video compression, complex math) within the same process.
+
+<img src="./img/worker-thread.png" alt="thread" />
+
 **Why Is Node.js Single-Threaded?**
 
 Node.js is single-threaded because the V8 engine executes JavaScript on a single main thread. All synchronous code runs inside V8. For asynchronous operations like API calls, file system operations, and timers, Node.js uses libuv and OS services. This allows Node.js to handle non-blocking operations without creating a new thread for every request.
@@ -313,6 +326,51 @@ Libuv is a library that helps Node.js interact with the operating system and per
 
 Node.js is single-threaded for JavaScript execution,but it handles concurrency through the Event Loop and libuv. When an asynchronous operation/non-blocking I/O such as a file read, API request, or timer is encountered, Node.js delegates the task to libuv or the operating system. Once the task is completed, the callback is placed in the callback queue. The Event Loop then pushes the callback back to the V8 engine for execution. This allows Node.js to handle thousands of concurrent requests efficiently without creating a separate thread for each request.
 
+```js
+
+//exp 1
+console.log("1. Start");
+
+setTimeout(() => {
+    console.log("2. Async Operation Done");
+}, 1000);
+
+Promise.resolve().then(() => {
+    console.log("3. Promise Resolved");
+});
+
+console.log("4. End");
+
+// Output:
+// 1. Start
+// 4. End
+// 3. Promise Resolved
+// 2. Async Operation Done
+
+//exp 2
+console.log("1. Start");
+
+setTimeout(() => {
+    console.log("2. Timeout Callback");
+
+    Promise.resolve()
+        .then(() => {
+            console.log("3. First Promise");
+            return Promise.resolve();
+        })
+        .then(() => {
+            console.log("4. Second Promise");
+        });
+
+}, 1000);
+
+console.log("5. End");
+1. Start
+5. End
+2. Timeout Callback
+3. First Promise
+4. Second Promise
+```
 ---
 
 ## What Kind of API Function Is Supported by Node.js?
@@ -401,6 +459,9 @@ Exporting Values from a Module
 
 If you want other modules to access variables or functions, you must explicitly export them.
 
+<img src="./img/export.png" alt="export" />
+
+
 ```js
 module.export={x,calculateSum}
 //or
@@ -412,11 +473,58 @@ const {x,calculateSum} = require('./moduleOne');
 const data=require('./data.json');
 ```
 ---
+## 4. What is the purpose of module.exports vs. exports ?
+
+In Node.js CommonJS modules, module is the object representing the current module,
+and exports is a variable that points to module.exports.
+
+`module.exports` : The actual object that gets returned when you require() a
+module.
+
+`exports` : A shorthand reference to module.exports .
+
+```js
+// file: math.js
+// Valid: Attaching properties to exports
+exports.add = (a, b) => a + b;
+// Valid: Overwriting module.exports
+module.exports = {
+add: (a, b) => a + b,
+};
+// INVALID: Breaking the reference
+exports = { add: (a, b) => a + b };
+// 'exports' no longer points to 'module.exports', so nothing is exported.
+```
+---
 
 ## What Do You Mean by the Event Loop in Node.js?
 
 The event loop is a mechanism that processes asynchronous tasks in a single thread by continuously checking for and executing callback functions.
 The Event Loop is the core mechanism that enables Node.js to handle asynchronous operations without creating multiple threads for every request. It continuously cycles through phases such as Timers, Pending Callbacks, Poll, Check, and Close callbacks. Before moving between phases, Node.js processes Microtasks like process.nextTick() and Promise callbacks, giving them higher priority.
+The Event Loop is the mechanism that allows Node.js to perform non-blocking I/O
+operations. It has specific phases, and it cycles through them:
+1. Timers: Executes callbacks from setTimeout and setInterval .
+2. Pending Callbacks: Executes I/O callbacks deferred to the next loop iteration.
+3. Idle, Prepare: Internal use only.
+4. Poll: Retrieves new I/O events; executes I/O related callbacks.
+5. Check: Executes setImmediate() callbacks.
+6. Close Callbacks: Executes close events (e.g., socket.on('close', ...) ).
+
+```js
+console.log("Start");
+setImmediate(() => {
+console.log("setImmediate");
+});
+process.nextTick(() => {
+console.log("process.nextTick");
+});
+console.log("End");
+// Output:
+// Start
+// End
+// process.nextTick (Always runs before setImmediate)
+// setImmediate
+```
 
 <img src="./img/loop.jpeg" alt="loop" />
 
@@ -438,6 +546,17 @@ In Node.js, an Event Emitter is a class that allows objects to emit events and r
 
 When the EventEmitter object emits an event, all of the functions attached to that specific event are called synchronously.
 ```js
+//exp 1
+const EventEmitter = require('events');
+const myEmitter = new EventEmitter();
+// Listener
+myEmitter.on('greet', (name) => {
+console.log(`Hello ${name}`);
+});
+// Emitter
+myEmitter.emit('greet', 'Alice');
+
+//exp2
 import EventEmitter from 'events';
 import express from 'express';
 const app = express();
@@ -483,8 +602,27 @@ Whenever it makes sense for code to subscribe to something rather than get a cal
 ---
 
 ## What's a stub? Name a use case.
- Stubs are functions/programs that simulate the behaviours of components/modules. Stubs provide canned answers to function calls made during test cases. Also, you can assert on with what these stubs were called.
+ Stubs are functions/programs that simulate the behavior of components/modules. Stubs provide canned answers to function calls made during test cases. Also, you can assert on with what these stubs were called.
+ A Stub is a dummy function or object used during testing to simulate the behavior of
+ existing code. Stubs are used to:
+- Prevent side effects (e.g., prevent writing to a real database during tests).
+- Force specific code paths (e.g., force a function to throw an error to test error
+handling).
 
+```js
+const sinon = require("sinon");
+const fs = require("fs");
+// We want to test a function that reads a file,
+//but without actually reading from disk.
+const readFileStub = sinon.stub(fs, "readFile");
+// Force the stub to return a specific error
+readFileStub.yields(new Error("File not found"), null);
+fs.readFile("test.txt", (err, data) => {
+if (err) console.log("Caught expected error:", err.message);
+});
+// Restore the original function after test
+readFileStub.restore();
+```
 ---
 
 ## What Is `package.json` in Node.js?
@@ -496,6 +634,10 @@ Whenever it makes sense for code to subscribe to something rather than get a cal
 ## What Is a Buffer in Node.js?
 
 A buffer is a temporary storage space for binary data, allowing Node.js to handle raw data directly.
+The Buffer class handles binary data in Node.js. historically didn't handle binary streams
+well (it was designed for strings). Buffers are used to represent fixed-length sequences
+of bytes, which is essential for reading files, handling TCP streams, or processing image
+data.
 
 ```js
 const buffer = Buffer.from("Hello");
@@ -527,6 +669,10 @@ Streams are objects used to handle continuous data flows, processing data chunk 
 ```js
 const fs = require('fs');
 const data = fs.readFileSync('movie.mp4');
+const readable = fs.createReadStream('input.txt');
+const writable = fs.createWriteStream('output.txt');
+// Pipe reads from input and writes to output efficiently
+readable.pipe(writable);
 ```
 
 ---
@@ -626,6 +772,25 @@ path.join('users', 'admin', 'file.txt');
 path.resolve('file.txt');
 // C:\Projects\app\file.txt
 ```
+
+---
+## core modules of Node.js?
+
+Node.js comes with built-in modules that don’t need to be installed via npm. Common
+ones include:
+
+1. fs : File System (reading/writing files).
+
+2. http / https : Creating servers and making requests.
+
+3. path : Utilities for handling file paths.
+
+4. events : The Event Emitter class.
+
+5. os : Operating System information.
+
+6. crypto : Cryptography (hashing, encryption).
+
 
 ---
 
@@ -971,11 +1136,22 @@ app.listen(8080, () => {
 
 Middleware is a callback function that runs between the request coming in and the response going out — performing tasks like logging, authentication, and data processing. It has three parameters: `req`, `res`, and `next`. It executes before the route handler.
 
+They can:
+
+1. Execute code.
+
+2. Modify the request and response objects.
+
+3. End the request-response cycle.
+
+4. Call next() to pass control to the next middleware.
+
 - Data sent by the client to the server is available in the `req` (request) object.
 - Data sent from the server to the client is handled through the `res` (response) object.
 - After executing its logic, the middleware passes control to the next middleware or route handler by calling `next()`.
 
 <img src="./img/middleware.jpeg" alt="middleware" />
+<img src="./img/middleware.png" alt="middleware" />
 
 ```js
 const express = require("express");
@@ -1085,6 +1261,16 @@ app.get("/", (req, res) => {
     console.log("Route Handler");
     res.send("Hello");
 });
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+// Server running on port 8080
+// Middleware 1
+// Middleware 2
+// Route Handler
 ```
 **admin authentication middleware**
 ```js
@@ -1336,6 +1522,10 @@ project/
 
 `index.js`
 ```js
+//npm i express ejs
+//http://localhost:8080/add
+//http://localhost:8080/edit
+
 import express from "express";
 
 const app = express();
@@ -1484,49 +1674,73 @@ app.listen(port, () => {
 
 `index.js`
 ```js
-const express = require("express");
-const fs = require("fs");
-
-const users = require("./mock.json");
+const express = require('express');
+const fs = require('fs');
+const users = require('./users.json');
 
 const app = express();
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 const PORT = 8080;
 
+const normalizeKeysUtils = users => {
+	return users.map(user => {
+		const normalized = {};
+		Object.keys(user).forEach(key => {
+			normalized[key.trim()] = user[key];
+		});
+		return {
+			_id: normalized._id,
+			name: normalized.name || 'dummy',
+			email: normalized.email || 'dummy@gmail.com'
+		};
+	});
+};
+
 // GET all users JSON
-app.get("/api/users", (req, res) => {
-  return res.json(users);
+app.get('/api/users', (req, res) => {
+	return res.json(users);
 });
 
 // GET users as HTML
-app.get("/users", (req, res) => {
-  const html = `
+app.get('/users', (req, res) => {
+	const cleanedUsers = normalizeKeysUtils(users);
+	console.log(cleanedUsers);
+	const html = `
   <ul>
-    ${users.map((u) => `<li>${u.name}</li>`).join("")}
+    ${cleanedUsers.map(u => `<li>${u.name}</li>`).join('')}
   </ul>`;
-  res.send(html);
+	res.send(html);
 });
 
 // GET a user by ID
-app.get("/api/user/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const user = users.find((u) => u._id === id);
+app.get('/api/user/:id', (req, res) => {
+	const id = Number(req.params.id);
+	const user = users.find(u => u._id === id);
 
-  if (!user) return res.status(404).json({ msg: "User not found" });
+	if (!user) return res.status(404).json({ msg: 'User not found' });
 
-  res.json(user);
+	res.json(user);
 });
 
 // POST user
-app.post("/api/users", (req, res) => {
-  const body = req.body;
+app.post('/api/users', (req, res) => {
+	console.log('BODY:', req.body);
+	const normalizedBody = Object.fromEntries(
+		Object.entries(req.body).map(([k, v]) => [k.trim(), v])
+	);
+	const body = {
+		name: normalizedBody.name?.trim(),
+		email: normalizedBody.email?.trim()
+	};
 
-  const newUser = { ...body, _id: users.length + 1 };
-  users.push(newUser);
+	const newUser = { ...body, _id: users.length + 1 };
+	users.push(newUser);
 
-  fs.writeFile("./mock.json", JSON.stringify(users), () => {
-    return res.json({ status: "Success", id: newUser._id });
-  });
+	fs.writeFile('./users.json', JSON.stringify(users), err => {
+		if (err) return res.status(500).json({ status: 'Error', message: err.message });
+		return res.json({ status: 'Success', id: newUser._id });
+	});
 });
 
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
@@ -2040,6 +2254,27 @@ module.exports = User
 | Created with | `new mongoose.Schema({...})` | `mongoose.model("Name", schema)` |
 
 ---
+## What is CORS and how do you handle it in Node.js?
+
+CORS (Cross-Origin Resource Sharing) is a browser security feature that restricts web
+pages from making requests to a different domain than the one that served the web
+page.
+To allow it, the server must send specific headers (e.g., Access-Control-Allow-Origin).
+```js
+const cors = require('cors');
+app.use(cors()); // Enable all CORS requests
+```
+---
+## What is process in Node.js?
+
+The process object provides information about, and control over, the current Node.js
+`process.` It is a global object.
+`process.env` : Environment variables.
+`process.argv` : Command line arguments.
+`process.exit()` : Exits the process.
+`process.cwd()` : Current working directory.
+`process.memoryUsage()` : Memory usage stats.
+
 ---
 
 # 📦 Projects
