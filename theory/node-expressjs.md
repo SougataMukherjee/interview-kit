@@ -1811,7 +1811,8 @@ mongoose
 ---
 
 ## Create a Pagination API
-**using middleware**
+
+**🎯 using middleware**
 
 ```js
 const express = require('express');
@@ -1880,7 +1881,7 @@ app.listen(PORT, () => console.log(`Server running on ${PORT}`));
 
 ```
 
-**using search filter**
+**🛒 with search filter**
 
 ```js
 const express = require('express');
@@ -2003,71 +2004,254 @@ now cookie is store by browser in every request to server for validating
 <img src="./img/session.jpeg" alt="session" />
 
 ```js
-const cookieParser = require('cookie-parser');
-const express = require('express');
+//index.js
+
+const express = require("express");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+
+const { validateSignUpData } = require("./utils/validation");
 
 const app = express();
 
+app.use(express.json());
 app.use(cookieParser());
 
-app.get('/', function (req, res) {
-    res.cookie("name", "harshita");
-    res.send("done");
-});
+const PORT = 8080;
+const JWT_SECRET = "mySecretKey";
 
-app.get('/read', function (req, res) {
-    console.log(req.cookies);
-    res.send("read page");
-});
+// Temporary users storage
+const users = [];
 
-app.get('/delete', function (req, res) {
-    res.clearCookie('name');
-    res.send('Cookie deleted successfully');
-});
+// ===============================
+// Auth Middleware
+// ===============================
+const authMiddleware = (req, res, next) => {
 
-app.post("/login", async (req, res) => {
     try {
-        const { emailId, password } = req.body;
-        const user = await User.findOne({
-            emailId: emailId
-        });
-        if (!user) {
-            throw new Error("Invalid credentials");
+        const token = req.cookies.token;
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: "Please login first"
+            });
         }
-        const isPasswordValid =
+        const decoded = jwt.verify(
+            token,
+            JWT_SECRET
+        );
+        req.user = decoded;
+        next();
+
+    } catch (err) {
+
+        return res.status(401).json({
+            success: false,
+            message: "Invalid Token"
+        });
+    }
+};
+
+// ===============================
+// Register
+// http://localhost:8080/register
+// POST Body → raw → JSON
+// {
+//     "fullName": "Sougata",
+//     "email": "sougata@gmail.com",
+//     "password": "Sougata@123"
+// }
+// ===============================
+app.post("/register", async (req, res) => {
+
+    try {
+        validateSignUpData(req);
+        const { fullName, email, password } =
+            req.body;
+
+        const userExists = users.find(
+            user => user.email === email
+        );
+        if (userExists) {
+            return res.status(400).json({
+                message: "User already exists"
+            });
+        }
+        const hashedPassword =
+            await bcrypt.hash(password, 10);
+
+        const user = {
+            id: users.length + 1,
+            fullName,
+            email,
+            password: hashedPassword
+        };
+
+        users.push(user);
+
+        const token = jwt.sign(
+            {
+                id: user.id,
+                email: user.email
+            },
+            JWT_SECRET
+        );
+        res.cookie("token", token, {
+            httpOnly: true
+        });
+
+        res.json({
+            success: true,
+            message: "User Registered",
+            user: {
+                id: user.id,
+                fullName,
+                email
+            }
+        });
+    } catch (err) {
+        res.status(400).json({
+            success: false,
+            message: err.message
+        });
+    }
+});
+
+// ===============================
+// Login
+// http://localhost:8080/login
+// POST Body → raw → JSON
+// {
+//     "email": "sougata@gmail.com",
+//     "password": "Sougata@123"
+// }
+// ===============================
+app.post("/login", async (req, res) => {
+
+    try {
+
+        const { email, password } = req.body;
+        const user = users.find(
+            user => user.email === email
+        );
+
+        if (!user) {
+            return res.status(400).json({
+                message: "User not found"
+            });
+        }
+
+        const isMatched =
             await bcrypt.compare(
                 password,
                 user.password
             );
-        if (isPasswordValid) {
-            // Create JWT Token
-            const token = await jwt.sign(
-                { _id: user._id },
-                "DEV@Tinder$790",
-                {
-                    expiresIn: "7d"
-                }
-            );
-            // Add token to cookie
-            res.cookie("token", token, {
-                expires: new Date(
-                    Date.now() + 8 * 3600000
-                )
+
+        if (!isMatched) {
+            return res.status(400).json({
+                message: "Invalid Password"
             });
-            res.send("Login Successful!!!");
-        } else {
-            throw new Error(
-                "Invalid credentials"
-            );
         }
-    } catch (err) {
-        res.status(400).send(
-            "ERROR : " + err.message
+
+        const token = jwt.sign(
+            {
+                id: user.id,
+                email: user.email
+            },
+            JWT_SECRET
         );
+
+        res.cookie("token", token, {
+            httpOnly: true
+        });
+
+        res.json({
+            success: true,
+            message: "Login Successful"
+        });
+
+    } catch (err) {
+        res.status(400).json({
+            success: false,
+            message: err.message
+        });
     }
 });
 
-app.listen(3000);
+// ===============================
+// Protected Route
+// GET http://localhost:8080/profile
+// ===============================
+app.get(
+    "/profile",
+    authMiddleware,
+    (req, res) => {
+        const user = users.find(
+            user => user.id === req.user.id
+        );
+        res.json({
+            success: true,
+            user: {
+                id: user.id,
+                fullName: user.fullName,
+                email: user.email
+            }
+        });
+    }
+);
+
+// ===============================
+// Read Cookie
+// ===============================
+app.get("/read-cookie", (req, res) => {
+    res.json(req.cookies);
+});
+
+// ===============================
+// Logout
+// ===============================
+app.post("/logout", (req, res) => {
+
+    res.clearCookie("token");
+    res.json({
+        success: true,
+        message: "Logged Out Successfully"
+    });
+});
+
+// ===============================
+app.listen(PORT, () => {
+    console.log(`Server Running on Port ${PORT}`);
+}); 
+
+
+//validation.js
+const validator = require("validator");
+
+const validateSignUpData = (req) => {
+    const { fullName, email, password } = req.body;
+
+    if (!fullName || fullName.trim().length < 3) {
+        throw new Error("Name is not valid!");
+    }
+
+    if (!validator.isEmail(email)) {
+        throw new Error("Email is not valid!");
+    }
+
+    if (!validator.isStrongPassword(password)) {
+        throw new Error(
+            "Password must contain at least 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 symbol"
+        );
+    }
+
+    return true;
+};
+
+module.exports = {
+    validateSignUpData
+};
 ```
 
 ---
@@ -2116,6 +2300,10 @@ Authentication is the process of verifying a user’s identity, while Authorizat
 | Example        | Login using email and password  | Admin can delete users, normal user cannot |
 | Common Methods | JWT, OAuth, Session, SSO        | RBAC, ABAC, ACL                            |
 
+### does Zod and Joi used for same purpose?
+
+ **Joi and Zod solve the same problem, which is input validation**. For modern scalable applications, I prefer Zod because it has excellent TypeScript support, allows schema sharing between frontend and backend, reduces duplication by acting as a single source of truth, and provides a cleaner developer experience. Joi is still a great option for legacy or enterprise applications, but for new projects, especially those using TypeScript, I would choose Zod.
+
 **using zod**
 
 ```js
@@ -2134,32 +2322,46 @@ const userSchema = z.object({
 });
 
 // Route
+//body -> json
+//{   
+//     "name": "sou",
+//     "email": "Sougata@gmail.com",
+//     "age":29
+// }
 app.post("/users", (req, res) => {
-  try {
-    const validatedData = userSchema.parse(req.body);
+    try {
 
-    res.status(201).json({
-      success: true,
-      data: validatedData,
-    });
-  } catch (error) {
-    if (error instanceof ZodError) {
-      return res.status(400).json({
-        success: false,
-        errors: error.errors,
-      });
+        const validatedData =
+            userSchema.parse(req.body);
+
+        res.status(201).json({
+            success: true,
+            data: validatedData
+        });
+
+    } catch (error) {
+
+        if (error instanceof ZodError) {
+
+            return res.status(400).json({
+                success: false,
+                errors: error.issues.map(
+                    issue => issue.message
+                )
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
     }
-
-    res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-    });
-  }
 });
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+app.listen(8080, () => {
+  console.log("Server running on port 8080");
 });
+ 
 ```
 
 **using bcrypt**
@@ -2819,9 +3021,9 @@ app.listen(PORT, () => {
 ## Project 3: CRUD App with Express Router
 
 ```js
-import express from 'express';
-const router = express.Router();
+const express = require('express');
 const app = express();
+const router = express.Router();
 
 // Middleware to parse JSON request bodies
 app.use(express.json());
@@ -2830,85 +3032,99 @@ app.use(router);
 const port = 8080;
 
 const posts = [
-  { id: 1, title: 'Post One' },
-  { id: 2, title: 'Post Two' },
-  { id: 3, title: 'Post Three' },
+	{ id: 1, title: 'Post One' },
+	{ id: 2, title: 'Post Two' },
+	{ id: 3, title: 'Post Three' },
+	{ id: 4, title: 'Post four' },
+	{ id: 5, title: 'Post five' }
 ];
 
 // Get all posts with limit
 // GET http://localhost:8080/api/posts?limit=2
 router.get('/api/posts', (req, res) => {
-  const limit = parseInt(req.query.limit);
+	const limit = parseInt(req.query.limit);
 
-  if (!isNaN(limit) && limit > 0) {
-    res.status(200).json(posts.slice(0, limit));
-  } else {
-    res.status(200).json(posts);
-  }
+	if (!isNaN(limit) && limit > 0) {
+		res.status(200).json(posts.slice(0, limit));
+	} else {
+		res.status(200).json(posts);
+	}
 });
 
 // Get single post by id
 // GET http://localhost:8080/api/posts/1
 router.get('/api/posts/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const post = posts.filter((post) => post.id === id);
+	const id = parseInt(req.params.id);
+	const post = posts.filter(post => post.id === id);
 
-  if (post.length === 0) {
-    return res.status(404).json({ message: 'Post not found' });
-  }
+	if (post.length === 0) {
+		return res.status(404).json({ message: 'Post not found' });
+	}
 
-  res.status(200).json(post);
+	res.status(200).json(post);
 });
 
-// POST http://localhost:3000/api/posts
+// POST http://localhost:8080/api/posts
+// {
+//   "id": 6,
+//   "title": "My New Post"
+// }
 router.post('/api/posts', (req, res) => {
-  if (!req.body.title) {
-    return res.status(400).json({ message: 'Title is required' });
-  }
+	const { title } = req.body || {};
+	if (!title) {
+		return res.status(400).json({
+			message: 'Title is required'
+		});
+	}
 
-  const newPost = {
-    id: posts.length + 1,
-    title: req.body.title
-  };
+	const newPost = {
+		id: posts.length + 1,
+		title: req.body.title
+	};
 
-  posts.push(newPost);
-  res.status(201).json(newPost);
+	posts.push(newPost);
+	res.status(201).json(newPost);
 });
 
 // Update Post
+//http://localhost:8080/api/posts/3
+//Body → raw → JSON
+// {
+//   "title": "Updated Post Three"
+// }
 router.put('/api/posts/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const post = posts.find((post) => post.id === id);
+	const id = parseInt(req.params.id);
+	const post = posts.find(post => post.id === id);
 
-  if (!post) {
-    return res.status(404).json({ msg: `A post with the id ${id} was not found` });
-  }
+	if (!post) {
+		return res.status(404).json({ msg: `A post with the id ${id} was not found` });
+	}
 
-  if (!req.body.title) {
-    return res.status(400).json({ msg: 'Title is required' });
-  }
+	if (!req.body.title) {
+		return res.status(400).json({ msg: 'Title is required' });
+	}
 
-  post.title = req.body.title;
-  res.status(200).json(post);
+	post.title = req.body.title;
+	res.status(200).json(post);
 });
 
 // Delete Post
 router.delete('/api/posts/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const post = posts.find((post) => post.id === id);
+	const id = parseInt(req.params.id);
+	const post = posts.find(post => post.id === id);
 
-  if (!post) {
-    return res.status(404).json({ msg: `A post with the id ${id} was not found` });
-  }
+	if (!post) {
+		return res.status(404).json({ msg: `A post with the id ${id} was not found` });
+	}
 
-  // Actually remove from array
-  const index = posts.findIndex((p) => p.id === id);
-  posts.splice(index, 1);
+	// Actually remove from array
+	const index = posts.findIndex(p => p.id === id);
+	posts.splice(index, 1);
 
-  res.status(200).json({
-    msg: 'Post deleted successfully',
-    posts: posts
-  });
+	res.status(200).json({
+		msg: 'Post deleted successfully',
+		posts: posts
+	});
 });
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));
@@ -2964,36 +3180,129 @@ app.listen(PORT, () => {
 ## Project 5: Encrypt and Decrypt API
 
 ```js
-import express from "express";
-import crypto from "crypto";
+const express = require("express");
+const crypto = require("crypto");
 
 const app = express();
 
 app.use(express.json());
 
+// Encryption Settings
 const algorithm = "aes-256-cbc";
-const key = crypto.randomBytes(32);
-const iv = crypto.randomBytes(16);
+
+// Fixed key and IV for testing
+const key = Buffer.from(
+  "12345678901234567890123456789012"
+); // 32 bytes
+
+const iv = Buffer.from(
+  "1234567890123456"
+); // 16 bytes
+
+// =========================
+// Encrypt Route
+// http://localhost:8080/encrypt
+// body->raw->json->{"text":"Hello World!"}
+// =========================
 
 app.post("/encrypt", (req, res) => {
-  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  try {
+    const { text } = req.body || {};
 
-  let encrypted = cipher.update(req.body.text, "utf8", "hex");
-  encrypted += cipher.final("hex");
+    if (!text) {
+      return res.status(400).json({
+        success: false,
+        message: "text is required"
+      });
+    }
 
-  res.json({ encrypted });
+    const cipher = crypto.createCipheriv(
+      algorithm,
+      key,
+      iv
+    );
+
+    let encrypted = cipher.update(
+      text,
+      "utf8",
+      "hex"
+    );
+
+    encrypted += cipher.final("hex");
+
+    res.status(200).json({
+      success: true,
+      encrypted
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
 });
+
+// =========================
+// Decrypt Route
+// http://localhost:8080/decrypt
+// body->raw->json->{"encrypted":"<encrypted_text>"}
+// =========================
 
 app.post("/decrypt", (req, res) => {
-  const decipher = crypto.createDecipheriv(algorithm, key, iv);
 
-  let decrypted = decipher.update(req.body.encrypted, "hex", "utf8");
-  decrypted += decipher.final("utf8");
+  try {
 
-  res.json({ decrypted });
+    const { encrypted } = req.body || {};
+
+    if (!encrypted) {
+      return res.status(400).json({
+        success: false,
+        message: "encrypted is required"
+      });
+    }
+
+    const decipher =
+      crypto.createDecipheriv(
+        algorithm,
+        key,
+        iv
+      );
+
+    let decrypted =
+      decipher.update(
+        encrypted,
+        "hex",
+        "utf8"
+      );
+
+    decrypted += decipher.final(
+      "utf8"
+    );
+
+    res.status(200).json({
+      success: true,
+      decrypted
+    });
+
+  } catch (error) {
+
+    res.status(400).json({
+      success: false,
+      message:
+        "Invalid encrypted text"
+    });
+  }
 });
 
-app.listen(8080);
+// =========================
+
+app.listen(8080, () => {
+  console.log(
+    "Server running on port 8080"
+  );
+});
 ```
 
 ---
@@ -3002,6 +3311,9 @@ app.listen(8080);
 
 ```js
 const readline = require("readline");
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 8080;
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -3081,6 +3393,10 @@ function handleInput(option) {
 }
 
 showMenu();
+
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
+});
 ```
 
 ---
@@ -3088,9 +3404,13 @@ showMenu();
 ## Project 7: Random Joke Generator
 
 ```js
-import https from "https";
-import readline from "readline";
-import chalk from "chalk";
+const express = require("express");
+const https = require("https");
+const readline = require("readline");
+const chalk = require("chalk");
+
+const app = express();
+const PORT = process.env.PORT || 8080;
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -3141,50 +3461,88 @@ function handleInput(option) {
 }
 
 showMenu();
+
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
+});
 ```
 
 ---
 
-## Project 8: Weather App (CLI)
+## Project 8: terminal-based LLM chat app(CLI)
 
 ```js
-import readline from "readline/promises";
+import dotenv from "dotenv";
+import fetch from "node-fetch";
+import express from "express";
+dotenv.config();
+const app = express();
 
-const API_KEY = "YOUR_API_KEY";
-const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
+const API_KEY = process.env.GROQ_API_KEY;
+const API_BASE = "https://api.groq.com/openai/v1";
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+async function testGroqLLM() {
+  console.log("🔍 Testing Groq LLM Integration...\n");
 
-const getWeather = async (city) => {
-  const url = `${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`;
+  // Test 1: Check API Key
+  if (!API_KEY) {
+    console.error("❌ API_KEY not found in environment variables");
+    return false;
+  }
+  console.log("✅ API Key loaded");
 
+  // Test 2: Check available models
   try {
-    const response = await fetch(url);
+    const modelsRes = await fetch(`${API_BASE}/models`, {
+      headers: { Authorization: `Bearer ${API_KEY}` }
+    });
+    
+    if (modelsRes.status !== 200) {
+      console.error(`❌ Models endpoint failed: ${modelsRes.status}`);
+      return false;
+    }
+    
+    const models = await modelsRes.json();
+    console.log(`✅ Available models: ${models.data.length} found`);
+  } catch (error) {
+    console.error("❌ Models endpoint error:", error.message);
+    return false;
+  }
 
-    if (!response.ok) {
-      throw new Error("City not found. Please check the city name.");
+  // Test 3: Make actual LLM call
+  try {
+    const chatRes = await fetch(`${API_BASE}/chat/completions`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "mixtral-8x7b-32768",
+        messages: [{ role: "user", content: "Say 'LLM works!'" }],
+        max_tokens: 10
+      })
+    });
+
+    if (chatRes.status !== 200) {
+      console.error(`❌ Chat endpoint failed: ${chatRes.status}`);
+      return false;
     }
 
-    const weatherData = await response.json();
-
-    console.log("\n🌤 Weather Information:");
-    console.log(`City: ${weatherData.name}`);
-    console.log(`Temperature: ${weatherData.main.temp}°C`);
-    console.log(`Description: ${weatherData.weather[0].description}`);
-    console.log(`Humidity: ${weatherData.main.humidity}%`);
-    console.log(`Wind Speed: ${weatherData.wind.speed} m/s\n`);
+    const result = await chatRes.json();
+    console.log("✅ LLM Response:", result.choices[0].message.content);
+    return true;
   } catch (error) {
-    console.log("❌ Error:", error.message);
-  } finally {
-    rl.close();
+    console.error("❌ LLM call failed:", error.message);
+    return false;
   }
-};
+}
 
-const city = await rl.question("Enter city name: ");
-await getWeather(city);
+await testGroqLLM();
+
+app.listen(process.env.PORT || 8080, () => {
+  console.log(`Server running on port ${process.env.PORT || 8080}`);
+});
 ```
 ---
 
