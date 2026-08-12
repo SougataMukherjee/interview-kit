@@ -554,8 +554,10 @@ It allows you to read, write, update, and delete files on your computer.
 | Node.js recommendation | Limited use | Preferred approach |
 
 ```js
-const fs = require("fs");
+import fs from "fs";
+import express from "express";
 
+const app = express();
 // Async
 fs.readFile("./blog.txt", (err, data) => {
   if (err) return console.log(err);
@@ -570,6 +572,15 @@ console.log("Sync:", data.toString());
 fs.writeFile("./blog.txt", "Hello World", () => {
   console.log("File written");
 });
+
+app.listen(8080, () => {
+    console.log('Server running on port 8080');
+});
+
+// Sync: Hello World
+// Server running on port 8080
+// Async: 
+// File written
 ```
 
 ---
