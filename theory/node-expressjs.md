@@ -636,35 +636,48 @@ The `fs` (File System) module in Node.js is a core module that allows you to wor
 **CRUD Operations — Asynchronous (callback style)**
 
 ```js
-const fs = require("fs");
+const fs = require("fs/promises");
 const path = require("path");
+const express = require("express");
+const app = express();
 
-const fileName = "test.txt";
-const filePath = path.join(__dirname, fileName);
+const filePath = path.join(__dirname, "test.txt");
 
-// Read
-fs.readFile(filePath, "utf-8", (err, data) => {
-  if (err) console.error(err);
-  else console.log(data);
+async function fileOperations() {
+  try {
+    await fs.writeFile(filePath, "This is the initial Data");
+    console.log("File has been Saved");
+
+    const data = await fs.readFile(filePath, "utf-8");
+    console.log("Read:", data);
+
+    await fs.appendFile(filePath, "\nThis is the updated Data");
+    console.log("File has been Updated");
+
+    const updatedData = await fs.readFile(filePath, "utf-8");
+    console.log("Updated Content:\n", updatedData);
+
+    await fs.unlink(filePath);
+    console.log("File has been Deleted");
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+fileOperations();
+
+app.listen(8080, () => {
+  console.log("Server running on port 8080");
 });
 
-// Create
-fs.writeFile(filePath, "This is the initial Data", "utf-8", (err) => {
-  if (err) console.error(err);
-  else console.log("File has been Saved");
-});
-
-// Update
-fs.appendFile(filePath, "\nThis is the updated Data", "utf-8", (err) => {
-  if (err) console.error(err);
-  else console.log("File has been Updated");
-});
-
-// Delete
-fs.unlink(filePath, (err) => {
-  if (err) console.error(err);
-  else console.log("File has been Deleted");
-});
+// Server running on port 8080
+// File has been Saved
+// Read: This is the initial Data
+// File has been Updated
+// Updated Content:
+//  This is the initial Data
+// This is the updated Data
+// File has been Deleted
 ```
 
 **Using Promises**
@@ -703,9 +716,15 @@ fs.promises
 **Using async/await**
 
 ```js
+const fs = require("fs/promises");
+const path = require("path");
+const express = require("express");
+const app = express();
+const filePath = path.join(__dirname, "test.txt");
+
 const readFileExample = async () => {
   try {
-    const data = await fs.promises.readFile(filePath, "utf-8");
+    const data = await fs.readFile(filePath, "utf-8");
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -716,7 +735,7 @@ readFileExample();
 
 const appendFileExample = async () => {
   try {
-    await fs.promises.appendFile(filePath, "This is the initial Data", "utf-8");
+    await fs.appendFile(filePath, "This is the initial Data", "utf-8");
     console.log("File created successfully!");
   } catch (error) {
     console.error(error);
@@ -727,7 +746,7 @@ appendFileExample();
 
 const writeFileExample = async () => {
   try {
-    await fs.promises.writeFile(filePath, "This is the initial Data", "utf-8");
+    await fs.writeFile(filePath, "This is the initial Data", "utf-8");
     console.log("File created successfully!");
   } catch (error) {
     console.error(error);
@@ -735,7 +754,20 @@ const writeFileExample = async () => {
 };
 
 writeFileExample();
+app.listen(8080, () => {
+  console.log("Server running on port 8080");
+});
+
+// Server running on port 8080
+
+// File created successfully!
+// File created successfully!
 ```
+| Feature   | `fs.writeFile()`               | `fs.promises.writeFile()`        |
+| --------- | ------------------------------ | -------------------------------- |
+| API Style | Callback-based                 | Promise-based                    |
+| Syntax    | `fs.writeFile(path, data, cb)` | `await fs.writeFile(path, data)` |
+| Best With | Callbacks                      | `async/await` (modern Node.js)   |
 
 ---
 
@@ -749,6 +781,8 @@ writeFileExample();
 2. **`on(eventName, listener)`** — registers a listener function for the given event.
 
 ```js
+const express = require("express");
+const app = express();
 const EventEmitter = require("events");
 
 // Create an instance of EventEmitter
@@ -756,18 +790,25 @@ const emitter = new EventEmitter();
 
 // 1. Define an event listener (addListener)
 emitter.on("greet", () => {
-    console.log(`hello Vinod Thapa`);
+    console.log(`hello Sam`);
 });
 
 emitter.on("greet", (arg) => {
-    console.log(`hello ${arg.username}, You are a ${arg.prof}, ri8`);
+    console.log(`hello ${arg.username}, You are a ${arg.prof},`);
 });
 
 // 2. Trigger (emit) the "greet" event
 emitter.emit("greet", {
-    username: "Vinod Thapa",
+    username: "Sam Muk",
     prof: "Full Stack Dev"
 });
+app.listen(8080, () => {
+  console.log("Server running on port 8080");
+});
+
+// hello Sam
+// hello Sam Muk, You are a Full Stack Dev,
+// Server running on port 8080
 ```
 
 ---
@@ -792,7 +833,7 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(3000, () => console.log("Server running on port 3000"));
+server.listen(8080, () => console.log("Server running on port 8080"));
 ```
 
 ---
@@ -858,29 +899,22 @@ const express = require("express");
 const app = express();
 
 app.use(
-    "/user",
+    "/users",
     (req, res, next) => {
-        console.log(
-            "Handling the route user!!"
-        );
+        console.log("Handling the route user!!");
         next();
     },
 
     (req, res) => {
-        console.log(
-            "Handling the route user 2!!"
-        );
-        res.send(
-            "2nd Response!!"
-        );
+        console.log("Handling the route user 2!!");
+        res.send("2nd Response!!");
     }
 );
 
 app.listen(8080, () => {
-    console.log(
-        "Server is successfully listening on port 8080..."
-    );
+    console.log("Server is successfully listening on port 8080...");
 });
+//2nd Response!!
 ```
 **express router is groupe similar route and handle those instead of write all route in index js**
 
@@ -897,13 +931,13 @@ userRouter.post("/", (req, res) => {
     res.send("Create User");
 });
 userRouter.get("/:id", (req, res) => {
-    res.send("Get User By ID");
+    res.send(`Get User By User ${req.params.id}`);
 });
 userRouter.put("/:id", (req, res) => {
-    res.send("Update User");
+    res.send(`Update User ${req.params.id}`);
 });
 userRouter.delete("/:id", (req, res) => {
-    res.send("Delete User");
+    res.send(`Delete User ${req.params.id}`);
 });
 
 module.exports = userRouter;
@@ -917,7 +951,9 @@ const express = require("express");
 const app = express();
 const userRouter = require("./routes/userRouter");
 app.use("/users", userRouter);
-app.listen(3000);
+app.listen(8080, () => {
+    console.log("Server is successfully listening on port 8080...");
+});
 ```
 | Aspect            | `app.get()`            | `app.use()`                         |
 | ----------------- | ---------------------- | ----------------------------------- |
