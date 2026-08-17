@@ -4133,3 +4133,360 @@ app.listen(3000, () => {
     );
 });
 ```
+
+# E-Commerce Full-Stack App
+
+A full-stack e-commerce application with a **React** client and a **Node.js/Express** backend, JWT-based auth, role-based access (user/admin), cart, checkout, and payment integration.
+
+
+## Tech Stack
+
+### Frontend
+- **React** (with **Vite**)
+- **Tailwind CSS** + **daisyUI**
+- **React Router** — routing
+- **Axios** — HTTP client
+- **Zustand** — state management
+- **React Query** (`@tanstack/react-query`) — server-state/caching
+- **Recharts** — admin analytics charts
+- **Framer Motion** — animations
+
+### Backend
+- **Node.js** + **Express.js**
+- **cors** — cross-origin requests
+- **Redis** — caching / session store 🆕(corrected from "radis")
+- **Multer** — file/image upload handling
+- **Zod** — schema validation
+- **Helmet.js** — HTTP security headers
+- **JWT (jsonwebtoken)** — authentication
+- **bcryptjs** — password hashing
+
+### Database
+- **json-server** (mock REST API over `db.json`) — fine for prototyping; see [Suggested Additions](#suggested-additions) for a production swap
+
+### Payment Gateway
+- **Razorpay** (test mode), with a **mock/bypass payment mode** for local development without live API keys
+
+### Email
+- **Nodemailer** — order confirmations, password reset, etc.
+
+### Deployment
+- **Render** / **Vercel**
+
+---
+
+## Folder Structure
+
+```
+ecommerce-app/
+│
+├── client/                     # React App
+│   ├── src/
+│   │   ├── api/
+│   │   │   ├── axios.js
+│   │   │   ├── authApi.js
+│   │   │   ├── productApi.js
+│   │   │   ├── cartApi.js
+│   │   │   └── orderApi.js         # 🆕 order/checkout calls
+│   │   │
+│   │   ├── store/
+│   │   │   └── store.js
+│   │   │
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── ProductCard.jsx
+│   │   │   ├── ProtectedRoute.jsx
+│   │   │   ├── AdminRoute.jsx
+│   │   │   ├── Loader.jsx
+│   │   │   └── ErrorBoundary.jsx    # 🆕 catch render errors gracefully
+│   │   │
+│   │   ├── pages/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Signup.jsx
+│   │   │   ├── Products.jsx
+│   │   │   ├── ProductDetails.jsx
+│   │   │   ├── Cart.jsx
+│   │   │   ├── Checkout.jsx         # 🆕 was missing — payment flow needs a page
+│   │   │   ├── OrderSuccess.jsx     # 🆕
+│   │   │   ├── OrderFailed.jsx      # 🆕
+│   │   │   ├── OrderHistory.jsx     # 🆕 user's past orders
+│   │   │   ├── Dashboard.jsx
+│   │   │   └── NotFound.jsx
+│   │   │
+│   │   ├── hooks/
+│   │   │   ├── useAuth.js
+│   │   │   └── useProducts.js
+│   │   │
+│   │   ├── routes/
+│   │   │   └── AppRoutes.jsx
+│   │   │
+│   │   ├── features/
+│   │   │   ├── authStore.js
+│   │   │   └── cartStore.js
+│   │   │
+│   │   ├── layouts/
+│   │   │   └── MainLayout.jsx
+│   │   │
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   │
+│   ├── .env                        # 🆕 VITE_API_BASE_URL etc.
+│   └── package.json
+│
+├── server/
+│   ├── src/
+│   │   ├── controllers/
+│   │   │   ├── authController.js
+│   │   │   ├── productController.js
+│   │   │   ├── cartController.js
+│   │   │   └── orderController.js  # 🆕 checkout/order + payment webhook
+│   │   │
+│   │   ├── middlewares/
+│   │   │   ├── authMiddleware.js
+│   │   │   ├── adminMiddleware.js
+│   │   │   ├── validate.js
+│   │   │   ├── errorHandler.js     # 🆕 centralized error handling
+│   │   │   └── rateLimiter.js      # 🆕 brute-force / abuse protection
+│   │   │
+│   │   ├── routes/
+│   │   │   ├── authRoutes.js
+│   │   │   ├── productRoutes.js
+│   │   │   ├── cartRoutes.js
+│   │   │   └── orderRoutes.js      # 🆕
+│   │   │
+│   │   ├── services/
+│   │   │   ├── userService.js
+│   │   │   ├── productService.js
+│   │   │   ├── cartService.js
+│   │   │   ├── orderService.js     # 🆕
+│   │   │   ├── paymentService.js   # 🆕 Razorpay integration + bypass mode
+│   │   │   └── emailService.js     # 🆕 Nodemailer wrapper
+│   │   │
+│   │   ├── schemas/
+│   │   │   ├── loginSchema.js
+│   │   │   ├── signupSchema.js
+│   │   │   ├── productSchema.js    # 🆕 admin add/edit product validation
+│   │   │   └── orderSchema.js      # 🆕
+│   │   │
+│   │   ├── config/
+│   │   │   ├── db.js
+│   │   │   └── redis.js            # 🆕
+│   │   │
+│   │   └── server.js
+│   │
+│   ├── .env                        # 🆕 JWT_SECRET, RAZORPAY keys, SMTP creds
+│   └── package.json
+│
+├── database/
+│   └── db.json
+│
+├── package.json                    # root — monorepo scripts (concurrently)
+└── README.md
+```
+
+---
+
+## Database Structure
+
+```json
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@test.com",
+      "password": "$2a$10$hashedPassword",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Sougata",
+      "email": "sougata@test.com",
+      "password": "$2a$10$hashedPassword",
+      "role": "user"
+    }
+  ],
+
+  "products": [
+    {
+      "id": 1,
+      "title": "Backpack",
+      "price": 109.95,
+      "description": "Travel backpack",
+      "category": "men's clothing",
+      "image": "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png",
+      "stock": 15
+    }
+  ],
+
+  "cart": [
+    {
+      "id": 1,
+      "userId": 2,
+      "productId": 1,
+      "quantity": 1
+    }
+  ],
+
+  "orders": [
+    {
+      "id": 1,
+      "userId": 2,
+      "items": [
+        { "productId": 1, "title": "Backpack", "price": 109.95, "quantity": 1 }
+      ],
+      "totalAmount": 109.95,
+      "status": "pending",
+      "paymentStatus": "unpaid",
+      "createdAt": "2026-08-17T10:00:00Z"
+    }
+  ],
+
+  "transactions": [
+    {
+      "id": 1,
+      "orderId": 1,
+      "razorpayOrderId": "order_xxxxx",
+      "razorpayPaymentId": null,
+      "amount": 109.95,
+      "status": "created",
+      "createdAt": "2026-08-17T10:00:05Z"
+    }
+  ]
+}
+```
+
+---
+
+## API Endpoints
+
+### Auth
+```
+POST   /api/auth/signup
+POST   /api/auth/login
+POST   /api/auth/logout          🆕
+GET    /api/auth/me              🆕  — return current user from JWT
+```
+
+### Products
+```
+GET    /api/products             ?page=&limit=&category=&search=   🆕 query params for pagination/filter/search
+GET    /api/products/:id
+POST   /api/products             🆕  admin only — add product
+PUT    /api/products/:id         🆕  admin only — edit product
+DELETE /api/products/:id         🆕  admin only — delete product
+```
+
+### Cart
+```
+GET    /api/cart
+POST   /api/cart
+PUT    /api/cart/:id             🆕  update quantity — was missing, needed for "Update Quantity" in flow
+DELETE /api/cart/:id
+```
+
+### Orders & Payment 🆕 (entire section — implied by flow diagram, not in original list)
+```
+POST   /api/orders                    — create order from cart
+GET    /api/orders                    — current user's order history
+GET    /api/orders/:id
+POST   /api/payment/create-order      — create Razorpay order
+POST   /api/payment/verify            — verify signature, mark order paid
+POST   /api/payment/webhook           — Razorpay webhook (payment.failed/captured)
+```
+
+### Admin
+```
+GET    /api/admin/analytics       🆕  — total products/users/orders/revenue for Dashboard
+GET    /api/admin/orders          🆕  — all orders (admin view)
+```
+
+
+---
+
+## Environment Variables 🆕
+
+**`server/.env`**
+```env
+PORT=5000
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=7d
+
+DB_URL=http://localhost:5000        # json-server base URL
+REDIS_URL=redis://localhost:6379
+
+RAZORPAY_KEY_ID=rzp_test_xxxxxxxx
+RAZORPAY_KEY_SECRET=xxxxxxxxxxxx
+PAYMENT_BYPASS=true                 # local dev — skips real Razorpay call
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_app_password
+
+CLIENT_URL=http://localhost:5173
+```
+
+**`client/.env`**
+```env
+VITE_API_BASE_URL=http://localhost:5000/api
+VITE_RAZORPAY_KEY_ID=rzp_test_xxxxxxxx
+```
+
+> Add both `.env` files to `.gitignore` — never commit real secrets.
+
+---
+
+## Non-Functional Requirements
+
+- Page load time < 3 sec
+- API response time < 1 sec
+- Image optimization
+- Lazy loading
+- Monorepo structure
+- Database backup
+- Payment gateway fallback/error handling
+- Clear folder structure
+
+---
+
+## Installation & Setup
+
+### 1. Install dependencies
+```bash
+npm init -y
+
+# Frontend (inside /client)
+npm install -D vite
+npm install react react-dom
+npm install tailwindcss @tailwindcss/vite daisyui
+npm install react-router-dom axios zustand @tanstack/react-query framer-motion recharts
+
+# Backend (inside /server)
+npm install express cors helmet jsonwebtoken bcryptjs multer zod
+npm install nodemailer razorpay redis           # 🆕 was missing from install list
+npm install -D nodemon
+```
+
+### 2. Run the mock database
+```bash
+npx json-server --watch database/db.json --port 5000
+```
+
+### 3. Run frontend + backend together
+From the **root**, using a monorepo script (add `concurrently` 🆕):
+```bash
+npm install -D concurrently
+```
+**root `package.json`**
+```json
+{
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "db": "json-server --watch database/db.json --port 5000"
+  }
+}
+```
+```bash
+npm run dev     # replaces "npm run dev twise(fe+be)" with a single command
+```
