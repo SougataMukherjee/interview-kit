@@ -3795,7 +3795,7 @@ app.listen(process.env.PORT || 8080, () => {
 });
 ```
 ---
-## Project 8.1: AI Assistant chatbot using Node.js and Groq
+## Project 9: AI Assistant chatbot using Node.js and Groq
 
 ```js
 	const Groq = require("groq-sdk");
@@ -3835,7 +3835,7 @@ app.listen(process.env.PORT || 8080, () => {
 
 ---
 
-## Project 9: User Management CRUD API using Node.js, Express & MongoDB
+## Project 10: User Management CRUD API using Node.js, Express & MongoDB
 
 ```js
 // crud-app/
@@ -3913,7 +3913,7 @@ app.listen(3000, () => {
 
 ```
 ---
-## Project 10: JWT Authentication & Authorization System
+## Project 11: JWT Authentication & Authorization System
 
 ```js
 // npm install express mongoose bcrypt jsonwebtoken cookie-parser
