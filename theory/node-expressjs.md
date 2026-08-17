@@ -4134,7 +4134,7 @@ app.listen(3000, () => {
 });
 ```
 
-# E-Commerce Full-Stack App
+## Project 12: E-Commerce Full-Stack App
 
 A full-stack e-commerce application with a **React** client and a **Node.js/Express** backend, JWT-based auth, role-based access (user/admin), cart, checkout, and payment integration.
 
