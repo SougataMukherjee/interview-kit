@@ -1237,6 +1237,89 @@ app.listen(PORT, () => {
 ```
 
 ---
+## How many middleware can we pass in a route?
+
+✅ There is no practical limit. You can pass one or multiple middleware functions before the controller.
+```js
+router.get('/users', protect, admin, getUsers);
+router.get('/users', protect, getUsers);
+
+const admin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({
+      message: 'Access denied, admin only'
+    });
+  }
+};
+
+module.exports = { admin };
+```
+---
+## What is the order of execution?
+
+✅Execution happens from left to right.
+```javascript
+Request
+   │
+   ▼
+protect
+   │ next()
+   ▼
+admin
+   │ next()
+   ▼
+getUsers
+   │
+   ▼
+Response
+
+const protect = (req, res, next) => {
+  console.log("Protect Middleware");
+  next();
+};
+
+const admin = (req, res, next) => {
+  console.log("Admin Middleware");
+  next();
+};
+
+const getUsers = (req, res) => {
+  console.log("Controller");
+  res.send("Users");
+};
+
+router.get("/users", protect, admin, getUsers);
+```
+Protect Middleware
+Admin Middleware
+Controller
+
+---
+
+## What happens if a middleware doesn't call next()?
+
+✅The request stops there.
+```js
+const protect = (req, res, next) => {
+  console.log("Checking token");
+  // next() missing
+};
+```
+---
+## Can we pass middleware as an array?
+✅ Yes.
+```js
+const authMiddlewares = [protect, admin];
+
+router.get("/users", authMiddlewares, getUsers);
+```
+---
+Can middleware modify req?
+✅ Yes.
+
+---
 
 ## how express handles middleware behind the scence?
 
@@ -1811,6 +1894,23 @@ mongoose
 ---
 
 ## Create a Pagination API
+
+req.query is used to retrieve query string parameters from a URL. It is commonly used in REST APIs for pagination, filtering, searching, sorting, and passing optional parameters without modifying the API route structure. It helps create flexible and reusable endpoints while improving performance by fetching only the required data.
+
+**Common Query Parameters in APIs**
+
+| Parameter | Purpose             |
+| --------- | ------------------- |
+| page      | Current page number |
+| limit     | Records per page    |
+| search    | Search keyword      |
+| sort      | Sorting field       |
+| order     | asc / desc          |
+| status    | Filter by status    |
+| role      | Filter by role      |
+| category  | Filter by category  |
+| startDate | Date range start    |
+| endDate   | Date range end      |
 
 **🎯 using middleware**
 
@@ -2535,6 +2635,14 @@ app.post("/users", async (req, res) => {
 ## Model and Schema (Mongoose)
 
 📝 **Schema** — defines the *structure/shape* of a document: field names, data types, validation rules, and defaults. It's a blueprint, not a database object.
+A schema defines the structure, rules, and validation for data.
+
+`A schema ensures:`
+
+- Required fields exist
+- Data types are correct
+- Invalid values are rejected
+- Data remains consistent
 
 📝 **Model** — a compiled version of the schema; it's the actual interface used to create, read, update, and delete documents in MongoDB (the "class" built from the schema "blueprint").
 
@@ -2616,6 +2724,109 @@ module.exports = User
 | Created with | `new mongoose.Schema({...})` | `mongoose.model("Name", schema)` |
 
 ---
+## What is Zod Schema?
+
+Zod validates incoming request data before it reaches the database.
+
+```js
+const { z } = require("zod");
+
+exports.signupSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+```
+`Benefit of Zod`
+
+✅ Validates Request Body
+
+✅ Better Error Messages
+
+✅ Prevents Bad Data Entering Controller
+
+✅ Works With Express
+
+✅ Works With TypeScript
+
+✅ Lightweight
+
+`Disadvantages of Zod`
+
+❌ Doesn't Store Data
+
+❌ Doesn't Create Collection
+
+❌ Doesn't Handle MongoDB
+
+❌ Need Separate Database Validation
+
+## What is Mongoose Schema?
+
+Mongoose schema defines MongoDB document structure.for To define document structure and validate before storing in MongoDB.
+```js
+const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+
+  password: {
+    type: String,
+    required: true
+  }
+});
+```
+
+`Benefit of Mongoose Schema`
+
+✅ Database Level Validation
+
+✅ Collection Structure
+
+✅ Default Values
+
+✅ Relationships
+
+✅ Indexes
+
+✅ CRUD Support
+
+✅ Middleware Hooks
+
+Disadvantages
+
+❌ Validation happens near database
+
+❌ Request already reached backend
+
+❌ Less user-friendly error messages
+
+❌ Cannot validate headers/query params easily
+
+---
+
+## Can Mongoose replace Zod?
+
+Partially.
+
+Mongoose can validate data.
+
+But it validates later, when interacting with the database.
+
+Zod validates immediately at API level.
+
+Zod only validates data. so zod cant replace Mongoose
+
+---
 ## What is CORS and how do you handle it in Node.js?
 
 CORS (Cross-Origin Resource Sharing) is a browser security feature that restricts web
@@ -2627,6 +2838,45 @@ const cors = require('cors');
 app.use(cors()); // Enable all CORS requests
 ```
 ---
+
+## What is CORS?
+
+CORS stands for:`Cross-Origin Resource Sharing`.
+It is a browser security mechanism that controls whether one website can access resources from another website.
+
+---
+
+## Why do we use CORS in Node.js?
+
+To allow frontend applications hosted on different origins to communicate with the backend.
+```txt
+http://localhost:3000
+http://localhost:5000
+```
+
+## What does app.use(cors()) do?
+
+Allows all origins.
+Equivalent to:
+Access-Control-Allow-Origin: *
+better use below for Only trusted frontend allowed.and using credentials you can pass cookies sessions id accors origin
+
+```js
+app.use(
+  cors({
+    origin: ["https://myapp.com","http://localhost:3000"],
+	credentials:true
+  })
+);
+```
+## Why is CORS middleware usually placed before routes?
+Every request passes CORS validation before reaching routes.
+app.use(cors());
+
+app.use("/api/users", userRoutes);
+
+---
+
 ## What is process in Node.js?
 
 The process object provides information about, and control over, the current Node.js
@@ -3544,6 +3794,45 @@ app.listen(process.env.PORT || 8080, () => {
   console.log(`Server running on port ${process.env.PORT || 8080}`);
 });
 ```
+---
+## Project 8.1: AI Assistant chatbot using Node.js and Groq
+
+```js
+	const Groq = require("groq-sdk");
+	require("dotenv").config();
+
+	const groq = new Groq({
+	  apiKey: process.env.GROQ_API_KEY,
+	});
+
+	const prompt = "What is the value of pi in maths?";
+
+	async function generate() {
+	  try {
+		const response = await groq.chat.completions.create({
+		  messages: [
+			{
+			  role: "user",
+			  content: prompt,
+			},
+		  ],
+		  model: "llama-3.3-70b-versatile",
+		});
+
+		console.log(response.choices[0].message.content);
+	  } catch (error) {
+		console.error(error);
+	  }
+	}
+
+	generate();//node index.js
+	const PORT = process.env.PORT || 8080;
+
+	app.listen(PORT, () => {
+	  console.log(`Server is Up and running on port ${PORT}`);
+	});
+```
+
 ---
 
 ## Project 9: User Management CRUD API using Node.js, Express & MongoDB
