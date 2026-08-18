@@ -1,7 +1,5 @@
 # Core Java — Complete Notes (with Java 8 Features)
 
----
-
 ## Table of Contents
 1. Literals
 2. Variables
@@ -41,6 +39,39 @@
 36. Collections Framework
 37. Generics
 38. Java 8 Features
+
+# Spring & Spring Boot — Complete Notes
+
+## Table of Contents
+1. Introduction to Spring
+2. Inversion of Control (IoC) & Dependency Injection
+3. The Spring Container & ApplicationContext
+4. Spring Bean Configuration (XML / Java Config / Annotations)
+5. Stereotype Annotations
+6. Autowiring
+7. Bean Scopes
+8. Bean Lifecycle
+9. Spring AOP (Aspect-Oriented Programming)
+10. Spring MVC
+11. Introduction to Spring Boot
+12. Spring Boot Project Structure & Starters
+13. `application.properties` / `application.yml`
+14. Spring Boot Auto-Configuration
+15. Building REST APIs with Spring Boot
+16. Request/Response Handling
+17. Exception Handling in Spring Boot
+18. Validation (`spring-boot-starter-validation`)
+19. Spring Data JPA
+20. Connecting to a Database
+21. Spring Boot with Lombok
+22. Spring Security Basics
+23. JWT Authentication in Spring Boot
+24. Spring Boot Profiles
+25. Spring Boot Actuator
+26. Spring Boot Testing
+27. Swagger / OpenAPI Documentation
+28. Microservices Basics with Spring Boot
+29. Quick Reference — Common Interview Comparisons
 
 ---
 
@@ -2411,3 +2442,1306 @@ System.out.println(age.getYears() + " years");
 List<String> names = Arrays.asList("A", "B", "C");
 names.forEach(n -> System.out.println(n));
 ```
+
+
+## Spring boot
+---
+
+## 1. Introduction to Spring
+
+**Spring Framework** is a lightweight, open-source Java framework used to build enterprise applications. Its core is built around two principles:
+
+- **IoC (Inversion of Control)** — object creation and dependency management is handed over to the Spring **container** instead of being done manually by the programmer.
+- **DI (Dependency Injection)** — a design pattern that implements IoC by "injecting" dependencies into a class rather than the class creating them itself.
+
+### Why Spring?
+- Reduces boilerplate code (compared to plain Java EE / Servlets).
+- Loosely coupled, easily testable code.
+- Modular — use only what you need (Core, MVC, Data, Security, etc.).
+- Large ecosystem: Spring MVC, Spring Data, Spring Security, Spring Boot, Spring Cloud.
+
+### Spring Modules (High Level)
+| Module | Purpose |
+|---|---|
+| Spring Core | IoC container, DI |
+| Spring AOP | Cross-cutting concerns (logging, transactions) |
+| Spring MVC | Web applications, REST APIs |
+| Spring Data | Simplifies database access (JPA, MongoDB, etc.) |
+| Spring Security | Authentication & authorization |
+| Spring Boot | Auto-configured, production-ready Spring apps |
+
+---
+
+## 2. Inversion of Control (IoC) & Dependency Injection
+
+### Without Spring (Tight Coupling)
+```java
+class Engine { }
+
+class Car {
+    Engine engine = new Engine();   // Car creates its own dependency — tightly coupled
+}
+```
+
+### With Spring (IoC / Loose Coupling)
+```java
+class Engine { }
+
+class Car {
+    private Engine engine;
+
+    // Dependency is INJECTED, not created — Car doesn't control "how" Engine is built
+    Car(Engine engine) {
+        this.engine = engine;
+    }
+}
+```
+The Spring **container** creates the `Engine` bean and **injects** it into `Car` — this is **Dependency Injection**, and letting the container manage that flow is **Inversion of Control**.
+
+### Types of Dependency Injection
+
+**1. Constructor Injection** — dependency passed via constructor. Recommended — supports immutability (`final` fields) and makes required dependencies explicit.
+```java
+@Component
+class Car {
+    private final Engine engine;
+
+    @Autowired
+    public Car(Engine engine) {
+        this.engine = engine;
+    }
+}
+```
+
+**2. Setter Injection** — dependency passed via a setter method. Useful for optional dependencies.
+```java
+@Component
+class Car {
+    private Engine engine;
+
+    @Autowired
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+}
+```
+
+**3. Field Injection** — dependency injected directly into a field. Concise but **not recommended** — harder to test (can't easily mock without Spring), hides dependencies, prevents `final` fields.
+```java
+@Component
+class Car {
+    @Autowired
+    private Engine engine;
+}
+```
+
+| Constructor Injection | Setter Injection | Field Injection |
+|---|---|---|
+| Best for required dependencies | Best for optional dependencies | Quick but discouraged |
+| Supports immutability (`final`) | Mutable | Mutable |
+| Easiest to unit test | Testable | Hardest to unit test |
+
+---
+
+## 3. The Spring Container & ApplicationContext
+
+The **Spring IoC Container** is responsible for creating, configuring, and managing the lifecycle of objects called **beans**.
+
+| Interface | Description |
+|---|---|
+| `BeanFactory` | Basic container — lazy initialization, minimal features |
+| `ApplicationContext` | Advanced container (extends `BeanFactory`) — eager initialization, event handling, AOP, i18n. **Used in almost all real applications.** |
+
+```java
+ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+Car car = context.getBean(Car.class);
+```
+
+A **bean** is simply an object that is instantiated, assembled, and managed by the Spring IoC container.
+
+---
+
+## 4. Spring Bean Configuration
+
+There are three ways to configure beans:
+
+### 1. XML-Based Configuration (legacy, rarely used today)
+```xml
+<beans>
+    <bean id="engine" class="com.example.Engine" />
+    <bean id="car" class="com.example.Car">
+        <constructor-arg ref="engine" />
+    </bean>
+</beans>
+```
+
+### 2. Java-Based Configuration (`@Configuration` + `@Bean`)
+```java
+@Configuration
+class AppConfig {
+
+    @Bean
+    public Engine engine() {
+        return new Engine();
+    }
+
+    @Bean
+    public Car car() {
+        return new Car(engine());   // manual wiring
+    }
+}
+```
+
+### 3. Annotation-Based Configuration (`@Component` + `@Autowired`) — most common
+```java
+@Component
+class Engine { }
+
+@Component
+class Car {
+    @Autowired
+    private Engine engine;
+}
+```
+Requires **component scanning** to detect annotated classes:
+```java
+@Configuration
+@ComponentScan(basePackages = "com.example")
+class AppConfig { }
+```
+(In **Spring Boot**, `@SpringBootApplication` already includes component scanning — see Section 11.)
+
+---
+
+## 5. Stereotype Annotations
+
+"Stereotype" annotations mark a class as a Spring-managed bean, and communicate its **role** in the application layer.
+
+| Annotation | Purpose |
+|---|---|
+| `@Component` | Generic Spring-managed bean |
+| `@Service` | Business/service layer — semantically clearer, same behavior as `@Component` |
+| `@Repository` | Data Access layer — additionally translates DB exceptions into Spring's `DataAccessException` |
+| `@Controller` | Web layer — returns view names (used with server-rendered pages) |
+| `@RestController` | Web layer — combines `@Controller` + `@ResponseBody`, returns data directly (JSON/XML) |
+
+```java
+@Repository
+interface UserRepository extends JpaRepository<User, Long> { }
+
+@Service
+class UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    public User getUser(Long id) {
+        return userRepository.findById(id).orElseThrow();
+    }
+}
+
+@RestController
+class UserController {
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/users/{id}")
+    public User getUser(@PathVariable Long id) {
+        return userService.getUser(id);   // serialized to JSON automatically
+    }
+}
+```
+
+---
+
+## 6. Autowiring
+
+**Autowiring** lets Spring automatically resolve and inject collaborating beans.
+
+### Modes
+| Mode | Behavior |
+|---|---|
+| `byType` (default with `@Autowired`) | Matches by bean **type** |
+| `byName` | Matches by bean **name** |
+| `constructor` | Matches constructor parameters by type |
+
+### Handling Multiple Implementations
+```java
+interface Engine { }
+
+@Component
+class PetrolEngine implements Engine { }
+
+@Component
+class DieselEngine implements Engine { }
+
+@Component
+class Car {
+    @Autowired
+    @Qualifier("dieselEngine")   // resolves ambiguity — picks the bean named "dieselEngine"
+    private Engine engine;
+}
+```
+
+`@Primary` — marks a bean as the **default choice** when multiple candidates exist:
+```java
+@Component
+@Primary
+class PetrolEngine implements Engine { }
+```
+
+`@Autowired(required = false)` — makes the dependency optional; won't fail if no matching bean is found.
+
+---
+
+## 7. Bean Scopes
+
+| Scope | Description |
+|---|---|
+| `singleton` (default) | **One shared instance** per Spring container |
+| `prototype` | **New instance** created every time the bean is requested |
+| `request` | One instance per HTTP request (web-aware context only) |
+| `session` | One instance per HTTP session (web-aware context only) |
+| `application` | One instance per `ServletContext` |
+
+```java
+@Component
+@Scope("prototype")
+class Car { }
+```
+
+```java
+@Component
+@Scope("singleton")   // default — can be omitted
+class Engine { }
+```
+
+**Q: Is a Spring singleton the same as the Singleton design pattern (GoF)?**
+A: No — the GoF pattern guarantees one instance **per JVM**; Spring's singleton scope guarantees one instance **per Spring container**. You could have multiple containers, each with its own "singleton" instance.
+
+---
+
+## 8. Bean Lifecycle
+
+```
+Container starts
+   │
+   ▼
+Bean instantiated (constructor called)
+   │
+   ▼
+Dependencies injected (via @Autowired / setters)
+   │
+   ▼
+@PostConstruct method called (initialization hook)
+   │
+   ▼
+Bean ready to use
+   │
+   ▼
+@PreDestroy method called (cleanup hook, on container shutdown)
+```
+
+```java
+@Component
+class Car {
+
+    @PostConstruct
+    public void init() {
+        System.out.println("Car bean initialized");
+    }
+
+    @PreDestroy
+    public void cleanup() {
+        System.out.println("Car bean about to be destroyed");
+    }
+}
+```
+
+Alternative — implementing `InitializingBean`/`DisposableBean` interfaces (older style, less common now):
+```java
+class Car implements InitializingBean, DisposableBean {
+    public void afterPropertiesSet() { /* init logic */ }
+    public void destroy() { /* cleanup logic */ }
+}
+```
+
+---
+
+## 9. Spring AOP (Aspect-Oriented Programming)
+
+**AOP** lets you separate **cross-cutting concerns** (logging, security, transactions) from business logic, so they don't clutter every method.
+
+### Key Terms
+| Term | Meaning |
+|---|---|
+| **Aspect** | A module containing cross-cutting logic (e.g. a `LoggingAspect` class) |
+| **Advice** | The action taken at a join point (`@Before`, `@After`, `@Around`, etc.) |
+| **Join Point** | A point during execution (e.g. a method call) where an aspect can be applied |
+| **Pointcut** | An expression that selects which join points the advice applies to |
+| **Weaving** | The process of linking aspects with the target objects |
+
+```java
+@Aspect
+@Component
+class LoggingAspect {
+
+    @Before("execution(* com.example.service.*.*(..))")
+    public void logBefore(JoinPoint jp) {
+        System.out.println("Calling method: " + jp.getSignature().getName());
+    }
+
+    @AfterReturning(pointcut = "execution(* com.example.service.*.*(..))", returning = "result")
+    public void logAfter(Object result) {
+        System.out.println("Method returned: " + result);
+    }
+}
+```
+
+| Advice Type | Runs |
+|---|---|
+| `@Before` | Before the method executes |
+| `@After` | After the method executes (regardless of outcome) |
+| `@AfterReturning` | After the method returns successfully |
+| `@AfterThrowing` | If the method throws an exception |
+| `@Around` | Wraps the method — can control whether it even executes |
+
+---
+
+## 10. Spring MVC
+
+**Spring MVC** is Spring's web framework, based on the **Model-View-Controller** pattern.
+
+```
+Client Request
+     │
+     ▼
+DispatcherServlet (Front Controller)
+     │
+     ▼
+Handler Mapping → finds the right Controller
+     │
+     ▼
+Controller → calls Service → returns Model + View name
+     │
+     ▼
+ViewResolver → resolves the View (e.g. JSP/Thymeleaf template)
+     │
+     ▼
+Response rendered back to client
+```
+
+- **`DispatcherServlet`** — the front controller; every request passes through it first.
+- **`@Controller`** — returns a **view name** (for server-rendered pages).
+- **`@RestController`** — returns **data directly** (JSON), used for REST APIs (see next sections).
+
+```java
+@Controller
+class HomeController {
+    @GetMapping("/home")
+    public String home(Model model) {
+        model.addAttribute("message", "Welcome!");
+        return "home";   // resolves to home.jsp / home.html via a ViewResolver
+    }
+}
+```
+
+---
+
+## 11. Introduction to Spring Boot
+
+**Spring Boot** is built on top of Spring — it removes the need for extensive manual configuration by providing:
+
+- **Auto-Configuration** — sensible defaults based on what's on the classpath.
+- **Embedded servers** — Tomcat/Jetty/Undertow bundled in, no need to deploy a WAR separately.
+- **Starter dependencies** — curated dependency bundles (see Section 12).
+- **Production-ready features** — Actuator, metrics, health checks.
+- **No XML** — configuration is annotation/property-driven.
+
+### Spring vs Spring Boot
+
+| Spring | Spring Boot |
+|---|---|
+| Requires manual configuration (XML/Java Config) | Auto-configured based on classpath |
+| Needs external server (deploy as WAR) | Embedded server (run as a JAR) |
+| More boilerplate | Minimal boilerplate |
+| Dependency versions managed manually | Managed via starters + parent POM |
+
+### The Entry Point
+```java
+@SpringBootApplication
+public class MyApp {
+    public static void main(String[] args) {
+        SpringApplication.run(MyApp.class, args);
+    }
+}
+```
+
+`@SpringBootApplication` is a **combination** of three annotations:
+| Annotation | Purpose |
+|---|---|
+| `@Configuration` | Marks the class as a source of bean definitions |
+| `@EnableAutoConfiguration` | Enables Spring Boot's auto-configuration mechanism |
+| `@ComponentScan` | Scans the current package (and sub-packages) for components |
+
+---
+
+## 12. Spring Boot Project Structure & Starters
+
+### Typical Structure
+```
+myapp/
+├── src/main/java/com/example/myapp/
+│   ├── MyAppApplication.java     # main class
+│   ├── controller/
+│   ├── service/
+│   ├── repository/
+│   ├── model/ (entity)
+│   ├── dto/
+│   ├── config/
+│   └── exception/
+├── src/main/resources/
+│   ├── application.properties
+│   └── static/ , templates/
+├── src/test/java/...
+└── pom.xml (or build.gradle)
+```
+
+### Common Starters
+| Starter | Adds |
+|---|---|
+| `spring-boot-starter-web` | Spring MVC + embedded Tomcat — for REST APIs/web apps |
+| `spring-boot-starter-data-jpa` | Spring Data JPA + Hibernate |
+| `spring-boot-starter-security` | Spring Security |
+| `spring-boot-starter-validation` | Bean validation (`@Valid`, `@NotNull`, etc.) |
+| `spring-boot-starter-test` | JUnit, Mockito, Spring Test |
+| `spring-boot-devtools` | Hot reload during development |
+| `spring-boot-starter-actuator` | Health checks, metrics, monitoring endpoints |
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+---
+
+## 13. `application.properties` / `application.yml`
+
+Central place for externalized configuration — no hardcoded values in code.
+
+**`application.properties`**
+```properties
+server.port=8080
+spring.application.name=myapp
+
+spring.datasource.url=jdbc:mysql://localhost:3306/mydb
+spring.datasource.username=root
+spring.datasource.password=root
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+```
+
+**Equivalent `application.yml`**
+```yaml
+server:
+  port: 8080
+
+spring:
+  application:
+    name: myapp
+  datasource:
+    url: jdbc:mysql://localhost:3306/mydb
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+```
+
+### Injecting Property Values
+```java
+@Value("${server.port}")
+private int port;
+```
+
+### Type-Safe Configuration Binding
+```java
+@Component
+@ConfigurationProperties(prefix = "app")
+class AppProperties {
+    private String name;
+    private String version;
+    // getters/setters
+}
+```
+```properties
+app.name=MyApp
+app.version=1.0.0
+```
+
+---
+
+## 14. Spring Boot Auto-Configuration
+
+Auto-configuration inspects the **classpath** and existing bean definitions, then automatically configures beans that make sense for your setup.
+
+**Example:** if `spring-boot-starter-data-jpa` + a JDBC driver (e.g. `mysql-connector-j`) are on the classpath, Spring Boot automatically configures a `DataSource`, `EntityManagerFactory`, and `TransactionManager` — no manual setup needed.
+
+### Conditional Annotations (used internally by Spring Boot's auto-config, and available for your own config too)
+| Annotation | Applies bean only if... |
+|---|---|
+| `@ConditionalOnClass` | A specified class is present on the classpath |
+| `@ConditionalOnMissingBean` | No bean of that type already exists |
+| `@ConditionalOnProperty` | A property has a specific value |
+
+```java
+@Configuration
+class MyConfig {
+
+    @Bean
+    @ConditionalOnMissingBean
+    public MyService myService() {
+        return new MyServiceImpl();
+    }
+}
+```
+
+**Excluding auto-configuration:**
+```java
+@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
+```
+
+---
+
+## 15. Building REST APIs with Spring Boot
+
+### Mapping Annotations
+| Annotation | HTTP Method |
+|---|---|
+| `@GetMapping` | GET — retrieve data |
+| `@PostMapping` | POST — create data |
+| `@PutMapping` | PUT — full update |
+| `@PatchMapping` | PATCH — partial update |
+| `@DeleteMapping` | DELETE — remove data |
+| `@RequestMapping` | Generic — method specified via `method =` attribute |
+
+### Full CRUD Example
+```java
+@RestController
+@RequestMapping("/api/products")
+class ProductController {
+
+    @Autowired
+    private ProductService productService;
+
+    @GetMapping
+    public List<Product> getAll() {
+        return productService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public Product getById(@PathVariable Long id) {
+        return productService.getById(id);
+    }
+
+    @PostMapping
+    public Product create(@RequestBody Product product) {
+        return productService.save(product);
+    }
+
+    @PutMapping("/{id}")
+    public Product update(@PathVariable Long id, @RequestBody Product product) {
+        return productService.update(id, product);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        productService.delete(id);
+        return ResponseEntity.noContent().build();   // 204
+    }
+}
+```
+
+### Key Request-Handling Annotations
+| Annotation | Purpose |
+|---|---|
+| `@PathVariable` | Extracts a value from the URL path — `/users/{id}` |
+| `@RequestParam` | Extracts a query parameter — `/users?role=admin` |
+| `@RequestBody` | Binds the JSON request body to a Java object |
+| `@RequestHeader` | Extracts an HTTP header value |
+
+```java
+@GetMapping("/search")
+public List<Product> search(@RequestParam String category,
+                              @RequestParam(defaultValue = "0") int page) {
+    return productService.search(category, page);
+}
+```
+
+### `ResponseEntity` — full control over the HTTP response
+```java
+@GetMapping("/{id}")
+public ResponseEntity<Product> getById(@PathVariable Long id) {
+    Product p = productService.getById(id);
+    if (p == null) return ResponseEntity.notFound().build();       // 404
+    return ResponseEntity.ok(p);                                    // 200 + body
+}
+```
+
+---
+
+## 16. Request/Response Handling
+
+### DTOs (Data Transfer Objects)
+Best practice: don't expose your **JPA entity** directly in the API — use a separate DTO to control exactly what's sent/received.
+
+```java
+class ProductDTO {
+    private String name;
+    private Double price;
+    // getters/setters — no internal fields like createdAt/updatedBy exposed
+}
+```
+
+### JSON Serialization — Jackson (default, bundled with `spring-boot-starter-web`)
+```java
+class Product {
+    @JsonIgnore
+    private String internalNote;   // excluded from JSON output
+
+    @JsonProperty("product_name")
+    private String name;           // renamed in JSON output
+}
+```
+
+### CORS Configuration
+```java
+@CrossOrigin(origins = "http://localhost:5173")
+@RestController
+class ProductController { }
+```
+Or globally:
+```java
+@Configuration
+class CorsConfig implements WebMvcConfigurer {
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/api/**")
+                .allowedOrigins("http://localhost:5173")
+                .allowedMethods("GET", "POST", "PUT", "DELETE");
+    }
+}
+```
+
+---
+
+## 17. Exception Handling in Spring Boot
+
+### Local — `@ExceptionHandler` inside a controller
+```java
+@RestController
+class ProductController {
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(ProductNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+}
+```
+
+### Global — `@ControllerAdvice` / `@RestControllerAdvice` (recommended)
+Centralizes exception handling for **all** controllers.
+```java
+@RestControllerAdvice
+class GlobalExceptionHandler {
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(ProductNotFoundException e) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGeneric(Exception e) {
+        ErrorResponse error = new ErrorResponse(500, "Something went wrong");
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+class ErrorResponse {
+    int status;
+    String message;
+    ErrorResponse(int status, String message) { this.status = status; this.message = message; }
+}
+```
+
+### Custom Exception
+```java
+class ProductNotFoundException extends RuntimeException {
+    public ProductNotFoundException(String message) { super(message); }
+}
+```
+
+| `@ExceptionHandler` (local) | `@ControllerAdvice` (global) |
+|---|---|
+| Handles exceptions for **one** controller | Handles exceptions across **all** controllers |
+| Duplicated across controllers if reused | Written once, centrally |
+
+---
+
+## 18. Validation (`spring-boot-starter-validation`)
+
+```java
+class ProductDTO {
+    @NotBlank(message = "Name is required")
+    private String name;
+
+    @Positive(message = "Price must be positive")
+    private Double price;
+
+    @Email
+    private String contactEmail;
+
+    @Min(0) @Max(100)
+    private int discountPercent;
+}
+```
+
+### Triggering Validation
+```java
+@PostMapping
+public Product create(@Valid @RequestBody ProductDTO dto) {
+    // if validation fails, MethodArgumentNotValidException is thrown automatically
+    return productService.save(dto);
+}
+```
+
+### Handling Validation Errors Globally
+```java
+@RestControllerAdvice
+class ValidationExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException e) {
+        Map<String, String> errors = new HashMap<>();
+        e.getBindingResult().getFieldErrors()
+            .forEach(err -> errors.put(err.getField(), err.getDefaultMessage()));
+        return ResponseEntity.badRequest().body(errors);
+    }
+}
+```
+
+| Common Annotation | Checks |
+|---|---|
+| `@NotNull` | Value is not `null` |
+| `@NotBlank` | String is not `null`/empty/whitespace-only |
+| `@NotEmpty` | Collection/String is not `null`/empty |
+| `@Size(min=, max=)` | Length/size within bounds |
+| `@Min` / `@Max` | Numeric bounds |
+| `@Email` | Valid email format |
+| `@Pattern(regexp=)` | Matches a regex |
+
+---
+
+## 19. Spring Data JPA
+
+**Spring Data JPA** eliminates most boilerplate DAO code — you just define a **repository interface**.
+
+### Entity
+```java
+@Entity
+@Table(name = "products")
+class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    private Double price;
+}
+```
+
+### Repository
+```java
+@Repository
+interface ProductRepository extends JpaRepository<Product, Long> {
+
+    // Query derived automatically from the method name
+    List<Product> findByNameContaining(String keyword);
+    List<Product> findByPriceLessThan(Double price);
+    Optional<Product> findByName(String name);
+
+    // Custom JPQL query
+    @Query("SELECT p FROM Product p WHERE p.price > :minPrice")
+    List<Product> findExpensiveProducts(@Param("minPrice") Double minPrice);
+}
+```
+`JpaRepository<Product, Long>` already provides: `save()`, `findById()`, `findAll()`, `deleteById()`, `count()`, etc. — **no implementation needed**, Spring generates it at runtime.
+
+### Entity Relationships
+```java
+@Entity
+class Order {
+    @Id @GeneratedValue
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> items;
+}
+```
+
+| Annotation | Relationship |
+|---|---|
+| `@OneToOne` | One-to-one |
+| `@OneToMany` | One-to-many |
+| `@ManyToOne` | Many-to-one |
+| `@ManyToMany` | Many-to-many |
+
+### JPA vs Hibernate vs Spring Data JPA
+
+| JPA | Hibernate | Spring Data JPA |
+|---|---|---|
+| Specification (interfaces/rules) | An **implementation** of JPA | A layer **on top of** JPA that removes boilerplate |
+| Doesn't do anything by itself | Actually persists data | Auto-generates repository implementations |
+
+---
+
+## 20. Connecting to a Database
+
+### MySQL / PostgreSQL
+```xml
+<dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+</dependency>
+```
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/mydb
+spring.datasource.username=root
+spring.datasource.password=root
+spring.jpa.hibernate.ddl-auto=update
+```
+
+### H2 (in-memory, great for testing)
+```xml
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+```properties
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.h2.console.enabled=true
+```
+
+### `ddl-auto` values
+| Value | Behavior |
+|---|---|
+| `none` | No schema changes |
+| `validate` | Validates schema matches entities, no changes |
+| `update` | Updates schema to match entities (safe for dev) |
+| `create` | Drops and recreates schema on every startup |
+| `create-drop` | Like `create`, but also drops schema on shutdown |
+
+⚠️ Never use `create`/`create-drop`/`update` in **production** — use a migration tool instead (see below).
+
+### Database Migrations — Flyway / Liquibase 🆕
+For production, schema changes should be **version-controlled** rather than auto-generated:
+```xml
+<dependency>
+    <groupId>org.flywaydb</groupId>
+    <artifactId>flyway-core</artifactId>
+</dependency>
+```
+```
+src/main/resources/db/migration/
+  V1__create_products_table.sql
+  V2__add_stock_column.sql
+```
+Flyway runs these scripts in order automatically on startup, keeping schema changes traceable.
+
+---
+
+## 21. Spring Boot with Lombok
+
+**Lombok** removes boilerplate (getters, setters, constructors, `toString()`) via annotations processed at compile time.
+
+```xml
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <optional>true</optional>
+</dependency>
+```
+
+```java
+@Entity
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+class Product {
+    @Id @GeneratedValue
+    private Long id;
+    private String name;
+    private Double price;
+}
+```
+
+| Annotation | Generates |
+|---|---|
+| `@Getter` / `@Setter` | Getter/setter methods for all fields |
+| `@NoArgsConstructor` | Empty constructor |
+| `@AllArgsConstructor` | Constructor with all fields |
+| `@Data` | Getters, setters, `toString()`, `equals()`, `hashCode()` — all in one |
+| `@Builder` | Builder pattern for object creation |
+
+```java
+Product p = Product.builder()
+        .name("Laptop")
+        .price(999.99)
+        .build();
+```
+
+---
+
+## 22. Spring Security Basics
+
+Spring Security handles **authentication** (who are you?) and **authorization** (what are you allowed to do?).
+
+### Basic Setup
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+As soon as this starter is added, Spring Boot **auto-secures all endpoints** with a default login form and a generated password (printed in the console on startup).
+
+### Custom Security Configuration
+```java
+@Configuration
+@EnableWebSecurity
+class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/**").permitAll()      // public endpoints
+                .requestMatchers("/api/admin/**").hasRole("ADMIN") // role-restricted
+                .anyRequest().authenticated()                      // everything else needs login
+            )
+            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();   // never store plaintext passwords
+    }
+}
+```
+
+### `UserDetailsService` — how Spring Security loads user data
+```java
+@Service
+class CustomUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getEmail())
+                .password(user.getPassword())
+                .roles(user.getRole())
+                .build();
+    }
+}
+```
+
+### Authentication vs Authorization
+
+| Authentication | Authorization |
+|---|---|
+| Verifies **who** the user is | Verifies **what** the user can access |
+| Example: login with email/password | Example: only `ADMIN` can delete a product |
+| Happens first | Happens after authentication |
+
+---
+
+## 23. JWT Authentication in Spring Boot
+
+**JWT (JSON Web Token)** — a stateless way to authenticate requests: the server issues a signed token at login; the client sends it on every subsequent request instead of re-sending credentials.
+
+### Flow
+```
+1. POST /api/auth/login (email + password)
+2. Server validates credentials → generates a signed JWT
+3. Client stores the JWT (memory / httpOnly cookie)
+4. Client sends "Authorization: Bearer <token>" on every request
+5. A JwtFilter validates the token before the request reaches the controller
+```
+
+### Generating a Token
+```java
+@Component
+class JwtUtil {
+
+    private final String SECRET_KEY = "your-secret-key";
+
+    public String generateToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))   // 1 hour
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
+
+    public String extractUsername(String token) {
+        return Jwts.parser().setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public boolean isTokenValid(String token) {
+        try {
+            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
+    }
+}
+```
+
+### JWT Filter — runs before every request
+```java
+class JwtAuthFilter extends OncePerRequestFilter {
+
+    @Autowired private JwtUtil jwtUtil;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
+            throws ServletException, IOException {
+
+        String header = req.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
+            if (jwtUtil.isTokenValid(token)) {
+                String username = jwtUtil.extractUsername(token);
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+        }
+        chain.doFilter(req, res);
+    }
+}
+```
+
+**Q: Why is JWT considered "stateless"?**
+A: The server doesn't need to store session data — all the info needed to identify the user is inside the signed token itself.
+
+---
+
+## 24. Spring Boot Profiles
+
+Profiles let you maintain **different configurations** for different environments (dev, test, prod).
+
+```
+application.properties          # common config
+application-dev.properties      # dev-specific overrides
+application-prod.properties     # prod-specific overrides
+```
+
+```properties
+# application-dev.properties
+spring.datasource.url=jdbc:h2:mem:devdb
+logging.level.root=DEBUG
+```
+```properties
+# application-prod.properties
+spring.datasource.url=jdbc:mysql://prod-host:3306/proddb
+logging.level.root=WARN
+```
+
+**Activating a profile:**
+```properties
+# in application.properties
+spring.profiles.active=dev
+```
+Or via command line:
+```bash
+java -jar app.jar --spring.profiles.active=prod
+```
+
+**Profile-specific beans:**
+```java
+@Configuration
+@Profile("dev")
+class DevConfig {
+    @Bean
+    public DataSource dataSource() { return new EmbeddedDatabase(); }
+}
+```
+
+---
+
+## 25. Spring Boot Actuator
+
+`spring-boot-starter-actuator` exposes production-ready **monitoring/management endpoints** out of the box.
+
+```properties
+management.endpoints.web.exposure.include=health,info,metrics,env
+```
+
+| Endpoint | Purpose |
+|---|---|
+| `/actuator/health` | Application health status (UP/DOWN) |
+| `/actuator/info` | Custom app info |
+| `/actuator/metrics` | JVM/HTTP/system metrics |
+| `/actuator/env` | Environment properties |
+| `/actuator/beans` | List of all Spring beans |
+
+```java
+@Component
+class DbHealthIndicator implements HealthIndicator {
+    @Override
+    public Health health() {
+        boolean dbUp = checkDatabaseConnection();
+        return dbUp ? Health.up().build() : Health.down().withDetail("reason", "DB unreachable").build();
+    }
+}
+```
+
+---
+
+## 26. Spring Boot Testing
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+Bundles: **JUnit 5**, **Mockito**, **AssertJ**, **Spring Test**.
+
+### Unit Test — mocking dependencies
+```java
+@ExtendWith(MockitoExtension.class)
+class ProductServiceTest {
+
+    @Mock
+    private ProductRepository productRepository;
+
+    @InjectMocks
+    private ProductService productService;
+
+    @Test
+    void shouldReturnProductById() {
+        Product mockProduct = new Product(1L, "Laptop", 999.99);
+        when(productRepository.findById(1L)).thenReturn(Optional.of(mockProduct));
+
+        Product result = productService.getById(1L);
+
+        assertEquals("Laptop", result.getName());
+    }
+}
+```
+
+### Integration Test — full Spring context
+```java
+@SpringBootTest
+@AutoConfigureMockMvc
+class ProductControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void shouldReturnProductsList() throws Exception {
+        mockMvc.perform(get("/api/products"))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$[0].name").exists());
+    }
+}
+```
+
+| `@Mock` / `@InjectMocks` | `@SpringBootTest` |
+|---|---|
+| Pure unit test — no Spring context loaded | Loads the full (or sliced) application context |
+| Very fast | Slower — closer to a real run |
+| Use for testing service/business logic in isolation | Use for testing controller/end-to-end wiring |
+
+**Test slices** — load only part of the context for faster, focused tests: `@WebMvcTest` (controller layer only), `@DataJpaTest` (repository layer only).
+
+---
+
+## 27. Swagger / OpenAPI Documentation
+
+Auto-generates interactive API documentation.
+
+```xml
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.x.x</version>
+</dependency>
+```
+Once added, Spring Boot auto-exposes:
+- `/v3/api-docs` — raw OpenAPI JSON spec
+- `/swagger-ui.html` — interactive UI to try out endpoints
+
+```java
+@Operation(summary = "Get a product by ID")
+@GetMapping("/{id}")
+public Product getById(@PathVariable Long id) {
+    return productService.getById(id);
+}
+```
+
+---
+
+## 28. Microservices Basics with Spring Boot
+
+Spring Boot is commonly used to build individual **microservices** — small, independently deployable services, each owning its own data and responsibility.
+
+| Concern | Typical Spring Tool |
+|---|---|
+| Service discovery | Eureka (`spring-cloud-starter-netflix-eureka-client`) |
+| API Gateway | Spring Cloud Gateway |
+| Inter-service calls | `RestTemplate` / `WebClient` / OpenFeign |
+| Centralized config | Spring Cloud Config Server |
+| Fault tolerance | Resilience4j (circuit breaker, retry) |
+| Distributed tracing | Micrometer + Zipkin/Sleuth |
+
+```java
+@FeignClient(name = "product-service", url = "http://localhost:8081")
+interface ProductClient {
+    @GetMapping("/api/products/{id}")
+    Product getProduct(@PathVariable Long id);
+}
+```
+
+> Microservices architecture is a broad topic on its own — this section is just an entry point; a dedicated Spring Cloud deep-dive would be its own notes file.
+
+---
+
