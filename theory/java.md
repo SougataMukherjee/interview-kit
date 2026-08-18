@@ -1,7 +1,5 @@
 # Core Java — Complete Notes (with Java 8 Features)
 
-> Rebuilt sequentially from your notes. Sections marked **🆕** are gaps I noticed while sequencing (referenced repeatedly in your notes but never fully explained) and filled in so the flow doesn't break.
-
 ---
 
 ## Table of Contents
@@ -13,7 +11,7 @@
 6. Looping Statements
 7. Selection Statements
 8. Arrays
-9. Access Modifiers 🆕
+9. Access Modifiers
 10. Object-Oriented Programming (OOP)
 11. Inner Classes
 12. Constructors
@@ -28,11 +26,11 @@
 21. Polymorphism
 22. Method Overriding — Rules
 23. Abstract Methods & Abstract Classes
-24. Final Keyword (Variable / Method / Class) 🆕
+24. Final Keyword (Variable / Method / Class) 
 25. Interfaces
 26. Inheritance & Object Class
 27. `this` and `super`
-28. Type Casting (Upcasting / Downcasting) 🆕
+28. Type Casting (Upcasting / Downcasting) 
 29. Coupling & Cohesion
 30. Exception Handling
 31. Multithreading
@@ -186,10 +184,11 @@ class Test {
 ```
 
 **Q: What is the default value of a local variable?**
+
 A: None — the programmer must explicitly assign a value before use.
 
 ### Variable Shadowing
-If an instance variable and a local variable share the same name, the **local variable's value** is used inside that method — this is called **variable shadowing**.
+If an instance variable and a local variable share the same name, the **local variable's value** is used inside that method this is called **variable shadowing**.
 
 ```java
 public class A {
@@ -377,25 +376,8 @@ int y = (10 > 20) ? 30 : ((40 < 50) ? 60 : 70);
 System.out.println(y);   // 60
 ```
 
-### Worked Example — if-else vs Ternary (grading)
-```java
-import java.util.Scanner;
+### Worked Example
 
-public class Operators {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter marks: ");
-        int marks = sc.nextInt();
-
-        if (marks > 80)                          System.out.println("Grade: Excellent");
-        else if (marks <= 80 && marks >= 60)      System.out.println("Grade: Good");
-        else if (marks >= 30 && marks < 60)       System.out.println("Grade: Average");
-        else if (marks < 30)                      System.out.println("Grade: Bad");
-        else                                       System.out.println("Invalid Marks");
-        sc.close();
-    }
-}
-```
 ```java
 import java.util.Scanner;
 
@@ -622,7 +604,7 @@ for (int i = 0; i < 2; i++)
 
 ---
 
-## 9. Access Modifiers 🆕
+## 9. Access Modifiers 
 
 Referenced throughout the notes (`public`, `private`, `protected`, default) — summarized here since it wasn't centralized:
 
@@ -1093,7 +1075,7 @@ class Test {
 3. Static blocks can execute even without a `main()` method (older Java versions allowed this for simple execution).
 4. Static block can access **only static members** directly.
 
-**🆕 Execution order when an object is created:**
+** Execution order when an object is created:**
 `static block` (once, at class loading) → `instance initializer block` → `constructor`.
 
 ---
@@ -1439,7 +1421,7 @@ public class Abstract {
 
 ---
 
-## 24. Final Keyword (Variable / Method / Class) 🆕
+## 24. Final Keyword (Variable / Method / Class) 
 
 `final` has three uses, referenced separately throughout the notes — grouped here for clarity.
 
@@ -1641,7 +1623,7 @@ A: To prevent direct access to class data from outside the class.
 
 ---
 
-## 28. Type Casting (Upcasting / Downcasting) 🆕
+## 28. Type Casting (Upcasting / Downcasting) 
 
 Referenced implicitly in overriding/polymorphism but never spelled out — added here.
 
@@ -1801,7 +1783,7 @@ void m1() throws IOException, SQLException, ClassNotFoundException { }
 | Used in method body | Used in method declaration |
 | One at a time | Multiple can be declared |
 
-### try-with-resources (Java 7+) 🆕
+### try-with-resources (Java 7+) 
 Automatically closes any resource implementing `AutoCloseable` (e.g. `FileReader`, `FileWriter`, `Scanner`) — no need for a manual `finally { close(); }`.
 ```java
 try (FileReader fr = new FileReader("abc.txt")) {
@@ -1989,7 +1971,7 @@ String s1 = "Java";
 String s2 = "Java";
 String s3 = "Java";   // all three refer to the SAME pooled object
 ```
-🆕 `intern()` forces a heap `String` object to be pooled (or return the existing pooled reference):
+ `intern()` forces a heap `String` object to be pooled (or return the existing pooled reference):
 ```java
 String s4 = new String("Java").intern();
 System.out.println(s4 == s1);   // true — now points to the pooled "Java"
@@ -2022,7 +2004,7 @@ s.concat("muk");
 System.out.println(s);   // "sam" — concat() result was NOT stored anywhere
 ```
 
-🆕 Common `StringBuilder` methods:
+ Common `StringBuilder` methods:
 ```java
 StringBuilder sb = new StringBuilder("Java");
 sb.append(" Rocks");     // Java Rocks
@@ -2052,7 +2034,7 @@ public boolean equals(Object obj)
 | Used for logical equality | Used by hash-based collections |
 | Must be overridden **together** for consistency | — |
 
-🆕 **The `equals()`/`hashCode()` contract:** if two objects are `equal` per `equals()`, they **must** produce the same `hashCode()`. Breaking this contract causes objects to "get lost" inside `HashMap`/`HashSet` (wrong bucket lookup).
+ **The `equals()`/`hashCode()` contract:** if two objects are `equal` per `equals()`, they **must** produce the same `hashCode()`. Breaking this contract causes objects to "get lost" inside `HashMap`/`HashSet` (wrong bucket lookup).
 
 ---
 
@@ -2230,7 +2212,7 @@ System.out.println(t);   // [10, 20, 40]
 | Hash table | Hash table + linked list | Balanced tree |
 | Fastest | Slightly slower | Slowest (but sorted) |
 
-### `HashMap` vs `Hashtable` 🆕
+### `HashMap` vs `Hashtable` 
 
 ```java
 HashMap<Integer, String> map = new HashMap<>();
@@ -2429,22 +2411,3 @@ System.out.println(age.getYears() + " years");
 List<String> names = Arrays.asList("A", "B", "C");
 names.forEach(n -> System.out.println(n));
 ```
-
-### 38.9 Interview-Style Q&A
-**Q: Why were default methods added to interfaces in Java 8?**
-A: To allow adding new methods to existing interfaces (e.g. `Collection.stream()`) without breaking all classes that already implement them.
-
-**Q: Is a Stream reusable?**
-A: No — once a terminal operation runs, the stream is consumed and cannot be reused; a new stream must be created.
-
-**Q: Difference between `map()` and `flatMap()`?**
-A: `map()` transforms each element 1-to-1; `flatMap()` transforms each element into a stream and flattens all resulting streams into one.
-```java
-List<List<Integer>> nested = Arrays.asList(Arrays.asList(1,2), Arrays.asList(3,4));
-List<Integer> flat = nested.stream()
-        .flatMap(List::stream)
-        .collect(Collectors.toList());
-System.out.println(flat);   // [1, 2, 3, 4]
-```
-
----
