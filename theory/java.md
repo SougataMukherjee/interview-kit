@@ -1,4 +1,48 @@
-# Core Java Notes (with Java 8 Features)
+# Core Java — Complete Notes (with Java 8 Features)
+
+> Rebuilt sequentially from your notes. Sections marked **🆕** are gaps I noticed while sequencing (referenced repeatedly in your notes but never fully explained) and filled in so the flow doesn't break.
+
+---
+
+## Table of Contents
+1. Literals
+2. Variables
+3. Var-Args Methods
+4. Method Overloading
+5. Operators & Assignment
+6. Looping Statements
+7. Selection Statements
+8. Arrays
+9. Access Modifiers 🆕
+10. Object-Oriented Programming (OOP)
+11. Inner Classes
+12. Constructors
+13. Garbage Collection
+14. Wrapper Classes / Boxing
+15. `==` vs `equals()`
+16. Static Block
+17. Enum
+18. Packages & Imports
+19. Abstraction
+20. Internationalization (I18N)
+21. Polymorphism
+22. Method Overriding — Rules
+23. Abstract Methods & Abstract Classes
+24. Final Keyword (Variable / Method / Class) 🆕
+25. Interfaces
+26. Inheritance & Object Class
+27. `this` and `super`
+28. Type Casting (Upcasting / Downcasting) 🆕
+29. Coupling & Cohesion
+30. Exception Handling
+31. Multithreading
+32. String, StringBuffer, StringBuilder
+33. Object Class Methods (Detail)
+34. File I/O
+35. Serialization
+36. Collections Framework
+37. Generics
+38. Java 8 Features
 
 ---
 
@@ -33,6 +77,17 @@ private int age;
 }
 ```
 
+### Method Signature
+A method signature = **method name + parameter list** (number, type, and order of parameters). Return type is **not** part of the signature.
+
+```java
+class Demo {
+    void display() { }          // Signature: display()
+    void display(int a) { }     // Signature: display(int)
+    void display(String s) { }  // Signature: display(String)
+}
+```
+
 ### Types of Variables
 
 | Type | Description |
@@ -45,11 +100,11 @@ private int age;
 - A separate copy is created for **every** object.
 - Created when the object is created, destroyed when the object is destroyed.
 - Scope = scope of the object.
-- instance variable should be declare within the class directly but outside of any method or block or constructor
+- Must be declared **directly inside the class**, outside any method, block, or constructor.
 
 ```java
 class Test {
-    int x = 10;  //if we made 5 obj then 5 diff obj will created with name x
+    int x = 10;   // if we make 5 objects, 5 different copies of x are created
     public static void main(String[] args) {
         Test t = new Test();
         System.out.println(t.x);   // 10
@@ -59,13 +114,44 @@ class Test {
 
 ### Static / Class Variable
 - Single copy shared by **all** objects of the class.
-- Declared with `static`, stored at the class level but outside method or constructor or class
+- Declared with `static`, stored at the class level — outside any method/constructor/block.
 
 ```java
-class Test {
-    static int x = 10;//once obj create for whole class
+class BankAccount {
+
+    // Static variable — shared across all accounts
+    static double interestRate = 5.0;
+
+    // Instance variables — unique to each account
+    double balance;
+    String accountHolder;
+
+    BankAccount(String accountHolder, double balance) {
+        this.accountHolder = accountHolder;
+        this.balance = balance;
+    }
+
+    // Static method — can use static members only
+    static double calculateInterest(double amount) {
+        return amount * interestRate / 100;
+    }
+
+    void showAccountDetails() {
+        System.out.println("Account Holder: " + accountHolder);
+        System.out.println("Balance: " + balance);
+    }
+}
+
+public class Static_var_method {
     public static void main(String[] args) {
-        System.out.println(Test.x);   // 10
+        BankAccount acc1 = new BankAccount("Rahul", 10000);
+        BankAccount acc2 = new BankAccount("Anita", 20000);
+
+        acc1.showAccountDetails();
+        System.out.println("Interest: " + BankAccount.calculateInterest(acc1.balance));
+
+        acc2.showAccountDetails();
+        System.out.println("Interest: " + BankAccount.calculateInterest(acc2.balance));
     }
 }
 ```
@@ -77,6 +163,14 @@ class Test {
 | Separate copy per object | Single copy shared by all objects |
 | Stored in heap (inside object) | Stored in method/class area |
 
+### Instance vs Local Variable
+
+| Instance Variable | Local Variable |
+|---|---|
+| Declared inside a class, outside methods | Declared inside a method, constructor, or block |
+| Accessible by all methods of the class | Accessible only within the method/block where declared |
+| Gets default values (`0`, `null`, `false`, ...) | Must be initialized before use — no default value |
+
 ### Local Variable
 - Declared inside a block, method, or constructor for temporary needs.
 - **Must be initialized before use** — no default value is given.
@@ -86,13 +180,28 @@ class Test {
 class Test {
     public static void main(String[] args) {
         int x;
-        System.out.println(x);   // Compile-time error — not initialized do int x=10
+        System.out.println(x);   // Compile-time error — not initialized; do int x = 10;
     }
 }
 ```
 
 **Q: What is the default value of a local variable?**
 A: None — the programmer must explicitly assign a value before use.
+
+### Variable Shadowing
+If an instance variable and a local variable share the same name, the **local variable's value** is used inside that method — this is called **variable shadowing**.
+
+```java
+public class A {
+    String s = "xyz";   // instance variable
+
+    public void display() {
+        String s = "abc";          // local variable — shadows instance variable
+        System.out.println(s);      // prints "abc"
+        System.out.println(this.s); // prints "xyz" — use `this` to access the shadowed instance var
+    }
+}
+```
 
 ### Summary — Possible Combinations
 - Primitive Variable / Reference Variable
@@ -112,7 +221,7 @@ class Test {
 
 ## 3. Var-Args Methods
 
-whenever you are not sure how many input are going to be provided by user or you are not sure how many argument that you need to take inside method.
+Used when you're **not sure how many arguments** the caller will provide.
 
 ```java
 return-type methodName(int... x)
@@ -140,7 +249,10 @@ Internally implemented using a 1-D array: `sum(int[] x)`.
 - Only **one** var-arg parameter allowed per method — `m1(int... x, double... d)` is invalid.
 - A var-arg method **cannot be overloaded** with the same signature as `m1(int[] x)`.
 - Var-arg methods have the **lowest priority** — called only when no other method matches.
-- we can mix var-arg parameter with normal parameter but remember last parameter should be var-arg parameter `m1(String s, int... y)`
+- Var-args **can be mixed** with normal parameters, but the var-arg parameter **must come last**:
+```java
+void m1(String s, int... y) { }   // valid
+```
 
 ---
 
@@ -163,10 +275,25 @@ class Test {
 // m1('a') -> char is promoted to int -> calls m1(int)
 ```
 
-**Ways to overload:**
-- Different number of arguments
-- Different types of arguments
-- Different order of parameters
+**Ways to overload:** different number of arguments, different types of arguments, different order of parameters.
+
+### Worked Example
+```java
+class Calculator {
+    public int add(int n1, int n2)              { return n1 + n2; }
+    public double add(double n1, double n2)      { return n1 + n2; }
+    public int add(int n1, int n2, int n3)       { return n1 + n2 + n3; }
+}
+
+public class MethodOverload {
+    public static void main(String[] args) {
+        Calculator obj = new Calculator();
+        System.out.println(obj.add(2, 3));         // 5   -> int version
+        System.out.println(obj.add(2.2, 3.3));     // 5.5 -> double version
+        System.out.println(obj.add(2, 3, 4));       // 9   -> 3-arg version
+    }
+}
+```
 
 ---
 
@@ -225,7 +352,7 @@ System.out.println(s instanceof String);   // true
 | `\|\|` | Short-circuit OR | If first is `true`, second is skipped |
 
 ### Bitwise Operators
-```java
+```
 4 = 100
 5 = 101
 4 & 5 = 100 = 4
@@ -250,36 +377,131 @@ int y = (10 > 20) ? 30 : ((40 < 50) ? 60 : 70);
 System.out.println(y);   // 60
 ```
 
+### Worked Example — if-else vs Ternary (grading)
+```java
+import java.util.Scanner;
+
+public class Operators {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter marks: ");
+        int marks = sc.nextInt();
+
+        if (marks > 80)                          System.out.println("Grade: Excellent");
+        else if (marks <= 80 && marks >= 60)      System.out.println("Grade: Good");
+        else if (marks >= 30 && marks < 60)       System.out.println("Grade: Average");
+        else if (marks < 30)                      System.out.println("Grade: Bad");
+        else                                       System.out.println("Invalid Marks");
+        sc.close();
+    }
+}
+```
+```java
+import java.util.Scanner;
+
+public class Ternary {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter marks: ");
+        int marks = sc.nextInt();
+
+        String grade = (marks > 80) ? "Excellent" :
+                       (marks >= 60) ? "Good" :
+                       (marks >= 30) ? "Average" : "Bad";
+
+        System.out.println("Grade: " + grade);
+        sc.close();
+    }
+}
+```
+
 ---
 
 ## 6. Looping Statements
 
-### While Loop — entry-controlled, condition checked **before** execution
+### While Loop — entry-controlled
 ```java
 while (condition) {
     // statements
 }
 ```
+**Rules**
+- Used when the number of iterations is not known in advance.
+- Condition must be `boolean`.
+- Entry-controlled → condition checked **before** the body runs.
+- May execute **zero** times.
+- Curly braces `{}` optional for a single statement — but you can't put a declaration statement alone without braces.
 
-### Do-While Loop — exit-controlled, executes **at least once**
+### Do-While Loop — exit-controlled
 ```java
 do {
     // body
 } while (condition);
 ```
+**Rules**
+- Executes the body **at least once**.
+- Condition checked **after** the body runs.
+- Semicolon `;` mandatory after `while(condition)`.
 
-### For Loop — entry-controlled, used when iterations are known
+| `while` Loop | `do-while` Loop |
+|---|---|
+| Entry-controlled | Exit-controlled |
+| Checked before body | Checked after body |
+| May run zero times | Runs at least once |
+| `while(condition){ }` | `do{ }while(condition);` |
+| No trailing `;` | Trailing `;` required |
+
+### For Loop — entry-controlled, iterations known
 ```java
 for (initialization; condition; update) {
     // body
 }
 ```
+**Rules**
+- Initialization executes **only once**.
+- Condition must be `boolean`.
+- Variable declared in initialization is **local to the loop**.
+- Any of the 3 sections can be omitted.
+
+```java
+// All valid:
+for (int i = 0; ; )                          { }
+for ( ; a <= 10; )                            { }
+for ( ; ; )                                    { }
+for (i = 0, j = 1; i < 10 && j < 20; i++, j--) { }
+```
 
 ### Enhanced For-Each Loop (Java 5+)
+Traverses array/collection elements without an index variable.
+```java
+for (dataType variable : array) { }
+```
 ```java
 int[] x = {10, 20, 30, 40};
-for (int i : x) {
-    System.out.println(i);   // 10 20 30 40
+for (int i : x) System.out.println(i);   // 10 20 30 40
+
+// 2-D array
+int[][] m = { {1, 2}, {3, 4} };
+for (int[] row : m) {
+    for (int j : row) System.out.print(j + " ");
+    System.out.println();
+}
+```
+
+### `break` — terminates a loop or switch immediately
+```java
+for ( ; ; ) { break; }                              // directly
+for ( ; ; ) { if (true) break; }                     // inside if
+for ( ; ; ) { for ( ; ; ) { break; } }                 // breaks only the INNER loop
+for ( ; ; ) { switch (1) { case 1: break; } }         // breaks the switch, not the loop
+```
+
+### `continue` — skips current iteration
+✅ Usable only inside loops. ❌ Cannot be used inside `switch` alone.
+```java
+for (int i = 0; i < 10; i++) {
+    if (i % 2 == 0) continue;
+    System.out.println(i);   // prints odd numbers
 }
 ```
 
@@ -295,7 +517,6 @@ for (int i = 1; i <= 10; i++) {
     if (i == 5) break;
     System.out.println(i);   // prints 1 2 3 4
 }
-
 for (int i = 1; i <= 10; i++) {
     if (i == 5) continue;
     System.out.println(i);   // prints 1 2 3 4 6 7 8 9 10
@@ -314,10 +535,16 @@ else { }
 ```
 
 ### Switch Statement
+Tests a variable for equality against a list of values (**cases**). Supported types: `byte, short, char, int, String, enum`.
 
-A switch statement allows a variable to be tested for equality against a list of values.each value is called a case and the variable is checked against each case 
-
-Supported types: `byte, short, char, int, String, enum`
+| Rule | Description |
+|---|---|
+| Braces optional for a single case statement | `case 1: System.out.println("One"); break;` |
+| Case label must be a **constant expression** | ✅ `case 10:` ❌ `case y:` (unless `y` is `final`) |
+| Duplicate case labels not allowed | Every case value must be unique |
+| `break` is optional | Without it, control **falls through** to the next case |
+| `default` is optional | Runs when no case matches |
+| Switch expression & case types must be compatible | `byte b = 10; switch(b){ case 10: }` |
 
 ```java
 byte x = 1;
@@ -331,14 +558,9 @@ switch (x) {
 **Fall-through** (used for code reuse):
 ```java
 switch (day) {
-    case 1: 
-    case 2: 
-    case 3: 
-    case 4: 
-    case 5:
+    case 1: case 2: case 3: case 4: case 5:
         System.out.println("Weekday"); break;
-    case 6: 
-    case 7:
+    case 6: case 7:
         System.out.println("Weekend"); break;
 }
 ```
@@ -354,17 +576,21 @@ switch (day) {
 
 ## 8. Arrays
 
-An **array** is an indexed collection of a fixed number of homogeneous elements.
+An **array** is an indexed collection of a fixed number of **homogeneous** (same-type) elements.
 
-**Advantages:** single variable for multiple values, contiguous memory, fast indexed access.
+**Advantages:** single variable for multiple values, contiguous memory, fast indexed access, simple to use.
+**Disadvantages:** fixed size, stores only homogeneous elements.
 
 ```java
-int[] arr = {10, 20, 30};   // Index: 0 1 2
+// Index : 0   1   2   3
+// Value : 10 20 30 40
+// First index = 0, Last index = length - 1
 
-int[] a;                     // declaration
-int[] x = new int[5];        // declaration + creation
-int[][] a2 = new int[3][5];  // 2-D
-int[] x2 = {10, 20, 30, 40}; // initialization
+int[] arr = {10, 20, 30};    // Index: 0 1 2
+int[] a;                      // declaration
+int[] x = new int[5];         // declaration + creation
+int[][] a2 = new int[3][5];   // 2-D
+int[] x2 = {10, 20, 30, 40};  // initialization
 ```
 
 - `array.length` — final field, gives array size.
@@ -374,6 +600,17 @@ int[] x2 = {10, 20, 30, 40}; // initialization
 ```java
 new int[]{10, 20, 30};
 ```
+
+### 2-D Array — Declaration Syntax Variants
+```java
+int[][] a;
+int [][]a;
+int a[][];
+int[] []a;
+int [][] a;
+int[] a[];
+```
+Multidimensional arrays are actually **arrays of arrays** (rows and columns).
 
 **Example — 2-D array addition:**
 ```java
@@ -385,7 +622,23 @@ for (int i = 0; i < 2; i++)
 
 ---
 
-## 9. Object-Oriented Programming (OOP)
+## 9. Access Modifiers 🆕
+
+Referenced throughout the notes (`public`, `private`, `protected`, default) — summarized here since it wasn't centralized:
+
+| Modifier | Same Class | Same Package | Subclass (different package) | Different Package |
+|---|---|---|---|---|
+| `private` | ✅ | ❌ | ❌ | ❌ |
+| default (no modifier) | ✅ | ✅ | ❌ | ❌ |
+| `protected` | ✅ | ✅ | ✅ | ❌ |
+| `public` | ✅ | ✅ | ✅ | ✅ |
+
+- **Top-level classes** may only be `public` or default (not `private`/`protected`).
+- While **overriding**, a subclass method cannot reduce the parent method's visibility (can only keep the same or widen it).
+
+---
+
+## 10. Object-Oriented Programming (OOP)
 
 OOP organizes software around **objects** rather than functions.
 
@@ -396,11 +649,18 @@ Class
  |-- Constructors
 ```
 
-**Object** = State (data) + Behaviour (methods).
+### Object
+An object is a **real-world entity** and an instance of a class, used to access non-static members. It has **identity, behaviour, and state**.
+
+| Property | Meaning | Example |
+|---|---|---|
+| Identity | Name / unique identification | Car1 |
+| Behaviour | Functionality (methods) | `start()`, `stop()` |
+| State | Values (data) | Red colour, Speed = 60 |
 
 ```java
 Box b1 = new Box();
-Box b2 = b1;              // b1 and b2 refer to the SAME object
+Box b2 = b1;                    // b1 and b2 refer to the SAME object
 System.out.println(b1 == b2);   // true
 
 Box b3 = new Box();
@@ -423,9 +683,33 @@ No — it would be inaccessible outside the file → compile-time error.
 | `wait()` | Makes thread wait |
 | `notify()` | Wakes a waiting thread |
 
+### How Are Objects Passed to Methods?
+Java is **always pass-by-value** — for objects, the **value of the reference** (i.e. a copy of the pointer) is passed. So changes to the object's **state** are visible outside the method, but reassigning the parameter itself does not affect the caller's reference.
+
+```java
+class Box { int x = 10; }
+
+class Test {
+    static void change(Box b) { b.x = 100; }   // modifies the SAME object's state
+
+    public static void main(String[] args) {
+        Box obj = new Box();
+        change(obj);
+        System.out.println(obj.x);   // 100 — state change is visible
+    }
+}
+```
+
+### In How Many Ways Can You Create an Object in Java?
+**4 ways:**
+1. **`new` operator** — `Employee obj = new Employee();`
+2. **Factory method** — `NumberFormat obj = NumberFormat.getNumberInstance();`
+3. **`newInstance()`** (reflection) — `Employee obj = (Employee) Class.forName("Employee").newInstance();`
+4. **Cloning** an existing object — `Employee obj2 = (Employee) obj1.clone();` (requires implementing `Cloneable`)
+
 ---
 
-## 10. Inner Classes
+## 11. Inner Classes
 
 ### Inner Class vs Sub Class
 
@@ -436,13 +720,15 @@ No — it would be inaccessible outside the file → compile-time error.
 | Can access all outer members | — |
 
 ### Types
-1. **Normal (Regular) Inner Class**
+
+**1. Normal (Regular) Inner Class** — a named class declared directly inside a class, without `static`.
 ```java
 class Outer {
     class Inner { }
 }
 ```
-2. **Method-Local Inner Class**
+
+**2. Method-Local Inner Class** — declared inside a method.
 ```java
 class Test {
     void m1() {
@@ -450,26 +736,75 @@ class Test {
     }
 }
 ```
-3. **Anonymous Inner Class** — no name, instantiated in one statement, used once.
+
+**3. Anonymous Inner Class** — no name, instantiated in one statement, used once.
 ```java
 Runnable r = new Runnable() {
-    public void run() {
-        System.out.println("Running...");
-    }
+    public void run() { System.out.println("Running..."); }
 };
 ```
-4. **Static Nested Class**
+
+**4. Static Nested Class** — declared with `static`.
 ```java
 class Outer {
     static int x = 10;
     static class Inner {
-        void m1() { System.out.println(x); }  // can access only static members
+        void m1() { System.out.println(x); }   // can access only static members
     }
 }
-Outer.Inner n = new Outer.Inner();   // instantiated without an Outer object
+Outer.Inner n = new Outer.Inner();   // instantiated WITHOUT an Outer object
 ```
 
 **Why use inner classes?** Better encapsulation, logical grouping, readability — widely used in GUI/event handling.
+
+### Worked Example — Inner Class Accessing Outer's Members
+```java
+class Car {
+    private String model = "Honda City";
+
+    class Engine {
+        void start() {
+            System.out.println(model + " engine has started");   // accesses outer's field
+        }
+    }
+
+    void drive() {
+        Engine engine = new Engine();
+        engine.start();
+        System.out.println("Car is driving");
+    }
+}
+
+public class InnerClass {
+    public static void main(String[] args) {
+        Car car = new Car();
+        car.drive();
+        // Output:
+        // Honda City engine has started
+        // Car is driving
+    }
+}
+```
+
+### Normal Class vs Anonymous Inner Class
+
+| Normal Java Class | Anonymous Inner Class |
+|---|---|
+| Can extend only one class at a time | Can also extend only one class at a time |
+| Can implement multiple interfaces simultaneously | Can implement only one interface at a time |
+| Can extend a class AND implement multiple interfaces together | Can either extend a class OR implement an interface, not both |
+| Can have any number of constructors | Cannot have constructors (no name) |
+| Has a class name | Has no class name |
+| Reusable via multiple objects | Generally one-time use |
+
+### Normal Inner Class vs Static Nested Class
+
+| Normal Inner Class | Static Nested Class |
+|---|---|
+| Cannot exist without an outer class object | Can exist without an outer class object |
+| Cannot declare static members | Can declare static members |
+| Cannot declare `main()` | Can declare `main()` |
+| Can access both static and non-static outer members | Can access only static outer members directly |
 
 ### IS-A vs HAS-A
 ```java
@@ -484,17 +819,35 @@ class Car {
 
 ---
 
-## 11. Constructors
+## 12. Constructors
 
 A **constructor** is a special member function executed automatically at object creation, used to initialize the object.
 
-- Name = class name.
-- **No return type** — not even `void`.
-- Can be overloaded, **cannot** be inherited, can be `public`.
+### Rules
+1. Constructor name = class name.
+2. **No return type** — not even `void`.
+3. Constructors **can be overloaded**.
+4. Constructors are **not inherited**.
+5. A constructor can call the parent's constructor via `super()`.
+6. Multiple constructors with different signatures are allowed.
+
+```java
+class Test {
+    Test()             { }
+    Test(int x)         { }
+    Test(String s)       { }
+}
+```
+
+**Q: Does a constructor return any value?**
+A: ✅ Yes — implicitly, the current class object (instance) itself.
+
+**Q: Can a constructor do things other than initialization?**
+A: ✅ Yes — it can create objects, start a thread, call methods, open files/connections.
 
 ### Types
 
-**Default (No-Arg) Constructor**
+**Default (No-Arg) Constructor** — the compiler auto-generates one if you don't write any constructor.
 ```java
 class Test {
     Test() { System.out.println("constructor"); }
@@ -566,15 +919,26 @@ new Test();
 |---|---|
 | Runs on object creation | Runs on object destruction |
 | Can be overloaded | Cannot be overloaded |
-| Available in Java | Not explicitly available in Java (GC handles cleanup) |
+| Available in Java | Not explicitly available (GC handles cleanup) |
+
+### Constructor vs Method
+
+| Constructor | Method |
+|---|---|
+| Name must match the class name | Name can be same or different |
+| Called during object creation | Called after object creation |
+| Called only once per object creation | Can be called multiple times |
+| No return type | Must have a return type (or `void`) |
+| Invoked implicitly | Invoked explicitly |
 
 ---
 
-## 12. Garbage Collection (GC)
+## 13. Garbage Collection (GC)
 
 **Definition:** GC automatically destroys unreferenced objects and frees memory.
 
-- Can be requested (not forced) via `System.gc()` or `Runtime.getRuntime().gc()`.
+- Can be **requested** (not forced) via `System.gc()` or `Runtime.getRuntime().gc()`.
+- Java is automatically garbage-collected, so **Java does not have destructors**.
 
 ### Ways an object becomes eligible for GC
 1. **Nullifying reference:** `s1 = null;`
@@ -599,10 +963,12 @@ protected void finalize() throws Throwable {
     // cleanup code
 }
 ```
-- Defined in `java.lang.Object`; called by GC just before destroying an object; called at **most once**; should not be invoked directly by the programmer.
+- Defined in `java.lang.Object`; called by GC just before destroying an object.
+- Called **at most once**; should never be invoked directly by the programmer.
+- It is `protected` so subclasses can override it, while preventing unrestricted access from outside the class.
 
 ### Runtime Class
-- Bridge between a Java application and the JVM; **singleton** — one `Runtime` object per JVM.
+Bridge between a Java application and the JVM — **singleton**, one `Runtime` object per JVM.
 ```java
 Runtime r = Runtime.getRuntime();
 ```
@@ -616,25 +982,123 @@ while (true) { list.add(new Object()); }   // memory leak
 
 ---
 
-## 13. Internationalization (I18N)
+## 14. Wrapper Classes / Boxing
 
-Designing an app to adapt to different languages/regions without major code changes.
+A **Wrapper Class** wraps a primitive data type in an object. All wrapper class objects are **immutable** — once created, the value cannot change.
 
-**Key classes:** `Locale`, `NumberFormat`, `DateFormat`, `Currency`
+**Objectives:** convert primitives into objects; provide utility methods for primitive types.
 
+| Primitive Type | Wrapper Class |
+|---|---|
+| byte | Byte |
+| short | Short |
+| int | Integer |
+| long | Long |
+| float | Float |
+| double | Double |
+| char | Character |
+| boolean | Boolean |
+
+### Utility Methods
+
+**1. `valueOf()`** — creates a wrapper object from a primitive or String.
 ```java
-Locale l = new Locale("en", "US");
+Integer i = Integer.valueOf(10);
+Integer j = Integer.valueOf("20");
+```
 
-NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.ITALY);
-System.out.println(nf.format(123456.789));   // Italy-specific currency form
+**2. `xxxValue()`** — get primitive value from wrapper object.
+```java
+Integer i = new Integer(10);
+System.out.println(i.intValue());    // 10
+System.out.println(i.longValue());   // 10
+```
 
-SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-System.out.println(sdf.format(new Date()));   // e.g. 2026-08-17
+**3. `parseXxx()`** — converts a String into a primitive.
+```java
+int x = Integer.parseInt("100");
+System.out.println(x);   // 100
+```
+
+**4. `toString()`** — converts wrapper/primitive to String.
+```java
+Integer i = new Integer(10);
+String s = i.toString();
+```
+
+### Autoboxing and Auto-Unboxing
+
+**Autoboxing** — automatic conversion of primitive → wrapper object by the compiler.
+```java
+Integer I = 10;   // compiler internally does: Integer I = Integer.valueOf(10);
+```
+
+**Auto-Unboxing** — automatic conversion of wrapper object → primitive by the compiler.
+```java
+Integer I = new Integer(10);
+int i = I;   // auto-unboxing
+```
+
+**Immutability of wrapper objects:**
+```java
+Integer x = 10;
+Integer y = x;
+x++;
+System.out.println(x);        // 11
+System.out.println(y);        // 10
+System.out.println(x == y);   // false — x now points to a NEW Integer object
 ```
 
 ---
 
-## 14. Enum
+## 15. `==` vs `equals()`
+
+| `==` Operator | `equals()` Method |
+|---|---|
+| An **operator**, works on both primitives and objects | A **method**, works only on objects |
+| For objects, performs **reference comparison** | Default (in `Object`) also performs reference comparison |
+| Cannot be overridden | **Can** be overridden for content comparison |
+| Generally used for reference comparison | Generally used for content comparison |
+
+```java
+String s1 = new String("Java");
+String s2 = new String("Java");
+System.out.println(s1 == s2);       // false
+System.out.println(s1.equals(s2));  // true
+```
+
+---
+
+## 16. Static Block
+
+A **static block** is a nameless block declared inside a class using `static`.
+
+```java
+class Test {
+    static {
+        System.out.println("Static Block");
+    }
+}
+```
+
+### Rules
+1. **Multiple static blocks allowed** — they execute in the order they're written.
+```java
+class Test {
+    static { System.out.println("Block-1"); }
+    static { System.out.println("Block-2"); }
+}
+```
+2. Static block executes **before `main()`**.
+3. Static blocks can execute even without a `main()` method (older Java versions allowed this for simple execution).
+4. Static block can access **only static members** directly.
+
+**🆕 Execution order when an object is created:**
+`static block` (once, at class loading) → `instance initializer block` → `constructor`.
+
+---
+
+## 17. Enum
 
 Used to represent a **fixed set of constants**.
 
@@ -643,8 +1107,28 @@ enum Month { JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC }
 ```
 
 - Every constant is implicitly `public static final` and represents an **object**.
-- Can be declared: inside a class, outside a class (top-level), inside an interface.
+- Can be declared: inside a class, outside a class (top-level), inside an interface — **never inside a method**.
 - **Cannot** create enum objects using `new`.
+
+### Rules
+1. Enum can be declared inside or outside a class, but **not** inside a method.
+```java
+enum X { }         // top-level
+class Y { }
+
+class X {
+    enum Y { }      // nested inside a class
+}
+```
+2. If declared **outside** a class, allowed modifiers: `public`, default, `strictfp`.
+3. If declared **inside** a class, it can also take access modifiers like `private`/`protected`.
+4. **Enum constants must be declared first** — before any methods/fields.
+```java
+enum Fish {
+    STAR, GUPPY;      // constants first
+    public void m1() { }
+}
+```
 
 ### `values()` — returns all constants
 ```java
@@ -666,15 +1150,49 @@ enum Beer {
 }
 ```
 
+### Worked Example — enum in a switch
+```java
+package pkg1;
+
+enum Operation { ADD, SUBTRACT, MULTIPLY }
+
+public class Enums {
+    public static void main(String[] args) {
+        Operation op = Operation.MULTIPLY;
+        int a = 10, b = 5;
+        switch (op) {
+            case ADD:       System.out.println("Result: " + (a + b)); break;
+            case SUBTRACT:  System.out.println("Result: " + (a - b)); break;
+            case MULTIPLY:  System.out.println("Result: " + (a * b)); break;   // Result: 50
+        }
+    }
+}
+```
+
+### Enum vs Constructor
+
+| Enum | Constructor |
+|---|---|
+| Special data type for a fixed set of constants | Special member used to initialize objects |
+| Created using the `enum` keyword | Name must match the class name |
+| Can contain variables, methods, constructors | Exists inside a class only |
+| Constants are created automatically | Objects created via `new` |
+| Cannot create enum objects with `new` | Objects created via constructors |
+
 ---
 
-## 15. Packages & Imports
+## 18. Packages & Imports
 
 A **package** is a container for classes, interfaces, enums, and sub-packages.
 
-**Advantages:** resolves naming conflicts, supports encapsulation, improves modularity/maintainability/reusability.
+### Advantages
+- Resolves **naming conflicts** — two classes can share a name if they're in different packages.
+- Packages can contain **hidden (default-access) classes** — accessible only within the same package.
+- Improves **modularity** — related classes/interfaces grouped together.
+- Improves **maintainability and reusability**.
+- Provides **security (access protection)** via package-level access control.
 
-**Rules**
+### Rules
 1. At most **one** `package` statement per file.
 2. It must be the **first statement** in the file.
 
@@ -698,9 +1216,65 @@ A **package** is a container for classes, interfaces, enums, and sub-packages.
 - Two imported packages with the same class name → compile-time ambiguity error.
 - **File name rule:** the file name must exactly match the `public` class name.
 
+### 3 Ways to Access a Class From Another Package
+1. **Import all classes** of a package: `import java.util.*;`
+2. **Import a specific class**: `import java.util.ArrayList;`
+3. **Fully qualified name** (no import needed): `java.util.ArrayList list = new java.util.ArrayList();`
+
 ---
 
-## 16. Polymorphism
+## 19. Abstraction
+
+**Definition:** Hiding internal implementation and complexity, showing only essential features to the user.
+
+**Example — ATM Machine:** the user only sees "Withdraw", "Deposit", "Check Balance" — not the underlying logic.
+
+**Advantages**
+1. **Security** — internal implementation is hidden.
+2. **Easy Enhancement** — implementation can change without affecting the user.
+3. **Better Maintainability**.
+
+### Abstract Class vs Abstract Method
+
+| Abstract Class | Abstract Method |
+|---|---|
+| A class declared with `abstract` | A method declared with `abstract` |
+| Can contain both abstract and concrete methods | Only declaration, no implementation |
+| Cannot be instantiated | Must be implemented by the subclass |
+| Can have constructors, variables, static methods | Cannot have a method body |
+| Used to achieve **partial** abstraction | Used to **enforce** abstraction |
+
+### IS-A vs HAS-A
+
+| IS-A Relationship | HAS-A Relationship |
+|---|---|
+| Represents Inheritance | Represents Composition/Aggregation |
+| Used for complete functionality of another class | Used for part functionality of another class |
+| Achieved with `extends` | Achieved by holding another class as a member |
+| Example: Dog IS-A Animal | Example: Car HAS-A Engine |
+| Strong relationship | Weak relationship |
+
+---
+
+## 20. Internationalization (I18N)
+
+Designing an app to adapt to different languages/regions without major code changes.
+
+**Key classes:** `Locale`, `NumberFormat`, `DateFormat`, `Currency`
+
+```java
+Locale l = new Locale("en", "US");
+
+NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.ITALY);
+System.out.println(nf.format(123456.789));   // Italy-specific currency form
+
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+System.out.println(sdf.format(new Date()));   // e.g. 2026-08-18
+```
+
+---
+
+## 21. Polymorphism
 
 **One task performed in different ways.**
 
@@ -732,9 +1306,37 @@ class Child extends Parent { void show() { System.out.println("Child"); } }
 | Binding | Compile-time | Runtime |
 | Static methods | Can be overloaded | Cannot be overridden (only hidden) |
 
+### Worked Example — Overriding with `super`
+```java
+package pkg1;
+
+class Calculators {
+    public int add(int n1, int n2) {
+        System.out.println("Inside Calculator add()");
+        return n1 + n2;
+    }
+}
+
+class AdvancedCalculator extends Calculators {
+    @Override
+    public int add(int n1, int n2) {
+        System.out.println("Inside AdvancedCalculator add()");
+        return (int) (super.add(n1, n2) + (n1 * 0.01));   // calls parent's version too
+    }
+}
+
+public class MethodOverride {
+    public static void main(String[] args) {
+        Calculators obj = new AdvancedCalculator();   // upcasting
+        int res = obj.add(2, 3);
+        System.out.println("Result: " + res);
+    }
+}
+```
+
 ---
 
-## 17. Method Overriding — Rules
+## 22. Method Overriding — Rules
 
 ```java
 class Animal {
@@ -770,12 +1372,13 @@ class C extends P { public void m1() { } }   // Valid — widened access
 
 ---
 
-## 18. Abstract Methods & Abstract Classes
+## 23. Abstract Methods & Abstract Classes
 
 ### Abstract Method — declaration only, no body
 ```java
 public abstract void m1();
 ```
+- A method with **no implementation** — only declaration.
 - Must end with `;` — no `{ }` body allowed.
 - Can have any return type, and modifiers like `public`/`protected`.
 - Invalid: `abstract static void m1();`
@@ -787,21 +1390,43 @@ abstract class Vehicle { }
 1. **Cannot be instantiated** directly: `new Vehicle();` → compile-time error.
 2. May contain abstract **and** concrete methods, variables, and constructors.
 3. Subclass **must implement all abstract methods**, or itself be abstract.
-4. **Can** have a constructor:
-```java
-abstract class Test {
-    Test() { System.out.println("Constructor"); }
-}
-```
+4. **Can** have a constructor.
 5. **Can** have static methods and **final** methods.
 
-### Abstract vs Final
+### Worked Example
+```java
+package pkg1;
 
-| Abstract | Final |
-|---|---|
-| Incomplete implementation | Complete implementation |
-| Must be inherited | Cannot be inherited |
-| Requires overriding | Prevents overriding |
+abstract class BankAccount1 {
+    abstract void calculateInterest();          // abstract
+
+    void accountType() {                         // concrete
+        System.out.println("This is a bank account");
+    }
+}
+
+class SavingsAccount extends BankAccount1 {
+    @Override
+    void calculateInterest() { System.out.println("Interest for Savings Account is 4%"); }
+}
+
+class CurrentAccount extends BankAccount1 {
+    @Override
+    void calculateInterest() { System.out.println("Current Account has no interest"); }
+}
+
+public class Abstract {
+    public static void main(String[] args) {
+        BankAccount1 account1 = new SavingsAccount();
+        account1.calculateInterest();
+        account1.accountType();
+
+        BankAccount1 account2 = new CurrentAccount();
+        account2.calculateInterest();
+        account2.accountType();
+    }
+}
+```
 
 ### Valid/Invalid combinations
 | Combination | Valid? |
@@ -814,9 +1439,17 @@ abstract class Test {
 
 ---
 
-## 19. Final Variable
+## 24. Final Keyword (Variable / Method / Class) 🆕
 
-Once assigned, a `final` variable's value **cannot change**.
+`final` has three uses, referenced separately throughout the notes — grouped here for clarity.
+
+| Applied to | Effect |
+|---|---|
+| **Variable** | Value cannot be reassigned once set |
+| **Method** | Cannot be overridden by a subclass |
+| **Class** | Cannot be extended/inherited |
+
+### Final Variable
 ```java
 final int x = 10;
 // x = 20;   // Compile-time error
@@ -827,16 +1460,30 @@ final int x = 10;
 2. In an instance initializer block: `{ x = 10; }`
 3. In the constructor: `Test() { x = 10; }`
 
-**Final local variable** — allowed:
-```java
-final int x = 10;
-```
+**Final local variable** is also valid: `final int x = 10;`
+
+### Abstract vs Final
+| Abstract | Final |
+|---|---|
+| Incomplete implementation | Complete implementation |
+| Must be inherited | Cannot be inherited |
+| Requires overriding | Prevents overriding |
+
+### `final` vs `finally` vs `finalize()`
+| `final` | `finally` | `finalize()` |
+|---|---|---|
+| Keyword | Block | Method |
+| Restriction (no override/no reassign) | Cleanup code | GC callback |
+| Inheritance control | ❌ | ❌ |
+| Exception handling | ❌ | ✅ | ❌ |
 
 ---
 
-## 20. Interfaces
+## 25. Interfaces
 
-Achieves **abstraction** and (multiple) **type inheritance**, since Java classes cannot extend multiple classes.
+An interface is a collection of abstract methods and constants — used to achieve **100% abstraction** (traditionally).
+
+Also achieves **multiple type inheritance**, since Java classes can't extend multiple classes.
 
 ### Characteristics
 - Interface **variables** are implicitly: `public static final`
@@ -857,11 +1504,40 @@ class A extends B implements C, D, E { }   // extends = class, implements = inte
 
 interface A { }
 interface B extends A { }        // interface extending interface
-
 interface C extends A, B { }     // multiple interface inheritance — allowed!
 ```
 - A class can implement **any number** of interfaces.
 - If a class doesn't implement all interface methods, it must be declared `abstract`.
+
+### Worked Example — Nested Interface
+```java
+interface OuterInterface {
+    int OUTER_VALUE = 10;   // implicitly public static final
+
+    interface InnerInterface {
+        String MESSAGE = "Hello from Inner Interface";
+        void methodOne();
+        void methodTwo();
+    }
+}
+
+class InterfaceDemo implements OuterInterface.InnerInterface {
+    public void methodOne() {
+        System.out.println("Outer Value: " + OuterInterface.OUTER_VALUE);
+    }
+    public void methodTwo() {
+        System.out.println("Message: " + MESSAGE);
+    }
+}
+
+public class Interfaces {
+    public static void main(String[] args) {
+        InterfaceDemo obj = new InterfaceDemo();
+        obj.methodOne();   // Outer Value: 10
+        obj.methodTwo();   // Message: Hello from Inner Interface
+    }
+}
+```
 
 ### Marker Interface
 Contains **no** methods and **no** variables — provides metadata to JVM/framework.
@@ -887,7 +1563,7 @@ interface I { void m1(); }
 
 ---
 
-## 21. Inheritance & Object Class
+## 26. Inheritance & Object Class
 
 ### Advantages
 1. **Code Reusability**
@@ -909,7 +1585,7 @@ class C implements A, B {
 }
 ```
 
-### Object class
+### Object Class
 Every class implicitly extends `java.lang.Object`:
 ```java
 class Test { }
@@ -925,9 +1601,12 @@ class Test extends Object { }
 
 ---
 
-## 22. `this` and `super`
+## 27. `this` and `super`
 
 ### `this` — refers to the current object
+- `this` **cannot** be used in a `static` context (no current object exists there).
+- `this()` is used for **constructor chaining**.
+
 ```java
 class A {
     String name;
@@ -962,7 +1641,41 @@ A: To prevent direct access to class data from outside the class.
 
 ---
 
-## 23. Coupling & Cohesion
+## 28. Type Casting (Upcasting / Downcasting) 🆕
+
+Referenced implicitly in overriding/polymorphism but never spelled out — added here.
+
+```java
+class Animal {
+    void sound() { System.out.println("Animal makes a sound"); }
+}
+
+class Dog extends Animal {
+    void sound() { System.out.println("Dog barks"); }
+    void run()   { System.out.println("Dog runs fast"); }
+}
+
+public class Casting {
+    public static void main(String[] args) {
+
+        // Upcasting (Child -> Parent) — implicit, always safe
+        Animal a = new Dog();
+        a.sound();   // "Dog barks" — runtime polymorphism picks the actual object's method
+
+        // Downcasting (Parent -> Child) — explicit, needed to access child-only members
+        Dog d = (Dog) a;
+        d.sound();   // "Dog barks"
+        d.run();     // "Dog runs fast" — only accessible after downcasting
+    }
+}
+```
+
+- **Upcasting** happens automatically; you lose access to the subclass-only methods through the parent reference (though the overridden method still runs via dynamic dispatch).
+- **Downcasting** requires an explicit cast and throws `ClassCastException` at runtime if the object isn't actually an instance of the target type.
+
+---
+
+## 29. Coupling & Cohesion
 
 ### Coupling — dependency **between** classes/modules (lower is better)
 
@@ -1001,7 +1714,7 @@ class Calculator {
 
 ---
 
-## 24. Exception Handling
+## 30. Exception Handling
 
 **Definition:** handling runtime errors so normal execution can continue gracefully.
 
@@ -1040,9 +1753,9 @@ Object
 try {
     int x = 10 / 0;
 } catch (ArithmeticException e) {
-    e.printStackTrace();      // name + description + stack trace
-    System.out.println(e.toString());   // class name + description
-    System.out.println(e.getMessage()); // description only
+    e.printStackTrace();                 // name + description + stack trace
+    System.out.println(e.toString());    // class name + description
+    System.out.println(e.getMessage());  // description only
 }
 ```
 
@@ -1073,11 +1786,6 @@ try {
 - `try` **without** `catch` is valid **if** `finally` is present.
 - `try` alone (no `catch`, no `finally`) is **invalid**.
 
-| `final` | `finally` | `finalize()` |
-|---|---|---|
-| Keyword | Block | Method |
-| Restriction (no override/no reassign) | Cleanup code | GC callback |
-
 ### `throw` vs `throws`
 ```java
 int age = 15;
@@ -1093,13 +1801,59 @@ void m1() throws IOException, SQLException, ClassNotFoundException { }
 | Used in method body | Used in method declaration |
 | One at a time | Multiple can be declared |
 
+### try-with-resources (Java 7+) 🆕
+Automatically closes any resource implementing `AutoCloseable` (e.g. `FileReader`, `FileWriter`, `Scanner`) — no need for a manual `finally { close(); }`.
+```java
+try (FileReader fr = new FileReader("abc.txt")) {
+    int i;
+    while ((i = fr.read()) != -1) System.out.print((char) i);
+}   // fr.close() is called automatically, even if an exception occurs
+catch (IOException e) {
+    e.printStackTrace();
+}
+```
+
 ---
 
-## 25. Multithreading
+## 31. Multithreading
 
-### Creating Threads
+### Two Ways to Create a Thread
+```
+                Thread
+          /                    \
+   Extends                  Implements
+ Thread Class          Runnable Interface
+          \                    /
+             Override run()
+                    |
+                 start()
+```
 
-**Via `Runnable`** (functional interface with `run()`):
+**1. Extending `Thread`**
+```java
+class ThreadOne extends Thread {
+    public void run() {
+        for (int i = 1; i <= 50; i++) System.out.println("Hi");
+    }
+}
+class ThreadTwo extends Thread {
+    public void run() {
+        for (int i = 1; i <= 50; i++) System.out.println("Hello");
+    }
+}
+
+public class Threads {
+    public static void main(String[] args) {
+        ThreadOne t1 = new ThreadOne();
+        ThreadTwo t2 = new ThreadTwo();
+        t2.setPriority(Thread.MAX_PRIORITY);
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+**2. Implementing `Runnable`**
 ```java
 class ThreadDemo implements Runnable {
     public void run() { System.out.println("child thread"); }
@@ -1108,11 +1862,16 @@ Thread t = new Thread(new ThreadDemo());
 t.start();
 ```
 
-**Via extending `Thread`:**
+**Q: Which method does a thread execute by default?**
+A: `public void run()`
+
+**Q: How can you stop/terminate a thread?**
+A: There's no direct "stop" — use a `boolean` flag checked inside `run()`.
+
+**Q: What happens if `run()` is called directly instead of `start()`?**
+A: It behaves like a normal method call, executing on the **current** thread — no new thread is created.
+
 ```java
-class A extends Thread {
-    public void run() { System.out.println("running..."); }
-}
 A t1 = new A();
 t1.start();
 // t1.start();   // NOT allowed — a thread cannot be started twice
@@ -1167,12 +1926,10 @@ t.start();
 
 ### Synchronization
 Prevents **race conditions** when multiple threads access shared data.
-
 ```java
 public void display() {
-    // non-critical code
-    synchronized (this) {
-        // critical section only
+    synchronized (this) {   // critical section only
+        // ...
     }
 }
 ```
@@ -1189,6 +1946,21 @@ public void display() {
 
 `suspend()`/`resume()` — deprecated/unsafe, may cause deadlocks.
 
+### Thread Pool (Executor Framework)
+A **thread pool** is a collection of pre-created, reusable threads ready to execute tasks.
+
+**Advantages:** improves performance, reduces memory consumption, reuses existing threads, faster task execution, better resource management.
+
+```java
+class MyTask implements Runnable {
+    public void run() { System.out.println("Task executed"); }
+}
+
+ExecutorService executor = Executors.newFixedThreadPool(3);
+executor.submit(new MyTask());
+executor.shutdown();
+```
+
 ### `Runnable` vs `Callable`
 
 | Feature | Runnable | Callable |
@@ -1202,7 +1974,7 @@ public void display() {
 
 ---
 
-## 26. String, StringBuffer, StringBuilder
+## 32. String, StringBuffer, StringBuilder
 
 **String is immutable** — content cannot change once created.
 ```java
@@ -1217,14 +1989,18 @@ String s1 = "Java";
 String s2 = "Java";
 String s3 = "Java";   // all three refer to the SAME pooled object
 ```
+🆕 `intern()` forces a heap `String` object to be pooled (or return the existing pooled reference):
+```java
+String s4 = new String("Java").intern();
+System.out.println(s4 == s1);   // true — now points to the pooled "Java"
+```
 
 ### String Comparison
 ```java
 String s1 = "A", s2 = "A";
-System.out.println(s1.compareTo(s2));      // 0
-
-System.out.println(s1.equals(s2));          // true
-System.out.println("A".equalsIgnoreCase("a")); // true
+System.out.println(s1.compareTo(s2));           // 0
+System.out.println(s1.equals(s2));               // true
+System.out.println("A".equalsIgnoreCase("a"));   // true
 
 String s3 = new String("sam");
 String s4 = "sam";
@@ -1246,9 +2022,18 @@ s.concat("muk");
 System.out.println(s);   // "sam" — concat() result was NOT stored anywhere
 ```
 
+🆕 Common `StringBuilder` methods:
+```java
+StringBuilder sb = new StringBuilder("Java");
+sb.append(" Rocks");     // Java Rocks
+sb.insert(0, ">> ");     // >> Java Rocks
+sb.reverse();            // skcoR avaJ >>
+sb.replace(0, 2, "**");
+```
+
 ---
 
-## 27. Object Class Methods (Detail)
+## 33. Object Class Methods (Detail)
 
 ```java
 public String toString()
@@ -1267,9 +2052,11 @@ public boolean equals(Object obj)
 | Used for logical equality | Used by hash-based collections |
 | Must be overridden **together** for consistency | — |
 
+🆕 **The `equals()`/`hashCode()` contract:** if two objects are `equal` per `equals()`, they **must** produce the same `hashCode()`. Breaking this contract causes objects to "get lost" inside `HashMap`/`HashSet` (wrong bucket lookup).
+
 ---
 
-## 28. File I/O
+## 34. File I/O
 
 ### FileWriter — write character data
 ```java
@@ -1302,6 +2089,18 @@ fr.close();
 | Char-by-char (slower) | Buffered (faster) |
 | No `readLine()` | Has `readLine()` |
 
+### Scanner Class
+Reads different types of input (`int`, `float`, `double`, `String`, etc.) from `java.util`.
+
+| Method | Purpose |
+|---|---|
+| `nextInt()` | Reads an integer |
+| `nextDouble()` | Reads a double value |
+| `nextFloat()` | Reads a float value |
+| `next()` | Reads a single word |
+| `nextLine()` | Reads an entire line |
+| `nextBoolean()` | Reads a boolean value |
+
 ### Scanner vs BufferedReader
 
 | Scanner | BufferedReader |
@@ -1319,7 +2118,7 @@ BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 ---
 
-## 29. Serialization
+## 35. Serialization
 
 **Object Graph:** when an object is serialized, **all** objects reachable from it are serialized too — every reachable object must be `Serializable`, or a `NotSerializableException` occurs at runtime.
 
@@ -1339,7 +2138,7 @@ class Rat implements Serializable { int j = 20; }
 
 ---
 
-## 30. Collections Framework
+## 36. Collections Framework
 
 **Why Collections?** Arrays have fixed size, store only homogeneous data, and costly insert/delete. Collections offer dynamic size, rich built-in algorithms, and better utility.
 
@@ -1352,12 +2151,21 @@ class Rat implements Serializable { int j = 20; }
 ### Collection Hierarchy
 ```
 Iterable
-   └── Collection
-         ├── List (ArrayList, LinkedList, Vector, Stack)
-         ├── Queue (PriorityQueue, Deque → ArrayDeque)
-         └── Set (HashSet, LinkedHashSet, SortedSet → TreeSet, NavigableSet)
+   └── Collection(I)
+         ├── List(I)  — ArrayList, LinkedList, Vector, Stack
+         ├── Queue(I) — PriorityQueue, Deque → ArrayDeque
+         └── Set(I)   — HashSet, LinkedHashSet, SortedSet → TreeSet, NavigableSet
 ```
 Common `Collection` methods: `add()`, `remove()`, `contains()`, `size()`, `clear()`, `isEmpty()`.
+
+Java Collections also include the separate **Map** hierarchy (not `Iterable`/`Collection`, but part of the framework):
+```
+Map(I)
+ ├── HashMap
+ ├── LinkedHashMap
+ ├── Hashtable (legacy)
+ └── SortedMap(I) → TreeMap
+```
 
 ### List — allows duplicates, preserves insertion order, index-based access
 ```java
@@ -1422,14 +2230,60 @@ System.out.println(t);   // [10, 20, 40]
 | Hash table | Hash table + linked list | Balanced tree |
 | Fastest | Slightly slower | Slowest (but sorted) |
 
-### Custom Sorting with `Comparator`
+### `HashMap` vs `Hashtable` 🆕
+
+```java
+HashMap<Integer, String> map = new HashMap<>();
+map.put(1, "Java");
+map.put(2, "Python");
+map.put(null, "AllowedKey");    // one null key allowed
+
+for (Map.Entry<Integer, String> entry : map.entrySet()) {
+    System.out.println(entry.getKey() + " -> " + entry.getValue());
+}
+```
+
+| HashMap | Hashtable |
+|---|---|
+| Methods not synchronized | Methods synchronized |
+| Multiple threads can operate simultaneously | Only one thread at a time |
+| Not thread-safe | Thread-safe |
+| Higher performance | Lower performance (synchronization overhead) |
+| Allows one `null` key + multiple `null` values | Does not allow `null` key or value |
+
+### `Comparable` vs `Comparator`
+
+```java
+// Comparable — natural ordering, defined INSIDE the class
+class Student implements Comparable<Student> {
+    int marks;
+    Student(int marks) { this.marks = marks; }
+    public int compareTo(Student s) { return this.marks - s.marks; }   // ascending
+}
+
+// Comparator — custom ordering, defined OUTSIDE the class
+class MarksDescComparator implements Comparator<Student> {
+    public int compare(Student a, Student b) { return b.marks - a.marks; }   // descending
+}
+```
+
+| Comparable | Comparator |
+|---|---|
+| Default (natural) sorting order | Customized sorting order |
+| `java.lang` | `java.util` |
+| One method: `compareTo()` | Two methods: `compare()`, `equals()` |
+| String and wrapper classes implement it | Custom classes implement sorting logic externally |
+| Affects the original class | Does not affect the original class |
+
+### Custom Sorting with `Comparator` (lambda-style, quick reference)
 ```java
 class MyComparator implements Comparator<Integer> {
-    public int compare(Integer a, Integer b) { return b.compareTo(a); }  // descending
+    public int compare(Integer a, Integer b) { return b.compareTo(a); }   // descending
 }
 ```
 
 ### Cursors
+A cursor retrieves objects one by one from a collection.
 
 | Enumeration | Iterator | ListIterator |
 |---|---|---|
@@ -1439,7 +2293,7 @@ class MyComparator implements Comparator<Integer> {
 
 ---
 
-## 31. Generics
+## 37. Generics
 
 Introduced in **Java 5** — allows specifying the type of an object at compile time (type-safety, no casting needed).
 
@@ -1456,11 +2310,11 @@ t.display();   // Java
 
 ---
 
-## 32. Java 8 Features
+## 38. Java 8 Features
 
 Java 8 was a landmark release adding functional-programming capabilities.
 
-### 32.1 Lambda Expressions
+### 38.1 Lambda Expressions
 An **anonymous function** — no name, no explicit return type, no access modifier.
 ```java
 // Before Java 8
@@ -1480,7 +2334,7 @@ System.out.println(add.operate(3, 4));   // 7
 ```
 - A lambda can only be used where a **functional interface** (exactly one abstract method) is expected.
 
-### 32.2 Functional Interfaces (`java.util.function`)
+### 38.2 Functional Interfaces (`java.util.function`)
 ```java
 @FunctionalInterface
 interface Greet { void sayHello(String name); }
@@ -1508,7 +2362,7 @@ Supplier<Double> randomVal = () -> Math.random();
 System.out.println(randomVal.get());
 ```
 
-### 32.3 Method References
+### 38.3 Method References
 Shorthand for a lambda that just calls an existing method.
 ```java
 // Lambda
@@ -1519,7 +2373,7 @@ list.forEach(System.out::println);
 ```
 Types: `ClassName::staticMethod`, `object::instanceMethod`, `ClassName::instanceMethod`, `ClassName::new` (constructor reference).
 
-### 32.4 Default & Static Methods in Interfaces
+### 38.4 Default & Static Methods in Interfaces
 Interfaces can now have method **bodies** — allows adding new methods without breaking existing implementations.
 ```java
 interface Vehicle {
@@ -1529,7 +2383,7 @@ interface Vehicle {
 }
 ```
 
-### 32.5 Stream API (`java.util.stream`)
+### 38.5 Stream API (`java.util.stream`)
 Process collections declaratively — filter, map, reduce, etc.
 ```java
 List<Integer> nums = Arrays.asList(1, 2, 3, 4, 5, 6);
@@ -1549,16 +2403,16 @@ System.out.println(count);   // 3
 - Streams are **not** data structures — they don't store data, they compute on-the-fly.
 - Two kinds of operations: **intermediate** (`filter`, `map`, `sorted` — lazy, return a stream) and **terminal** (`collect`, `forEach`, `reduce`, `count` — trigger execution).
 
-### 32.6 `Optional<T>`
+### 38.6 `Optional<T>`
 Wraps a value that may or may not be present — avoids `NullPointerException`.
 ```java
 Optional<String> opt = Optional.ofNullable(getName());
-System.out.println(opt.isPresent());        // true/false
-System.out.println(opt.orElse("Default"));   // returns value or "Default"
+System.out.println(opt.isPresent());          // true/false
+System.out.println(opt.orElse("Default"));    // returns value or "Default"
 opt.ifPresent(name -> System.out.println("Name: " + name));
 ```
 
-### 32.7 New Date & Time API (`java.time`)
+### 38.7 New Date & Time API (`java.time`)
 Replaces the old, mutable `Date`/`Calendar` classes with **immutable**, thread-safe types.
 ```java
 LocalDate date = LocalDate.now();
@@ -1570,13 +2424,13 @@ Period age = Period.between(birthday, LocalDate.now());
 System.out.println(age.getYears() + " years");
 ```
 
-### 32.8 `forEach()` on Collections
+### 38.8 `forEach()` on Collections
 ```java
 List<String> names = Arrays.asList("A", "B", "C");
 names.forEach(n -> System.out.println(n));
 ```
 
-### 32.9 Interview-Style Q&A
+### 38.9 Interview-Style Q&A
 **Q: Why were default methods added to interfaces in Java 8?**
 A: To allow adding new methods to existing interfaces (e.g. `Collection.stream()`) without breaking all classes that already implement them.
 
@@ -1594,18 +2448,3 @@ System.out.println(flat);   // [1, 2, 3, 4]
 ```
 
 ---
-
-## Quick Reference — Common Interview Comparisons
-
-| Topic | Key Point |
-|---|---|
-| `==` vs `equals()` | Reference vs content comparison |
-| `String` vs `StringBuilder` | Immutable vs mutable, thread-unsafe but fast |
-| Overloading vs Overriding | Compile-time vs runtime polymorphism |
-| Abstract class vs Interface | Partial vs full abstraction (pre-Java 8), single vs multiple inheritance |
-| `throw` vs `throws` | Actually throwing vs declaring possibility |
-| `sleep()` vs `wait()` | `sleep()` doesn't release lock; `wait()` does |
-| `ArrayList` vs `LinkedList` | Fast access vs fast insert/delete |
-| Checked vs Unchecked Exception | Compile-time checked vs runtime |
-| Composition vs Aggregation | Strong vs weak HAS-A |
-| `Runnable` vs `Callable` | No return value vs returns a value via `Future` |
