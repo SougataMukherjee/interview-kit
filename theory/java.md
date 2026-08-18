@@ -45,10 +45,11 @@ private int age;
 - A separate copy is created for **every** object.
 - Created when the object is created, destroyed when the object is destroyed.
 - Scope = scope of the object.
+- instance variable should be declare within the class directly but outside of any method or block or constructor
 
 ```java
 class Test {
-    int x = 10;
+    int x = 10;  //if we made 5 obj then 5 diff obj will created with name x
     public static void main(String[] args) {
         Test t = new Test();
         System.out.println(t.x);   // 10
@@ -56,13 +57,13 @@ class Test {
 }
 ```
 
-### Static Variable
+### Static / Class Variable
 - Single copy shared by **all** objects of the class.
-- Declared with `static`, stored at the class level.
+- Declared with `static`, stored at the class level but outside method or constructor or class
 
 ```java
 class Test {
-    static int x = 10;
+    static int x = 10;//once obj create for whole class
     public static void main(String[] args) {
         System.out.println(Test.x);   // 10
     }
@@ -85,7 +86,7 @@ class Test {
 class Test {
     public static void main(String[] args) {
         int x;
-        System.out.println(x);   // Compile-time error — not initialized
+        System.out.println(x);   // Compile-time error — not initialized do int x=10
     }
 }
 ```
@@ -110,6 +111,8 @@ class Test {
 ---
 
 ## 3. Var-Args Methods
+
+whenever you are not sure how many input are going to be provided by user or you are not sure how many argument that you need to take inside method.
 
 ```java
 return-type methodName(int... x)
@@ -137,6 +140,7 @@ Internally implemented using a 1-D array: `sum(int[] x)`.
 - Only **one** var-arg parameter allowed per method — `m1(int... x, double... d)` is invalid.
 - A var-arg method **cannot be overloaded** with the same signature as `m1(int[] x)`.
 - Var-arg methods have the **lowest priority** — called only when no other method matches.
+- we can mix var-arg parameter with normal parameter but remember last parameter should be var-arg parameter `m1(String s, int... y)`
 
 ---
 
@@ -310,6 +314,9 @@ else { }
 ```
 
 ### Switch Statement
+
+A switch statement allows a variable to be tested for equality against a list of values.each value is called a case and the variable is checked against each case 
+
 Supported types: `byte, short, char, int, String, enum`
 
 ```java
@@ -324,9 +331,14 @@ switch (x) {
 **Fall-through** (used for code reuse):
 ```java
 switch (day) {
-    case 1: case 2: case 3: case 4: case 5:
+    case 1: 
+    case 2: 
+    case 3: 
+    case 4: 
+    case 5:
         System.out.println("Weekday"); break;
-    case 6: case 7:
+    case 6: 
+    case 7:
         System.out.println("Weekend"); break;
 }
 ```
