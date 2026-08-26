@@ -1022,7 +1022,12 @@ foo(...[1,2,3]); //[1,2,3]
 
 **Q27: Deep Clone Object**  
 ```js
-JSON.parse(JSON.stringify(obj)); 
+function deepClone(obj) {
+    if (obj === null || typeof obj !== 'object') {
+        return obj
+    }
+    return JSON.parse(JSON.stringify(obj))
+} 
 ```
 🎯 NOTE:JSON.stringify() → convert js object to string 
         but JSON.stringify('JS')!=='JS'

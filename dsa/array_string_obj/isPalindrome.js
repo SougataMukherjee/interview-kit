@@ -1,9 +1,11 @@
 //Check if a string is palindrome
-function isPalindrome(s) {
+function isPalindrome(str) {
+  const s = str.toLowerCase();
   if(s === s.split("").reverse().join("")){
       return true
   }
   return false
 }
-let s="madam";
-console.log(isPalindrome(s))
+console.log(isPalindrome('madam'))//true
+validatePalindrome("!!!@@@###"); // true
+validatePalindrome("No lemon no melon"); // true

@@ -1,46 +1,39 @@
-import { useState } from "react";
-import "./styles.css";
+import React, { useState } from 'react';
 
-export default function App() {
-  const [active, setActive] = useState("Home"); 
+// Sample tab data
+const tabs = [
+  { id: "home", label: "Home", content: "Welcome to the Home tab!" },
+  { id: "profile", label: "Profile", content: "This is your Profile." },
+  { id: "settings", label: "Settings", content: "Adjust your Settings here." },
+];
 
-  const handleClick = (name) => {
-    setActive(name); 
-  };
+export default function <i class="fas fa-app-store-ios    "></i>() {
+  const [activeTab, setActiveTab] = useState('home');
+  const setTab = (id) => {
+   setActiveTab(id)
+  }
 
   return (
-    <div>
-      <ul>
-        <li>
-          <a
-            href="#"
-            className={active === "Home" ? "active" : ""}
-            onClick={() => handleClick("Home")}
-          >
-            Home
-          </a>
-          <a
-            href="#"
-            className={active === "About" ? "active" : ""}
-            onClick={() => handleClick("About")}
-          >
-            About
-          </a>
-          <a
-            href="#"
-            className={active === "Contact" ? "active" : ""}
-            onClick={() => handleClick("Contact")}
-          >
-            Contact
-          </a>
-        </li>
-      </ul>
+    <div className="tab-switcher">
+      <h1>Tab Switcher</h1>
 
-      <div className="main">
-        <h3>Heading</h3>
-        <span>Subheading</span>
-        <p>sss</p>
+      {/* Tab buttons */}
+      <div className="tab-buttons" >
+        {tabs.map((t, i) => (<button
+          className={activeTab===t.id ?"active":""}
+          data-testid={`tab-button-${t.id}`} 
+          onClick={() => setTab(t.id)}>
+            {t.label}
+          </button>))}
       </div>
+
+      {/* Content */}
+      <div className="tab-content" data-testid="tab-content">
+        
+        {tabs.map((t) => (activeTab === t.id &&<div>{t.content}</div>))}
+
+      </div>
+    
     </div>
   );
 }

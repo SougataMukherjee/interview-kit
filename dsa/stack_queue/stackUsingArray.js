@@ -35,6 +35,9 @@ function isEmpty() {
 function isFull() {
     return top === N - 1;
 }
+function clear(){
+    return stack=[]
+}
 
 
 push(10);

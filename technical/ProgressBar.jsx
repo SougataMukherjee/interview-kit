@@ -1,12 +1,18 @@
 
 export default function App() {
+  const [progress, setProgress] = useState(50);
+  const getBarColor = () => {
+		if (progress >= 80) return "green";
+		if (progress >= 40) return "orange";
+		return "red";
+	};
   return (
     <>
       <div style={{ width: "100%", background: "#eee", borderRadius: "10px" }}>
         <div
           style={{
-            width: "70%",
-            background: "green",
+            width: `${progress}%`,
+            background: getBarColor(),
             color: "#fff",
             textAlign: "center",
             borderRadius: "10px",

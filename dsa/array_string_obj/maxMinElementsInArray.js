@@ -2,6 +2,10 @@
 function getMinMax(arr) {
   let min = Infinity,
     max = -Infinity;
+    
+  if (!Array.isArray(arr) || arr.some(x => !Number.isFinite(x))) return false;
+  if (arr.length === 0) return null;
+
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] < min) {
       min = arr[i];

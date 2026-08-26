@@ -1,5 +1,6 @@
 //count number of even and odd digits in a number
 let n=1234,ev=0,od=0;
+if (typeof n !== 'number' || !Number.isFinite(n)) return false;
 while(n>0){
     let rem=n%10;
     if(rem%2==0){
