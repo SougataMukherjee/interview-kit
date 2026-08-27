@@ -6,7 +6,7 @@ JAVASCRIPT NOTES
 
 JS was created by Brendan Eich at Netscape in 1995.  
 
-<u>JavaScript is a lightweight, case sensitive scripting language.</u>
+<span style="text-decoration:underline">JavaScript is a lightweight, case sensitive scripting language.</span>
 JS was created to add logic to web pages.  initial name was "LiveScript" then marketing—syntax inspired by Java, but not related.  
 <u>JavaScript is called a scripting language because it is not compiled beforehand — it runs line by line(single-threaded or synchronous) directly by the browser or runtime</u>  
 4 ways to import js file
