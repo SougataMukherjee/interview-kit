@@ -53,6 +53,7 @@ When the browser starts loading a webpage, it wants to show something to the use
 
 **Q2: what are JavaScript engine? how js works internally**  
 
+---
 a javascript engine is a computer programme that execute javascript code developed by web browser vender.  
 
 Example: chrome we have V8 firefox we have SpiderMonkey
@@ -82,11 +83,13 @@ there Values are assigned and Functions are executed
 
 **Q3: JavaScript vs ECMAScript**  
 
+---
 JavaScript → language used in browsers.
 ECMAScript → standard/spec that JS follows.
 
 **Q4: What is Hoisting?**  
 
+---
 Variables and functions declarations are moved to top of there scope before code execution.hoisting is not working on let and const its throwing reference error  
 in parent function anywhere we can use var because var add itself to the window object.  
 
@@ -121,6 +124,7 @@ test();
 ```
 **Q5: What is Closure? How do closures maintain memory?Disadvantages of Closures**  
 
+---
 A closure is a function that giving you to access to outer function scope from inner function.It's like your mother packing your bag in the morning and you going to pg — even though she is no longer there, you still have the tiffin, shirt, and water bottle she packed.
 it is used to module design pattern,curring,memorize.  
 disadvantage of closure is memory leak and freeze the browser
@@ -168,6 +172,7 @@ function heavy() {
 
 **Q6: What is an Expression? What is an Identifier? JS Variables? Difference: var, let, const. what is Variable Shadowing**   
 
+---
 An expression is any reference to a variable value or a set of variable values.  
 ```js
 10 + 20
@@ -251,6 +256,7 @@ console.log(a); // 100 (because var is function-scoped)
 ```
 **Q7: What is Event Loop? Explain event loop phases (macrotasks, microtasks)**  
 
+---
 The Event Loop is the mechanism in JavaScript that allows it to handle asynchronous operations (like setTimeout, promises, APIs) even though JavaScript is single-threaded
 1. Call Stack
 JS executes code line by line. Synchronous code runs here.
@@ -312,11 +318,13 @@ console.log("D");
 
 **Q8:Sync vs Async**  
 
+---
 - Sync → one by one
 - Async → doesn't block next
 
 **Q9: What is 'this' keyword?**  
 
+---
 Refers to current context.Value of this depends on how function is called.Arrow functions don't define their own this; they inherit it from the parent scope.Constructor bind this to the new instance.
 ```js
 //global scope
@@ -365,6 +373,7 @@ console.log(p.name); // Sam
 
 **Q10: Arrow function vs normal function vs IIFE vs Anonymous function**  
 
+---
 Normal Function 
 ```js
 function add(a, b) { // declaration + definition
@@ -447,6 +456,7 @@ test(3)
 
 **Q11: Shallow vs Deep Copy**  
 
+---
 Shallow Copy: Copies only the top-level values.
 If the object contains another object, only the reference is copied, not the actual nested data.
 So changing nested values affects both copies.  
@@ -475,6 +485,7 @@ a.y ──► { z:2 }     b.y ──► { z:2 }   (separate copies)
 
 **Q12. What are Promises? why promise faster than setTimeout? Build Own Promise for Microtask? What happens internally when a Promise resolves?**  
 
+---
 Promise is an object represent the eventual completion or failure of asynchronous operation and resulting value.promise has 3 states pending,rejected,fulfilled, it is introduce es6 onwards.we can make asynchronous task using promise.to execute promise we have prototype method promise.prototype.then() for successful compilation and promise.prototype.catch() for unsuccessful compilation 
 Example:
 ```js
@@ -554,6 +565,7 @@ When a Promise resolves, it quietly changes its internal state from 'pending' to
 
 **Q13. Promise.all vs Promise.race**  
 
+---
 Promise.all() → Runs multiple promises in parallel and waits until all are finished.If any one fails, the whole result fails
 ```txt
 Promise.all([P1, P2, P3])
@@ -616,6 +628,7 @@ Promise.race([p1,p2]).then(res=>console.log("Race",res));// 1st Race p2 done
 ```
 **Q14. How AJAX is used in JS ? How to fetch API using Promise? how to restricting fetch data**  
 
+---
 AJAX = Asynchronous JavaScript and XML
 ```js
 fetch("https://api.example.com/data")
@@ -646,6 +659,7 @@ For secure APIs, server must know who is making the request.JWT is sent as "Auth
 
 **Q15. create a Promise and resolve on Button click**  
 
+---
 ```js
 import { useState } from "react";
 
@@ -667,6 +681,7 @@ export default function App() {
 ```
 **Q16. using promise fetch a data,if the fetch fails it should automatically retry after the given delay, up to the maximum number of attempts**  
 
+---
 ```js
 function retryFetch(url, maxSteps, delay) {
   let attempt = 0;
@@ -702,6 +717,7 @@ fetch(url).catch(err => console.error(err));
 
 **Q17. Async/Await? why its better than Promise**  
 
+---
 async/await is a cleaner way to work with Promises in JavaScript.
 It allows you to write asynchronous code that looks synchronous, making it easier to read and debug.  
 ```js
@@ -774,6 +790,7 @@ catch(error){
 
 **Q18: What is Debounce & Throttle?**  
 
+---
 Debounce: delay execution till user stops typing.
 Runs after user stops typing or triggering for a certain time
 Useful for: Search bars, input validation, API calls
@@ -835,6 +852,8 @@ Server:                     A              Server:  A---------------------A
 ```
 
 **Q19: Polyfill Example (map-filter-flat)**
+
+---
 ```js
 //map polyfill
 Array.prototype.myMap = function(callback) {
@@ -883,6 +902,7 @@ console.log(arr.myFlat(2)); // [1, 2, 3, 4]
 ```
 **Q20: Call, Apply, Bind**  
 
+---
 call() invokes a function immediately with a specific this value and individual arguments.  
 apply() is the same as call().  
 bind() returns a new function with a permanently bound this value.
@@ -904,6 +924,7 @@ introSam("Hey", "😎");//Hey, I'm Sam and I'm 25 😎
 
 **Q21: What is Currying?**  
 
+---
 Currying is the process of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument.  
 Currying is like ordering a pizza step by step: first you choose the size, for example "Large," then you separately choose the crust or toppings such as "Cheese" and "Olives," and finally the last step returns the fully prepared pizza order after all selections are made.
 Example:
@@ -925,6 +946,7 @@ console.log(add(5)(3)); // 8
 ```
 **Q22: What is Prototype?**  
 
+---
 prototype is an object automatically attached to functions (specifically constructor functions).__proto__ is a reference inside every object that points to the prototype it inherits from.Every JS object inherits from a prototype object.
 ```js
 const obj = { a: 10 };
@@ -949,6 +971,7 @@ p.sayHello(); // Hello!
 
 **Q23: Difference: undefined vs null**  
 
+---
 undefined -> declared but not assigned
 ```js
 let a;      
@@ -962,6 +985,7 @@ console.log(b);  // null
 
 **Q24: Event Delegation**  
 
+---
 Event Delegation is used to handle events efficiently by adding a single event listener on a parent element instead of adding multiple listeners to each child element.  
 
 Benefits:Improves performance (fewer listeners in DOM) and Improves performance (fewer listeners in DOM)
@@ -975,6 +999,7 @@ ul.addEventListener('click',(e)=>{
 
 **Q25: LocalStorage vs SessionStorage with exp**  
 
+---
 localStorage -> persists after reload and permanent until cleared.we can use in theme and token,and scope is shared
 ```js
 localStorage.setItem("name", "Sam");
@@ -989,6 +1014,7 @@ console.log(sessionStorage.getItem("sessionName")); // SamSession
 
 **Q26: Spread vs Rest**  
 
+---
 Spread -> it is es6 features ,it operation with array and combine the content
 ```js
 //exp1
@@ -1024,6 +1050,8 @@ foo(...[1,2,3]); //[1,2,3]
 
 
 **Q27: Deep Clone Object**  
+
+---
 ```js
 function deepClone(obj) {
     if (obj === null || typeof obj !== 'object') {
@@ -1040,6 +1068,7 @@ function deepClone(obj) {
 
 **Q28: Optional Chaining**  
 
+---
 Access nested property safely
 ```js 
 user?.address?.city
@@ -1052,6 +1081,7 @@ document.querySelector(".box")?.textContent
 
 **Q29: Difference Between == and ===**  
 
+---
 == Loose Equality Compares value only 
 ```js
 console.log(5 == "5");     // true 
@@ -1064,6 +1094,7 @@ console.log(5 === "5");   // false
 
 **Q30: Difference Between slice, splice, split**  
 
+---
 slice -> The slice() method is used to copy a portion of an array and return a new array.doesn’t change original array.It accepts two optional arguments:
 - the starting index 
 - the ending index
@@ -1089,6 +1120,7 @@ split(",")  -> ['a','b','c']
 
 **Q31: Event Bubbling(default) vs Capturing**  
 
+---
 Bubbling: inner → outer (Event moves from child → parent)
 Clicking the button → shows "Child clicked" → then "Parent clicked"
 ```txt
@@ -1154,6 +1186,7 @@ Capturing: outer/parent → inner/child
 
 **Q32: What is Temporal Dead Zone (TDZ)?**  
 
+---
 Zone where variable exists but can’t be accessed before initialization.
 ```js
 console.log(a)
@@ -1162,10 +1195,12 @@ var a='sam'
 
 **Q33: Garbage Collection**  
 
+---
 JS automatically removes unused memory (unreferenced objects).
 
 **Q34: Webpack**  
 
+---
 Webpack is a module bundler that combines JavaScript, CSS, images, and other assets into an optimized build.(usually a single bundle.js)
 ```txt
           React Project Files
@@ -1197,6 +1232,7 @@ Webpack is a module bundler that combines JavaScript, CSS, images, and other ass
 
 **Q35: What are higher-order functions?**  
 
+---
 A function that takes another function as an argument OR returns a function. (e.g., map, filter, reduce). like Amazon's product system: when you pick a shirt, you’re giving Amazon your 'preference'. Amazon then uses that logic to show similar shirts or recommendations — that’s the HOF running your function. And sometimes Amazon even gives you new personalized suggestions, just like a HOF returning another function.  
 why use? Reusability,code modularity.
 ```js
@@ -1216,6 +1252,8 @@ console.log(calc(10,10,multiply))
 ```
 
 **Q36.how to check Performance**  
+
+---
 ```js
 console.time('loop');
 for (let i = 0; i < 10; i++) {
@@ -1227,6 +1265,7 @@ console.timeEnd('loop');
 
 **Q37: What are modules in JavaScript?**  
 
+---
 Break code into reusable files using export and import.in js two types of modules are there 1. common js module for node js 2. es6 module for modern application
 Types:  
 1. Named export: you can not rename it
@@ -1244,6 +1283,7 @@ import { add } from "./util.js";
 
 **Q38:Use of Content-Type**  
 
+---
 Tells the browser what type of data is being sent.  
 
 Examples:
