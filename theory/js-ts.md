@@ -2,9 +2,10 @@
 JAVASCRIPT NOTES
 ================
 
-## Q1: what is JavaScript? why name called JavaScript? Ways to Import JS in HTML?What are render-blocking resources, and how do you avoid them?
+**Q1: what is JavaScript? why name called JavaScript? Ways to Import JS in HTML?What are render-blocking resources, and how do you avoid them?**
 
 ---
+
 JS was created by Brendan Eich at Netscape in 1995.  
 
 **JavaScript is a lightweight, case sensitive scripting language.**
@@ -18,7 +19,7 @@ JS was created to add logic to web pages.  initial name was "LiveScript" then ma
 <script src="app.js" type="module"></script> <!-- ES modules -->
 
 ```
-🎯 Note: we can use both defer and type="module" but defer is unnecessary when using type="module" because by default, module scripts behave like defer.
+🎯 Note: we can use both `defer` and `type="module"` but defer is unnecessary when using type="module" because by default, module scripts behave like defer.
 
 ***What is crossorigin in the <script> tag?***
 crossorigin controls how browsers handle CORS (Cross-Origin Resource Sharing) when loading external scripts from another domain.mainly use for security and cdn usages
