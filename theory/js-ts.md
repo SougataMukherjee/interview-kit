@@ -1293,6 +1293,7 @@ Examples:
 
 **Q39: What is destructuring?**  
 
+---
 Extract/unpacking values from arrays or objects into separate cleaner and more readable code:
 ```js
 //exp 1
@@ -1339,6 +1340,7 @@ console.log(name,a);// Sam Asansol
 
 **Q40: What is a generator function?**  
 
+---
 A generator function can pause and resume execution using yield.
 Defined with function* syntax.
 Useful for lazy evaluation or async flows.
@@ -1385,16 +1387,20 @@ export default function App() {
 
 **Q41: Explain the concept of immutability.**  
 
+---
 Data shouldn’t be modified directly; instead, create new copies.
 Important for React state and predictable behavior.
 
 **Q42: All attributes of script tag**  
 
+---
 use script tag to include js in html
 <script scr="index.js"></script>
 src, type, async, defer, crossorigin
 
 **Q43.what is first class function?**  
+
+---
 first class function you can store as a value
 ```js
 let a=function(){}
@@ -1402,6 +1408,7 @@ let a=function(){}
 
 **Q44:Use of "use strict"?What Problems "use strict" Solves?use strict vs TypeScript**  
 
+---
 Makes JS more secure: prevents undeclared variables, silent errors.
 ```js
 //exp 1
@@ -1429,6 +1436,7 @@ console.log(sum(10,10))// 20 but without 'use strict' it 40
 
 **Q45:Data Types in JS (Primitive vs Non-Primitive)**  
 
+---
 data types are describe the type of data  
 
 - Primitive: data types that store single values (immutable)(String, Number, boolean, null, undefined, symbol, bigint).
@@ -1452,6 +1460,7 @@ console.log(a,b)//[ 1, 2 ] [ 1, 2 ]
 
 **Q46:Null vs Undefined**  
 
+---
 - null → empty value set by user.it represent absence of object value.null is not global property of global object
 ```js
 var x=null
@@ -1471,6 +1480,7 @@ console.log(obj.property); // undefined
 
 **Q47: types of operator give associativity**  
 
+---
 Arithmetic:+,-,*,/,%,++,--  
 
 Assignment: =,+=,-=,*=,/=  
@@ -1509,6 +1519,7 @@ console.log(increaseNumber());//11
 
 **Q48:Parameter vs Argument**  
 
+---
 Parameter = variable in function definition.  
 
 Argument = actual value passed.
@@ -1529,6 +1540,7 @@ show()
 ```
 **Q49:Callback Function**  
 
+---
 Function passed into another function as a parameter to run after a task completes.
 ```js
 //exp 1
@@ -1552,6 +1564,7 @@ document.getElementById("btnClick").addEventListener("click", () => {
 
 **Q50:Pyramid of Doom (Callback Hell)**  
 
+---
 When many callbacks are nested inside each other — code becomes deep, messy, and hard to read.
 ```js
 getData(() => {
@@ -1566,6 +1579,7 @@ getData(() => {
 ```
 **Q51:call back hell solved by Promise Chain**  
 
+---
 its readable and handle error easily
 ```js
 getData()
@@ -1578,6 +1592,7 @@ getData()
 ```
 **Q52: Constructor**  
 
+---
 Used to create multiple similar objects.
 ```js
 function User(n){
@@ -1590,6 +1605,7 @@ console.log(u?.name,v?.name);//Sam undefined
 
 **Q53: why Constructor Function? what is Prototype Inheritance?**  
 
+---
 To create multiple objects with the same structure and properties without manually writing each object.
 ```js
 
@@ -1623,6 +1639,7 @@ u2.sayHello(); // Hello, John
 
 **Q54: Strings are Immutable**  
 
+---
 A string is a sequence of characters.once created, can't be changed—new copy made on edit.
 <img src="./img/string.png" alt="string" />
 ```js
@@ -1639,6 +1656,8 @@ const fruits=['Apple','Banana','Orange']
         const fruits=new Array('Apple','Banana','Orange')
 ```
 **Q56: create object without using new**
+
+---
 ```js
 const obj1 = {}; 
 const obj2 = Object.create(null);
@@ -1650,10 +1669,13 @@ const obj5 = makeObj();
 
 **Q57: Web APIs (browser features)**  
 
+---
 fetch(), setTimeout(), setInterval(), localStorage, sessionStorage,
 document, navigator, geolocation, history, console, alert()
 
 **Q58: for of vs for in  and if-else vs switch**
+
+---
 | Loop Type    | Best For             | Works On                                  | What It Returns                          | When To Use                         |
 | ------------ | -------------------- | ----------------------------------------- | ---------------------------------------- | ----------------------------------- |
 | **for**      | General-purpose loop | Arrays, Strings                           | Index-based iteration                    | When you need index or full control |
@@ -1756,6 +1778,7 @@ function filterSublets(type, list) {
 
 **Q59:map vs forEach**  
 
+---
 forEach() just loops and forEach does not have return type,it support return type but it return undefined and it is not support method chaining
 ```js
 let a=["a","b","c"]
@@ -1774,6 +1797,7 @@ console.log(b);//["a","b","c"]
 ``` 
 **Q60: instanceof**  
 
+---
 Checks if object created from class.
 ```js
 obj instanceof MyClass;
@@ -1781,10 +1805,12 @@ obj instanceof MyClass;
 
 **Q61: Tree Shaking**  
 
+---
 Removes unused JS code during bundling.
 
 **Q62: what is DOM and BOM and its advantage and disadvantage**  
 
+---
 DOM(Document Object Model): when a web page loads the browser construct the DOM which is tree like structure of HTML.  
 
 Document is the root object that represents the entire HTML page.  
@@ -1836,6 +1862,7 @@ use it inside useEffect for
 
 **Q63:Useful DOM Properties**  
 
+---
 .innerHTML:Used when you need to insert HTML (e.g., cards list, table rows)
 .innerText:when you want to add text only,it ignore html tags
 ```js
@@ -1921,6 +1948,8 @@ div.hasAttribute("id"); // true / false
 
 ```
 **Q64:DOMContentLoaded**  
+
+---
 DOMContentLoaded fires when the HTML is fully loaded and parsed, before images, CSS, and other assets finish loading, it helps to run js early
 ```js
 document.addEventListener("DOMContentLoaded", function () {
@@ -1930,6 +1959,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 **Q65:Access DOM (5 ways)**  
 
+---
 - getElementById() Selects a single element by its id.You need one specific element with a unique ID (fastest and most direct)
 ```js
 const title = document.getElementById("mainTitle");
@@ -1975,6 +2005,8 @@ allBoxes.forEach(el => el.style.color = 'red');
 
 ```
 **Q66: Optimize DOM Traversal**   
+
+---
  use documentFragment, DocumentFragments are lightweight DOM Node objects which are never part of the main DOM tree. 
  ```js
  <div id="box"></div>
@@ -1995,6 +2027,8 @@ box.appendChild(fragment);
  ```
 
 **Q67.what is DOMTokenList (classList)?**  
+
+---
 element.classList returns a DOMTokenList, which has methods to manage CSS classes dynamically.
 ```js
 let box = document.querySelector('.box');
@@ -2007,6 +2041,7 @@ console.log(box.classList.contains('red')); // true or false
 
 **Q68: isNaN() and Number()**  
 
+---
 Checks if value is not number
 ```js
 isNaN('true') → true
@@ -2039,6 +2074,8 @@ You convert it yourself using functions like Number(), String(), Boolean()
 
 
 **Q69 Array and Array Methods**  
+
+---
 An array is a linear data structure used to store multiple elements. It is a collection of elements of the same data type stored at contiguous memory locations.size of the array are dynamic and type of the array are object.Arrays are mutable(changable).
 we can check weather statement array or not using Array.isArray()
 <img src="./img/array.png" alt="array" />
@@ -2190,6 +2227,7 @@ console.log(ff, typeof ff)//[ 'mango', 'banana' ] object
 
 **Q70:String Methods**  
 
+---
 charAt() → returns character at index.
 ```js
         "Hello".charAt(1) → "e"
@@ -2267,6 +2305,7 @@ repeat() → repeats string given times.
 
 **Q71:Object Methods**  
 
+---
 keys() → returns array of property names.
 ```js
         Object.keys({a:1,b:2}) → ["a","b"]
@@ -2311,6 +2350,7 @@ toString() → returns string form of object.
 
 **Q72: what is pass by value and pass by reference**  
 
+---
 Pass by Value → Copy of value passed (primitive).when you do not want original data to change.
 ```js
    let a = 10;
@@ -2331,6 +2371,7 @@ let obj = { name: "Sam" };
 ```
 **Q73: Pure Function and Impure function**  
 
+---
 Pure function → Same input → same output, no side effects. it takes at least one arguments
 ```js
 function add(a, b) {
@@ -2359,6 +2400,7 @@ function increment() {
 
 **Q74: Cross-Browser Scripting**  
 
+---
  Write JS that works same on all browsers (handle compatibility).
 
 **Q75: ES6 Features**  
@@ -2379,10 +2421,12 @@ console.log(p.greet()); // Hi Sam
 ```
 **Q76:CORS**  
 
+---
  Cross-Origin Resource Sharing – allows API access from different domains.
 
 **Q77:Mouse Events**  
 
+---
 - click:Fired when the user presses and releases the mouse button on an element.
 - dblclick:Fired when the user double-clicks an element.
 - mousedown:Fired when the mouse button is pressed down on an element (before releasing).
@@ -2413,6 +2457,7 @@ box.addEventListener("mouseleave", () => console.log("Mouse Leave"));
 ```
 **Q78:Event Emitter**  
 
+---
 Object that listens (on) and triggers (emit) events.
 ```js
 const EventEmitter = require('events');
@@ -2422,6 +2467,7 @@ event.emit('hi');
 ```
 **Q79:clientX vs scrollX**  
 
+---
 - clientX → Mouse position relative to visible viewport (ignores scrolling)
 - scrollX → Total horizontal scroll offset of the page
 
@@ -2467,16 +2513,19 @@ Page Start ───────────────────────
 
 **Q80: Bundling vs Chunking**  
 
+---
 Bundling is the process of combining many JavaScript, CSS, and asset files into one or a few optimized files.
 Chunking is the process of splitting your large bundled code into smaller pieces (chunks) that can be loaded on demand
 
 **81: ESM vs ES6**  
 
+---
 ES6: A language version (includes classes, let/const, arrow functions).
 ESM: The module system using import/export.
 
 **82: Task Scheduler & LRU Cache**  
 
+---
 A Task Scheduler executes tasks in a planned order, usually with delay or priority.
 Example use cases: running API calls sequentially, retry logic, scheduled jobs, animations, pausing long loops.  
 in LRU cache is a technique which stores a limited number of items and discards the least recently used item when the cache is full.Imagine you have a small bag that holds only 2 items so If the bag is full and you add a new item so you throw out the Least Recently Used (LRU) item
@@ -2521,6 +2570,7 @@ console.log(cache.get(3));//30
 ```
 **83. How to Test Code Using Jest in JS**  
 
+---
 install jest npm install --save-dev jest and script package.json "test": "jest"
 in sum.js
 ```js
@@ -2540,6 +2590,7 @@ test("adds numbers", () => {
 ```
 **84. what is invariant?**  
 
+---
 An invariant is a condition that always remains true during the execution of a program or throughout every iteration of a loop. For example, in a loop that counts items in an array, an invariant could be that the counter will never exceed the array length. Consider this loop:
 ```js
 let sum = 0;
@@ -2554,6 +2605,8 @@ WebSocket is a communication protocol that creates a persistent, two-way (full-d
 - Chat apps, multiplayer games, live score updates, stock prices app we can use
 
 **86. What is RegExp? (Regular Expression).How to create dynamic Regex in JavaScript?**
+
+---
 RegExp (Regular Expression) is a pattern used to match, search, or replace text in strings
 ```js
 const email = "test@mail.com";
@@ -2571,6 +2624,7 @@ console.log(reg.test("Hello World"));
 ```
 **87.types of console methods**  
 
+---
 console.log() print general messages 
 
 console.error() show error messages  
@@ -2581,6 +2635,8 @@ console.time()  start a timer
 console.timeEnd() end timer and show time  
 
 **Q88. What is BigInt? example**  
+
+---
 It is used to store large integer values.
 ```js
 //using n suffix
@@ -2602,6 +2658,8 @@ let z=(...rest)=>rest
 console.log(z('sam','muk')
 ```
 **Q90. What is Method Chaining?**  
+
+---
 Method chaining means calling multiple methods on the same object in a single line — each method returns the same object.
 ```js
 let arr = [1, 2, 3, 4];
@@ -2619,6 +2677,7 @@ console.log(`Today's date: ${day}-${month}-${year}`);
 ```
 **Q92:Cookies**  
 
+---
 A cookie is a small piece of data stored in the browser by the server or by JavaScript.
 Size is usually 4KB.  
 for authentication, track user activity and maintaining session we use cookies
@@ -2629,6 +2688,8 @@ console.log(document.cookie)
 },[])
 ```
 **Q93. How to give object protection**  
+
+---
 Object.freeze() — cannot modify or add values
 ```js
 const obj = Object.freeze({ a: 1 });
@@ -2641,6 +2702,8 @@ const obj = Object.seal({ a: 1 });
 
 ```
 **Q94.Math.ceil(),Math.floor() and Math.abs() Infinity**  
+
+---
 Rounds a number UP to the nearest integer.
 ```js
 console.log(Math.ceil(0.6)); // 1
@@ -2668,6 +2731,7 @@ console.log(Number.NEGATIVE_INFINITY); // -Infinity
 
 **Q95.what is Symbol and WeakMap?**  
 
+---
 Symbol is a unique and primitive value used mainly as an object key to avoid property name conflicts.its used to create hidden object properties or private data.
 
 Example:
@@ -2699,6 +2763,7 @@ TYPESCRIPT NOTES
 
 **Q1: What is TypeScript?**  
 
+---
 Superset of JS adding static typing + compiler checks.
 ```txt
 +---------------------+
@@ -2711,15 +2776,19 @@ Superset of JS adding static typing + compiler checks.
 
 **Q2: why use it over JavaScript:**  
 
+---
 - Early error detection
 - Better IntelliSense
 - Type safety in large apps
 
 **Q3: Basic Types:**  
 
+---
 string, number, boolean, any, void, unknown, null, undefined
 
 **Q4: Interface** 
+
+---
 | Feature            | Class                                          | Interface                                                  |
 | ------------------ | ---------------------------------------------- | ---------------------------------------------------------- |
 | **Definition**     | A blueprint for creating objects               | A contract defining the shape (method/property signatures) |
@@ -2735,6 +2804,8 @@ interface User {
 }
 ```
 **Q5: Type Alias and Type Inference**  
+
+---
 Type Alias = giving a custom name to a type.
 It is used to simplify complex types and reuse them.
 ```js
@@ -2770,6 +2841,8 @@ add returns number
 
 ```
 **Q6: Optional and Readonly Properties:**  
+
+---
 ```js
 interface User { 
   name: string;
@@ -2779,6 +2852,7 @@ interface User {
 
 **Q7: Generics:**  
 
+---
 Generics allow you to create reusable, flexible functions and types that work with any data type while still preserving type safety. This avoids duplication, prevents runtime errors, and keeps code strongly typed and maintainable.
 
 ```js
@@ -2791,6 +2865,7 @@ let num = identity<number>(42);      // type T is number
 
 **Q8: Union and Intersection Types:**  
 
+---
 Union (|) is a variable can hold one of multiple types
 let val: string | number;
 ```js
@@ -2806,6 +2881,7 @@ const obj: C = { x: 10, y: "hello" };
 ```
 **Q9: Enum:**  
 
+---
 Used to define named constants:
 ```js
 enum Color { Red, Green, Blue }
@@ -2813,6 +2889,7 @@ enum Direction { Up, Down, Left, Right }
 ```
 **Q10: Difference between Interface and Type**  
 
+---
 Interface -> Best for object structure, especially when it needs to grow or extend
 ```js
 interface User {
@@ -2834,6 +2911,7 @@ type Point = { x: number } & { y: number }; // Intersection
 
 **Q11: Utility Types:**  
 
+---
 Partial<T>:Makes all properties / fields of a type optional.  
 Example 1:
 ```js
@@ -2902,6 +2980,8 @@ const user: Readonly<User> = {
 user.age = 31;//error
 ```
 **Q12: Type Assertion:**  
+
+---
 ```js
 let val: any = "hello";
 let len = (val as string).length;
@@ -2909,12 +2989,14 @@ let len = (val as string).length;
 
 **Q13: Difference between any and unknown and never**  
 
+---
 any -> unsafe  
 
 unknown -> needs type check before use
 
 **Q14: What are Decorators?**  
 
+---
 Experimental feature for class modification.
 Special syntax to add metadata or modify classes/functions
 Example:
@@ -2924,6 +3006,7 @@ class User {}
 ```
 **Q15: Difference between TypeScript and JavaScript**  
 
+---
 TS -> compiled language  
 
 JS -> interpreted  
@@ -2932,6 +3015,7 @@ TS adds types; JS doesn’t.
 
 **Q16: What is type narrowing?**  
 
+---
 Process of refining a variable’s type based on conditions.
 Example:
 ```js
@@ -2941,6 +3025,7 @@ if (typeof x === 'string') {
 ```
 **Q17: What are type guards?**  
 
+---
 Functions or checks that help narrow down types at runtime.
 Example:
 ```js
@@ -2948,3 +3033,4 @@ function isString(x: unknown): x is string {
   return typeof x === 'string';
 }
 ```
+---
