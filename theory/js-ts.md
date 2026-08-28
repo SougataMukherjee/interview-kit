@@ -22,6 +22,7 @@ JS was created to add logic to web pages.  initial name was "LiveScript" then ma
 🎯 Note: we can use both `defer` and `type="module"` but defer is unnecessary when using type="module" because by default, module scripts behave like defer.
 
 ***What is crossorigin in the <script> tag?***
+
 crossorigin controls how browsers handle CORS (Cross-Origin Resource Sharing) when loading external scripts from another domain.mainly use for security and cdn usages
 ```js
 <script 
@@ -44,8 +45,10 @@ both load scripts asynchronously.
 ```js
 <script async src="async.js"></script>
 ```
-**What are render-blocking resources, and how do you avoid them?**  
-When the browser starts loading a webpage, it wants to show something to the user as quickly as possible — but some files force it to stop and wait. CSS files and normal script tags block rendering because the browser must fully load them before it can safely continue building the page.To avoid these pauses, we tell the browser to handle scripts differently using async or defer, and we load CSS only when needed. For example, script defer lets HTML parsing continues without waiting, and link rel="preload" helps important CSS load earlier so the page paints faster.
+**What are render-blocking resources, and how do you avoid them?** 
+
+**When the browser starts loading a webpage, it wants to show something to the user as quickly as possible — but some files force it to stop and wait.** CSS files and normal script tags block rendering because the browser must fully load them before it can safely continue building the page.To avoid these pauses, we tell the browser to handle scripts differently using async or defer, and we load CSS only when needed. For example, script defer lets HTML parsing continues without waiting, and link rel="preload" helps important CSS load earlier so the page paints faster.
+
 ```js
 <script src="app.js" defer></script>
 <link rel="preload" href="style.css" as="style">
@@ -71,8 +74,8 @@ Call Stack (executes code)
 🎯 Note:  
 **Global Execution Context (GEC)**  
 When JavaScript starts running a file, it creates the Global Execution Context.It has 2 phases
-1. Memory Phase (Creation / Hoisting Phase):JavaScript scans through the file before executing anything.Variables declared with var are stored as undefined.let and const are put into memory but not initialized.Function expressions & arrow functions behave like variables (undefined or uninitialized)  
-2. Code Phase (Execution Phase): JavaScript now runs the code line by line.
+1. `Memory Phase (Creation / Hoisting Phase)`:JavaScript scans through the file before executing anything.Variables declared with var are stored as undefined.let and const are put into memory but not initialized.Function expressions & arrow functions behave like variables (undefined or uninitialized)  
+2. `Code Phase (Execution Phase)`: JavaScript now runs the code line by line.
 there Values are assigned and Functions are executed
 ***Priority Rules in Memory Phase***
 1. Function declarations are hoisted with full function value
@@ -185,7 +188,8 @@ let name = "Sam"; // name is the identifier
 ```
 JavaScript variables are containers for data.  
 <img src="./img/scope.png" alt="scope" />
-var -> the scope of the variable define with the keyword "var". this is global scope.it is store in browser window object.it is limited to the function within which it is defined ,calling function scope. 
+
+`var :` the scope of the variable define with the keyword **var**. this is global scope.it is store in browser window object.it is limited to the function within which it is defined ,calling function scope. 
 ```js
 var x = 10;
 var x = 20;
@@ -194,7 +198,9 @@ console.log(x); // 20
 function foo(){
   var x='sam'//local scope or function scope
 }
-but
+
+//but//
+
 var x="sam"//global scope
 if(true){
   y="sou"//global scope
@@ -207,8 +213,9 @@ switch(true){
 }
 ```
 
-let, const -> the scope of variable defined with the keyword 'let' or 'const' is limited to the block defined by curly brace called lexical variable scope. it is not store in browser window object  
+`let, const:` the scope of variable defined with the keyword `'let' or 'const'` is limited to the block defined by curly brace called lexical variable scope. it is not store in browser window object  
 difference between let and const is const variable can only one time declare and assign a value because it's a constant and const cannot be update or redeclared 
+
 ```js
 {
   let x='hello'//block scope
@@ -374,13 +381,15 @@ console.log(p.name); // Sam
 **Q10: Arrow function vs normal function vs IIFE vs Anonymous function**  
 
 ---
-Normal Function 
+**Normal Function**
+
 ```js
 function add(a, b) { // declaration + definition
   return a + b;  // definition (body)
 }
 ```
-Arrow Function / Lambda Expression
+**Arrow Function / Lambda Expression**
+
 - ES6 onwards introduce.arrow function does not support function declaration,it support only function expression.  
 - arrow function does not have own this binding and not suitable for call apply bind
  ```js 
@@ -397,7 +406,8 @@ arrows();//hello
  const add = (a, b) => a + b;
  console.log(add(10,20))//30
  ```
-IIFE (Immediately Invoked Function Expression) 
+**IIFE (Immediately Invoked Function Expression)**
+
 if you want to avoid global scope partition use IIFE
 ```js
 problem
@@ -422,7 +432,8 @@ solution
   else no("You canceled the execution.");
 })();
 ```
-Anonymous Function 
+**Anonymous Function**
+
 it is a function without having a name
 ```js
 let f=function(){
@@ -457,11 +468,11 @@ test(3)
 **Q11: Shallow vs Deep Copy**  
 
 ---
-Shallow Copy: Copies only the top-level values.
+`Shallow Copy:` Copies only the top-level values.
 If the object contains another object, only the reference is copied, not the actual nested data.
 So changing nested values affects both copies.  
 
-Deep Copy: Creates a completely independent copy of all levels of the object.
+`Deep Copy:` Creates a completely independent copy of all levels of the object.
 Changing nested values does not affect the original.
 Example:
 Original Object
@@ -486,7 +497,9 @@ a.y ──► { z:2 }     b.y ──► { z:2 }   (separate copies)
 **Q12. What are Promises? why promise faster than setTimeout? Build Own Promise for Microtask? What happens internally when a Promise resolves?**  
 
 ---
-Promise is an object represent the eventual completion or failure of asynchronous operation and resulting value.promise has 3 states pending,rejected,fulfilled, it is introduce es6 onwards.we can make asynchronous task using promise.to execute promise we have prototype method promise.prototype.then() for successful compilation and promise.prototype.catch() for unsuccessful compilation 
+**Promise is an object represent the eventual completion or failure of asynchronous operation and resulting value.**
+**promise has 3 states pending,rejected,fulfilled**, it is introduce es6 onwards.**we can make asynchronous task using promise**.to execute promise we have prototype method promise.prototype.then() for successful compilation and promise.prototype.catch() for unsuccessful compilation 
+
 Example:
 ```js
 //exp 1 
@@ -512,7 +525,7 @@ getData().then(()=>{
 })
 
 ```
-Promise is faster than setInterval because Promises run in the microtask queue, which has higher priority than setInterval, which runs in the macrotask queue. Microtasks execute faster and earlier than macrotasks in JavaScript’s event loop  
+`Promise is faster than setInterval` because Promises run in the microtask queue, which has higher priority than setInterval, which runs in the macrotask queue. Microtasks execute faster and earlier than macrotasks in JavaScript’s event loop  
 ```js
 console.log("Start");//1
 setInterval(() => console.log("Interval"), 0);//4
@@ -719,7 +732,7 @@ fetch(url).catch(err => console.error(err));
 
 ---
 async/await is a cleaner way to work with Promises in JavaScript.
-It allows you to write asynchronous code that looks synchronous, making it easier to read and debug.  
+It allows you to write asynchronous code that looks synchronous, making it easier to read and debug. **if you create a async function, it will return promise automatically**
 ```js
 //exp 1
 async function getSmile(){
