@@ -275,26 +275,9 @@ Once Web API finishes, it pushes the callback into a queue.
 Promises .then(), queueMicrotask(), MutationObserver.
 5. Event Loop
 Keeps checking and If call stack is empty, push tasks from microtask queue, then callback queue.
-```txt
-                ┌───────────────────────────────┐
-                │           CALL STACK           │
-                │  (Runs code line-by-line)      │
-                └─────────────▲─────────────────┘
-                              │
-                              │ (returns callback)
-                              │
-┌───────────────┐     ┌───────▼────────┐     ┌─────────────────────┐
-│   Web APIs     │----▶ Callback Queue  │----▶ Microtask Queue      │
-│ (setTimeout,   │     │ (setTimeout)   │     │ (Promises)           │
-│  fetch etc.)   │     └──────▲─────────┘     └─────────▲──────────┘
-└───────────────┘            │                         │
-                             └───────────┬─────────────┘
-                                         │
-                                         ▼
-                                   EVENT LOOP
-                             (Moves highest priority)
 
-```
+<img src="./img/event-loop.jpg" alt="script"/> 
+
 Example 1:
 ```js
 console.log("a");

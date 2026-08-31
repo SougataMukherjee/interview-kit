@@ -1,3 +1,204 @@
+# Database Design Strategy
+
+## 1. Identify Entities
+
+Entities represent real-world objects.
+
+Examples:
+
+- Book
+- Author
+- Order
+
+---
+
+## 2. Identify Attributes
+
+### Book
+
+```js
+Book {
+  id: string (PK)
+  title: string
+  price: number
+  isAvailable: boolean
+  publishYear: Date
+}
+```
+
+### Author
+
+```js
+Author {
+  id: string (PK)
+  name: string
+  phone?: string
+}
+```
+
+### Order
+
+```js
+Order {
+  id: string (PK)
+  orderType: "online" | "offline"
+  total: number
+}
+```
+
+---
+
+## 3. Define Relationships
+
+### Book ↔ Author
+
+```text
+Many-to-Many (M:M)
+
+One Book can have many Authors.
+One Author can write many Books.
+```
+
+```text
+Book 1 ─────┐
+            ├── Author 1
+Book 2 ─────┘
+
+Book 1 ─────┐
+            ├── Author 2
+Book 2 ─────┘
+```
+
+### Junction Table
+
+```sql
+BookAuthors
+-----------
+bookId
+authorId
+```
+
+---
+
+## 4. Define Cardinality
+
+```text
+1 : 1  → User ↔ Profile
+
+1 : M  → Customer ↔ Orders
+
+M : M  → Book ↔ Author
+```
+
+---
+
+## 5. Create ERD
+
+```text
+Book
+-----
+id (PK)
+title
+price
+publishYear
+
+        M:M
+
+Author
+------
+id (PK)
+name
+phone
+```
+
+---
+
+## 6. Define Keys
+
+### Primary Keys (PK)
+
+```text
+Book.id
+Author.id
+Order.id
+```
+
+### Foreign Keys (FK)
+
+```text
+BookAuthors.bookId  → Book.id
+BookAuthors.authorId → Author.id
+```
+
+---
+
+## 7. Normalize Data
+
+Apply:
+
+```text
+1NF
+2NF
+3NF
+```
+
+Goals:
+
+- Eliminate duplicate data
+- Reduce redundancy
+- Improve consistency
+
+---
+
+## 8. Add Constraints
+
+Examples:
+
+```sql
+title VARCHAR(255) NOT NULL
+
+price DECIMAL(10,2) NOT NULL
+
+phone VARCHAR(20) UNIQUE
+
+isAvailable BOOLEAN DEFAULT true
+```
+
+Common Constraints:
+
+```text
+NOT NULL
+UNIQUE
+DEFAULT
+CHECK
+PRIMARY KEY
+FOREIGN KEY
+```
+
+---
+
+## 9. Add Indexes
+
+Create indexes on frequently searched fields.
+
+Examples:
+
+```sql
+INDEX(title)
+
+INDEX(authorId)
+
+INDEX(phone)
+```
+
+Benefits:
+
+- Faster search
+- Faster filtering
+- Better query performance
+
+---
+
 # SQL Notes
 
 ## 1. What is SQL?
