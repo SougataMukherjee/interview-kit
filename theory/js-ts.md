@@ -276,7 +276,7 @@ Promises .then(), queueMicrotask(), MutationObserver.
 5. Event Loop
 Keeps checking and If call stack is empty, push tasks from microtask queue, then callback queue.
 
-<img src="./img/event-loop.jpg" alt="script"/> 
+<img src="./img/event-loop.jpeg" alt="script"/> 
 
 Example 1:
 ```js
