@@ -476,6 +476,20 @@ Deep Copy:
 b = JSON.parse(JSON.stringify(a))
 a.y ──► { z:2 }     b.y ──► { z:2 }   (separate copies)
 ```
+Example:
+```js
+let originalObj = {
+  name: "Sam",
+  address: { city: "Asansol" }
+};
+
+let shallowCopy = {...originalObj};
+let deepCopy = JSON.parse(JSON.stringify(originalObj));
+originalObj.address.city = "electronic";
+
+console.log(shallowCopy.address.city);//electronic
+console.log(deepCopy.address.city);//Asansol
+```
 
 **Q12. What are Promises? why promise faster than setTimeout? Build Own Promise for Microtask? What happens internally when a Promise resolves?**  
 
@@ -507,6 +521,33 @@ getData().then(()=>{
     console.log(data);//🥭
 })
 
+//exp 3:
+function createOrder() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      console.log("Creating an order...");
+      resolve();
+    }, 1000);
+  });
+}
+
+function chargePayment() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const pay=1000;
+      console.log("Charging the payment...");
+      resolve(pay);
+    }, 2000);
+  });
+}
+
+function sendInvoice(pay) {
+  console.log("Sending invoice...",pay);
+}
+
+createOrder()
+  .then(() => chargePayment())
+  .then((pay) => sendInvoice(pay));
 ```
 `Promise is faster than setInterval` because Promises run in the microtask queue, which has higher priority than setInterval, which runs in the macrotask queue. Microtasks execute faster and earlier than macrotasks in JavaScript’s event loop  
 ```js
@@ -923,6 +964,7 @@ introSam("Hey", "😎");//Hey, I'm Sam and I'm 25 😎
 ---
 Currying is the process of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument.  
 Currying is like ordering a pizza step by step: first you choose the size, for example "Large," then you separately choose the crust or toppings such as "Cheese" and "Olives," and finally the last step returns the fully prepared pizza order after all selections are made.
+<img src="./img/currying.jpeg" alt="script"/> 
 Example:
 ```js
 function add(a) {
@@ -983,8 +1025,9 @@ console.log(b);  // null
 
 ---
 Event Delegation is used to handle events efficiently by adding a single event listener on a parent element instead of adding multiple listeners to each child element.  
+<img src="./img/deligation.jpeg" alt="script"/> 
 
-Benefits:Improves performance (fewer listeners in DOM) and Improves performance (fewer listeners in DOM)
+`Benefits:`Improves performance (fewer listeners in DOM) and Improves performance (fewer listeners in DOM)
 Example:
 ```js
 ul.addEventListener('click',(e)=>{ 
@@ -1003,6 +1046,8 @@ console.log(localStorage.getItem("name")); // Sam
 ```
 
 sessionStorage -> clears when tab closes, we can use in Banking, forms,and scope is per tab
+<img src="./img/storage.jpeg" alt="script"/> 
+
 ```js
 sessionStorage.setItem("sessionName", "SamSession");
 console.log(sessionStorage.getItem("sessionName")); // SamSession
@@ -1119,19 +1164,8 @@ split(",")  -> ['a','b','c']
 ---
 Bubbling: inner → outer (Event moves from child → parent)
 Clicking the button → shows "Child clicked" → then "Parent clicked"
-```txt
-┌───────────────────────────────┐
-│           PARENT               │
-│   (executes second)            │
-│   ▲                            │
-│   │  Bubbling ↑                │
-│   │                            │
-│   ┌─────────────────────────┐  │
-│   │         CHILD            │  │
-│   │   (clicked first)        │  │
-│   └─────────────────────────┘  │
-└───────────────────────────────┘
-```
+<img src="./img/bubbling.jpeg" alt="script"/> 
+
 ```js
 <div id="parent">
   <button id="child">Click Me</button>
@@ -1189,6 +1223,7 @@ console.log(a)
 var a='sam'
 ```
 
+
 **Q33: Garbage Collection**  
 
 ---
@@ -1198,39 +1233,16 @@ JS automatically removes unused memory (unreferenced objects).
 
 ---
 Webpack is a module bundler that combines JavaScript, CSS, images, and other assets into an optimized build.(usually a single bundle.js)
-```txt
-          React Project Files
-       (Components, JS, CSS, Images)
-       __________________________________
-      |   js     js     js              |
-      |                                  |
-      |   img    img    img             |
-      |__________________________________|
+<img src="./img/webpack.jpeg" alt="script"/> 
 
-                    |
-                 (Babel)
-                    |
-                    v
-               +-----------+
-               |  Webpack  |
-               +-----------+
-                    |
-                 (Bundle Output)
-                    |
-                    v
-
-        ___________ Final Bundle ___________
-       |               |                   |
-       |     bundle.js |     images        |
-       |_______________|___________________|
-
-```
 
 **Q35: What are higher-order functions?**  
 
 ---
 A function that takes another function as an argument OR returns a function. (e.g., map, filter, reduce). like Amazon's product system: when you pick a shirt, you’re giving Amazon your 'preference'. Amazon then uses that logic to show similar shirts or recommendations — that’s the HOF running your function. And sometimes Amazon even gives you new personalized suggestions, just like a HOF returning another function.  
 why use? Reusability,code modularity.
+<img src="./img/hof.jpeg" alt="script"/> 
+
 ```js
 //exp1
 function add(a,b){
@@ -1244,6 +1256,25 @@ function calc(n1,n2,op){//HOF
 }
 console.log(calc(10,10,add))
 console.log(calc(10,10,multiply))
+
+//exp 2
+function onceHOF(fn) {
+  let called = false;
+
+  return function (...args) {
+    if (!called) {
+      called = true;
+      return fn(...args);
+    }
+  };
+}
+
+// Example
+const greetOnce = onceHOF(() => console.log("Hello!"));
+
+greetOnce(); // Hello!
+greetOnce(); // Nothing
+greetOnce(); // Nothing
 
 ```
 
@@ -1340,6 +1371,8 @@ console.log(name,a);// Sam Asansol
 A generator function can pause and resume execution using yield.
 Defined with function* syntax.
 Useful for lazy evaluation or async flows.
+<img src="./img/generator.jpeg" alt="script"/> 
+
 ```js
 //exp 1
 function* gen() {
@@ -1434,6 +1467,7 @@ console.log(sum(10,10))// 20 but without 'use strict' it 40
 
 ---
 data types are describe the type of data  
+<img src="./img/data-types.jpeg" alt="script"/> 
 
 - Primitive: data types that store single values (immutable)(String, Number, boolean, null, undefined, symbol, bigint).
 ```js
@@ -1556,6 +1590,40 @@ document.getElementById("btnClick").addEventListener("click", () => {
   console.log("Button clicked");
 });
 
+//exp 5
+function createOrder(callback) {
+    setTimeout(() => {
+        console.log('Creating an order...');
+        callback();
+    }, 1000);
+}
+
+function chargePayment(callback) {
+    setTimeout(() => {
+        console.log('Charging the payment...');
+		let err=null;
+		let chargePay=1000;
+        callback(err,chargePay);
+    }, 2000);
+}
+
+function sendInvoice(pay) {
+    console.log('Sending invoice $',pay);
+}
+
+function main() {
+        createOrder(() => {
+            chargePayment((err,chargePay) => {
+			  if(err){
+				console.error(err);
+				return;
+			  }else{
+			   sendInvoice(chargePay);
+			  }
+            });
+        });
+}
+main();
 ```
 
 **Q50:Pyramid of Doom (Callback Hell)**  
@@ -2467,42 +2535,97 @@ event.emit('hi');
 - clientX → Mouse position relative to visible viewport (ignores scrolling)
 - scrollX → Total horizontal scroll offset of the page
 
-```txt
-pageX = scrollX + clientX
+## clientX
 
-Browser Window (Viewport)
-┌───────────────────────────────┐
-│                               │
-│   clientX, clientY             │
-│   (Mouse position              │
-│    inside viewport)            │
-│        ● (Mouse)               │
-│        │                       │
-│        │                       │
-│        │                       │
-│        │                       │
-│        ▼                       │
-└───────────────────────────────┘
-↑
-│  scrollY (vertical scroll)
-│
-│   Page Content (Scrolled)
-│
-│────────────────────────────────
-│                               
-│
-│
+Returns the horizontal mouse position within the visible viewport.
 
-for X axis:
-←──────────── scrollX ───────────→
+```js
+document.addEventListener("click", (e) => {
+  console.log(e.clientX);
+});
+```
 
-Page Start ────────────────────────────────
-             ┌───────────────────────────┐
-             │        Viewport            │
-             │  clientX measured from     │
-             │  LEFT of viewport          │
-             └───────────────────────────┘
+### Characteristics
 
+✅ Relative to browser viewport
+
+✅ Not affected by page scrolling
+
+✅ Comes from MouseEvent
+
+Example:
+
+```text
+Page scrolled 500px
+
+Click 100px from left edge of screen
+
+clientX = 100
+```
+
+---
+
+## scrollX
+
+Returns how much the page has been scrolled horizontally.
+
+```js
+console.log(window.scrollX);
+```
+
+### Characteristics
+
+✅ Represents horizontal scroll position
+
+✅ Belongs to window object
+
+✅ Changes when user scrolls
+
+Example:
+
+```text
+User scrolls page horizontally by 500px
+
+scrollX = 500
+```
+
+---
+
+## Visual Diagram
+
+```text
+Entire Page
+─────────────────────────────────────────────>
+
+|----------- Hidden -----------|--- Viewport ---|
+
+<-------- scrollX = 500px ------->
+
+Viewport:
+
+0px                       100px
+|---------------------------|
+               ↑
+           Mouse Click
+
+clientX = 100
+```
+
+---
+
+## Relationship
+
+```js
+pageX = clientX + scrollX
+```
+
+Example:
+
+```js
+clientX = 100
+scrollX = 500
+
+pageX = 600
 ```
 
 
