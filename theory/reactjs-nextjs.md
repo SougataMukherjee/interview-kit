@@ -18,6 +18,8 @@ On the initial render, React builds the Virtual DOM and then creates the Real DO
 When state or props change, React updates the Virtual DOM—not the Real DOM directly.
 React compares the new Virtual DOM with the previous one using a process called diffing.  
 
+<img src="./img/v-dom.jpeg" alt="script"/>
+
 Only the parts that changed are updated in the Real DOM, not the entire UI.
 React batches multiple state updates together to reduce re-renders and improve performance.
 This approach makes UI updates faster, efficient, and more optimized than direct DOM manipulation.
@@ -66,8 +68,11 @@ How diffing algorithm works in Virtual DOM
                          +---------------------+
   ```
 **Q3: Components? What triggers a re-render? Functional vs Class Components**  
+
 Components are reusable building blocks of react application,its like a function that return HTML element. Through render() a component render to the dom.  
 A React component re-renders whenever the data it depends on changes. If the component’s own state updates, it must redraw. If its parent gives it new props, React must check again. If context values change, every consumer reacts to the new value. Even if nothing changes but a parent re-renders, the child might re-render too unless optimized.  
+
+<img src="./img/components.jpeg" alt="script"/>
 
 
 - Functional components/ State-less components are simple JavaScript functions that return JSX. They are lightweight, easier to read.  
@@ -142,6 +147,7 @@ const [name, setName] = useState("");
 const [age, setAge] = useState(0);
 const [isActive, setIsActive] = useState(true);
 const [form, setForm] = useState({ name: "", email: "" });
+const [user,setUser] = useState(null);
 const [items, setItems] = useState([]);
 ```
 ❌ No we can't update state directly — it won't trigger re-render & mutates data  
@@ -163,6 +169,14 @@ setCheck(prev => !prev);
 ```
 ❌ State must be treated as immutable,if you want to store mutable variable use ref(like timer id, scroll position)
 
+❌ Do not derive state from another state unnecessarily
+
+✔ use Lazy initialization for expensive calculation
+
+```js
+const [data] = useState(()=>bigCalculation());
+```
+
 **Q6: Explain useEffect and useLayoutEffect**  
 
 useEffect runs after the component renders on the screen. It is used for side effects like API calls, subscriptions, event listeners, timers, and cleanup. It does not block the UI paint, so the user sees the UI first and then the effect runs. Use it for normal async tasks, data fetching, logging, and non-visual updates.
@@ -179,6 +193,9 @@ useEffect(() => { const timer = setInterval(() => console.log("Running after 1 s
 ❌Note: We cannot use useEffect inside loops or conditions
 ```js
 if (someCondition) useEffect(() => {});
+for(let i=0;i<5;i++){
+  useEffect(()=>{})
+}
 
 ```
 ❌Note: We cannot use async directly in useEffect because Because useEffect expects a cleanup function, not a Promise.Instead, create an inner async function and call it.
@@ -193,6 +210,27 @@ useEffect(() => {
 },[score]);
 
 ```
+❌ Dependency comparison is shallow,objects and arrays are create issues because runs on every render because object reference change,better wrap object with useMemo
+```js
+const user=useMemo(()=>({name:"John"}),[])
+useEffect(()=>{
+  console.log('run')
+},[user])
+```
+❌ infinite loop danger
+```js
+useEffect(()=>{
+  setCount(count+1)
+},[count])
+```
+for correction we can use
+```js
+useEffect(()=>{
+  if(count<5){
+    setCount(prev=>prev+1)
+  }
+},[count])
+```
 
 useLayoutEffect runs synchronously after render but before the browser paints the UI. It blocks the paint until the code inside finishes. Use it only when you need to measure DOM size, position, scroll, or apply immediate UI updates to avoid flicker. Best suited for reading/writing DOM layout, animations, synchronizing UI, or correcting layout before the user sees it.
 
@@ -206,6 +244,7 @@ useLayoutEffect(() => {
 - Use useLayoutEffect for DOM measurements, fixing UI layout before paint, animations, and avoiding flicker.
 
 **Q6: Lifecycle using useEffect**  
+<img src="./img/useeffect-lifecycle.jpeg" alt="script"/>
 
 ```js
 useEffect(()=>{console.log("Mount")},[]); // Mount
@@ -464,6 +503,7 @@ React behaves like a smart personal assistant who prioritizes tasks based on urg
 **Q14: keys in React list? what is List virtualization**  
 
 A list in React is a collection of data that we display by looping through it, usually using map(). While rendering lists, each item should have a unique key so React can identify which item has changed, been added, or removed. A unique key helps React avoid unnecessary re-renders because it tracks each element efficiently. Without a proper key, React may re-render the entire list even if only one item changed, which affects performance.
+
 ***Why is key important Problems using index as key?***
 key helps React identify which list item changed, added, or removed.else use uuid or Date.now()
  ```js
@@ -477,6 +517,7 @@ key helps React identify which list item changed, added, or removed.else use uui
 ))}
 ```
 List virtualization is a smart technique used to optimize the rendering of large lists by only displaying the items that are currently visible on the screen. Instead of rendering all the items at once
+<img src="./img/virtualized.jpeg" alt="script"/>
 
 ```js
 import { FixedSizeList as List } from "react-window";
@@ -513,6 +554,8 @@ export default function VirtualizedList() {
           Used to react to state/prop changes (e.g., data refresh)  example getDeriveStateFromProps,shouldComponentUpdate,getSnapshotBeforeUpdate,componentDidUpdate
 
 ***Unmounting*** → Component is removed from the UI/DOM, runs before component is destroyed its use for cleanup(clear timers, remove event listeners)example componentDidCatch
+<img src="./img/life-cycle-class.jpeg" alt="script"/>
+
 ```txt
         ┌──────────────┐
         │ constructor  │
@@ -557,10 +600,16 @@ export default function VirtualizedList() {
 
 **componentDidMount vs useEffect**
 
-componentDidMount (class) = runs once after mount.
-componentDidMount() → Used only once in a class component; runs after the component is mounted.
-useEffect(()=>{},[]) (hook) = same behavior in functional components.
-useEffect() → Used in functional components; you can have multiple useEffect hooks for different side effects, and control when they run using dependency arrays
+| Feature                     | `componentDidMount()` (Class Component)           | `useEffect(() => {}, [])` (Functional Component)                  |
+| --------------------------- | ------------------------------------------------- | ----------------------------------------------------------------- |
+| Component Type              | Class Components                                  | Functional Components                                             |
+| Purpose                     | Runs after the component is mounted               | Runs after the component is mounted                               |
+| Execution Count             | Runs only once after initial render               | Runs once when dependency array is empty (`[]`)                   |
+| Syntax                      | `componentDidMount() { ... }`                     | `useEffect(() => { ... }, [])`                                    |
+| Multiple Side Effects       | Only one lifecycle method, logic must be combined | Multiple `useEffect` hooks can be used for different side effects |
+| Dependency Control          | No built-in dependency control                    | Dependency array controls when the effect runs                    |
+| Cleanup Support             | Requires `componentWillUnmount()` for cleanup     | Cleanup can be returned directly from `useEffect`                 |
+| Modern React Recommendation | Legacy approach                                   | Recommended approach in modern React                              |
 
 **Q16: What is HOC (Higher Order Component)? why we use?**  
 
@@ -569,6 +618,7 @@ useEffect() → Used in functional components; you can have multiple useEffect h
  ```txt
  HOC = Component → Enhanced Component
  ```
+ <img src="./img/hoc.jpeg" alt="script"/>
 
  ```js
 function withAuth(WrappedComponent) {
@@ -599,6 +649,7 @@ Error Boundaries are special React components that catch runtime errors in child
 They catch UI rendering errors, but not event handler errors and errors in asynchronous code(like setTimeout,fetch)
 
 **Q19. how to handle error in react?**  
+ <img src="./img/error-boundary.jpeg" alt="script"/>
 
 ```js
 // ErrorBoundary.jsx
@@ -867,14 +918,21 @@ Framework: it controls flow (Angular)
 
 **Q31: React vs React DOM**  
 
-React → React is the core library responsible for creating components, managing state, and handling UI logic.  
-
-ReactDOM → ReactDOM is responsible for rendering React components to the browser DOM.
+| Feature        | React                                                                                                 | ReactDOM                                                                   |
+| -------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Definition     | React is the core library responsible for creating components, managing state, and handling UI logic. | ReactDOM is responsible for rendering React components to the browser DOM. |
+| Purpose        | Builds and manages the UI structure.                                                                  | Connects React with the browser and updates the DOM.                       |
+| Handles        | Components, Hooks, State, Props, Lifecycle Logic.                                                     | DOM Rendering and DOM Updates.                                             |
+| Environment    | Platform-independent.                                                                                 | Browser-specific.                                                          |
+| Installation   | `react` package                                                                                       | `react-dom` package                                                        |
+| Example Import | `import React from "react";`                                                                          | `import ReactDOM from "react-dom/client";`                                 |
+| Usage Example  | Creates component logic.                                                                              | Renders component to the page.                                             |
 
 **Q32: JSX? does react use HTML?why browser cant understand JSX?**  
 
 jsx stand for javascript XML.it allow us to write HTML in react.
-JXS=JS + HTML
+
+`JXS=JS + HTML`
 ```js
 const el = <h1>Hello {name}</h1>;
 ```
@@ -925,15 +983,123 @@ function Greeting({ name }) {
 
 **Q36: Props vs State**  
 
-Props: read-only and immutable
-State: asynchronous and mutable (internal data)
+| Feature      | Props                                                     | State                                                                    |
+| ------------ | --------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Definition   | Data passed from a parent component to a child component. | Internal data managed within a component.                                |
+| Mutability   | ✅ Read-only (Immutable)                                   | ✅ Mutable (Can be updated)                                               |
+| Ownership    | Controlled by the parent component.                       | Controlled by the component itself.                                      |
+| Purpose      | Used to pass data and behaviour between components.       | Used to manage dynamic data that changes over time.                      |
+| Modification | Cannot be modified by the receiving component.            | Can be modified using state updater functions (`setState` / `useState`). |
+| Re-render    | Component re-renders when props change.                   | Component re-renders when state changes.                                 |
+| Scope        | Available to child components through props.              | Local to the component unless shared.                                    |
+| Nature       | External Data                                             | Internal Data                                                            |
+| Example      | `userName="Sougata"`                                      | `const [count, setCount] = useState(0)`                                  |
+| Updates      | Controlled by parent component.                           | Controlled by the component itself.                                      |
+| Behaviour    | Synchronous data flow from parent to child.               | State updates are asynchronous and may be batched.                       |
 
 **Q37: types of conditional rendering**  
 ```js
-isLogged ? <Home/> : <Login/> 
-(cond1 && cond2) ? st1 :cond2 ? st2 : st3
-status && <Loader/>
+// Ternary Operator
+isLogged ? <Home /> : <Login />
+
+// Nested Ternary
+(cond1 && cond2) ? st1 : cond2 ? st2 : st3
+
+// AND Operator
+status && <Loader />
+
+// OR Operator (Fallback Value)
 msg || "No message"
+
+// If Statement
+if (isLogged) return <Home />;
+return <Login />;
+
+// If-Else Statement
+if (role === "admin") {
+  return <Admin />;
+} else {
+  return <User />;
+}
+
+// Else If
+if (score >= 90) {
+  return "A";
+} else if (score >= 80) {
+  return "B";
+} else {
+  return "C";
+}
+
+// Switch Case
+switch (role) {
+  case "admin":
+    return <Admin />;
+  case "user":
+    return <User />;
+  default:
+    return <Guest />;
+}
+
+// Element Variable
+let content = isLogged ? <Home /> : <Login />;
+return content;
+
+// Return Null
+isVisible ? <Card /> : null
+
+// Early Return
+if (!user) return <Loader />;
+
+// Array Length Check
+users.length > 0 && <UserList />
+
+// Optional Chaining
+user?.name
+
+// Optional Chaining with Fallback
+user?.name || "Guest"
+
+// IIFE
+{
+  (() => {
+    if (isLogged) return <Home />;
+    return <Login />;
+  })();
+}
+
+// Render Function
+const renderContent = () => {
+  if (loading) return <Loader />;
+  return <Dashboard />;
+};
+
+return renderContent();
+
+// Multiple AND Conditions
+isLogged && isAdmin && <AdminPanel />
+
+// Multiple Conditions with OR
+(isAdmin || isManager) && <Dashboard />
+
+// Nullish Coalescing
+msg ?? "No message"
+
+// Logical Assignment Style
+const title = user?.title ?? "N/A";
+
+// Object Mapping
+const componentMap = {
+  admin: <Admin />,
+  user: <User />,
+  guest: <Guest />
+};
+
+return componentMap[role];
+
+// Dynamic Component
+const Component = isLogged ? Home : Login;
+return <Component />;
 ```
 
 **Q38: Folder Structure**
@@ -992,6 +1158,7 @@ export default function Parent() {
 **Q40. What is Suspense component? how lazy loading work internally**  
 
  Used to show fallback UI while loading async content (like lazy components).
+ <img src="./img/lazy.jpeg" alt="script"/>
  ```js
 import React, { Suspense, lazy } from "react";
 
@@ -1051,6 +1218,8 @@ if(!isVisible) return null;
 
 Render children outside parent DOM hierarchy.
 - children props used to pass nested JSX.
+ <img src="./img/portals.jpeg" alt="script"/>
+
 ```js
 // index.html
 <div id="root"></div>
@@ -1270,6 +1439,8 @@ function App() {
 **Q54.what is useImperativeHandle?**  
 useImperativeHandle is a hook in React that allows you to customize the ref object that a parent component can access.Normally, refs give access to DOM nodes only.
 But sometimes parent needs to trigger child functions like: focus the child,reset form,start/stop animation
+ <img src="./img/useinterpolation.jpeg" alt="script"/>
+
 ```js
 //parent
 function Parent() {
