@@ -1,7 +1,5 @@
 # CSS, SCSS & Tailwind CSS — Complete Notes
 
-> All original questions kept as-is, with brief extra detail added where useful. 
-
 ---
 
 ## Table of Contents
@@ -64,6 +62,8 @@ html, body {
 - **inline:** width/height not applicable (`span`, `a`) — perfect for small labels, icons, hyperlinks
 - **block:** takes full width (`div`, `p`) — perfect for layouts, full-width rows, box containers
 - **inline-block:** behaves inline but allows width/height — perfect for buttons, badges, small cards
+
+<img src="./img/inline-block.jpeg" alt="image" />
 
 ```html
 <span class="tag">React</span>
@@ -154,6 +154,8 @@ Small icon in the browser tab, common sizes: 16×16, 32×32, 64×64...
   right: 5px;
 }
 ```
+<img src="./img/position.jpeg" alt="image" />
+
 - **fixed** — relative to the viewport; stays fixed even while scrolling
 - **sticky** — hybrid; acts relative until scroll crosses a threshold, then sticks
 
@@ -234,6 +236,7 @@ Grid is useful for **2D layout** (rows and columns).
   gap: 10px;
 }
 ```
+<img src="./img/flex-grid.jpeg" alt="image" />
 
 - **Grid areas with `grid-template-areas`**
 ```css
@@ -386,6 +389,7 @@ $breakpoints: (
 ### Q14: What are CSS combinators?
 
 Define relationships between selectors: **Descendant (space), Child (>), Adjacent sibling (+), General sibling (~)**.
+<img src="./img/combinator.jpeg" alt="image" />
 
 ```html
 <div class="parent">
@@ -436,6 +440,7 @@ button { font-size: 1em; padding: 0.5em 1em; /* grows if font-size grows */ }
 .section { margin: 2rem; padding: 1rem; }
 h1 { font-size: 2rem; }
 ```
+<img src="./img/rem-em.jpeg" alt="image" />
 
 **`vw`:** Relative to 1% of viewport width. Example: `50vw` = half the screen width.
 
@@ -599,6 +604,7 @@ body { font-family: "MyFont"; }
 border: 2px solid red;
 outline: 2px solid blue;
 ```
+<img src="./img/border-outline.jpeg" alt="image" />
 
 ---
 
@@ -800,6 +806,7 @@ document.body.className = hour >= 18 || hour < 6 ? "dark" : "light";
 @layer components { .btn { padding: 10px 20px; } }
 @layer utilities { .text-red { color: red; } }
 ```
+<img src="./img/layer.jpeg" alt="image" />
 
 ---
 
@@ -850,6 +857,7 @@ inset: 10px 20px 30px 40px;  /* top, right, bottom, left */
 ```css
 .icon { filter: drop-shadow(0 5px 8px rgba(0,0,0,0.4)); }
 ```
+<img src="./img/drop-shadow.jpeg" alt="image" />
 
 ---
 
@@ -903,6 +911,7 @@ color: rgb(255, 87, 51);
 ```css
 color: hsl(10, 80%, 60%);
 ```
+<img src="./img/hsl.jpeg" alt="image" />
 
 ---
 
