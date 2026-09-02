@@ -1,0 +1,1 @@
+<img src="./img/countWords.png" alt="script"/>

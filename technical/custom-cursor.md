@@ -1,0 +1,1 @@
+<img src="./img/custom-cursor.png" alt="script"/>

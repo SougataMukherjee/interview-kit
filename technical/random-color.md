@@ -1,0 +1,1 @@
+<img src="./img/random-color.png" alt="script"/>
