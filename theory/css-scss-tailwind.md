@@ -348,9 +348,9 @@ $breakpoints: (
 
 ### Q12: Pseudo classes and elements
 
-**Pseudo-class:** styles a **state** (e.g. `:hover`, `:disabled`, `:focus`, `:nth-child(2)`, `:nth-child(odd)`).
+**Pseudo-class(:)** styles an elements based on its **state**,**condition** and **position** (e.g. `:hover`, `:disabled`, `:focus`, `:nth-child(2)`, `:nth-child(odd)`).
 
-**Pseudo-element:** styles a **particular part** of an element (e.g. `::before`, `::after`).
+**Pseudo-element(::)** styles a **particular part** of an element (e.g. `::before`, `::after`,`::first-letter`,`::first-line`).
 
 ```css
 .required::before { content: " *"; color: red; font-weight: bold; }
