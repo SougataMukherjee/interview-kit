@@ -431,6 +431,12 @@ function handleSubmit() {
 Ref means reference of react.you are referring through dom elements if directly used it was costly.do not overused ref its causing react performance.it is use for managing focus,text selection or media playback,triggering animation  
 
 useRef is Used to access DOM elements or persist mutable values without re-render.its a part of react hook, it can take maximum one parameter
+
+useRef persist a value between render without causing a rerender when value change
+```js
+const countRef=useRef(0)
+countRef.current+=1
+```
 Example:
 ```js
 //exp 1
@@ -1244,9 +1250,12 @@ export default function App() {
 }
 ```
 
-**Q43. Why not call setState in componentWillUnmount()?**  
+**Q43. Why not call setState in componentWillUnmount()? can we call setState inside componentsWillMount**  
 
 When a component is unmounting, React is removing it from the DOM, so updating state at that moment is pointless — the component will never re-render again.
+
+if you call it will cause an extra render and its consider unsafe
+
 
 **Q44. Is constructor mandatory in React class component?**  
 

@@ -2096,6 +2096,58 @@ app.listen(8080, () => {
 A cookie is a small piece of data stored in the user's browser and sent back to the server with every request.whenever user is login server will create a token attach it with cookie and sent back
 now cookie is store by browser in every request to server for validating
 
+```js
+const express = require("express");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+
+const app = express();
+
+app.use(express.json());
+app.use(cookieParser());
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find user by email
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).send("Invalid Credentials");
+    }
+
+    // Compare entered password with hashed password
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      user.password
+    );
+
+    if (!isPasswordValid) {
+      return res.status(400).send("Invalid Credentials");
+    }
+
+    // Create JWT Token
+    const token = jwt.sign(
+      { _id: user._id },
+      "MY_SECRET_KEY",
+      { expiresIn: "5m" } // 5 minutes
+    );
+
+    // Store token in cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 5 * 60 * 1000),
+    });
+
+    res.send("Login Successful");
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+```
+
 **How Cookies Work**
 - Server sends a cookie to the browser
 - Browser stores the cookie
@@ -2723,6 +2775,28 @@ module.exports = User
 | Analogy | Blueprint / class definition | The actual class used to create instances |
 | Created with | `new mongoose.Schema({...})` | `mongoose.model("Name", schema)` |
 
+---
+## how to connect with db?
+
+connectDB() returns a Promise. Node.js first establishes the MongoDB connection using mongoose.connect(). If the connection succeeds, the .then() block executes and starts the Express server using app.listen(). If the connection fails, the .catch() block handles the error and prevents the server from starting.
+
+```js
+const connectDB = async () => {
+  await mongoose.connect(MONGO_URL);
+};
+
+connectDB()
+  .then(() => {
+    console.log("Database connection established...");
+    
+    app.listen(7777, () => {
+      console.log("Server is successfully listening on port 7777");
+    });
+  })
+  .catch((err) => {
+    console.error("Database cannot be connected!!");
+  });
+```
 ---
 ## What is Zod Schema?
 

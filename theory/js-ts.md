@@ -483,14 +483,41 @@ Promise.race([p1,p2]).then(res => console.log("Race", res)); // "p2 done" (after
 
 ---
 
-### Q14: How is AJAX used in JS? How to fetch API using Promise? How to restrict fetch data?
+### Q14: How to fetch API/AJAX using Promise? How to restrict fetch data?
 
 AJAX = **A**synchronous **J**avaScript **A**nd **X**ML.
 ```js
-fetch("https://api.example.com/data")
-  .then(res => res.json())
-  .then(data => console.log(data))
-  .catch(err => console.log(err));
+const cache = new Map();
+
+async function fetchData(id) {
+  try {
+    if (cache.has(id)) {
+      console.log("Returning cached data");
+      return cache.get(id);
+    }
+
+    console.log("Fetching from API");
+
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/todos/${id}`
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    cache.set(id, data);
+
+    return data;
+  } catch (err) {
+    console.error("Fetch failed:", err.message);
+    return [];
+  }
+}
+
+fetchData(1).then(console.log);
 ```
 
 **Restricting fetched data** — by authentication token or role, to prevent unauthorized users from fetching data.
@@ -593,6 +620,16 @@ try { try { } catch (error) { } } catch (error) { }
 ### Q18: What is Debounce & Throttle?
 
 **Debounce:** delay execution until the user stops triggering the event for a set time. Useful for: search bars, input validation, API calls.
+**Use Debounce for:**
+
+- Search input API calls
+- Auto-suggestion/typeahead
+- Client-side filtering
+- Form validation
+- Username/email availability checks
+- Auto-save drafts
+- Address/location search
+
 ```jsx
 useEffect(() => {
   const timer = setTimeout(() => console.log("Searching for:", text), 500);
@@ -601,6 +638,19 @@ useEffect(() => {
 ```
 
 **Throttle:** limit execution to once per interval, even if triggered multiple times. Useful for: scroll, resize, mousemove events.
+
+
+**Use Throttle for:**
+
+- Scroll events
+- Window resize
+- Mouse movement tracking
+- Drag and drop
+- Infinite scrolling
+- Scroll progress indicators
+- Analytics/event tracking
+- Preventing rapid button clicks
+
 ```jsx
 function handleChange(e) {
   if (throttleRef.current) return;
@@ -686,6 +736,30 @@ console.log(add(5)(3)); // 8
 ```
 
 ---
+### Q21.1: What is Pipe function?
+
+A pipe function allows you to pass the output of one function as the input to the next function, creating a chain of left to right sequence of operations.
+
+```js
+function double(x){
+    return x*2;
+}
+function square(x){
+    return x*x
+}
+function add(x){
+    return x+1
+}
+
+function Pipe(...fns) {
+    return function(value) {
+        return fns.reduce((acc, fn) => fn(acc), value);
+    };
+}
+
+const fn=Pipe(double,square,add)
+console.log(fn(3))
+```
 
 ### Q22: What is Prototype?
 

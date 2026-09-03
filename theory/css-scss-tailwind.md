@@ -897,6 +897,23 @@ text-wrap: pretty;
 
 ---
 
+### Q44.1: how to truncate text
+
+```css
+<p class="truncate-3">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
+        aspernatur consequatur fugiat obcaecati modi repellat eaque.
+</p>
+
+
+.truncate-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+```
+
 ### Q45: Types of CSS colors
 
 **Hex** — short, common, simple.

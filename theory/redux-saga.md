@@ -20,6 +20,7 @@
 ### What is Redux?
 
 **Redux** is a state management library that stores application data in one central store, making state predictable, shared, and easier to manage across components.
+**Redux mainly uses the Flux architecture pattern**
 
 ### Key Principles
 1. **Single Source of Truth** - One centralized store for entire app state
@@ -512,6 +513,8 @@ function* fetchWithTimeoutSaga() {
 A Reducer is a function that decides:
 
 "Given the current state and action, what should the new state be?"
+
+**a reducer function returns the next state based on the current state and action**
 
 **Rules**
 

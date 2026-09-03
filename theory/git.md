@@ -520,6 +520,12 @@ git push origin development/mcr-my-branch --no-verify --force
 ```bash
 git push -f origin feature-branch
 ```
+**Remove the last commit completely**
+
+```bash
+git reset --soft HEAD~1
+git push -f origin main
+```
 
 ---
 
