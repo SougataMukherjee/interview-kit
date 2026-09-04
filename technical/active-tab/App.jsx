@@ -7,7 +7,7 @@ const tabs = [
   { id: "settings", label: "Settings", content: "Adjust your Settings here." },
 ];
 
-export default function <i class="fas fa-app-store-ios    "></i>() {
+export default function App() {
   const [activeTab, setActiveTab] = useState('home');
   const setTab = (id) => {
    setActiveTab(id)
