@@ -83,6 +83,7 @@ Think of containers like shipping containers on a ship - each container is isola
 | Performance | Lower | Higher |
 
 <img src="./img/vir.png" alt="dockervir" />
+
 ---
 
 ## Docker Architecture

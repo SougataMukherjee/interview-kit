@@ -450,9 +450,9 @@ git add *.js                 # add all files with specific extension
 git commit -m "WIP: technician display logic implementation"
 ```
 ### Commit All Tracked Changes (Does not include newly created untracked files.)
-	```bash
-        git commit -a -m "message"
-        ```
+```bash
+git commit -a -m "message"
+```
 
 **Best Practice Commit Messages**
 
