@@ -56,13 +56,7 @@ A web browser is a software application for retrieving and presenting info on th
 
 The browser reads HTML top to bottom, breaks it into tokens, converts tokens into nodes, and links these nodes like a family tree — `html` becomes the root, and everything inside becomes its children, connected into a tree structure called the **DOM**.
 
-```txt
-html
-└── body
-    └── h1
-        ├── (attribute) class="heading"
-        └── "Hi"
-```
+<img src="./img/html-5-parse.png" loading="lazy" />
 
 ---
 
@@ -114,6 +108,8 @@ A semantic element clearly describes its meaning to both the browser and the dev
 |             <footer>          |
 +-------------------------------+
 ```
+<img src="./img/semantic-html.png" loading="lazy" />
+
 
 ---
 
@@ -146,6 +142,8 @@ The `fieldset` element groups related controls in a single box — improves acce
   <input type="radio" name="pay"> Card
 </fieldset>
 ```
+<img src="./img/fieldset.png" loading="lazy" />
+
 
 ---
 
@@ -229,6 +227,8 @@ Form validation attributes: `required`, `min`/`max`, `type="email/tel/password"`
 
 - **GET:** sends data in the URL, used for data retrieval.
 - **POST:** sends data in the body, used for data creation or sensitive info.
+<img src="./img/get-post.png" loading="lazy" />
+
 
 ---
 
@@ -285,9 +285,8 @@ Example: `&lt;` for `<`, `&gt;` for `>`, `&nbsp;` for a non-breaking space.
 ### Q21: What is lazy loading for images?
 
 Defers image loading until it enters the viewport.
-```html
-<img src="img.jpg" loading="lazy" />
-```
+<img src="./img/lazy-load.png" loading="lazy" />
+
 
 ---
 
@@ -365,14 +364,8 @@ ARIA (Accessible Rich Internet Applications) roles provide extra semantic meanin
 
 Shadow DOM encapsulates (protects) a component's HTML, CSS, and behavior so it doesn't leak out and isn't affected by the external page.
 
-```txt
- Main DOM
- ├── <div id="host">
- │     └── Shadow DOM
- │          ├── <style>p { color: red; }</style>
- │          └── <p>Shadow DOM content</p>
- └── <p>Normal DOM content</p>
-```
+<img src="./img/shadow-dom.png" loading="lazy" />
+
 
 ---
 
@@ -748,6 +741,9 @@ Web Vitals are key performance metrics used to measure user experience on the we
 **How to measure Web Vitals:** Lighthouse (Chrome), Chrome DevTools → Performance tab, Google Search Console → Core Web Vitals report.
 
 > 💡 **Extra detail:** As of 2024, Google replaced **FID** with **INP (Interaction to Next Paint)** as the official Core Web Vital — INP measures the responsiveness of *all* interactions throughout the page's lifetime (not just the first one), giving a more complete picture.
+
+<img src="./img/web-vitals.png" loading="lazy" />
+
 
 ---
 
