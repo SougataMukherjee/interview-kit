@@ -599,6 +599,7 @@ body { font-family: "MyFont"; }
 ### Q24: Border vs Outline
 
 **Border** → part of the element's box, affects layout.
+
 **Outline** → drawn outside the border, doesn't affect size.
 ```css
 border: 2px solid red;
@@ -611,6 +612,7 @@ outline: 2px solid blue;
 ### Q25: `display:none` vs `visibility:hidden`
 
 **`display: none`** → element is removed from the layout (no space reserved).
+
 **`visibility: hidden`** → element is hidden but still occupies space.
 
 ---
@@ -667,7 +669,9 @@ nav { a { color: blue; } }
 ### Q28: Cascading rules
 
 When two styles have the same specificity:
+
 ✔ Last rule written wins (order matters)
+
 ✔ More specific selector beats a less specific one (like `!important` overrides all rules)
 
 ---
@@ -1071,7 +1075,10 @@ Locks scrolling to defined positions — useful for image carousels/galleries.
 
 ### Q56: What is `:focus-visible` and why does it matter for accessibility?
 
-`:focus` applies whenever an element gets focus (including mouse clicks); `:focus-visible` applies **only** when the browser determines focus should be visibly indicated — typically keyboard navigation. This avoids showing a focus ring on mouse click while still supporting keyboard users.
+`:focus` applies whenever an element gets focus (including mouse clicks); 
+
+`:focus-visible` applies **only** when the browser determines focus should be visibly indicated — typically keyboard navigation. This avoids showing a focus ring on mouse click while still supporting keyboard users.
+
 ```css
 button:focus-visible { outline: 2px solid blue; }
 button:focus:not(:focus-visible) { outline: none; }

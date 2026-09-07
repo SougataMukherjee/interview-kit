@@ -5,8 +5,11 @@
 ---
 
 ✅ Document requirements, user flows, finalize component names, required props (non-default, default, optional), local and global states, review designs, common components and usages
+
 ✅ Identify reusable components and patterns with design mockups before coding
+
 ✔️ Cross-check with Figma Design
+
 - Match layout, spacing, typography, and interactions
 - Validate component hierarchy before coding
 
@@ -302,6 +305,7 @@ enum ButtonVariant {
 ---
 
 ✔️ Use Mag tokens (updated) — ❌ avoid Mi tokens
+
 ✅ Use MUI Grid with `item` and `container`, responsive breakpoints
 
 ```tsx
@@ -319,9 +323,13 @@ enum ButtonVariant {
 ```
 
 ✅ Use flex and grid
+
 ❌ Avoid absolute positioning
+
 ❌ Avoid `!important`
+
 ❌ Don't create style folders inside components, use CSS Grid, hardcode values
+
 ❌ Don't use inline styles
 
 ```tsx
@@ -474,8 +482,11 @@ try {
 ---
 
 ✅ Use `React.memo`, `useCallback`, `useMemo`, avoid `filter().map()` — use conditional inside map
+
 ✔️ Prevent re-renders
+
 ✅ Cleanup useEffect: `return () => subscription.unsubscribe()`
+
 ✅ No unnecessary re-render and prevent memory leak
 
 ```tsx
@@ -501,12 +512,17 @@ const expensiveValue = React.useMemo(() => {
 ---
 
 ✔️ Use Jest functions instead of DOM selectors
+
 ❌ Avoid: `document.querySelector()`
+
 ✔️ Merge similar test cases
 
 ✅ 100% TSX and test coverage, test all props/events/edge cases, use `querySelector` not `getElementById`
+
 ✅ Don't test multiple concerns in the same test, avoid logic in tests
+
 ✅ Define types, write default props, mock functions/constants/array of objects separately, use `renderWrapper {...defaultProps}` pattern, separate test files when dividing components
+
 ❌ Don't overcomplicate test setup, remove redundant tests after coverage check
 
 ---
@@ -516,8 +532,11 @@ const expensiveValue = React.useMemo(() => {
 ---
 
 ✔️ Remove unused code
+
 ✔️ Remove unnecessary test cases
+
 ✔️ Keep tests minimal and relevant
+
 ✔️ Avoid risky test cases — if text is `null`, the `if` block is skipped and no assertion runs, so the test passes falsely
 
 ```tsx
@@ -595,6 +614,7 @@ const renderComponent = (props: Partial<MockProps> = {}) => {
 ---
 
 ✅ Remove console.logs, remove all commented-out code, format with Prettier, organize imports (Alt+Shift+O), no hardcoded values, avoid undefined unless necessary
+
 ✅ 100% test case coverage, all tests passing, remove failing tests if necessary (after coverage check)
 
 ---
@@ -604,8 +624,11 @@ const renderComponent = (props: Partial<MockProps> = {}) => {
 ---
 
 ✅ Meaningful title: `(MCR)feat: Add ComponentName with responsive design`
+
 ✅ Detailed description with what/why changed, build checks passed with snapshot
+
 ✅ Keep PR under 20 files
+
 ✔️ Break work into small, manageable PRs — one PR = one feature / small unit, avoid large PRs
 
 ✔️ Maintain PR flow:
