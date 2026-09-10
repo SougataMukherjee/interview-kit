@@ -32,6 +32,7 @@
 - Security is your own responsibility.
 
 **Can we externalize all this?**
+
 ✅ Yes — using **cloud computing**.
 
 ---
@@ -40,6 +41,7 @@
 
 ### Virtualization
 Virtualization is the process of creating multiple **virtual machines** on a single physical server to efficiently use hardware resources (CPU, RAM, Storage, Network).
+<img src="./img/virtual-machine.png" loading="lazy" />
 
 **Advantage:** you don't need new physical resources to run a different OS, and there's no risk of affecting your primary OS.
 
@@ -69,6 +71,8 @@ Installed on top of an operating system as a software application. Easy to use �
 ## 3. What is Cloud Computing?
 
 Cloud computing is accessing computing resources (compute, storage, network, media services, and databases) **over the internet**, rather than owning and maintaining physical servers.
+
+<img src="./img/cloud-computing.png" loading="lazy" />
 
 You can access as many resources as you need, almost instantly.
 
@@ -101,6 +105,8 @@ Cloud resources owned and operated by a **third-party** cloud service provider, 
 A solution that **combines a private cloud with public cloud services**.
 - Keep some servers on-premises, and extend some capabilities to the Cloud.
 
+<img src="./img/deployment-model.png" loading="lazy" />
+
 ---
 
 ## 5. The Five Characteristics of Cloud Computing
@@ -115,21 +121,27 @@ A solution that **combines a private cloud with public cloud services**.
 
 ## 6. Types of Cloud Computing (IaaS / PaaS / SaaS)
 
+<img src="./img/cloud-service-types.png" loading="lazy" />
+
 ### Infrastructure as a Service (IaaS)
 Only AWS provides the machine — everything else needs to be customized and handled by you. You have **flexibility and responsibility**.
 - Provides building blocks for cloud IT.
 - Provides networking, computers, data storage space.
 - Highest level of flexibility.
 - Easy parallel with traditional on-premises IT.
+<img src="./img/iaas.png" loading="lazy" />
 
 ### Platform as a Service (PaaS)
 No need to manage the machine — you only manage applications/platform (like a SQL database).
 - Removes the need for your organization to manage the underlying infrastructure.
 - Focus on deployment and management of your applications.
+<img src="./img/paas.png" loading="lazy" />
 
 ### Software as a Service (SaaS)
 No need to manage the platform — only use the end product. No need to scale or download anything (like Amazon.com itself).
 - A completed product that is run and managed by the service provider.
+
+<img src="./img/saas.png" loading="lazy" />
 
 ### IaaS vs PaaS vs SaaS
 
@@ -190,13 +202,20 @@ AWS EC2 is an **Infrastructure as a Service (IaaS)** that allows us to launch vi
 - **You** manage the operating system, software installation, security configurations, and applications.
 
 EC2 is used when you need **complete control** over the server environment.
+<img src="./img/ec2-connect.png" loading="lazy" />
 
 ### When do we use EC2?
+
 ✅ Need full control over the server
+
 ✅ Hosting web applications or APIs
+
 ✅ Running custom software that requires OS-level access
+
 ✅ Migrating on-premises servers to the cloud
+
 ✅ Development, testing, and staging environments
+
 ✅ Running databases or enterprise applications
 
 ### Advantages of EC2
@@ -281,11 +300,17 @@ An Elastic IP is a **static public IP** associated with your AWS account, which 
 > By default, an IAM user has **no permission** to access any resource.
 
 ### What Can We Do with IAM?
+
 ✅ Create Users
+
 ✅ Create Groups
+
 ✅ Create Roles
+
 ✅ Assign Permissions using Policies
+
 ✅ Control Access to AWS Resources
+
 ✅ Implement Security Best Practices
 
 ### 1. Root User
@@ -309,6 +334,7 @@ When an AWS account is created, AWS automatically creates a **Root User**.
 
 ### 2. IAM User
 An **IAM User** represents an individual person or application that needs access to AWS.
+<img src="./img/iam-user.png" loading="lazy" />
 
 **Features:**
 - Has its own username and password.
@@ -324,6 +350,7 @@ An **IAM Group** is a collection of IAM Users.
 
 ### 4. IAM Role
 An **IAM Role** provides **temporary** permissions to users, applications, or AWS services.
+<img src="./img/iam-role.png" loading="lazy" />
 
 - An IAM role is an IAM entity that defines a set of permissions for making AWS service requests.
 - IAM roles are **not** associated with a specific user or group — instead, trusted entities *assume* roles: IAM users, applications, or AWS services (such as EC2).
@@ -377,6 +404,7 @@ A **policy** is a JSON document that defines who is **allowed** and **denied** t
 
 ### What are Network Settings in EC2?
 Network Settings in an EC2 instance control how the instance communicates with the internet, other AWS resources, and other servers. When launching an EC2 instance, you'll configure these under the **Network Settings** section.
+<img src="./img/network.png" loading="lazy" />
 
 **Main Components:**
 1. VPC (Virtual Private Cloud)
@@ -387,6 +415,7 @@ Network Settings in an EC2 instance control how the instance communicates with t
 
 ### What is VPC (Virtual Private Cloud)?
 A **VPC** is a networking service in AWS that lets you create an **isolated virtual network** for your AWS resources — EC2 instances, databases, applications, etc.
+<img src="./img/vpc.png" loading="lazy" />
 
 **Hotel Room Analogy:**
 - The hotel building = AWS Cloud
@@ -406,6 +435,7 @@ A networking connection between **two VPCs** that allows resources in those VPCs
 - Enables private communication using private IPs.
 - Does **not** require the internet.
 - Does **not** support **transitive routing**.
+<img src="./img/vpc-peering.png" loading="lazy" />
 
 **Q: With 5 VPCs, all needing to communicate with each other via VPC Peering, how many connections are required?**
 A: **10** peering connections. Formula: `n(n-1)/2`, because VPC Peering is one-to-one and doesn't support transitive routing.
@@ -441,6 +471,7 @@ A collection of **routes** that determines how network traffic is directed withi
 
 ### What is a NAT Gateway?
 A **NAT (Network Address Translation) Gateway** allows resources in a **private subnet** to access the internet **outbound**, while preventing the internet from initiating connections to those resources.
+<img src="./img/nat-gateway.png" loading="lazy" />
 
 - Allows only **one direction**: outgoing, not incoming.
 
@@ -453,6 +484,7 @@ Internet → Private Subnet     ❌ Not Allowed
 A **virtual firewall** that controls network traffic to and from an AWS resource (such as an EC2 instance).
 - Defines **inbound** (incoming) and **outbound** (outgoing) traffic rules.
 - Only allowed traffic can reach the instance; all other traffic is **blocked by default**.
+<img src="./img/security-group.png" loading="lazy" />
 
 **Example:** Allow HTTP (Port 80) from everyone.
 
@@ -477,6 +509,7 @@ A **Bucket** is a container used to store objects (files) in Amazon S3 (**Simple
 - It is an **object storage service** providing scalable, durable, and highly available storage in the cloud.
 - Can store any type of file (object) up to **5 TB per object**.
 - Provides highly reliable, scalable object storage, making your data accessible from anywhere, anytime, via the internet.
+<img src="./img/s3-bucket.png" loading="lazy" />
 
 ### Most Important S3 Storage Classes
 
@@ -551,9 +584,13 @@ A **serverless computing service** that lets you run code without creating or ma
 
 **Benefits:**
 ✅ No server management
+
 ✅ Auto scaling
+
 ✅ Pay only when code runs
+
 ✅ Highly available
+
 ✅ Supports multiple languages — JavaScript (Node.js), Python, Java
 
 ### EC2 vs Lambda
@@ -589,14 +626,16 @@ Use when:
 
 ---
 
-## 15. Important Interview Questions (Question-wise) 🆕
+## 15. Important Interview Questions (Question-wise)
 
 A few high-frequency AWS interview topics that weren't in the original notes — added here question-wise so nothing important is missing.
 
 **Q1: What is the AWS Shared Responsibility Model?**
+
 A: AWS is responsible for the **security *of* the cloud** (hardware, networking, data centers, virtualization). The customer is responsible for **security *in* the cloud** (OS patching, data encryption, IAM permissions, application security). What exactly falls to the customer shifts depending on the service model — e.g. you manage more with EC2 (IaaS) than with Lambda (serverless).
 
 **Q2: What is an ARN?**
+
 A: **Amazon Resource Name** — a unique identifier for every AWS resource.
 ```
 arn:aws:s3:::my-bucket-name
@@ -604,6 +643,7 @@ arn:aws:iam::123456789012:user/John
 ```
 
 **Q3: EBS vs Instance Store?**
+
 A:
 | EBS (Elastic Block Store) | Instance Store |
 |---|---|
@@ -613,15 +653,19 @@ A:
 | Slightly higher latency | Lower latency, higher throughput |
 
 **Q4: What is an Elastic Load Balancer (ELB)?**
+
 A: Automatically distributes incoming application traffic across multiple EC2 instances (or other targets) to improve availability and fault tolerance. Types: **Application Load Balancer (ALB)** — HTTP/HTTPS, layer 7; **Network Load Balancer (NLB)** — TCP/UDP, layer 4, ultra-low latency; **Gateway Load Balancer (GWLB)**.
 
 **Q5: What is Auto Scaling?**
+
 A: Automatically adjusts the number of EC2 instances in a group based on demand (CPU usage, request count, schedule) — scales **out** (add instances) under load and **in** (remove instances) when demand drops, helping both availability and cost.
 
 **Q6: What is Amazon RDS?**
+
 A: **Relational Database Service** — a managed service for relational databases (MySQL, PostgreSQL, MariaDB, SQL Server, Oracle). AWS handles patching, backups, and replication, so you don't manage the underlying database server yourself (unlike running a DB on EC2).
 
 **Q7: RDS Multi-AZ vs Read Replica?**
+
 A:
 | Multi-AZ | Read Replica |
 |---|---|
@@ -631,12 +675,15 @@ A:
 | Automatic failover on primary failure | Manual promotion needed to become a writer |
 
 **Q8: What is Amazon CloudFront?**
+
 A: AWS's **CDN (Content Delivery Network)** — caches content (static assets, video, API responses) at edge locations worldwide, reducing latency for users far from your origin server.
 
 **Q9: What is Route 53?**
+
 A: AWS's **DNS (Domain Name System)** web service — used for domain registration, DNS routing, and health checking. Supports routing policies like simple, weighted, latency-based, and failover routing.
 
 **Q10: CloudWatch vs CloudTrail?**
+
 A:
 | CloudWatch | CloudTrail |
 |---|---|
@@ -654,28 +701,39 @@ A:
 | Evaluates ALL rules before deciding | Evaluates rules in order (by rule number) |
 
 **Q12: What is Horizontal vs Vertical Scaling?**
+
 A: **Vertical scaling** ("scale up") — increasing the size/power of a single instance (more CPU/RAM). **Horizontal scaling** ("scale out") — adding more instances to share the load. Cloud environments favor horizontal scaling since it avoids a single point of failure and works well with Auto Scaling + Load Balancers.
 
 **Q13: What is AWS CloudFormation?**
+
 A: An **Infrastructure as Code (IaC)** service — define AWS resources in a YAML/JSON template, and CloudFormation provisions/manages them automatically, making infrastructure repeatable and version-controlled.
 
 **Q14: What is S3 Versioning?**
+
 A: Keeps multiple versions of an object in the same bucket, protecting against accidental overwrite/deletion — you can restore any previous version.
 
 **Q15: What is an S3 Lifecycle Policy?**
+
 A: A rule set that automatically transitions objects between storage classes (e.g. Standard → IA → Glacier) or deletes them after a set period, to optimize storage cost over time.
 
 **Q16: Availability Zone vs Region — quick recap?**
+
 A: A **Region** is a geographic area (e.g. `ap-south-1` Mumbai) containing multiple **Availability Zones**, which are physically separate, isolated data centers within that region connected by low-latency links. Spreading resources across AZs protects against a single data-center failure; spreading across Regions protects against a whole-region outage and reduces latency for global users.
+<img src="./img/region-zone.png" loading="lazy" />
+
 
 **Q17: What is the AWS Well-Architected Framework?**
+
 A: A set of best-practice guidelines across **6 pillars**: Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability — used to evaluate and improve cloud architecture.
 
 **Q18: What is the AWS Free Tier?**
+
 A: A program offering limited free usage of many AWS services (e.g. 750 hrs/month of `t2.micro`/`t3.micro` EC2, 5GB S3 storage) for 12 months after account creation (plus some "always free" services), intended for learning and light workloads.
 
 **Q19: Access Key vs Secret Key — what are they used for?**
+
 A: Used for **programmatic access** to AWS (CLI/SDK/API) instead of console login. The **Access Key ID** identifies the request; the **Secret Access Key** signs it (like a password) — both together authenticate API calls. Never commit these to source control.
 
 **Q20: What is the difference between stopping and terminating an EC2 instance?**
+
 A: **Stopping** shuts the instance down but keeps its EBS root volume (and, if not using an Elastic IP, its public IP is released) — you can start it again later. **Terminating** permanently deletes the instance (and, by default, its root EBS volume too), and it cannot be restarted.
