@@ -740,7 +740,7 @@ Web Vitals are key performance metrics used to measure user experience on the we
 
 **How to measure Web Vitals:** Lighthouse (Chrome), Chrome DevTools → Performance tab, Google Search Console → Core Web Vitals report.
 
-> 💡 **Extra detail:** As of 2024, Google replaced **FID** with **INP (Interaction to Next Paint)** as the official Core Web Vital — INP measures the responsiveness of *all* interactions throughout the page's lifetime (not just the first one), giving a more complete picture.
+> 💡 **Extra detail:** As of 2024, Google replaced **FID** with **INP (Interaction to Next Paint)** as the official Core Web Vital — INP measures the responsiveness of *all* interactions throughout the page's lifetime (not just the first one), giving a more complete picture. 
 
 <img src="./img/web-vitals.png" loading="lazy" />
 
