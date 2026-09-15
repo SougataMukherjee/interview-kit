@@ -1,8 +1,8 @@
 # Core Java — Complete Notes (with Java 8 Features)
 
 ## Table of Contents
-1. Literals
-2. Variables
+1. Basic
+2. Variables and Literals
 3. Var-Args Methods
 4. Method Overloading
 5. Operators & Assignment
@@ -75,23 +75,49 @@
 
 ---
 
-## 1. Literals
+## 1. why java is pure object oriented?
+in java every code is written under some class,even main method is also member of class
 
-**Literal** — a constant value directly assigned to a variable.
+## why java is strictly typed language?
 
-- Decimal (base 10), Octal (base 8), Hexadecimal (base 16)
-- Character literals: `'a'`, `'A'`, `'@'`, `'\n'`
+## can we execute a program without main method?
+yes
 
-```java
-int dec = 10;
-int oct = 012;    // octal
-int hex = 0x1A;   // hexadecimal
-char ch = 'A';
-```
+## features of java
+1. simple and secure:
+2. object oriented:
+3. distributed
+4. robust-strict rules
+5. Intrepreted-use jit intrepreter
+6. portable
+7. open source
+8. platform independent wora architecture
+9. dynamic
+
+## prototype of main method
+`public static void main(string[] args)`
+
+main method is public so that it can be access from anywhere
+main method is static so that it can be accessed even without object
+main method is void because it does not return anything
+string[] args which are command line arguments to store the value which are pass to the main method
+
+
+## identifier
+a name in java program is called identifier which can be used for identification purpose,it can be method variable class name
+rules:
+1. valid identifiers are a-z,A-Z,0-9,$,_
+2. it cannot starts with digit
+3. java identifier are case sensitives
+4. we can not use reserve words as identifiers
+5. valid identifiers are total123,ca$h,_$_$,java2share
+6. must not contain white space
+
+
 
 ---
 
-## 2. Variables
+## 2. Variables and Literals
 
 **Variable Declaration**
 ```java
@@ -125,6 +151,7 @@ class Demo {
 | Reference Variable | Represents an object reference, e.g. `Student s = new Student();` |
 
 ### Instance Variable (Non-static)
+variable declared outside the method or constructors or block but outside the class are called as instance variable.
 - Value varies from object to object.
 - A separate copy is created for **every** object.
 - Created when the object is created, destroyed when the object is destroyed.
@@ -142,6 +169,8 @@ class Test {
 ```
 
 ### Static / Class Variable
+static variable should be declared within the class directly
+we can access static variable directly from both static or instance areas
 - Single copy shared by **all** objects of the class.
 - Declared with `static`, stored at the class level — outside any method/constructor/block.
 
@@ -201,6 +230,8 @@ public class Static_var_method {
 | Gets default values (`0`, `null`, `false`, ...) | Must be initialized before use — no default value |
 
 ### Local Variable
+scope of local variable same as block
+the local variables are not initialized by any default value
 - Declared inside a block, method, or constructor for temporary needs.
 - **Must be initialized before use** — no default value is given.
 - Can be declared inside: a block, a method, a constructor.
@@ -246,11 +277,23 @@ class Test {
     }
 }
 ```
+**Literal** — a constant value directly assigned to a variable.
 
+- Decimal (base 10), Octal (base 8), Hexadecimal (base 16)
+- Character literals: `'a'`, `'A'`, `'@'`, `'\n'`
+
+```java
+int dec = 10;
+int oct = 012;    // octal
+int hex = 0x1A;   // hexadecimal
+char ch = 'A';
+```
 ---
 
 ## 3. Var-Args Methods
 
+var args is variable with arguments.
+whenever you are not sure how many input are going to be provided by user
 Used when you're **not sure how many arguments** the caller will provide.
 
 ```java
@@ -482,6 +525,8 @@ for (int i = 0; ; )                          { }
 for ( ; a <= 10; )                            { }
 for ( ; ; )                                    { }
 for (i = 0, j = 1; i < 10 && j < 20; i++, j--) { }
+for (int i = 0,j = 0; ; )                          { }
+for (System.out.println("Hi");i<3 ;System.out.println("Ho" ))                          {i++ }
 ```
 
 ### Enhanced For-Each Loop (Java 5+)
@@ -589,7 +634,14 @@ switch (day) {
 
 ## 8. Arrays
 
+An array is a group of like type variables that are referred to common name.
 An **array** is an indexed collection of a fixed number of **homogeneous** (same-type) elements.
+
+index start at zero and ends at length -1 .
+
+array are fixed in size.
+
+all arrays are object created with new operator
 
 **Advantages:** single variable for multiple values, contiguous memory, fast indexed access, simple to use.
 **Disadvantages:** fixed size, stores only homogeneous elements.
@@ -664,6 +716,7 @@ Class
 
 ### Object
 An object is a **real-world entity** and an instance of a class, used to access non-static members. It has **identity, behaviour, and state**.
+access an object state and behavior using dot operator.
 
 | Property | Meaning | Example |
 |---|---|---|
@@ -723,6 +776,8 @@ class Test {
 ---
 
 ## 11. Inner Classes
+
+class is a template where objects behavior are defined.it is a blue print for its own object
 
 ### Inner Class vs Sub Class
 
@@ -851,6 +906,12 @@ class Test {
     Test(String s)       { }
 }
 ```
+## methods rule:
+
+- it is compulsory to maintain the return type when define method in java
+- calling a method from another method is perfectly allowed in java
+- static method only call other static method
+- inside static method,'this' keyword is not allowed,because this is just a reff - variable which refer current class object
 
 **Q: Does a constructor return any value?**
 A: ✅ Yes — implicitly, the current class object (instance) itself.
@@ -1061,7 +1122,11 @@ System.out.println(x);        // 11
 System.out.println(y);        // 10
 System.out.println(x == y);   // false — x now points to a NEW Integer object
 ```
+## data type:
+every variable and expression have some type
 
+1. `primitive:` boolean,character,integer,float
+2. `Non primitive:` String,Array,class,interface
 ---
 
 ## 15. `==` vs `equals()`
@@ -1267,6 +1332,34 @@ A **package** is a container for classes, interfaces, enums, and sub-packages.
 | Example: Dog IS-A Animal | Example: Car HAS-A Engine |
 | Strong relationship | Weak relationship |
 
+## Encapsulation
+
+Encapsulation is the process of wrapping data (variables) and methods into a single unit (class) and restricting direct access to data using access modifiers.
+
+### Key Points
+Data members are declared private.
+Access to data is provided through getter and setter methods.
+Improves data security and data hiding.
+Prevents unauthorized access to variables.
+```js
+class Student {
+    private String name;  // private data
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+```
+## Benefits
+Data Hiding
+Better Security
+Better Control over Data
+Easy Maintenance
+
 ---
 
 ## 20. Internationalization (I18N)
@@ -1288,6 +1381,8 @@ System.out.println(sdf.format(new Date()));   // e.g. 2026-08-18
 ---
 
 ## 21. Polymorphism
+
+poly means many and morphism means forms.one task is performed by different way,as person is same but multiple behaviour
 
 **One task performed in different ways.**
 
@@ -1350,6 +1445,8 @@ public class MethodOverride {
 ---
 
 ## 22. Method Overriding — Rules
+
+if child class has the same method with same type and signature known as method overriding
 
 ```java
 class Animal {
@@ -1497,6 +1594,15 @@ final int x = 10;
 An interface is a collection of abstract methods and constants — used to achieve **100% abstraction** (traditionally).
 
 Also achieves **multiple type inheritance**, since Java classes can't extend multiple classes.
+
+
+| Class                                             | Interface                                                        |
+| ------------------------------------------------- | ---------------------------------------------------------------- |
+| Can have implementation (method body)             | Mainly contains method declarations (contract)                   |
+| Can have constructors                             | Cannot have constructors                                         |
+| Supports single inheritance (`extends` one class) | Supports multiple inheritance (`implements` multiple interfaces) |
+| Objects can be created from a class               | Objects cannot be created directly from an interface             |
+
 
 ### Characteristics
 - Interface **variables** are implicitly: `public static final`
@@ -1684,7 +1790,15 @@ public class Casting {
 ```
 
 - **Upcasting** happens automatically; you lose access to the subclass-only methods through the parent reference (though the overridden method still runs via dynamic dispatch).
+```java
+char ch='A'
+int num=(int)ch;
+```
 - **Downcasting** requires an explicit cast and throws `ClassCastException` at runtime if the object isn't actually an instance of the target type.
+```java
+int i=20;
+byte b=(byte)i;
+```
 
 ---
 
@@ -1730,6 +1844,11 @@ class Calculator {
 ## 30. Exception Handling
 
 **Definition:** handling runtime errors so normal execution can continue gracefully.
+**advantage**
+
+- maintain the normal flow of the program
+- meaningful error reporting
+- realtime use in JDBC
 
 ```java
 try {
@@ -1743,14 +1862,14 @@ try {
 ### Exception Hierarchy
 ```
 Object
- └── Throwable
-      ├── Exception
+ └── Throwable(c)
+      ├── Exception(c)
       │     ├── IOException          (checked)
       │     ├── SQLException         (checked)
-      │     └── RuntimeException     (unchecked)
+      │     └── RuntimeException(c)     (unchecked)
       │           ├── ArithmeticException
       │           └── NullPointerException
-      └── Error
+      └── Error(c)
             ├── StackOverflowError
             └── OutOfMemoryError
 ```
@@ -1830,6 +1949,26 @@ catch (IOException e) {
 
 ## 31. Multithreading
 
+Multithreading is a feature in Java that allows a program to execute multiple threads simultaneously within a single process.
+
+A thread is the smallest unit of execution in a program.
+
+Example: Playing music while downloading a file at the same time.
+
+**Advantages of Multithreading**
+Improves Performance by running tasks concurrently.
+Efficient CPU Utilization.
+Faster Execution of applications.
+Better Responsiveness for applications and users.
+
+**Applications of Multithreading**
+- Web Servers (handling multiple user requests)
+- Gaming Applications
+- Chat Applications
+- Video/Audio Streaming
+- Download Managers
+- Banking and E-Commerce Systems
+
 ### Two Ways to Create a Thread
 ```
                 Thread
@@ -1866,7 +2005,7 @@ public class Threads {
 }
 ```
 
-**2. Implementing `Runnable`**
+**2. Implementing `Runnable` (best way)**
 ```java
 class ThreadDemo implements Runnable {
     public void run() { System.out.println("child thread"); }
@@ -1939,6 +2078,8 @@ t.start();
 
 ### Synchronization
 Prevents **race conditions** when multiple threads access shared data.
+example
+if multiple dogs(threads) eat simultanusly same biriyani object(java obj) the biriyani inconsistence problem occure
 ```java
 public void display() {
     synchronized (this) {   // critical section only
@@ -1985,11 +2126,22 @@ executor.shutdown();
 | Introduced | Java 1.0 | Java 5 |
 | Result retrieval | Not possible directly | Via `Future` |
 
+| Feature          | User Thread                          | Daemon Thread                                   |
+| ---------------- | ------------------------------------ | ----------------------------------------------- |
+| Purpose          | Performs main application tasks      | Provides background support services            |
+| JVM Behavior     | JVM waits for user threads to finish | JVM does not wait for daemon threads            |
+| Application Life | Keeps the application running        | Ends automatically when all user threads finish |
+| Examples         | Main thread, worker thread           | Garbage Collector, background monitoring thread |
+| Priority         | Important application work           | Supporting/background work                      |
 ---
 
 ## 32. String, StringBuffer, StringBuilder
 
 **String is immutable** — content cannot change once created.
+3 ways
+1. by compareTo() method
+2. by equals() method
+3. by == operator
 ```java
 String s1 = "Hi";
 s1 = "123";   // s1 now refers to a NEW string object, "Hi" is unchanged
@@ -2048,10 +2200,41 @@ sb.replace(0, 2, "**");
 
 ## 33. Object Class Methods (Detail)
 
+1. toString()
+
+toString() is used to return the string representation of an object.
+
+Defined in the Object class.
+Useful for displaying object information.
+Can be overridden to provide meaningful output.
 ```java
-public String toString()
-public int hashCode()
-public boolean equals(Object obj)
+class Student {
+    String name = "John";
+
+    public String toString() {
+        return name;
+    }
+}
+```
+2. hashCode()
+
+hashCode() returns an integer value (hash code) that represents an object.
+
+Used in collections like HashMap and HashSet.
+Objects that are equal should have the same hash code.
+Can be overridden for custom behavior.
+
+3. equals()
+
+equals() is used to compare two objects for equality.
+
+By default, it compares memory addresses (references).
+Often overridden to compare object data/content.
+```java
+String s1 = new String("Java");
+String s2 = new String("Java");
+
+System.out.println(s1.equals(s2)); // true
 ```
 
 | `==` | `equals()` |
@@ -2071,6 +2254,20 @@ public boolean equals(Object obj)
 
 ## 34. File I/O
 
+### Streams Class
+
+A Stream in Java is used to perform operations on collections of data in a declarative and efficient way.
+
+Introduced in Java 8.
+Used for processing data such as filtering, sorting, and mapping.
+Does not store data; it processes data from a source (List, Set, Array, etc.).
+Supports parallel processing.
+
+**Advantages of Streams**
+Less code
+Improved readability
+Supports parallel execution
+Faster processing for large datasets
 ### FileWriter — write character data
 ```java
 FileWriter fw = new FileWriter("abc.txt");
@@ -2152,6 +2349,19 @@ class Rat implements Serializable { int j = 20; }
 ---
 
 ## 36. Collections Framework
+
+The Java Collection Framework (JCF) is a set of classes and interfaces used to store, manage, and manipulate groups of objects dynamically.
+
+Located in the java.util package.
+Provides ready-made data structures like List, Set, Queue, and Map.
+Reduces programming effort and improves performance.
+
+**Main Interfaces:**
+
+List → Allows duplicates, maintains insertion order.
+Set → Does not allow duplicates.
+Queue → Follows FIFO (First In First Out).
+Map → Stores data as key-value pairs.
 
 **Why Collections?** Arrays have fixed size, store only homogeneous data, and costly insert/delete. Collections offer dynamic size, rich built-in algorithms, and better utility.
 

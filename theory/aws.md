@@ -45,15 +45,6 @@ Virtualization is the process of creating multiple **virtual machines** on a sin
 
 **Advantage:** you don't need new physical resources to run a different OS, and there's no risk of affecting your primary OS.
 
-```txt
-Physical Server
-       |
-   Hypervisor
-       |
- ┌─────┼─────┐
- VM1   VM2   VM3
-Linux Windows Ubuntu
-```
 
 ### Hypervisor
 A **Hypervisor** is software that creates and manages virtual machines. It sits between the physical hardware and the virtual machines.
