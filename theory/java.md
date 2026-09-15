@@ -80,6 +80,8 @@ in java every code is written under some class,even main method is also member o
 
 ## why java is strictly typed language?
 
+every variable must be declared with a specific data type and type checking is enforced at compile time
+
 ## can we execute a program without main method?
 yes
 
@@ -98,8 +100,11 @@ yes
 `public static void main(string[] args)`
 
 main method is public so that it can be access from anywhere
+
 main method is static so that it can be accessed even without object
+
 main method is void because it does not return anything
+
 string[] args which are command line arguments to store the value which are pass to the main method
 
 
@@ -734,6 +739,7 @@ System.out.println(b1 == b3);   // false — different objects
 ```
 
 **Can a top-level class be `private`?**
+
 No — it would be inaccessible outside the file → compile-time error.
 
 **Immutable class** — object state cannot change after creation (e.g. `String`). Benefits: security, thread-safety.
@@ -914,9 +920,11 @@ class Test {
 - inside static method,'this' keyword is not allowed,because this is just a reff - variable which refer current class object
 
 **Q: Does a constructor return any value?**
+
 A: ✅ Yes — implicitly, the current class object (instance) itself.
 
 **Q: Can a constructor do things other than initialization?**
+
 A: ✅ Yes — it can create objects, start a thread, call methods, open files/connections.
 
 ### Types
@@ -1048,6 +1056,7 @@ Runtime r = Runtime.getRuntime();
 ```
 
 **Q: Can memory leaks happen in Java despite GC?**
+
 A: **Yes** — if the application keeps live references to unused objects, GC cannot reclaim them.
 ```java
 List<Object> list = new ArrayList<>();
@@ -1171,7 +1180,8 @@ class Test {
 3. Static blocks can execute even without a `main()` method (older Java versions allowed this for simple execution).
 4. Static block can access **only static members** directly.
 
-** Execution order when an object is created:**
+**Execution order when an object is created:**
+
 `static block` (once, at class loading) → `instance initializer block` → `constructor`.
 
 ---
@@ -1355,9 +1365,13 @@ class Student {
 }
 ```
 ## Benefits
+
 Data Hiding
+
 Better Security
+
 Better Control over Data
+
 Easy Maintenance
 
 ---
@@ -1956,10 +1970,11 @@ A thread is the smallest unit of execution in a program.
 Example: Playing music while downloading a file at the same time.
 
 **Advantages of Multithreading**
-Improves Performance by running tasks concurrently.
-Efficient CPU Utilization.
-Faster Execution of applications.
-Better Responsiveness for applications and users.
+
+- Improves Performance by running tasks concurrently.
+- Efficient CPU Utilization.
+- Faster Execution of applications.
+- Better Responsiveness for applications and users.
 
 **Applications of Multithreading**
 - Web Servers (handling multiple user requests)
@@ -2138,7 +2153,8 @@ executor.shutdown();
 ## 32. String, StringBuffer, StringBuilder
 
 **String is immutable** — content cannot change once created.
-3 ways
+
+3 ways compare string
 1. by compareTo() method
 2. by equals() method
 3. by == operator
@@ -2200,7 +2216,7 @@ sb.replace(0, 2, "**");
 
 ## 33. Object Class Methods (Detail)
 
-1. toString()
+**toString()**
 
 toString() is used to return the string representation of an object.
 
@@ -2216,7 +2232,7 @@ class Student {
     }
 }
 ```
-2. hashCode()
+**hashCode()**
 
 hashCode() returns an integer value (hash code) that represents an object.
 
@@ -2224,7 +2240,7 @@ Used in collections like HashMap and HashSet.
 Objects that are equal should have the same hash code.
 Can be overridden for custom behavior.
 
-3. equals()
+**equals()**
 
 equals() is used to compare two objects for equality.
 
@@ -2264,9 +2280,13 @@ Does not store data; it processes data from a source (List, Set, Array, etc.).
 Supports parallel processing.
 
 **Advantages of Streams**
+
 Less code
+
 Improved readability
+
 Supports parallel execution
+
 Faster processing for large datasets
 ### FileWriter — write character data
 ```java
