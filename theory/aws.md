@@ -728,3 +728,638 @@ A: Used for **programmatic access** to AWS (CLI/SDK/API) instead of console logi
 **Q20: What is the difference between stopping and terminating an EC2 instance?**
 
 A: **Stopping** shuts the instance down but keeps its EBS root volume (and, if not using an Elastic IP, its public IP is released) — you can start it again later. **Terminating** permanently deletes the instance (and, by default, its root EBS volume too), and it cannot be restarted.
+
+# AWS Bedrock & Generative AI — Notes
+
+---
+
+## Table of Contents
+1. Core GenAI Concepts
+2. Amazon Bedrock — Overview
+3. RAG (Retrieval-Augmented Generation) with Bedrock Knowledge Base
+4. AWS Lambda + Python Fundamentals (Q&A)
+5. Boto3 & DynamoDB
+6. Full RAG Architecture — Bedrock + Lambda + Boto3
+7. Amazon Bedrock + LangChain Agent (Step-by-Step)
+8. Additional Concepts 🆕
+
+---
+
+## 1. Core GenAI Concepts
+
+### AI Model
+An **AI Model** is a mathematical and computational system trained on data to recognize patterns and make predictions or decisions.
+
+### Base Model
+A **Base Model** is an AI model trained on a generic dataset.
+
+### Foundation Model (FM)
+A **Foundation Model (FM)** is a large-scale AI model trained on massive and diverse datasets that can be adapted for various tasks — text generation, summarization, translation, question answering, etc.
+
+### Agent
+An AI-powered system capable of understanding requests, making decisions, and performing tasks **autonomously**.
+
+> **Agent = LLM + Tools (Actions)**
+
+### Knowledge Base
+A **Knowledge Base (KB)** is a centralized collection of information — documents, FAQs, manuals, policies, databases, or business data — that an AI system can search to answer user questions accurately.
+
+### Multi-Agent Architecture
+A system where **multiple specialized agents** collaborate to solve complex tasks.
+
+### Agent Orchestration
+The coordination and management of multiple agents to ensure tasks are executed in the correct **sequence and workflow**.
+
+---
+
+## 2. Amazon Bedrock — Overview
+
+### What is Amazon Bedrock?
+**Amazon Bedrock** is a fully managed AWS service that allows developers to build and scale **Generative AI applications** using foundation models (FMs) from AWS and leading AI providers, **without managing infrastructure**.
+
+> Whenever we use Amazon Bedrock for a GenAI application, we should use **IAM users or IAM roles** to securely control access to Bedrock resources.
+
+### Why Use Amazon Bedrock?
+- No need to train your own AI model from scratch.
+- No need to manage servers or GPU infrastructure.
+- Access multiple AI models from a **single service**.
+- Secure integration with AWS services.
+
+### Popular Foundation Models Available
+- **Amazon Nova**
+- **Anthropic Claude**
+- **Meta Llama**
+- **Mistral AI**
+- **Cohere**
+- **Stability AI** (image generation)
+
+### Common Use Cases
+- Chatbots & Virtual Assistants
+- Content Generation (emails, blogs, product descriptions)
+- Document Summarization
+- Code Generation
+- **RAG Applications** (Retrieval-Augmented Generation)
+- Image Generation
+
+---
+
+## 3. RAG (Retrieval-Augmented Generation) with Bedrock Knowledge Base
+
+### RAG Application Flow (Knowledge Base Setup)
+
+```txt
+Step 1: Create IAM User
+        ↓
+Step 2: Create S3 Bucket
+        ↓
+Upload PDFs/Documents
+        ↓
+Step 3: Create Bedrock Knowledge Base
+        ↓
+Select Embedding Model
+        ↓
+Create Vector Store
+(OpenSearch Serverless)
+        ↓
+Attach S3 Data Source
+        ↓
+Step 4: Sync Knowledge Base
+        ↓
+Documents Converted → Chunks → Embeddings
+        ↓
+Stored in Vector Store
+        ↓
+User Query
+        ↓
+Knowledge Base retrieves relevant chunks
+        ↓
+Bedrock FM generates answer
+```
+
+**In short:** documents are uploaded to S3 → the Knowledge Base chunks them and converts each chunk into a numeric **embedding** → embeddings are stored in a **vector database** (OpenSearch Serverless) → at query time, the user's question is embedded and matched against the stored chunks → the most relevant chunks are retrieved and passed to a foundation model, which generates the final answer.
+
+---
+
+## 4. AWS Lambda + Python Fundamentals (Q&A)
+
+### Q1: What is the `event` object in AWS Lambda?
+The `event` object is the **input data** that triggers your Lambda function.
+
+> Think of it as a Python dictionary (JSON data) that Lambda receives automatically.
+
+```python
+def lambda_handler(event, context):
+    question = event["question"]
+    print(question)
+```
+
+### Q2: What is a Dictionary?
+A **dictionary** in Python is a collection of key-value pairs.
+```python
+{"name": "Sougata", "city": "Asansol"}
+```
+
+### Q3: What happens if a key is not available when using `event.get()` in AWS Lambda?
+**Answer:** If the specified key is not present in the `event` object, `event.get()` returns `None` by default and does **not** throw an exception.
+
+```python
+event = { "name": "Sougata" }
+
+question = event.get("question")
+print(question)   # None — no error raised
+```
+
+### Q4: How do you use the `RetrieveAndGenerate` API in AWS Lambda?
+In AWS Lambda, we use the **Boto3** `bedrock-agent-runtime` client and call the `retrieve_and_generate()` method. The API retrieves relevant document chunks from the Bedrock Knowledge Base and passes them to a foundation model (such as Claude), which generates the final answer and returns it to the Lambda function.
+
+```python
+import json
+import boto3
+
+client = boto3.client(
+    "bedrock-agent-runtime",
+    region_name="us-east-1"
+)
+
+KB_ID = "KB12345678"
+
+def lambda_handler(event, context):
+
+    question = event.get("question")
+
+    if not question:
+        return {
+            "statusCode": 400,
+            "body": "Question is required"
+        }
+
+    response = client.retrieve_and_generate(
+        input={
+            "text": question
+        },
+        retrieveAndGenerateConfiguration={
+            "type": "KNOWLEDGE_BASE",
+            "knowledgeBaseConfiguration": {
+                "knowledgeBaseId": KB_ID,
+                "modelArn": "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-sonnet"
+            }
+        }
+    )
+
+    answer = response["output"]["text"]
+
+    return {
+        "statusCode": 200,
+        "body": json.dumps(answer)
+    }
+```
+
+---
+
+## 5. Boto3 & DynamoDB
+
+### Q5: What is Boto3?
+**Boto3** is the official Python library used to access and manage AWS services **programmatically**.
+
+```python
+import boto3
+
+def lambda_handler(event, context):
+    s3 = boto3.client("s3")
+    buckets = s3.list_buckets()
+    return buckets
+```
+
+### Q6: What is DynamoDB in AWS?
+**Amazon DynamoDB** is a fully managed **NoSQL database** service provided by AWS.
+
+- Designed to store and retrieve data with **single-digit millisecond latency**.
+- **Automatically scales** based on traffic.
+
+```python
+import json
+import boto3
+
+# Connect to DynamoDB using low-level client
+client = boto3.client('dynamodb')
+
+def lambda_handler(event, context):
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }
+```
+
+---
+
+## 6. Full RAG Architecture — Bedrock + Lambda + Boto3
+
+**RAG application using Amazon Bedrock Knowledge Base + AWS Lambda + Boto3:**
+
+```txt
++-----------+
+|   User    |
++-----------+
+      |
+      v
++-------------+
+| API Gateway |
++-------------+
+      |
+      v
++-------------+
+| AWS Lambda  |
+| Python      |
+| Boto3       |
++-------------+
+      |
+      v
++----------------------+
+| Bedrock KnowledgeBase|
++----------------------+
+      |
+      +--------Retrieve--------+
+      |                         |
+      v                         v
++------------+        +------------------+
+| OpenSearch |        | S3 Documents     |
+| Vector DB  |        | PDF/DOC/TXT      |
++------------+        +------------------+
+      |
+      v
++------------------+
+| Claude Sonnet    |
+| Llama            |
++------------------+
+      |
+      v
+  Final Answer
+```
+
+**Flow:** the user's request hits **API Gateway**, which triggers a **Lambda** function (using Boto3). Lambda calls the **Bedrock Knowledge Base**, which retrieves relevant chunks from the **OpenSearch vector DB** (originally sourced from S3 documents), passes them to a foundation model (Claude/Llama), and returns the final generated answer back through the chain to the user.
+
+---
+
+## 7. Amazon Bedrock + LangChain Agent (Step-by-Step)
+
+### Step 1: Install Dependencies
+```bash
+pip install langchain langgraph langchain-aws boto3 langchain-core numpy
+```
+
+### Step 2: Create a Basic Agent (`app.py`)
+
+**Create a tool:**
+```python
+from langchain.tools import tool
+
+@tool
+def multiply(a: int, b: int) -> int:
+    """Multiplies two numbers"""
+    return a * b
+```
+
+**Create a Bedrock model:**
+```python
+from langchain_aws import ChatBedrockConverse
+
+model = ChatBedrockConverse(
+    model="amazon.nova-pro-v1:0",
+    region_name="us-east-1"
+)
+```
+
+**Create the agent:**
+```python
+from langchain.agents import create_agent
+
+agent = create_agent(
+    model=model,
+    tools=[multiply]
+)
+```
+
+**Invoke the agent with user input:**
+```python
+response = agent.invoke(
+    {
+        "messages": [
+            {
+                "role": "user",
+                "content": "What is 25 multiplied by 4?"
+            }
+        ]
+    }
+)
+
+print(response)
+```
+
+### Step 3: Configure AWS Credentials
+
+**Step 3.1 — Create an IAM User**
+- Go to AWS IAM
+- Create a user
+- Attach permissions such as:
+  - `AmazonBedrockFullAccess` (for learning/testing)
+  - Or custom **least-privilege** permissions
+
+**Step 3.2 — Generate Access Keys**
+- IAM User → Security Credentials
+- Create Access Key
+- Copy: **Access Key ID** and **Secret Access Key**
+
+**Step 3.3 — Configure the AWS CLI**
+```bash
+aws configure
+AWS Access Key ID [None]: AKIAxxxxxxxxxxxxxxxx
+AWS Secret Access Key [None]: xxxxxxxxxxxxxxxxx
+Default region name [None]: us-east-1
+Default output format [None]: json
+```
+
+### Step 4: Full Working Example — Agent Calling a Lambda Tool
+
+```python
+# =====================================================
+# REQUIREMENTS
+# =====================================================
+# pip install langchain langgraph langchain-aws boto3 langchain-core numpy
+#
+# Configure AWS Credentials
+# aws configure
+#
+# AWS Access Key ID: XXXXX
+# AWS Secret Access Key: XXXXX
+# Region: us-east-1
+# Output: json
+#
+# Lambda Function Name: multiply-function
+# =====================================================
+
+import json
+import boto3
+
+from langchain.tools import tool
+from langchain.agents import create_agent
+from langchain_aws import ChatBedrockConverse
+
+
+# =====================================================
+# Tool: Call AWS Lambda using Boto3
+# =====================================================
+
+@tool
+def multiply(a: int, b: int) -> int:
+    """
+    Multiplies two numbers using AWS Lambda
+    """
+
+    lambda_client = boto3.client(
+        "lambda",
+        region_name="us-east-1"
+    )
+
+    response = lambda_client.invoke(
+        FunctionName="multiply-function",
+        InvocationType="RequestResponse",
+        Payload=json.dumps(
+            {
+                "a": a,
+                "b": b
+            }
+        )
+    )
+
+    result = json.loads(
+        response["Payload"].read()
+    )
+
+    return result["result"]
+
+
+# =====================================================
+# Create Amazon Bedrock Model
+# =====================================================
+
+model = ChatBedrockConverse(
+    model="amazon.nova-pro-v1:0",
+    region_name="us-east-1"
+)
+
+
+# =====================================================
+# Create Agent
+# =====================================================
+
+agent = create_agent(
+    model=model,
+    tools=[multiply]
+)
+
+
+# =====================================================
+# User Input
+# =====================================================
+
+user_input = input("Enter your question: ")
+
+
+# =====================================================
+# Invoke Agent
+# =====================================================
+
+response = agent.invoke(
+    {
+        "messages": [
+            {
+                "role": "user",
+                "content": user_input
+            }
+        ]
+    }
+)
+
+
+# =====================================================
+# Print Response
+# =====================================================
+
+print("\nAgent Response:\n")
+print(response)
+```
+
+### Multi-Tool Agent Example — Order Management
+
+A more realistic agent with **two tools**, letting the LLM decide which one to call based on the user's request:
+
+```python
+import json
+import boto3
+
+from langchain.tools import tool
+from langchain.agents import create_agent
+from langchain_aws import ChatBedrockConverse
+
+# ==================================================
+# Lambda Client
+# ==================================================
+
+client = boto3.client(
+    "lambda",
+    region_name="us-east-1"
+)
+
+# ==================================================
+# Tool 1 : Place Order
+# ==================================================
+
+@tool
+def place_order(product_id: str, quantity: int) -> dict:
+    """
+    Place an order for a product with given quantity.
+    """
+
+    response = client.invoke(
+        FunctionName="place-orders",
+        InvocationType="RequestResponse",
+        Payload=json.dumps(
+            {
+                "product_id": product_id,
+                "quantity": quantity
+            }
+        ).encode("utf-8")
+    )
+
+    return json.loads(
+        response["Payload"].read()
+    )
+
+# ==================================================
+# Tool 2 : Get Order Status
+# ==================================================
+
+@tool
+def get_order(order_id: str) -> dict:
+    """
+    Look up the status of an existing order by its order id.
+    """
+
+    response = client.invoke(
+        FunctionName="order-status",
+        InvocationType="RequestResponse",
+        Payload=json.dumps(
+            {
+                "order_id": order_id
+            }
+        ).encode("utf-8")
+    )
+
+    return json.loads(
+        response["Payload"].read()
+    )
+
+# ==================================================
+# Bedrock Model
+# ==================================================
+
+model = ChatBedrockConverse(
+    model="amazon.nova-pro-v1:0",
+    region_name="us-east-1"
+)
+
+# ==================================================
+# Create Agent
+# ==================================================
+
+agent = create_agent(
+    model=model,
+    tools=[
+        place_order,
+        get_order
+    ]
+)
+
+# ==================================================
+# User Input
+# ==================================================
+
+user_query = input("Enter Request: ")
+
+# ==================================================
+# Invoke Agent
+# ==================================================
+
+response = agent.invoke(
+    {
+        "messages": [
+            {
+                "role": "user",
+                "content": user_query
+            }
+        ]
+    }
+)
+
+print("\nAgent Response:\n")
+print(response)
+```
+
+> 💡 **How this works:** the agent's LLM reads the user's natural-language request, decides *which* tool (if any) is relevant based on each `@tool` function's docstring, extracts the right arguments from the request, calls the corresponding AWS Lambda function via Boto3, and then uses the tool's result to compose its final natural-language answer.
+
+---
+
+## 8. Additional Concepts 🆕
+
+A few Bedrock/GenAI fundamentals not in the original notes, useful for rounding out the picture:
+
+### Bedrock Agents (Native) vs a LangChain Agent
+Bedrock also has its **own native "Agents for Amazon Bedrock"** feature (separate from building an agent yourself with LangChain as shown above) — it lets you define **Action Groups** (API calls the agent can make) and a Knowledge Base directly in the AWS console, with Bedrock managing the orchestration loop. LangChain gives more flexibility/control over the agent logic in code; native Bedrock Agents are more managed/low-code.
+
+### Chunking Strategy
+How documents are split before embedding matters a lot for RAG quality:
+| Strategy | Description |
+|---|---|
+| Fixed-size chunking | Splits by a fixed token/character count (simple, but can cut sentences awkwardly) |
+| Semantic chunking | Splits along natural boundaries (paragraphs, sections) |
+| Hierarchical chunking | Keeps parent/child chunk relationships for better context retrieval |
+
+### Embeddings
+A numeric vector representation of text that captures semantic meaning — texts with similar meaning have embeddings that are close together in vector space. Bedrock offers embedding models like **Amazon Titan Embeddings** and **Cohere Embed**, used to convert both the stored document chunks and the user's query into comparable vectors.
+
+### On-Demand vs Provisioned Throughput (Bedrock pricing models)
+| On-Demand | Provisioned Throughput |
+|---|---|
+| Pay per token/request, no commitment | Reserve dedicated model capacity for a fixed time |
+| Best for variable/unpredictable traffic | Best for high, steady, predictable traffic |
+| No throughput guarantee | Guaranteed throughput |
+
+### Key Inference Parameters
+| Parameter | Effect |
+|---|---|
+| `temperature` | Higher = more random/creative output; lower = more deterministic |
+| `top_p` | Nucleus sampling — restricts token choices to the smallest set whose cumulative probability exceeds `top_p` |
+| `max_tokens` | Caps the length of the generated response |
+
+### Model Customization in Bedrock
+- **Fine-tuning** — further train a copy of a base FM on your own labeled dataset for a specific task.
+- **Continued pre-training** — further train on unlabeled domain-specific data.
+- **RAG** (as covered above) — no model training at all; instead, relevant info is retrieved and injected into the prompt at query time. RAG is usually the first and cheapest approach to try before fine-tuning.
+
+### Amazon Bedrock Guardrails
+A safety feature that lets you configure content filters (blocking harmful topics, PII redaction, denied topics, word filters) applied consistently across any FM used through Bedrock — helps enforce responsible-AI policies without building your own filtering layer.
+
+### Bedrock vs SageMaker
+| Amazon Bedrock | Amazon SageMaker |
+|---|---|
+| Access pre-built foundation models via API | Build, train, and deploy **your own** custom ML models |
+| No infrastructure/GPU management | You manage training infrastructure (or use managed training jobs) |
+| Best for GenAI app development quickly | Best for custom ML/data-science workloads |
+
+### Quick Recap — Agent vs Knowledge Base vs RAG
+
+| Term | What it actually is |
+|---|---|
+| **Knowledge Base** | The *searchable store* of your documents/data (chunks + embeddings in a vector DB) |
+| **RAG** | The *technique* of retrieving relevant chunks from a Knowledge Base and feeding them to an FM before it answers |
+| **Agent** | An LLM + tools that can *autonomously decide* which actions/tools to invoke (may or may not use a Knowledge Base/RAG as one of its capabilities) |
