@@ -741,7 +741,6 @@ A: **Stopping** shuts the instance down but keeps its EBS root volume (and, if n
 5. Boto3 & DynamoDB
 6. Full RAG Architecture — Bedrock + Lambda + Boto3
 7. Amazon Bedrock + LangChain Agent (Step-by-Step)
-8. Additional Concepts 🆕
 
 ---
 
@@ -1308,58 +1307,3 @@ print(response)
 > 💡 **How this works:** the agent's LLM reads the user's natural-language request, decides *which* tool (if any) is relevant based on each `@tool` function's docstring, extracts the right arguments from the request, calls the corresponding AWS Lambda function via Boto3, and then uses the tool's result to compose its final natural-language answer.
 
 ---
-
-## 8. Additional Concepts 🆕
-
-A few Bedrock/GenAI fundamentals not in the original notes, useful for rounding out the picture:
-
-### Bedrock Agents (Native) vs a LangChain Agent
-Bedrock also has its **own native "Agents for Amazon Bedrock"** feature (separate from building an agent yourself with LangChain as shown above) — it lets you define **Action Groups** (API calls the agent can make) and a Knowledge Base directly in the AWS console, with Bedrock managing the orchestration loop. LangChain gives more flexibility/control over the agent logic in code; native Bedrock Agents are more managed/low-code.
-
-### Chunking Strategy
-How documents are split before embedding matters a lot for RAG quality:
-| Strategy | Description |
-|---|---|
-| Fixed-size chunking | Splits by a fixed token/character count (simple, but can cut sentences awkwardly) |
-| Semantic chunking | Splits along natural boundaries (paragraphs, sections) |
-| Hierarchical chunking | Keeps parent/child chunk relationships for better context retrieval |
-
-### Embeddings
-A numeric vector representation of text that captures semantic meaning — texts with similar meaning have embeddings that are close together in vector space. Bedrock offers embedding models like **Amazon Titan Embeddings** and **Cohere Embed**, used to convert both the stored document chunks and the user's query into comparable vectors.
-
-### On-Demand vs Provisioned Throughput (Bedrock pricing models)
-| On-Demand | Provisioned Throughput |
-|---|---|
-| Pay per token/request, no commitment | Reserve dedicated model capacity for a fixed time |
-| Best for variable/unpredictable traffic | Best for high, steady, predictable traffic |
-| No throughput guarantee | Guaranteed throughput |
-
-### Key Inference Parameters
-| Parameter | Effect |
-|---|---|
-| `temperature` | Higher = more random/creative output; lower = more deterministic |
-| `top_p` | Nucleus sampling — restricts token choices to the smallest set whose cumulative probability exceeds `top_p` |
-| `max_tokens` | Caps the length of the generated response |
-
-### Model Customization in Bedrock
-- **Fine-tuning** — further train a copy of a base FM on your own labeled dataset for a specific task.
-- **Continued pre-training** — further train on unlabeled domain-specific data.
-- **RAG** (as covered above) — no model training at all; instead, relevant info is retrieved and injected into the prompt at query time. RAG is usually the first and cheapest approach to try before fine-tuning.
-
-### Amazon Bedrock Guardrails
-A safety feature that lets you configure content filters (blocking harmful topics, PII redaction, denied topics, word filters) applied consistently across any FM used through Bedrock — helps enforce responsible-AI policies without building your own filtering layer.
-
-### Bedrock vs SageMaker
-| Amazon Bedrock | Amazon SageMaker |
-|---|---|
-| Access pre-built foundation models via API | Build, train, and deploy **your own** custom ML models |
-| No infrastructure/GPU management | You manage training infrastructure (or use managed training jobs) |
-| Best for GenAI app development quickly | Best for custom ML/data-science workloads |
-
-### Quick Recap — Agent vs Knowledge Base vs RAG
-
-| Term | What it actually is |
-|---|---|
-| **Knowledge Base** | The *searchable store* of your documents/data (chunks + embeddings in a vector DB) |
-| **RAG** | The *technique* of retrieving relevant chunks from a Knowledge Base and feeding them to an FM before it answers |
-| **Agent** | An LLM + tools that can *autonomously decide* which actions/tools to invoke (may or may not use a Knowledge Base/RAG as one of its capabilities) |
