@@ -182,6 +182,7 @@ Each region contains multiple **Availability Zones (AZs)**, which are isolated d
 
 - **Regions** help deploy applications closer to users.
 - **AZs** provide high availability and fault tolerance.
+<img src="./img/region-zone.png" loading="lazy" />
 
 ---
 
@@ -617,7 +618,7 @@ Use when:
 
 ---
 
-## 15. Important Interview Questions (Question-wise)
+## Important Interview Questions (Question-wise)
 
 A few high-frequency AWS interview topics that weren't in the original notes — added here question-wise so nothing important is missing.
 
@@ -625,109 +626,21 @@ A few high-frequency AWS interview topics that weren't in the original notes —
 
 A: AWS is responsible for the **security *of* the cloud** (hardware, networking, data centers, virtualization). The customer is responsible for **security *in* the cloud** (OS patching, data encryption, IAM permissions, application security). What exactly falls to the customer shifts depending on the service model — e.g. you manage more with EC2 (IaaS) than with Lambda (serverless).
 
-**Q2: What is an ARN?**
-
-A: **Amazon Resource Name** — a unique identifier for every AWS resource.
-```
-arn:aws:s3:::my-bucket-name
-arn:aws:iam::123456789012:user/John
-```
-
-**Q3: EBS vs Instance Store?**
-
-A:
-| EBS (Elastic Block Store) | Instance Store |
-|---|---|
-| Persistent — survives instance stop/termination | Ephemeral — data lost on stop/termination |
-| Network-attached storage, can be detached/reattached | Physically attached to the host machine |
-| Can be resized, snapshotted | Cannot be snapshotted the same way |
-| Slightly higher latency | Lower latency, higher throughput |
-
-**Q4: What is an Elastic Load Balancer (ELB)?**
-
-A: Automatically distributes incoming application traffic across multiple EC2 instances (or other targets) to improve availability and fault tolerance. Types: **Application Load Balancer (ALB)** — HTTP/HTTPS, layer 7; **Network Load Balancer (NLB)** — TCP/UDP, layer 4, ultra-low latency; **Gateway Load Balancer (GWLB)**.
-
-**Q5: What is Auto Scaling?**
+**Q2: What is Auto Scaling?**
 
 A: Automatically adjusts the number of EC2 instances in a group based on demand (CPU usage, request count, schedule) — scales **out** (add instances) under load and **in** (remove instances) when demand drops, helping both availability and cost.
 
-**Q6: What is Amazon RDS?**
+**Q3: What is Amazon RDS?**
 
 A: **Relational Database Service** — a managed service for relational databases (MySQL, PostgreSQL, MariaDB, SQL Server, Oracle). AWS handles patching, backups, and replication, so you don't manage the underlying database server yourself (unlike running a DB on EC2).
 
-**Q7: RDS Multi-AZ vs Read Replica?**
-
-A:
-| Multi-AZ | Read Replica |
-|---|---|
-| For **high availability** / failover | For **read scaling** / performance |
-| Synchronous replication to a standby in another AZ | Asynchronous replication, can be in same/different region |
-| Standby is not readable | Replica IS readable |
-| Automatic failover on primary failure | Manual promotion needed to become a writer |
-
-**Q8: What is Amazon CloudFront?**
-
-A: AWS's **CDN (Content Delivery Network)** — caches content (static assets, video, API responses) at edge locations worldwide, reducing latency for users far from your origin server.
-
-**Q9: What is Route 53?**
+**Q4: What is Route 53?**
 
 A: AWS's **DNS (Domain Name System)** web service — used for domain registration, DNS routing, and health checking. Supports routing policies like simple, weighted, latency-based, and failover routing.
 
-**Q10: CloudWatch vs CloudTrail?**
-
-A:
-| CloudWatch | CloudTrail |
-|---|---|
-| **Monitoring** — metrics, logs, alarms | **Auditing** — who did what, and when |
-| Tracks performance (CPU, memory, request counts) | Tracks API calls/account activity |
-| Used for operational visibility | Used for compliance and security investigation |
-
-**Q11: What is a Network ACL (NACL), and how does it differ from a Security Group?**
-A:
-| Security Group | Network ACL |
-|---|---|
-| Operates at the **instance** level | Operates at the **subnet** level |
-| **Stateful** (return traffic auto-allowed) | **Stateless** (must explicitly allow both directions) |
-| Only supports "Allow" rules | Supports both "Allow" and "Deny" rules |
-| Evaluates ALL rules before deciding | Evaluates rules in order (by rule number) |
-
-**Q12: What is Horizontal vs Vertical Scaling?**
+**Q5: What is Horizontal vs Vertical Scaling?**
 
 A: **Vertical scaling** ("scale up") — increasing the size/power of a single instance (more CPU/RAM). **Horizontal scaling** ("scale out") — adding more instances to share the load. Cloud environments favor horizontal scaling since it avoids a single point of failure and works well with Auto Scaling + Load Balancers.
-
-**Q13: What is AWS CloudFormation?**
-
-A: An **Infrastructure as Code (IaC)** service — define AWS resources in a YAML/JSON template, and CloudFormation provisions/manages them automatically, making infrastructure repeatable and version-controlled.
-
-**Q14: What is S3 Versioning?**
-
-A: Keeps multiple versions of an object in the same bucket, protecting against accidental overwrite/deletion — you can restore any previous version.
-
-**Q15: What is an S3 Lifecycle Policy?**
-
-A: A rule set that automatically transitions objects between storage classes (e.g. Standard → IA → Glacier) or deletes them after a set period, to optimize storage cost over time.
-
-**Q16: Availability Zone vs Region — quick recap?**
-
-A: A **Region** is a geographic area (e.g. `ap-south-1` Mumbai) containing multiple **Availability Zones**, which are physically separate, isolated data centers within that region connected by low-latency links. Spreading resources across AZs protects against a single data-center failure; spreading across Regions protects against a whole-region outage and reduces latency for global users.
-<img src="./img/region-zone.png" loading="lazy" />
-
-
-**Q17: What is the AWS Well-Architected Framework?**
-
-A: A set of best-practice guidelines across **6 pillars**: Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability — used to evaluate and improve cloud architecture.
-
-**Q18: What is the AWS Free Tier?**
-
-A: A program offering limited free usage of many AWS services (e.g. 750 hrs/month of `t2.micro`/`t3.micro` EC2, 5GB S3 storage) for 12 months after account creation (plus some "always free" services), intended for learning and light workloads.
-
-**Q19: Access Key vs Secret Key — what are they used for?**
-
-A: Used for **programmatic access** to AWS (CLI/SDK/API) instead of console login. The **Access Key ID** identifies the request; the **Secret Access Key** signs it (like a password) — both together authenticate API calls. Never commit these to source control.
-
-**Q20: What is the difference between stopping and terminating an EC2 instance?**
-
-A: **Stopping** shuts the instance down but keeps its EBS root volume (and, if not using an Elastic IP, its public IP is released) — you can start it again later. **Terminating** permanently deletes the instance (and, by default, its root EBS volume too), and it cannot be restarted.
 
 # AWS Bedrock & Generative AI — Notes
 
