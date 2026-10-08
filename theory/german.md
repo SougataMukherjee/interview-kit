@@ -27,7 +27,6 @@
 22. [Daily Routine (Tagesablauf)](#sec22)
 23. [Telling the Time (Uhrzeit)](#sec23)
 24. [Making an Appointment](#sec24)
-25. [Appendix — Corrections Made](#sec25)
 
 ---
 
@@ -1313,29 +1312,3 @@ The verb **stays in position 2**:
 - **Ich komme zu spät.** = I am coming late.
 
 ---
-
-<a id="sec25"></a>
-## 25. Appendix — Corrections Made to the Original Notes
-
-| Original | Corrected | Why |
-|---|---|---|
-| "Nouns and verbs always start with capital letters" | **Only nouns** are capitalized | Verbs are written in lowercase in German |
-| "-ing" listed as a masculine ending | **-ling** is masculine; English loanwords in **-ing** are **neuter** (*das Training, das Meeting*) | Original contradicted its own examples |
-| die glass | **das Glas** | *Glas* is neuter |
-| die flasche / die schuhe | **die Flasche** / **die Schuhe** (plural of *der Schuh*) | Capitalization + plural note |
-| das kissan | **das Kissen** | Spelling |
-| der kellner / der teller / der kuli | **der Kellner / der Teller / der Kuli** | Nouns must be capitalized; duplicate *Teller* merged |
-| der Polizist = the police | the police **officer** | Meaning |
-| ich weib nicht | **Ich weiß nicht** | Typo (ß) |
-| kaine ahnung | **Keine Ahnung** | Spelling |
-| Konnen sie das bitte wiederholen | **Können Sie das bitte wiederholen?** | Umlaut + formal *Sie* capitalized |
-| viel gluck | **Viel Glück** | Umlaut |
-| Bitte!/willkommen = You're welcome | **Bitte! / Bitte schön!** (*Willkommen* = Welcome) | *Willkommen* is not "you're welcome" |
-| Entschuldigung! bitte | **Entschuldigung!** and **Bitte** listed separately | Two different phrases |
-| Hast du schon gegessen? (Have you completed your meal?) | "Have you **eaten already**?" | Natural translation |
-| Rose = roo-ze, Tag = taag, Weg = veeg, legen = lee-gen, Hund = hund | roh-ze, taak, vayk, lay-gen, hunt | Closer to real pronunciation |
-| "Hundert", "Zweihundert", "Dreihundert", "Tausend", etc. | lowercase numerals (*hundert, zweihundert, tausend*) | Number words are lowercase; only *eine Million* (a noun) is capitalized |
-| `Email` | **E-Mail** | Standard German spelling |
-| Possessive table (broken row `s\| Her`) | Fixed table | Formatting error |
-| "conjunction of German verbs" | **Conjugation** of verbs | Wrong term (conjunction ≠ conjugation) |
-| Duplicates removed | *Wo wohnen Sie?*, *Welcher Tag ist heute?*, *Ja, ich verstehe*, *Ich muss Deutsch lernen*, *der Sommer*, *der Teller*, repeated modal & *kommen* examples | Merged into single entries |
