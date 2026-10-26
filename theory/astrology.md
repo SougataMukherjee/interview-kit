@@ -2736,7 +2736,24 @@ D1-এ গ্রহ যদি রবি, চন্দ্র, মঙ্গল ব
 | **১১শ ভাবে** | বন্ধুদের মাধ্যমে · নেটওয়ার্কিং · Facebook, Instagram, LinkedIn · ক্লাব, সংগঠন |
 | **১২শ ভাবে** | বিদেশে · Long Distance Relationship · হোটেল, রিসোর্ট · আধ্যাত্মিক স্থান |
 
-### ৪৩.৩ বিবাহে বাধা দূর করার জন্য প্রতিকার
+### ৪৩.৩ শুক্র থেকে ৭ম রাশি অনুযায়ী পরিচয়ের পরিবেশ
+
+| রাশি | সম্ভাব্য পরিবেশ |
+|---|---|
+| ♈ মেষ | Gym · Sports Club · Defence/Police environment · Fitness Centre |
+| ♉ বৃষ | Restaurant · Music Program · Beauty/Fashion Industry · Bank |
+| ♊ মিথুন | Social Media · Mobile, Internet · Coaching Centre · Communication platform |
+| ♋ কর্কট | Family Setting · Relative's House · Restaurant/Cafe · Home Function |
+| ♌ সিংহ | Government Office · Stage Show · Leadership Event · Political Gathering |
+| ♍ কন্যা | Office · Hospital · Medical Field · Accounts/Service Sector |
+| ♎ তুলা | Marriage Function · Shopping Mall · Fashion Industry · Beauty Parlour |
+| ♏ বৃশ্চিক | Bar / Lounge · Research Centre · Insurance Sector · Secret Environment |
+| ♐ ধনু | Temple · Pilgrimage · University · Foreign Travel |
+| ♑ মকর | Arrangement Marriage · Family Setting · Workplace · Senior Person's Reference |
+| ♒ কুম্ভ | Internet · Social Group · NGO · Technology Sector |
+| ♓ মীন | Temple · Ashram · Spiritual Gathering · Hospital / Charity Work |
+
+### ৪৩.৪ বিবাহে বাধা দূর করার জন্য প্রতিকার
 
 | প্রতিকার | করণীয় |
 |---|---|
