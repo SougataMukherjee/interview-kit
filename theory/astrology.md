@@ -2650,7 +2650,7 @@ D1-এ গ্রহ যদি রবি, চন্দ্র, মঙ্গল ব
 
 ### ✋ বিবাহ রেখা (Marriage Line) সম্পর্কিত প্রচলিত হস্তরেখা নোট
 
-<img src="./img/hand-marriage.jpeg" loading="lazy" />
+<img src="./img/marriage.jpeg" loading="lazy" />
 
 | লক্ষণ | সম্ভাব্য ইঙ্গিত |
 |---|---|
