@@ -2373,7 +2373,7 @@ Communication gap
 | মঙ্গল + বৃহস্পতি      | প্রবাল + পীত পোখরাজ              | **Orange Pokraj/Orange Coral**         |
 | চন্দ্র + শনি      | মুক্তা + নীলা              | **Black Pearl**         |
 | চন্দ্র + সূর্য      | মুক্তা + মানিক্য              | **Purple Pearl**         |
-| বৃহস্পতি + শুক্র  | পীত পোখরাজ + হীরা          | **White Pukhraj (সাদা পোখরাজ)/yellow Zircon/Honey Opal**         |
+| বৃহস্পতি + শুক্র  | পীত পোখরাজ + হীরা          | **White Pukhraj (সাদা পোখরাজ)/yellow Zircon/Honey Opal/Firoza**         |
 | বৃহস্পতি + শনি    | পীত পোখরাজ + নীলা          | **Pitambari Neelam (পীতাম্বরী নীলা)/ Lapis lazuli**   |
 | মঙ্গল + শনি       | প্রবাল + নীলা              | **orange coral**                    |
 | সূর্য + শুক্র     | মানিক্য + হীরা             | **Fiery Opal (ফায়ারি ওপাল)**           |
