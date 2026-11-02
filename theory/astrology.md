@@ -2709,7 +2709,7 @@ D1-এ গ্রহ যদি রবি, চন্দ্র, মঙ্গল ব
 
 <div style="flex:1">
 
-### ✅ Good Mount
+<h3> ✅ Good Mount</h3>
 
 <img src="./img/good-robi.jpeg" loading="lazy" />
 
@@ -2717,7 +2717,7 @@ D1-এ গ্রহ যদি রবি, চন্দ্র, মঙ্গল ব
 
 <div style="flex:1">
 
-### ❌ Bad Mount
+<h3> ❌ Bad Mount</h3>
 
 <img src="./img/bad-robi.jpeg" loading="lazy" />
 
