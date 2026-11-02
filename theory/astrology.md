@@ -2707,21 +2707,8 @@ D1-এ গ্রহ যদি রবি, চন্দ্র, মঙ্গল ব
 
 <div style="display:flex; gap:20px;">
 
-<div style="flex:1">
-
-<h3> ✅ Good Mount</h3>
-
-<img src="./img/good-robi.jpeg" loading="lazy" />
-
-</div>
-
-<div style="flex:1">
-
-<h3> ❌ Bad Mount</h3>
-
-<img src="./img/bad-robi.jpeg" loading="lazy" />
-
-</div>
+  <img style="width:48%" src="./img/good-robi.jpeg" loading="lazy" />
+  <img style="width:48%" src="./img/bad-robi.jpeg" loading="lazy" />
 
 </div>
 
