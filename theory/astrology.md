@@ -2707,8 +2707,8 @@ D1-এ গ্রহ যদি রবি, চন্দ্র, মঙ্গল ব
 
 <div style="display:flex; gap:20px;">
 
-  <img style="width:48%" src="./img/good-robi.jpeg" loading="lazy" />
-  <img style="width:48%" src="./img/bad-robi.jpeg" loading="lazy" />
+  <img style="width:48%" src="./img/good-robi.jpeg" loading="lazy" title="good mount"/>
+  <img style="width:48%" src="./img/bad-robi.jpeg" loading="lazy" title="bad mount"/>
 
 </div>
 
@@ -2740,7 +2740,7 @@ D1-এ গ্রহ যদি রবি, চন্দ্র, মঙ্গল ব
 
 ## ৯. দ্বিখণ্ডিত রেখা (Forked Line)
 
-<img src="./img/dikhondito-rekha.png" loading="lazy" />
+<img src="./img/dikhondito-rekha.png" style="width:60%" loading="lazy" />
 
 | অবস্থান | সম্ভাব্য ইঙ্গিত |
 |---|---|
