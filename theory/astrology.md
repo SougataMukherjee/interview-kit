@@ -2704,11 +2704,27 @@ D1-এ গ্রহ যদি রবি, চন্দ্র, মঙ্গল ব
 | মাছ চিহ্ন | ধন ও খ্যাতির যোগ |
 | ঊর্ধ্বমুখী ত্রিভুজ | রাজনীতি বা জনজীবনে সম্মান পাওয়ার সম্ভাবনা |
 | চতুষ্কোণ | মান-সম্মান ও সুনাম রক্ষা পায় |
-#### Good Mount
+
+<div style="display:flex; gap:20px;">
+
+<div style="flex:1">
+
+### ✅ Good Mount
+
 <img src="./img/good-robi.jpeg" loading="lazy" />
 
-#### Bad Mount
+</div>
+
+<div style="flex:1">
+
+### ❌ Bad Mount
+
 <img src="./img/bad-robi.jpeg" loading="lazy" />
+
+</div>
+
+</div>
+
 
 
 ### ## ৭. ♄ শনি ক্ষেত্র ও শনি চিহ্ন
