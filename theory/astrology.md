@@ -2465,8 +2465,8 @@ D1-এ গ্রহ যদি রবি, চন্দ্র, মঙ্গল ব
 | চন্দ্র + বুধ | মুক্তা + পান্না| **White Emerald** |
 | বুধ + বৃহস্পতি | পান্না + পীত পোখরাজ | **Peridot** |
 | বুধ + শুক্র    | পান্না + হীরা | **Aquamarine/Firoza**  |
-| চন্দ্র + রাহু | মুক্তা + গোমেদ | **Moonstone / Black Pearl (কালো মুক্তো)** |
-| চন্দ্র + কেতু | মুক্তা + বৈদুর্য | **Moonstone / Silver Pearl/gray opal** |
+| চন্দ্র + রাহু | মুক্তা + গোমেদ | **Moonstone / Black Pearl (কালো মুক্তো)/Gomti Chakra** |
+| চন্দ্র + কেতু | মুক্তা + বৈদুর্য | **Moonstone / Silver Pearl/gray opal/Gomti Chakra** |
 | বুধ + কেতু | পান্না + বৈদুর্য  | **Green Catseye** |
 | বৃহস্পতি + কেতু | পীত পোখরাজ + বৈদুর্য | **Yellow Catseye**                           |
 | সূর্য + শনি | মানিক্য + নীলা | **Pitambari Neelam / Amethyst/Pink Pukhraj** |
